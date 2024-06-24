@@ -1,27 +1,17 @@
-"use client"
 import React from "react";
-import { ButtonCreate } from "./style";
-import { QuestionCircleOutlined } from "@ant-design/icons";
-import { FloatButton } from "antd";
+import { Nav, Section, ButtonStyle } from "./style";
+import { QuestionCircleOutlined } from '@ant-design/icons/lib';
 
 const NavLogin = () => {
   return (
-    <nav className="flex justify-between mx-4 my-4 text-blue-900">
+    <Nav>
       <p className="font-extrabold">Match Institucional</p>
-      <section className="flex justify-between mx-4 my-4 text-blue-900">
+      <Section>
         <div>
-          <FloatButton
-            icon={<QuestionCircleOutlined />}
-            type="primary"
-            style={{position: "fixed", top: 10, right: 180}}
-          />
-            
+        <ButtonStyle icon={<QuestionCircleOutlined />} />
         </div>
-        <div>
-        <ButtonCreate>Cadastre-se</ButtonCreate>
-        </div>
-      </section>
-    </nav>
+      </Section>
+    </Nav>
   );
 };
 
