@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {Button, Form, Input} from "antd"
+
 
 export const Section=styled.section`
     display: flex;
@@ -7,17 +7,18 @@ export const Section=styled.section`
 
 `
 
-export const StyledInput = styled(Input)`
+export const StyledInput = styled.input`
     width: 270px;
-    border: 1px solid #0059FD;
+    border: 1px solid #006400;
     padding: 6px;
+    border-radius: 5px;
 `;
 export const ButtonLogin = styled.button`
     color: white;
     font-weight: 800;
     width: 270px;
     padding: 6px;
-    background-color: #0059FD;
+    background-color: #228B22;
     border-radius: 5px;
 `;
 export const ButtonWithEmail=styled.button`
@@ -26,14 +27,21 @@ export const ButtonWithEmail=styled.button`
     font-size: 14px;
     font-weight: 800;
     background-color: #ffff;
-    border: 1px solid #0059FD;
+    border: 1px solid #228B22;
     border-radius: 30px; 
     cursor: pointer;
     transition: .2s;
-    color: #0B2A7A;
+    color: #228B22;
 
 &:hover {
     color: white;
-    background-color: #0059FD;
+    background-color: #228B22;
 }
+`
+export const ParagraphPassword = styled.p`
+    color: #272727;
+
+    &:hover{
+        color: green;
+    }
 `
