@@ -1,15 +1,16 @@
 "use client"
 import React from "react";
-import { Form } from "antd";
+import { Form, Input } from "antd";
 import Link from "next/link";
 import Image from "next/image";
 import NavLogin from "../components/navbar-login";
 import {
-  StyledInput,
   ButtonLogin,
   ButtonWithEmail,
-  ParagraphPassword
+  ParagraphPassword,
+  StyledInput
 } from "./style";
+import { ConfigProvider } from "antd/lib";
 
 type FieldType = {
   username?: string;
@@ -19,6 +20,7 @@ type FieldType = {
 const App: React.FC = () => (
   <>
     <NavLogin />
+    <ConfigProvider theme={{token: {colorPrimary: "#228B22"}}}>
     <section className="flex flex-col md:flex-row justify-center items-center md:mt-10 mx-4 md:mx-auto max-w-7xl">
       <Form
         name="basic"
@@ -51,24 +53,19 @@ const App: React.FC = () => (
           wrapperCol={{ offset: 1, span: 16 }}
           className="text-customDark"
         >
-          <Link href={"../cadastro"}>
+          <Link href={"../register"}>
             <ParagraphPassword className="text-xs">Esqueceu a senha?</ParagraphPassword>
           </Link>
         </Form.Item>
 
         <Form.Item className="mb-0">
           <ButtonLogin>
-            <Link href={"../cadastro"}>ENTRAR</Link>
+            <Link href={"../register"}>ENTRAR</Link>
           </ButtonLogin>
         </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 1, span: 30 }}>
-          <p className="text-customDark text-xs">Você ainda não tem uma conta?<Link href={"../cadastro"}> <ParagraphPassword className="flex">Sign Up</ParagraphPassword></Link>
-          </p>
-        </Form.Item>
-
         <Form.Item wrapperCol={{ span: 11 }}>
-          <p className="text-customDark text-xs">Ao clicar em Continuar para se cadastrar ou entrar, você aceita os <strong>Termos de Uso</strong> e <strong>Política de Privacidade</strong> da Match Institucional.</p>
+          <p className="text-customDark text-xs mt-6">Ao clicar em Continuar para se cadastrar ou entrar, você aceita os <strong>Termos de Uso</strong> e <strong>Política de Privacidade</strong> da Match Institucional.</p>
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 1, span: 16 }}>
@@ -91,6 +88,7 @@ const App: React.FC = () => (
         />
       </div>
     </section>
+    </ConfigProvider>
   </>
 );
 

@@ -20,3 +20,20 @@ export const ButtonCreate=styled.button`
     background-color: #228B22;
 }
 `
+export const ButtonCreateAccount=styled.button`
+    padding: 8px 25px;
+    font-size: 14px;
+    font-weight: 800;
+    background-color: #ffff;
+    border: 1px solid #228B22;
+    border-radius: 30px; 
+    cursor: pointer;
+    transition: .2s;
+    color: #228B22;
+    margin-left: 30px;
+
+&:hover {
+    color: white;
+    background-color: #228B22;
+}
+`

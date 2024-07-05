@@ -1,17 +1,15 @@
 import styled from "styled-components";
-
+import {Input} from "antd/lib"
 
 export const Section=styled.section`
     display: flex;
     margin: 55px 120px 0 180px;
 
 `
-
-export const StyledInput = styled.input`
+export const StyledInput = styled(Input)`
     width: 270px;
-    border: 1px solid #006400;
+    border: 1px solid #228B22;
     padding: 6px;
-    border-radius: 5px;
 `;
 export const ButtonLogin = styled.button`
     color: white;
