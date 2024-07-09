@@ -6,12 +6,16 @@ export const Section=styled.section`
     margin: 55px 120px 0 180px;
 
 `
-
 export const StyledInput = styled.input`
     width: 270px;
     border: 1px solid #006400;
     padding: 6px;
     border-radius: 5px;
+
+&:hover {
+    border: 1px solid #006400;
+    border-radius: 5px;
+}
 `;
 export const ButtonLogin = styled.button`
     color: white;

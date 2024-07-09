@@ -51,7 +51,7 @@ const App: React.FC = () => (
           wrapperCol={{ offset: 1, span: 16 }}
           className="text-customDark"
         >
-          <Link href={"../cadastro"}>
+          <Link href={"../"}>
             <ParagraphPassword className="text-xs">Esqueceu a senha?</ParagraphPassword>
           </Link>
         </Form.Item>
@@ -63,7 +63,7 @@ const App: React.FC = () => (
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 1, span: 30 }}>
-          <p className="text-customDark text-xs">Você ainda não tem uma conta?<Link href={"../cadastro"}> <ParagraphPassword className="flex">Sign Up</ParagraphPassword></Link>
+          <p className="text-customDark text-xs">Você ainda não tem uma conta?<Link href={"../cadastro"} className="text-customDark hover:text-green-700" > Cadastre-se</Link>
           </p>
         </Form.Item>
 
@@ -77,7 +77,7 @@ const App: React.FC = () => (
 
         <Form.Item>
           <ButtonWithEmail>
-            <Link href={"../teste"}>Continue com o Google</Link>
+            <Link href={"../"}>Continue com o Google</Link>
           </ButtonWithEmail>
         </Form.Item>
       </Form>

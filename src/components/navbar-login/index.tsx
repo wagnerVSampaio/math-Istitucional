@@ -2,6 +2,7 @@
 import React from "react";
 import { IoMdHelpCircleOutline } from "react-icons/io";
 import { ButtonCreate, ButtonCreateAccount } from "./style";
+import Link from "next/link";
 
 
 const NavLogin = () => {
@@ -15,7 +16,7 @@ const NavLogin = () => {
           </ButtonCreate>
         </div>
         <div>
-          <ButtonCreateAccount>Cadastre-se</ButtonCreateAccount>
+          <ButtonCreateAccount><Link href={"../pages/register"}>Cadastre-se</Link></ButtonCreateAccount>
         </div>
       </section>
     </nav>

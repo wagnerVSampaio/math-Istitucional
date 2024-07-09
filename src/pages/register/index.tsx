@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { ConfigProvider, Radio } from "antd/lib";
+import { Radio } from "antd/lib";
 import type { RadioChangeEvent } from "antd/lib";
 import NavServidor from "@/components/servant";
 import NavRecrutador from "@/components/recruiter";
+import { Itens } from "./style";
 
 const NavRegister = () => {
   const [value, setValue] = useState(1);
@@ -13,20 +14,19 @@ const NavRegister = () => {
   };
 
   return (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "column",
-        }}
+      <Itens style={{
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
+      }}
       >
-        <h1 className="#228B22" style={{ fontSize: "27px", marginBottom: "2px" }}>
+        <h1 style={{ fontSize: "27px", marginBottom: "2px", color: "#228B22" }}>
           Faça parte da nossa comunidade! Cadastre-se agora.
         </h1>
         <p className="text-customDark" style={{ fontSize: 14, width: "570px" }}>
           Para aproveitar ao máximo nosso sistema, preencha seus dados
           cadastrais. Os campos marcados com{" "}
-          <strong style={{ color: "red" }}> * </strong> são obrigatórios
+          <strong style={{color: "#d31414"}}> * </strong> são obrigatórios
         </p>
         <nav>
           <Radio.Group
@@ -41,7 +41,7 @@ const NavRegister = () => {
           </Radio.Group>
           {value === 1 ? <NavServidor /> : <NavRecrutador />}
         </nav>
-      </div>
+      </Itens>
   );
 };
 
