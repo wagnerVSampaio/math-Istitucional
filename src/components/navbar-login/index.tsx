@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
 import { IoMdHelpCircleOutline } from "react-icons/io";
-import { ButtonCreate } from "./style";
+import { ButtonCreate, ButtonCreateAccount } from "./style";
+
 
 const NavLogin = () => {
   return (
@@ -12,6 +13,9 @@ const NavLogin = () => {
           <ButtonCreate>
             <IoMdHelpCircleOutline className=" text-xl"/>
           </ButtonCreate>
+        </div>
+        <div>
+          <ButtonCreateAccount>Cadastre-se</ButtonCreateAccount>
         </div>
       </section>
     </nav>

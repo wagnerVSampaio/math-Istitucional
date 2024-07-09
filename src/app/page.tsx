@@ -58,7 +58,7 @@ const App: React.FC = () => (
 
         <Form.Item className="mb-0">
           <ButtonLogin>
-            <Link href={"../cadastro"}>ENTRAR</Link>
+            <Link href={"../register"}>ENTRAR</Link>
           </ButtonLogin>
         </Form.Item>
 
