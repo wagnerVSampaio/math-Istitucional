@@ -14,27 +14,23 @@ const NavRegister = () => {
   };
 
   return (
-      <Itens style={{
-        display: "flex",
-        alignItems: "center",
-        flexDirection: "column",
-      }}
+      <Itens className="flex items-center flex-col"
       >
-        <h1 style={{ fontSize: "27px", marginBottom: "2px", color: "#228B22" }}>
+        <h1 className="text-customGreen font-bold text-[27px] mb-[2px]">
           Faça parte da nossa comunidade! Cadastre-se agora.
         </h1>
-        <p className="text-customDark" style={{ fontSize: 14, width: "570px" }}>
+        <p className="text-customDark text-[14px] w-[570px] mb-[10px]">
           Para aproveitar ao máximo nosso sistema, preencha seus dados
           cadastrais. Os campos marcados com{" "}
-          <strong style={{color: "#d31414"}}> * </strong> são obrigatórios
+          <strong className="text-red-500"> * </strong> são obrigatórios
         </p>
         <nav>
           <Radio.Group
             onChange={onChangeRadio}
             value={value}
-            style={{ display: "flex", justifyContent: "center" }}
-          >
-            <Radio value={1} style={{ marginRight: "60px" }}>
+            className="flex justify-center"
+            >
+            <Radio value={1} className="mr-[60px]">
               Servidor
             </Radio>
             <Radio value={2}> Recrutadores</Radio>

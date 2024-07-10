@@ -6,8 +6,7 @@ import {
   Input,
   Upload,
   Button,
-  Flex,
-  ConfigProvider,
+  Flex
 } from "antd/lib";
 import { PlusOutlined } from "@ant-design/icons/lib";
 import Link from "next/link";
@@ -65,23 +64,23 @@ const NavServidor = () => {
         initialValues={{ size: componentSize }}
         onValuesChange={onFormLayoutChange}
         size={componentSize as SizeType}
-        style={{ maxWidth: 600 }}
+        className="max-w-[600px]"
       >
-          <div style={{ display: "flex" }}>
-            <div style={{ margin: "0px 100px 0px 0px" }}>
-              <P2styled style={{ marginBottom: "3px" }}>
-                Nome completo <strong style={{ color: "red" }}> *</strong>
+          <div className="flex">
+            <div className="mr-[100px]">
+              <P2styled className="mb-[3px]">
+                Nome completo <strong className="text-red-500"> *</strong>
               </P2styled>
               <Form.Item<FieldType>
                 rules={[
                   { required: true, message: "Por favor, insira o nome!" },
                 ]}
               >
-                <Input style={{width: 350}}/>
+                <Input className="w-[350px]"/>
               </Form.Item>
 
-              <p style={{ marginBottom: "3px", marginTop: "3px" }}>
-                E-mail <strong style={{ color: "red" }}> *</strong>
+              <p className="mt-[3px] mb-[3px]">
+                E-mail <strong className="text-red-500"> *</strong>
               </p>
               <Form.Item<FieldType>
                 name="email"
@@ -89,12 +88,12 @@ const NavServidor = () => {
                   { required: true, message: "Por favor, insira o e-mail!" },
                 ]}
               >
-                <Input style={{ width: 350 }}/>
+                <Input className="w-[350px]"/>
               </Form.Item>
             </div>
 
             <div>
-              <p style={{ marginBottom: "3px" }}>Foto (opcional) </p>
+              <p className="mb-[3px]">Foto (opcional) </p>
               <Form.Item valuePropName="fileList" getValueFromEvent={normFile}>
                 <Upload action="/upload.do" listType="picture-card">
                   <button
@@ -102,17 +101,17 @@ const NavServidor = () => {
                     type="button"
                   >
                     <PlusOutlined />
-                    <div style={{ marginTop: 8 }}>Carregar</div>
+                    <div className="mt-[8px]">Carregar</div>
                   </button>
                 </Upload>
               </Form.Item>
             </div>
           </div>
 
-          <div style={{ display: "flex" }}>
-            <div style={{ marginRight: "50px" }}>
-              <p style={{ marginBottom: "3px" }}>
-                Telefone <strong style={{ color: "red" }}> *</strong>
+          <div className="flex">
+            <div className="mr-[50px]">
+              <p className="mb-[3px]">
+                Telefone <strong className="text-red-500"> *</strong>
               </p>
               <Form.Item<FieldType>
                 name="email"
@@ -120,26 +119,26 @@ const NavServidor = () => {
                   { required: true, message: "Por favor, insira o e-mail!" },
                 ]}
               >
-                <Input style={{ width: 250 }}/>
+                <Input className="w-[250px]"/>
               </Form.Item>
             </div>
 
             <div>
-              <p style={{ marginBottom: "3px" }}>
-                Data de nascimento <strong style={{ color: "red" }}> * </strong>
+              <p className="mb-[3px]">
+                Data de nascimento <strong className="text-red-500"> * </strong>
               </p>
               <Form.Item>
                 <DatePicker
-                  style={{ width: 250 }}
+                  className="w-[250px]"
                 />
               </Form.Item>
             </div>
           </div>
 
-          <div style={{ display: "flex" }}>
-            <div style={{ marginRight: "50px" }}>
-              <p style={{ marginBottom: "3px" }}>
-                Senha <strong style={{ color: "red" }}> *</strong>
+          <div className="flex">
+            <div className="mr-[50px]">
+              <p className="mb-[3px]">
+                Senha <strong className="text-red-500"> *</strong>
               </p>
               <Form.Item<FieldType>
                 name="password"
@@ -148,14 +147,14 @@ const NavServidor = () => {
                 ]}
               >
                 <Input.Password
-                  style={{ width: 250 }}
+                  className="w-[250px]"
                 />
               </Form.Item>
             </div>
             <div>
-              <p style={{ marginBottom: "3px" }}>
+              <p className="mb-[3px]">
                 Confirmação de senha{" "}
-                <strong style={{ color: "red" }}> *</strong>
+                <strong className="text-red-500"> *</strong>
               </p>
               <Form.Item<FieldType>
                 name="password"
@@ -167,37 +166,28 @@ const NavServidor = () => {
                 ]}
               >
                 <Input.Password
-                  style={{
-                    width: 250,
-                    background: "white",
-                  }}
+                  className="w-[250px] bg-white"
                 />
               </Form.Item>
             </div>
           </div>
-          <p style={{ marginBottom: "20px" }}>
+          <div className="mb-[20px] flex">
             <Checkbox
               checked={checked}
               disabled={disabled}
               onChange={onChangeCheck}
-            >
-              Para prosseguir, por favor, clique no botão{" "}
-              <strong style={{ color: "#228B22" }}>Aceitar Termos</strong>{" "}
+              className="mr-[20px]"
+            />
+            <p>Para prosseguir, por favor, clique no botão{" "}
+              <strong className="text-customGreen">Aceitar Termos</strong>{" "}
               abaixo e confirme sua concordância com nossos termos de serviço e
-              política de privacidade.
-            </Checkbox>
-          </p>
-          <div style={{ marginTop: "40px" }}>
+              política de privacidade.</p>
+          </div>
+          <div className="mt-[40px]">
             <Flex gap="small" wrap>
               <Link href={"/"}>
                 <Button
-                  style={{
-                    width: "250px",
-                    marginRight: "40px",
-                    color: "#228B22",
-                    border: "1px solid #228B22",
-                    fontWeight: "bold",
-                  }}
+                  className="w-[250px] mr-[40px] text-customGreen font-bold border-[1px] border-[#228B22]"
                 >
                   Voltar
                 </Button>
@@ -205,7 +195,7 @@ const NavServidor = () => {
               <Link href={"./teste"}>
                 <Button
                   type="primary"
-                  style={{ width: "250px", fontWeight: 800 }}
+                  className="w-[250px] font-extrabold"
                 >
                   Criar conta
                 </Button>
