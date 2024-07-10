@@ -60,7 +60,7 @@ const NavRecrutador = () => {
       >
         <div>
           <PStyled>
-            Nome <strong style={{ color: "red" }}> *</strong>
+            Nome <strong className="text-red-500"> *</strong>
           </PStyled>
           <Form.Item<FieldType>
             rules={[{ required: true, message: "Por favor, insira o nome!" }]}
@@ -68,8 +68,8 @@ const NavRecrutador = () => {
             <Input />
           </Form.Item>
 
-          <p style={{ marginBottom: "3px", marginTop: "3px" }}>
-            CNPJ <strong style={{ color: "red" }}> *</strong>
+          <p className="mt-[3px] mb-[3px]">
+            CNPJ <strong className="text-red-500"> *</strong>
           </p>
           <Form.Item<FieldType>
             name="email"
@@ -78,29 +78,23 @@ const NavRecrutador = () => {
             <Input />
           </Form.Item>
         </div>
-        <p style={{ marginBottom: "20px", width: "570px" }}>
-          <Checkbox
-            checked={checked}
-            disabled={disabled}
-            onChange={onChangeCheck}
-          >
-            Para prosseguir, por favor, clique no botão{" "}
-            <strong style={{ color: "#228B22" }}>Aceitar Termos</strong> abaixo
-            e confirme sua concordância com nossos termos de serviço e política
-            de privacidade.
-          </Checkbox>
-        </p>
+        <div className="mb-[20px] flex">
+            <Checkbox
+              checked={checked}
+              disabled={disabled}
+              onChange={onChangeCheck}
+              className="mr-[20px]"
+            />
+            <p>Para prosseguir, por favor, clique no botão{" "}
+              <strong className="text-customGreen">Aceitar Termos</strong>{" "}
+              abaixo e confirme sua concordância com nossos termos de serviço e
+              política de privacidade.</p>
+          </div>
         <div style={{ marginTop: "40px" }}>
           <Flex gap="small" wrap>
             <Link href={"/"}>
               <Button
-                style={{
-                  width: "250px",
-                  marginRight: "40px",
-                  color: "#228B22",
-                  border: "1px solid #228B22",
-                  fontWeight: "bold",
-                }}
+                className="w-[250px] mr-[40px] text-customGreen font-bold border-[1px] border-[#228B22]"
               >
                 Voltar
               </Button>
@@ -108,7 +102,7 @@ const NavRecrutador = () => {
             <Link href={"./teste"}>
               <Button
                 type="primary"
-                style={{ width: "250px", fontWeight: 800 }}
+                className="w-[250px] font-extrabold"
               >
                 Criar conta
               </Button>
