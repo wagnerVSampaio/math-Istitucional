@@ -3,7 +3,7 @@ import React from "react";
 import { Form } from "antd";
 import Link from "next/link";
 import Image from "next/image";
-import NavLogin from "../components/navbar-login";
+import NavLogin from "../components/header-login";
 import {
   StyledInput,
   ButtonLogin,
