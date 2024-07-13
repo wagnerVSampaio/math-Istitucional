@@ -83,7 +83,7 @@ const App: React.FC = () => (
       </Form>
       <div className="mt-6 md:mt-0">
         <Image
-          src={"/login-img.png"}
+          src={"/img-login-page.png"}
           alt={"Login"}
           width={500}
           height={450}
