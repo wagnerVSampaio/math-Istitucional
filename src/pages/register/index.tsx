@@ -16,7 +16,7 @@ const NavRegister = () => {
   return (
       <Itens className="flex items-center flex-col"
       >
-        <h1 className="text-customGreen font-bold text-[27px] mb-[2px]">
+        <h1 className="text-green-900 font-bold text-[27px] mb-[2px] mt-[20px]">
           Faça parte da nossa comunidade! Cadastre-se agora.
         </h1>
         <p className="text-customDark text-[14px] w-[570px] mb-[10px]">
