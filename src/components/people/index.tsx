@@ -4,7 +4,7 @@ import { DivIconPleople } from './style'
 const People = () => {
   return (
     <DivIconPleople>
-      <p style={{margin: "25% 50%"}}>Tela 2</p>
+      <p style={{display: "flex", justifyContent: "center", alignItems: "center"}}></p>
     </DivIconPleople>
   )
 }

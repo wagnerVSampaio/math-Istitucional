@@ -4,7 +4,7 @@ import { DivIconMessage } from './style'
 const Message = () => {
   return (
     <DivIconMessage>
-      <p style={{margin: "25% 50%"}}>Tela 5</p>
+      <p style={{}}></p>
     </DivIconMessage>
   )
 }

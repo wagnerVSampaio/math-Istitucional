@@ -4,7 +4,7 @@ import { DivIconHomePage } from './style'
 const HomePage = () => {
   return (
     <DivIconHomePage>
-      <p className='mt-[25%] mr-[50%]'>Tela 1</p>
+      <p style={{display: "flex", justifyContent: "center", alignItems: "center"}}></p>
     </DivIconHomePage>
   )
 }

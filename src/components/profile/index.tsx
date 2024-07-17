@@ -4,7 +4,7 @@ import { DivIcon } from './style'
 const Profile = () => {
   return (
     <DivIcon>
-      <p style={{margin: "25% 50%"}}>Tela 6</p>
+      <p style={{margin: "25% 50%"}}></p>
     </DivIcon>
   )
 }
