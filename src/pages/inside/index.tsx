@@ -59,7 +59,7 @@ const App: React.FC = () => {
           value={value}
           defaultValue="a"
           buttonStyle="solid"
-          style={{ marginTop: "10px", marginLeft: "100px", display: "flex" }}
+          style={{ marginTop: "5px", marginLeft: "100px", display: "flex" }}
         >
           <Radio.Button value={1} style={{ border: 0 }}>
             <AiFillHome
