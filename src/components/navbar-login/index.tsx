@@ -1,17 +1,32 @@
+"use client";
 import React from "react";
-import { Nav, Section, ButtonStyle } from "./style";
-import { QuestionCircleOutlined } from '@ant-design/icons/lib';
+import { IoMdHelpCircleOutline } from "react-icons/io";
+import { ButtonCreate, ButtonCreateAccount } from "./style";
+import { ConfigProvider } from "antd/lib";
 
 const NavLogin = () => {
   return (
-    <Nav>
-      <p className="font-extrabold">Match Institucional</p>
-      <Section>
-        <div>
-        <ButtonStyle icon={<QuestionCircleOutlined />} />
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: "#228B22",
+        },
+      }}
+    >
+      <nav className="flex justify-between mx-4 my-4 text-green-900">
+        <p className="font-extrabold">Match Institucional</p>
+        <section className="flex justify-between mx-4 my-4 text-green-900">
+          <div>
+            <ButtonCreate>
+              <IoMdHelpCircleOutline className=" text-xl" />
+            </ButtonCreate>
+          </div>
+          <div>
+          <ButtonCreateAccount>Cadastre-se</ButtonCreateAccount>
         </div>
-      </Section>
-    </Nav>
+        </section>
+      </nav>
+    </ConfigProvider>
   );
 };
 
