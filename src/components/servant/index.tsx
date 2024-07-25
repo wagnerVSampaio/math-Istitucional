@@ -133,43 +133,42 @@ const NavServidor = () => {
                   </Form.Item >
             </div>
           </div>
-
           <div className="flex">
-            <div className="mr-[50px]">
-              <p className="mb-[3px]">
-                Senha <strong className="text-red-500"> *</strong>
-              </p>
-              <Form.Item<FieldType>
-                name="password"
-                rules={[
-                  { required: true, message: "Por favor, insira a senha!" },
-                ]}
-              >
-                <Input.Password
-                  className="w-[250px]"
-                />
-              </Form.Item>
-            </div>
-            <div>
-              <p className="mb-[3px]">
-                Confirmação de senha{" "}
-                <strong className="text-red-500"> *</strong>
-              </p>
-              <Form.Item<FieldType>
-                name="password"
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor, insira a confirmação da senha!",
-                  },
-                ]}
-              >
-                <Input.Password
-                  className="w-[250px] bg-white"
-                />
-              </Form.Item>
-            </div>
-          </div>
+                    <div className="mr-[50px]">
+                      <p className="mb-[3px]">
+                        Senha <strong className="text-red-500"> *</strong>
+                      </p>
+                      <Form.Item<FieldType>
+                        name="password"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Por favor, insira a senha!",
+                          },
+                        ]}
+                      >
+                        <Input.Password className="w-[250px]" />
+                      </Form.Item>
+                    </div>
+                    <div>
+                      <p className="mb-[3px]">
+                        Confirmação de senha{" "}
+                        <strong className="text-red-500"> *</strong>
+                      </p>
+                      <Form.Item<FieldType>
+                        name="password"
+                        rules={[
+                          {
+                            required: true,
+                            message:
+                              "Por favor, insira a confirmação da senha!",
+                          },
+                        ]}
+                      >
+                        <Input.Password className="w-[250px] bg-white" />
+                      </Form.Item>
+                    </div>
+              </div>
           <div className="mb-[20px] flex">
             <Checkbox
               checked={checked}
