@@ -74,7 +74,7 @@ const App: React.FC = () => (
 
         <Form.Item>
           <ButtonWithEmail>
-            <Link href={"../teste"}>Continue com o Google</Link>
+            <Link href={"../"}>Continue com o Google</Link>
           </ButtonWithEmail>
         </Form.Item>
       </Form>
