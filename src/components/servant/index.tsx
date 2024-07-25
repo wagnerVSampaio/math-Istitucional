@@ -13,7 +13,6 @@ import Link from "next/link";
 import type { CheckboxProps } from "antd/lib";
 import { P2styled } from "./style";
 
-
 type FieldType = {
   nome?: string;
   email?: string;
@@ -127,11 +126,11 @@ const NavServidor = () => {
               <p className="mb-[3px]">
                 Data de nascimento <strong className="text-red-500"> * </strong>
               </p>
-              <Form.Item>
-                <DatePicker
-                  className="w-[250px]"
-                />
-              </Form.Item>
+                  <Form.Item>
+                    <DatePicker
+                      className="custom-date-picker"
+                    />
+                  </Form.Item >
             </div>
           </div>
 
