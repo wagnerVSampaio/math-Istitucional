@@ -1,19 +1,29 @@
-import React, { useState } from 'react';
-import { ButtonLabel, ImageCover, DivTop, ImageWrapper, UploadButton, ButtonCoverLabel } from './style';
+/* eslint-disable @next/next/no-img-element */
+import React, { useState } from "react";
+import {
+  ButtonLabel,
+  ImageCover,
+  DivTop,
+  ImageWrapper,
+  UploadButton,
+  ButtonCoverLabel,
+  DivButton,
+} from "./style";
 import { FaCamera } from "react-icons/fa";
 
 const Profile: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
   const [coverImage, setCoverImage] = useState<string | undefined>(undefined);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setProfileImage(imageUrl);
     }
   };
-  const CoverImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleCoverImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
@@ -23,39 +33,39 @@ const Profile: React.FC = () => {
 
   return (
     <DivTop>
-      <ImageCover>
-      {coverImage ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={coverImage} alt="Cover" style={{ width: '100%', height: '100px', objectFit: 'cover' }} />
-        ) : (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src="/cover.png" alt="Cover" style={{ width: '100%', height: '100px', objectFit: 'cover' }} />
-        )}
+      <ImageCover className="relative">
+        <img
+          src={coverImage || '/cover.png'}
+          alt="Cover"
+          className="w-full h-[100px] object-cover"
+        />
         <UploadButton
           type="file"
           accept="image/*"
-          id="imageUpload"
-          onChange={CoverImageChange}
+          id="coverImageUpload"
+          onChange={handleCoverImageChange}
         />
-        <ButtonCoverLabel htmlFor="imageUpload"><FaCamera />Adicionar foto de capa</ButtonCoverLabel>
+        <ButtonCoverLabel htmlFor="coverImageUpload" className="absolute bottom-2 right-2 bg-gray-800 text-white p-2 rounded-full cursor-pointer flex items-center justify-center">
+          <FaCamera />
+          <span className="ml-2">Adicionar foto de capa</span>
+        </ButtonCoverLabel>
       </ImageCover>
-      <ImageWrapper>
-        {profileImage ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={profileImage} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        ) : (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src="/profile.png" alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        )}
+      <ImageWrapper className="relative">
+        <img
+          src={profileImage || '/profile.png'}
+          alt="Profile"
+          className="w-full h-[150px] object-cover"
+        />
         <UploadButton
           type="file"
           accept="image/*"
-          id="imageUpload"
-          onChange={handleImageChange}
+          id="profileImageUpload"
+          onChange={handleProfileImageChange}
         />
-        <ButtonLabel htmlFor="imageUpload"><FaCamera /></ButtonLabel>
+        <ButtonLabel htmlFor="profileImageUpload" className="absolute bottom-2 right-2 bg-gray-800 text-white p-2 rounded-full cursor-pointer flex items-center justify-center">
+          <FaCamera />
+        </ButtonLabel>
       </ImageWrapper>
-      
     </DivTop>
   );
 };

@@ -65,3 +65,6 @@ export const ButtonCoverLabel = styled.label`
   gap: 5px;
   
 `;
+export const DivButton = styled.div`
+  display: flex;
+`;
