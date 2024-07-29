@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { SlArrowDown, SlArrowUp } from "react-icons/sl";
 import { Form, Input } from "antd/lib";
-import { Flex } from "antd";
 import { AddButton } from "./style";
+import { Flex } from "antd";
 import FooterExpandable from "@/components/footer-expandable";
-
 
 type FieldType = {
   nome?: string;

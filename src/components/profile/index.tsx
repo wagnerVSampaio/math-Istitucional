@@ -76,14 +76,12 @@ const Profile: React.FC = () => {
           <FaCamera />
         </ButtonLabel>
       </ImageWrapper>
-      <DivParagraph>
-        <p className="text-[#272727]">
-          Sobre mim: Lorem Ipsum is simply dummy text of the printing and
-          typesetting industry. Lorem Ipsum has been the industry is standard
-          dummy text ever since the 1500s, when an unknown printer took a galley
-          of type and scrambled it to make a type specimen book.
-        </p>
-      </DivParagraph>
+        <DivParagraph>
+          <p>Nome completo do usuário</p>
+          <DivIconShare>
+          <FaShareAltSquare />
+        </DivIconShare>
+        </DivParagraph>
       <DivButton>
         <ProfileButton className="text-[#272727]">
           Tenho interesse em ...
@@ -97,9 +95,12 @@ const Profile: React.FC = () => {
           <IoSettingsSharp />
         </DivIcon>
       </DivButton>
-      <DivIconShare>
-        <FaShareAltSquare />
-      </DivIconShare>
+      <p className="text-[#272727] mx-5 mt-[15px] ">
+          Sobre mim: Lorem Ipsum is simply dummy text of the printing and
+          typesetting industry. Lorem Ipsum has been the industry is standard
+          dummy text ever since the 1500s, when an unknown printer took a galley
+          of type and scrambled it to make a type specimen book.
+        </p>
     </DivTop>
   );
 };

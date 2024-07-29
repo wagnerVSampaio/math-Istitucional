@@ -8,10 +8,11 @@ import { MdChat } from "react-icons/md";
 import type { RadioChangeEvent } from "antd/lib";
 import HomePage from "@/components/homepage";
 import People from "@/components/people";
-import Jobs from "@/components/jobs";
+
 import Profile from "@/components/profile";
 import Notification from "@/components/notification";
 import Message from "@/components/message";
+import Jobs from "../jobsPages";
 
 const { Search } = Input;
 
@@ -30,10 +31,7 @@ const App: React.FC = () => {
     <div>
       <div
         style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
+
           display: "flex",
           justifyContent: "space-between",
           boxShadow: "0 5px 5px rgba(42, 42, 238, 0.322)",

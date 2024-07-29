@@ -67,7 +67,20 @@ export const ButtonCoverLabel = styled.label`
 `;
 export const DivParagraph = styled.div`
    margin-left: 190px;
+   font-size: 24px;
+   color: #272727;
+   display: flex;
+   align-items: center;
 `;
+export const DivIconShare = styled.div`
+  font-size: 40px;
+  color: #228b22;
+  display: flex;
+  padding-right: 25px;
+  margin-top: 5px;
+  margin-left: auto;
+`;
+
 export const DivButton = styled.div`
   display: flex;
   margin-top: 20px;
@@ -93,12 +106,4 @@ export const DivIcon = styled.div`
   font-size: 40px;
   color: #228b22;
   margin-left: 20px;
-`;
-export const DivIconShare = styled.div`
-  font-size: 40px;
-  color: #228b22;
-  display: flex;
-  justify-content: end;
-  padding-right: 25px;
-  margin-top: 10px;
 `;

@@ -1,7 +1,6 @@
-import React from 'react';
 import styled from 'styled-components';
 
-const DivFooter = styled.div`
+export const DivFooter = styled.div`
     position: fixed;
     left: 0;
     bottom: 0;
@@ -12,7 +11,7 @@ const DivFooter = styled.div`
     background: rgb(230, 230, 250)
 `;
 
-const FooterButton = styled.button`
+export const FooterButton = styled.button`
     padding: 8px 50px;
     font-size: 14px;
     font-weight: 800;
@@ -29,14 +28,3 @@ const FooterButton = styled.button`
         background-color: #FFFFFF;
 }
 `;
-
-const FooterExpandable = () => {
-    return (
-        <DivFooter>
-            <h1 className='text-customDark font-bold p-[20px] text-[18px]'>Após clicar em Salvar, suas informações serão atualizadas</h1>
-            <div className='pt-3'><FooterButton>SALVAR</FooterButton></div>
-        </DivFooter>
-    );
-}
-
-export default FooterExpandable;
