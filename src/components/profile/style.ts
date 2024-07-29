@@ -65,6 +65,40 @@ export const ButtonCoverLabel = styled.label`
   gap: 5px;
   
 `;
+export const DivParagraph = styled.div`
+   margin-left: 190px;
+`;
 export const DivButton = styled.div`
   display: flex;
+  margin-top: 20px;
+  
+  
+`;
+export const EditProfileButton = styled.button`
+  padding: 8px 150px;
+  background-color: #228B22;
+  color: white;
+  border-radius: 10px;
+`;
+export const ProfileButton = styled.button`
+  padding: 8px 100px;
+  background-color: white;
+  color: #272727;
+  border: 1px solid #272727;
+  border-radius: 10px;
+  margin-left: 200px;
+  margin-right: 30px;
+`;
+export const DivIcon = styled.div`
+  font-size: 40px;
+  color: #228b22;
+  margin-left: 20px;
+`;
+export const DivIconShare = styled.div`
+  font-size: 40px;
+  color: #228b22;
+  display: flex;
+  justify-content: end;
+  padding-right: 25px;
+  margin-top: 10px;
 `;
