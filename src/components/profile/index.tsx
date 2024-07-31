@@ -13,18 +13,27 @@ import {
   ProfileButton,
   DivIcon,
   DivIconShare,
+  DivBio,
+  DivEdit,
+  DivSave,
+  DivP,
+  Textarea,
+  TextareaEdit
 } from "./style";
 import { FaCamera } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
 import { FaShareAltSquare } from "react-icons/fa";
+import { MdEditNote } from "react-icons/md";
+import { AiOutlineSave } from "react-icons/ai";
 import Link from "next/link";
 
-  
 const ProfileContainer: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | undefined>(
     undefined
   );
   const [coverImage, setCoverImage] = useState<string | undefined>(undefined);
+  const [isEditingBio, setIsEditingBio] = useState(false);
+  const [bioText, setBioText] = useState<string | undefined>(undefined);
 
   const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -40,6 +49,14 @@ const ProfileContainer: React.FC = () => {
       const imageUrl = URL.createObjectURL(file);
       setCoverImage(imageUrl);
     }
+  };
+
+  const handleEditBio = () => {
+    setIsEditingBio(true);
+  };
+
+  const handleSaveBio = () => {
+    setIsEditingBio(false);
   };
 
   return (
@@ -61,6 +78,7 @@ const ProfileContainer: React.FC = () => {
           <span className="ml-2">Adicionar foto de capa</span>
         </ButtonCoverLabel>
       </ImageCover>
+
       <ImageWrapper className="relative">
         <img
           src={profileImage || "/profile.png"}
@@ -77,28 +95,57 @@ const ProfileContainer: React.FC = () => {
           <FaCamera />
         </ButtonLabel>
       </ImageWrapper>
-        <DivParagraph>
-          <p>Nome completo do usuário</p>
-          <DivIconShare>
+
+      <DivParagraph>
+        <p>Nome completo do usuário</p>
+        <DivIconShare>
           <FaShareAltSquare />
         </DivIconShare>
-        </DivParagraph>
+      </DivParagraph>
+
       <DivButton>
-        <ProfileButton>
-          Tenho interesse em ...
-        </ProfileButton>
+        <ProfileButton>Tenho interesse em ...</ProfileButton>
         <Link href={"../expandable"}>
-          <EditProfileButton >
-            Editar perfil
-          </EditProfileButton>
+          <EditProfileButton>Editar perfil</EditProfileButton>
         </Link>
         <DivIcon>
           <IoSettingsSharp />
         </DivIcon>
       </DivButton>
-      <p className="text-[#272727] mx-5 mt-[15px] ">
-          <span className="font-bold">Sobre mim:</span> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry is standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-        </p>
+
+      <DivBio>
+        <DivP>
+          {isEditingBio ? (
+            <div>
+            <p>
+              <span className="font-bold">Biografia:</span>{" "}
+              <TextareaEdit
+                placeholder="Experimente escrever uma curta biografia sobre você, incluindo suas principais conquistas, habilidades e objetivos de carreira."
+                value={bioText}
+                onChange={(e) => setBioText(e.target.value)}
+              />
+            </p>
+            <DivSave onClick={handleSaveBio}>
+                <AiOutlineSave />
+              </DivSave>
+            </div>
+          ) : (
+            <div>
+              <p>
+                <span className="font-bold">Biografia:</span>{" "}
+                <Textarea
+                  placeholder="Experimente escrever uma curta biografia sobre você, incluindo suas principais conquistas, habilidades e objetivos de carreira."
+                >
+                  {bioText}
+                </Textarea>
+              </p>
+              <DivEdit onClick={handleEditBio}>
+                <MdEditNote />
+              </DivEdit>
+            </div>
+          )}
+        </DivP>
+      </DivBio>
     </DivTop>
   );
 };

@@ -64,7 +64,7 @@ const App: React.FC = () => {
               style={{ width: "100px", fontSize: "24px", marginTop: "4px" }}
             />
           </Radio.Button>
-          <Radio.Button value={2} style={{ border: 0 }}>
+          <Radio.Button value={2} style={{ border: 0 }} disabled={true}>
             <FaUserFriends
               style={{ width: "100px", fontSize: "24px", marginTop: "4px" }}
             />
@@ -79,7 +79,7 @@ const App: React.FC = () => {
               style={{ width: "100px", fontSize: "24px", marginTop: "4px" }}
             />
           </Radio.Button>
-          <Radio.Button value={5} style={{ border: 0 }}>
+          <Radio.Button value={5} style={{ border: 0 }} disabled={true}>
             <MdChat
               style={{ width: "100px", fontSize: "24px", marginTop: "4px" }}
             />

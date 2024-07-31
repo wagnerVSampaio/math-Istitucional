@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const DivTop = styled.div`
     background-color: white;
-    margin: 25px auto;
+    margin: 10px auto;
     width: 80%;
     height: 300px;
     border-radius: 10px;
@@ -106,4 +106,59 @@ export const DivIcon = styled.div`
   font-size: 40px;
   color: #006b3f;
   margin-left: 20px;
+`;
+export const DivBio = styled.div`
+  position: relative;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  color: #272727;
+  display: flex;
+`;
+export const DivP = styled.div`
+    width: 95%;
+    height: 100px;
+`;
+
+export const DivEdit = styled.button`
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 45px;
+  color: #006b3f;
+`;
+
+export const DivSave = styled.button`
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 40px;
+  color: #006b3f;
+  &:focus {
+    border: 1px solid #006b3f; 
+    outline: none; 
+  }
+`;
+export const Textarea = styled.textarea`
+  background-color: transparent;
+  border-radius: 10px;
+  padding: 10px;
+  width: 100%;
+
+`;
+export const TextareaEdit = styled.textarea`
+  background-color: transparent;
+  border-radius: 10px;
+  padding: 10px;
+  width: 100%;
+  cursor: default;
+  &:read-only {
+    background-color: #f5f5f5; /* Muda a cor de fundo para indicar que é não editável */
+  }
 `;
