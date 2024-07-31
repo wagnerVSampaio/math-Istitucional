@@ -7,7 +7,7 @@ import { PStyled } from "./style";
 type FieldType = {
   name?: string;
   cpf?: string;
-
+  lotacao?: string;
 };
 
 type SizeType = Parameters<typeof Form>[0]["size"];
@@ -74,6 +74,15 @@ const NavRecrutador = () => {
             </p>
             <Form.Item<FieldType>
               name="cpf"
+              rules={[{ required: true, message: "Por favor, insira o CPF!" }]}
+            >
+              <Input />
+            </Form.Item>
+            <p className="mt-[3px] mb-[3px]">
+              Lotação atual <strong className="text-red-500"> *</strong>
+            </p>
+            <Form.Item<FieldType>
+              name="lotacao"
               rules={[{ required: true, message: "Por favor, insira o CPF!" }]}
             >
               <Input />

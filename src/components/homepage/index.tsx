@@ -1,8 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect, useCallback } from 'react';
-import { DivTopHomePage, DivMenu, ImageHome, DivRadio, DivContainer } from './style';
+import { DivTopHomePage, DivMenu, ImageHome, DivRadio, ParagraphStyled } from './style';
 import type { RadioChangeEvent } from 'antd/lib';
 import { Radio } from 'antd/lib';
+import Link from 'next/link';
 
 const images = [
   "/bem-vindo.png",
@@ -60,10 +61,8 @@ const HomePage = () => {
           </Radio.Group>
         </DivRadio>
         <DivMenu>
-          <DivContainer>
-            <p className='mb-[10px]'>Sobre nós</p>
-            <p>Contato</p>
-          </DivContainer>
+            <Link href={""}><ParagraphStyled>Sobre nós</ParagraphStyled></Link>
+            <Link href={""}><ParagraphStyled>Contato</ParagraphStyled></Link>
         </DivMenu>
       </DivTopHomePage>
     </>

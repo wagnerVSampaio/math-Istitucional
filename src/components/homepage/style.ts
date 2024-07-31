@@ -17,9 +17,14 @@ export const DivMenu = styled.div`
   height: 90%; 
   z-index: 3; 
 `;
-export const DivContainer = styled.div`
+export const ParagraphStyled = styled.div`
     margin-left: 15px;
     color: #272727;
+    background-color: white;
+    border-radius: 10px;
+    gap: 10px;
+    padding: 10px;
+    margin-bottom: 5px;
 `;
 
 export const ImageHome = styled.div`

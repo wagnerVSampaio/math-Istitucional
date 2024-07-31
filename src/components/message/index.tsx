@@ -1,12 +1,11 @@
-import React from 'react'
-import { DivIconMessage } from './style'
+import React from 'react';
 
 const Message = () => {
   return (
-    <DivIconMessage>
-      <p style={{}}></p>
-    </DivIconMessage>
-  )
+    <div>
+      
+    </div>
+  );
 }
 
-export default Message
+export default Message;
