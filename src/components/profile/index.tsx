@@ -19,7 +19,8 @@ import { IoSettingsSharp } from "react-icons/io5";
 import { FaShareAltSquare } from "react-icons/fa";
 import Link from "next/link";
 
-const Profile: React.FC = () => {
+  
+const ProfileContainer: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | undefined>(
     undefined
   );
@@ -96,13 +97,10 @@ const Profile: React.FC = () => {
         </DivIcon>
       </DivButton>
       <p className="text-[#272727] mx-5 mt-[15px] ">
-          Sobre mim: Lorem Ipsum is simply dummy text of the printing and
-          typesetting industry. Lorem Ipsum has been the industry is standard
-          dummy text ever since the 1500s, when an unknown printer took a galley
-          of type and scrambled it to make a type specimen book.
+          <span className="font-bold">Sobre mim:</span> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry is standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
         </p>
     </DivTop>
   );
 };
 
-export default Profile;
+export default ProfileContainer;

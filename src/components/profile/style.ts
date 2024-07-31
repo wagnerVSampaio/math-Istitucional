@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const DivTop = styled.div`
     background-color: white;
-    margin: 60px auto;
+    margin: 25px auto;
     width: 80%;
     height: 300px;
     border-radius: 10px;
@@ -66,7 +66,7 @@ export const ButtonCoverLabel = styled.label`
   
 `;
 export const DivParagraph = styled.div`
-   margin-left: 190px;
+   margin-left: 200px;
    font-size: 24px;
    color: #272727;
    display: flex;
@@ -83,9 +83,7 @@ export const DivIconShare = styled.div`
 
 export const DivButton = styled.div`
   display: flex;
-  margin-top: 20px;
-  
-  
+  margin-top: 10px;
 `;
 export const EditProfileButton = styled.button`
   padding: 8px 150px;

@@ -30,7 +30,7 @@ export const DivVacanciesContainer = styled(Card)`
   height: 280px;
   box-shadow: 0 5px 5px rgba(42, 42, 238, 0.322);
   text-align: center;
-  padding: 10px;
+  padding: 10px; 
   color: black;
   cursor: pointer;
   transition: background-color 0.3s;
