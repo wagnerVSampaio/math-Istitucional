@@ -2,24 +2,24 @@
 import React from "react";
 import { IoMdHelpCircleOutline } from "react-icons/io";
 import Link from "next/link";
-import { ButtonCreate, ButtonCreateAccount } from "./style";
+import { ButtonIcon, ButtonCreateAccount, StyledNav, StyledP } from "./style";
 
 
 const NavLogin = () => {
   return (
-    <nav className="flex justify-between mx-4 my-4 text-green-900">
-      <p className="font-extrabold">Match Institucional</p>
-      <section className="flex justify-between mx-4 my-4 text-green-900">
+    <StyledNav >
+      <StyledP >Match Institucional</StyledP>
+      <section className="flex justify-between mx-1 my-1 text-green-900">
         <div>
-          <ButtonCreate>
+          <ButtonIcon>
             <IoMdHelpCircleOutline className=" text-xl"/>
-          </ButtonCreate>
+          </ButtonIcon>
         </div>
         <div>
-          <ButtonCreateAccount><Link href={"../pages/register"}>Cadastre-se</Link></ButtonCreateAccount>
+        <Link href={"../register"}><ButtonCreateAccount>Cadastre-se</ButtonCreateAccount></Link>
         </div>
       </section>
-    </nav>
+    </StyledNav>
   );
 };
 

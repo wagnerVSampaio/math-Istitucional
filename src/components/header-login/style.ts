@@ -1,6 +1,18 @@
 import styled from "styled-components";
 
-export const ButtonCreate=styled.button`
+export const StyledNav = styled.nav`
+  display: flex;
+  justify-content: space-between;
+  top: 0;
+  height: 50px;
+  color: #065f46; 
+  box-shadow: 0 4px 10px rgba(0, 107, 63, 0.5);
+`;
+export const StyledP = styled.p`
+    font-weight: 800;
+    margin: 12px 0 0 12px;
+`;
+export const ButtonIcon = styled.button`
     width: 40px;
     height: 40px;
     background-color: #ffff;
@@ -8,8 +20,6 @@ export const ButtonCreate=styled.button`
     border-radius: 50%; 
     cursor: pointer;
     transition: .2s;
-    color: #0B2A7A;
-    margin-left: 20px;
     display: flex;
     align-items: center;
     justify-content: center;

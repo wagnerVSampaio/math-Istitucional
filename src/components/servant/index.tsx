@@ -17,6 +17,8 @@ type FieldType = {
   nome?: string;
   email?: string;
   password?: string;
+  passwordconfirmation?: string;
+  phone?: string;
 };
 
 type SizeType = Parameters<typeof Form>[0]["size"];
@@ -113,9 +115,9 @@ const NavServidor = () => {
                 Telefone <strong className="text-red-500"> *</strong>
               </p>
               <Form.Item<FieldType>
-                name="email"
+                name="phone"
                 rules={[
-                  { required: true, message: "Por favor, insira o e-mail!" },
+                  { required: true, message: "Por favor, insira o telefone!" },
                 ]}
               >
                 <Input className="w-[250px]"/>
@@ -128,7 +130,8 @@ const NavServidor = () => {
               </p>
                   <Form.Item>
                     <DatePicker
-                      className="custom-date-picker"
+                      className="custom-date-picker w-[250px]"
+                      placeholder="Selecione a data de nascimento"
                     />
                   </Form.Item >
             </div>
@@ -156,7 +159,7 @@ const NavServidor = () => {
                         <strong className="text-red-500"> *</strong>
                       </p>
                       <Form.Item<FieldType>
-                        name="password"
+                        name="passwordconfirmation"
                         rules={[
                           {
                             required: true,
@@ -185,7 +188,7 @@ const NavServidor = () => {
             <Flex gap="small" wrap>
               <Link href={"/"}>
                 <Button
-                  className="w-[250px] mr-[40px] text-customGreen font-bold border-[1px] border-[#228B22]"
+                  className="w-[250px] mr-[40px] text-customGreen font-bold border-[1px] border-[#006b3f]"
                 >
                   Voltar
                 </Button>
