@@ -4,7 +4,7 @@ export const ButtonCreate=styled.button`
     width: 40px;
     height: 40px;
     background-color: #ffff;
-    border: 1px solid #228B22;
+    border: 1px solid #006b3f;
     border-radius: 50%; 
     cursor: pointer;
     transition: .2s;
@@ -13,11 +13,11 @@ export const ButtonCreate=styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #228B22;
+    color: #006b3f;
 
 &:hover {
     color: white;
-    background-color: #228B22;
+    background-color: #006b3f;
 }
 `
 export const ButtonCreateAccount=styled.button`
@@ -25,15 +25,15 @@ export const ButtonCreateAccount=styled.button`
     font-size: 14px;
     font-weight: 800;
     background-color: #ffff;
-    border: 1px solid #228B22;
+    border: 1px solid #006b3f;
     border-radius: 30px; 
     cursor: pointer;
     transition: .2s;
-    color: #228B22;
+    color: #006b3f;
     margin-left: 30px;
 
 &:hover {
     color: white;
-    background-color: #228B22;
+    background-color: #006b3f;
 }
 `

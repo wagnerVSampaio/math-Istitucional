@@ -84,11 +84,11 @@ const ProfileContainer: React.FC = () => {
         </DivIconShare>
         </DivParagraph>
       <DivButton>
-        <ProfileButton className="text-[#272727]">
+        <ProfileButton>
           Tenho interesse em ...
         </ProfileButton>
         <Link href={"../expandable"}>
-          <EditProfileButton className="text-[#272727]">
+          <EditProfileButton >
             Editar perfil
           </EditProfileButton>
         </Link>

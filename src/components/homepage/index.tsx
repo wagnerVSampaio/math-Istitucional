@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect, useCallback } from 'react';
-import { DivTopHomePage, DivMenu, ImageHome, DivRadio } from './style';
+import { DivTopHomePage, DivMenu, ImageHome, DivRadio, DivContainer } from './style';
 import type { RadioChangeEvent } from 'antd/lib';
 import { Radio } from 'antd/lib';
 
@@ -59,8 +59,13 @@ const HomePage = () => {
             <Radio value={2}></Radio>
           </Radio.Group>
         </DivRadio>
+        <DivMenu>
+          <DivContainer>
+            <p className='mb-[10px]'>Sobre nós</p>
+            <p>Contato</p>
+          </DivContainer>
+        </DivMenu>
       </DivTopHomePage>
-      <DivMenu></DivMenu>
     </>
   );
 };

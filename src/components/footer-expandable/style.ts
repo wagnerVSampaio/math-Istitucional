@@ -15,8 +15,8 @@ export const FooterButton = styled.button`
     padding: 8px 50px;
     font-size: 14px;
     font-weight: 800;
-    background-color: #228B22;
-    border: 1px solid #228B22;
+    background-color: #006b3f;
+    border: 1px solid #006b3f;
     border-radius: 10px; 
     cursor: pointer;
     transition: .2s;
@@ -24,7 +24,7 @@ export const FooterButton = styled.button`
     margin-left: 30px;
 
     &:hover {
-        color: #228B22;
+        color: #006b3f;
         background-color: #FFFFFF;
 }
 `;

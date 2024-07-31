@@ -74,7 +74,7 @@ export const DivParagraph = styled.div`
 `;
 export const DivIconShare = styled.div`
   font-size: 40px;
-  color: #228b22;
+  color: #006b3f;
   display: flex;
   padding-right: 25px;
   margin-top: 5px;
@@ -87,9 +87,10 @@ export const DivButton = styled.div`
 `;
 export const EditProfileButton = styled.button`
   padding: 8px 150px;
-  background-color: #228B22;
+  background-color: #006b3f;
   color: white;
   border-radius: 10px;
+  font-weight: bold;
 `;
 export const ProfileButton = styled.button`
   padding: 8px 100px;
@@ -98,10 +99,11 @@ export const ProfileButton = styled.button`
   border: 1px solid #272727;
   border-radius: 10px;
   margin-left: 200px;
-  margin-right: 30px;
+  margin-right: 15px;
+  font-weight: bold;
 `;
 export const DivIcon = styled.div`
   font-size: 40px;
-  color: #228b22;
+  color: #006b3f;
   margin-left: 20px;
 `;

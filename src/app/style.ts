@@ -16,7 +16,7 @@ export const ButtonLogin = styled.button`
     font-weight: 800;
     width: 270px;
     padding: 6px;
-    background-color: #228B22;
+    background-color: #006b3f;
     border-radius: 5px;
 `;
 export const ButtonWithEmail=styled.button`
@@ -25,15 +25,15 @@ export const ButtonWithEmail=styled.button`
     font-size: 14px;
     font-weight: 800;
     background-color: #ffff;
-    border: 1px solid #228B22;
+    border: 1px solid #006b3f;
     border-radius: 30px; 
     cursor: pointer;
     transition: .2s;
-    color: #228B22;
+    color: #006b3f;
 
 &:hover {
     color: white;
-    background-color: #228B22;
+    background-color: #006b3f;
 }
 `
 export const ParagraphPassword = styled.p`

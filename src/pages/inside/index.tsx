@@ -42,7 +42,7 @@ const App: React.FC = () => {
             marginLeft: "10px",
             marginRight: "40px",
             marginTop: "10px",
-            color: "#228b22",
+            color: "#006b3f",
             fontWeight: 800,
             fontSize: "15px"
           }}

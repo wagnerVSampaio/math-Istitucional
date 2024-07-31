@@ -20,7 +20,7 @@ type FieldType = {
 const App: React.FC = () => (
   <>
     <NavLogin />
-    <ConfigProvider theme={{token: {colorPrimary: "#228B22"}}}>
+    <ConfigProvider theme={{token: {colorPrimary: "#006b3f"}}}>
     <section className="flex flex-col md:flex-row justify-center items-center md:mt-10 mx-4 md:mx-auto max-w-7xl">
       <Form
         name="basic"
@@ -59,23 +59,23 @@ const App: React.FC = () => (
         </Form.Item>
 
         <Form.Item className="mb-0">
-          <ButtonLogin>
-            <Link href={"../register"}>ENTRAR</Link>
-          </ButtonLogin>
+        <Link href={"../inside"}><ButtonLogin>
+            ENTRAR
+          </ButtonLogin></Link>
         </Form.Item>
 
         <Form.Item wrapperCol={{ span: 11 }}>
           <p className="text-customDark text-xs mt-6">Ao clicar em Continuar para se cadastrar ou entrar, você aceita os <strong>Termos de Uso</strong> e <strong>Política de Privacidade</strong> da Match Institucional.</p>
         </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 1, span: 16 }}>
-          <p className="text-customDark">———————— ou ————————</p>
+        <Form.Item wrapperCol={{  span: 16 }}>
+          <p className="text-customDark">———————— ou —————————</p>
         </Form.Item>
 
         <Form.Item>
-          <ButtonWithEmail>
-            <Link href={"../"}>Continue com o Google</Link>
-          </ButtonWithEmail>
+        <Link href={"../"}><ButtonWithEmail>
+            Continue com o Google
+          </ButtonWithEmail></Link>
         </Form.Item>
       </Form>
       <div className="mt-6 md:mt-0">

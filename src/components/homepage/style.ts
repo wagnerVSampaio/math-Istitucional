@@ -10,12 +10,18 @@ export const DivTopHomePage = styled.div`
     overflow: hidden;
 `;
 export const DivMenu = styled.div`
-    margin-top: 25px;
-    left: 0;
-    width: 40px;
-    height: 100%;
-    background-color: red;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 150px;
+  height: 90%; 
+  z-index: 3; 
 `;
+export const DivContainer = styled.div`
+    margin-left: 15px;
+    color: #272727;
+`;
+
 export const ImageHome = styled.div`
   position: absolute;
   top: 0;
