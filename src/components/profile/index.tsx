@@ -18,8 +18,8 @@ import {
   DivSave,
   DivP,
   Textarea,
-  TextareaEdit
 } from "./style";
+
 import { FaCamera } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
 import { FaShareAltSquare } from "react-icons/fa";
@@ -33,7 +33,7 @@ const ProfileContainer: React.FC = () => {
   );
   const [coverImage, setCoverImage] = useState<string | undefined>(undefined);
   const [isEditingBio, setIsEditingBio] = useState(false);
-  const [bioText, setBioText] = useState<string | undefined>(undefined);
+  const [bioText, setBioText] = useState<string | undefined>("");
 
   const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -117,27 +117,25 @@ const ProfileContainer: React.FC = () => {
         <DivP>
           {isEditingBio ? (
             <div>
-            <p>
-              <span className="font-bold">Biografia:</span>{" "}
-              <TextareaEdit
-                placeholder="Experimente escrever uma curta biografia sobre você, incluindo suas principais conquistas, habilidades e objetivos de carreira."
-                value={bioText}
-                onChange={(e) => setBioText(e.target.value)}
-              />
-            </p>
-            <DivSave onClick={handleSaveBio}>
+              <p>
+                <span className="font-bold">Biografia:</span>
+                <Textarea
+                  placeholder="Experimente escrever uma curta biografia sobre você, incluindo suas principais conquistas, habilidades e objetivos de carreira."
+                  value={bioText}
+                  onChange={(e) => setBioText(e.target.value)}
+                />
+              </p>
+              <DivSave onClick={handleSaveBio}>
                 <AiOutlineSave />
               </DivSave>
             </div>
           ) : (
             <div>
-              <p>
-                <span className="font-bold">Biografia:</span>{" "}
-                <Textarea
-                  placeholder="Experimente escrever uma curta biografia sobre você, incluindo suas principais conquistas, habilidades e objetivos de carreira."
-                >
-                  {bioText}
-                </Textarea>
+              <p className="font-bold">Biografia:</p>
+              <p
+                style={{ color: "#272727", opacity: "0.5", padding: "10px" }}
+              >
+                {bioText || "Experimente escrever uma curta biografia sobre você, incluindo suas principais conquistas, habilidades e objetivos de carreira."}
               </p>
               <DivEdit onClick={handleEditBio}>
                 <MdEditNote />

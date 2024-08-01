@@ -134,7 +134,7 @@ export const DivEdit = styled.button`
 export const DivSave = styled.button`
   position: absolute;
   top: 12px;
-  right: 15px;
+  right: 16px;
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -143,6 +143,7 @@ export const DivSave = styled.button`
   &:focus {
     border: 1px solid #006b3f; 
     outline: none; 
+    
   }
 `;
 export const Textarea = styled.textarea`
@@ -150,15 +151,10 @@ export const Textarea = styled.textarea`
   border-radius: 10px;
   padding: 10px;
   width: 100%;
-
-`;
-export const TextareaEdit = styled.textarea`
-  background-color: transparent;
-  border-radius: 10px;
-  padding: 10px;
-  width: 100%;
-  cursor: default;
-  &:read-only {
-    background-color: #f5f5f5; /* Muda a cor de fundo para indicar que é não editável */
+  border: 1px solid #006b3f;
+  &:focus {
+    border: 1px solid #006b3f; 
+    outline: none; 
+    
   }
 `;
