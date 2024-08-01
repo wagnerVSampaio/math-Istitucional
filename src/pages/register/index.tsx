@@ -5,13 +5,39 @@ import NavServidor from "@/components/servant";
 import NavRecrutador from "@/components/recruiter";
 import { Itens } from "./style";
 import HeaderOverall from "@/components/header-overall";
+import { useRouter } from 'next/navigation';
 
 const NavRegister = () => {
   const [value, setValue] = useState(1);
+  const router = useRouter();
 
   const onChangeRadio = (e: RadioChangeEvent) => {
     console.log("radio checked", e.target.value);
     setValue(e.target.value);
+  };
+
+  //Metodo de cadastro do servidor
+  const onRegister = async (values: { nome: string; email: string;photo: string; dateBirth: string; password: string; phone: string }) => {
+    try {
+      const response = await fetch("http://localhost:3000/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        localStorage.setItem("token", data.token); 
+        router.push("/inside");  
+      } else {
+        console.error(data.message || "Erro ao cadastrar usuário");
+      }
+    } catch (error) {
+      console.error("Erro ao fazer cadastro:", error);
+    }
   };
 
   return (
@@ -38,7 +64,7 @@ const NavRegister = () => {
               </Radio>
               <Radio value={2}> Recrutadores</Radio>
             </Radio.Group>
-            {value === 1 ? <NavServidor /> : <NavRecrutador />}
+            {value === 1 ? <NavServidor onRegister={onRegister}/> : <NavRecrutador />}
           </nav>
         </Itens>
       </>

@@ -7,11 +7,13 @@ import { ButtonLabelDate, DateBirthUpload, UploadButtonDate, } from "./style";
 
 
 type FieldType = {
-  nome?: string;
-  email?: string;
-  password?: string;
-  passwordconfirmation?: string;
-  phone?: string;
+  nome: string;
+  email: string;
+  photo: string;
+  dateBirth: string;
+  password: string;
+  passwordconfirmation: string;
+  phone: string;
 };
 
 type SizeType = Parameters<typeof Form>[0]["size"];
@@ -23,13 +25,24 @@ const normFile = (e: any) => {
   return e?.fileList;
 };
 
-const NavServidor = () => {
+interface NavServidorProps {
+  onRegister: (values: FieldType) => Promise<void>;
+}
+
+const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
   const [value, setValue] = useState(1);
   const [checked, setChecked] = useState(true);
   const [disabled, setDisabled] = useState(false);
   const [RegisterImage, setRegisterImage] = useState<string | undefined>(
     undefined
   );
+  const onFinish = (values: FieldType) => {
+    if (checked) {
+      onRegister(values);
+    } else {
+      console.error("Você deve aceitar os termos e condições.");
+    }
+  };
 
   const handleRegisterImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -67,6 +80,7 @@ const NavServidor = () => {
       initialValues={{ size: componentSize }}
       onValuesChange={onFormLayoutChange}
       size={componentSize as SizeType}
+      onFinish={onFinish}
       className="max-w-[600px]"
     >
       <div className="flex">
@@ -75,6 +89,7 @@ const NavServidor = () => {
             Nome completo <strong className="text-red-500"> *</strong>
           </p>
           <Form.Item<FieldType>
+            name="nome"
             rules={[{ required: true, message: "Por favor, insira o nome!" }]}
           >
             <Input className="w-[350px]" />
@@ -92,8 +107,10 @@ const NavServidor = () => {
         </div>
 
         <div >
-          <p className="mb-[3px]">Foto (opcional) </p>
-          <Form.Item>
+          <p className="mb-[3px]">Foto <strong className="text-red-500"> *</strong> </p>
+          <Form.Item<FieldType>
+            name="photo"
+            >
             <ButtonLabelDate htmlFor="registerImageUpload">
               <DateBirthUpload className="relative">
                 <img
@@ -133,7 +150,9 @@ const NavServidor = () => {
           <p className="mb-[3px]">
             Data de nascimento <strong className="text-red-500"> * </strong>
           </p>
-          <Form.Item>
+          <Form.Item<FieldType>
+            name="dateBirth"
+            >
             <DatePicker
               className="custom-date-picker w-[250px]"
               placeholder="Selecione a data de nascimento"
@@ -197,7 +216,7 @@ const NavServidor = () => {
             </Button>
           </Link>
           <Link href={"./teste"}>
-            <Button type="primary" className="w-[250px] font-extrabold">
+            <Button htmlType="submit" className="w-[250px] font-extrabold" type="primary">
               Criar conta
             </Button>
           </Link>
