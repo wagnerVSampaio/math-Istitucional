@@ -1,5 +1,0 @@
-[
-    { "id": 1, "message": "Nova vaga disponível!", "type": "info", "read": false },
-    { "id": 2, "message": "Sua vaga foi atualizada.", "type": "update", "read": false }
-  ]
-  

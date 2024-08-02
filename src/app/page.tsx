@@ -1,6 +1,6 @@
-"use client";
-import React, { useState } from "react";
-import { Form, Input } from "antd";
+"use client"
+import React, {useState} from "react";
+import { Form, Input } from "antd/lib";
 import Link from "next/link";
 import Image from "next/image";
 import NavLogin from "../components/header-login";
@@ -11,6 +11,7 @@ import {
   StyledInput,
 } from "./style";
 import { ConfigProvider } from "antd/lib";
+import "../app/globals.css";
 import { useRouter } from 'next/navigation';
 
 type FieldType = {

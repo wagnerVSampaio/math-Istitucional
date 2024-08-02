@@ -133,7 +133,7 @@ const ProfileContainer: React.FC = () => {
             <div>
               <p className="font-bold">Biografia:</p>
               <p
-                style={{ color: "#272727", opacity: "0.5", padding: "10px" }}
+                style={{ color: "#272727", opacity: "0.8", padding: "10px" }}
               >
                 {bioText || "Experimente escrever uma curta biografia sobre você, incluindo suas principais conquistas, habilidades e objetivos de carreira."}
               </p>
