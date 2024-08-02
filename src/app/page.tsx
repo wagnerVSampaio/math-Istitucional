@@ -28,7 +28,7 @@ const App: React.FC = () => {
   const loginAuthentication = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const response = await fetch("http://localhost:3000", {
+      const response = await fetch("####URL DA API####", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,7 +39,6 @@ const App: React.FC = () => {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("token", data.token);
         router.push("/inside");
       } else {
         setError(data.message || "E-mail ou senha inválido");

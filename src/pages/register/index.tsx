@@ -7,6 +7,16 @@ import { Itens } from "./style";
 import HeaderOverall from "@/components/header-overall";
 import { useRouter } from 'next/navigation';
 
+type FieldType = {
+  nome: string;
+  email: string;
+  photo: string;
+  dateBirth: string;
+  password: string;
+  passwordconfirmation: string;
+  phone: string;
+};
+
 const NavRegister = () => {
   const [value, setValue] = useState(1);
   const router = useRouter();
@@ -17,9 +27,9 @@ const NavRegister = () => {
   };
 
   //Metodo de cadastro do servidor
-  const onRegister = async (values: { nome: string; email: string;photo: string; dateBirth: string; password: string; phone: string }) => {
+  const onRegister = async (values:FieldType) => {
     try {
-      const response = await fetch("http://localhost:3000/register", {
+      const response = await fetch("URL DA API ", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,7 +40,6 @@ const NavRegister = () => {
       const data = await response.json();
       
       if (response.ok) {
-        localStorage.setItem("token", data.token); 
         router.push("/inside");  
       } else {
         console.error(data.message || "Erro ao cadastrar usuário");
