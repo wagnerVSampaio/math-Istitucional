@@ -14,9 +14,10 @@ import { ConfigProvider } from "antd/lib";
 import "../app/globals.css";
 import { useRouter } from 'next/navigation';
 
-type FieldType = {
-  email?: string;
-  password?: string;
+interface User {
+  id: number;
+  email: string;
+  password: string;
 };
 
 const App: React.FC = () => {
@@ -29,22 +30,19 @@ const App: React.FC = () => {
   const loginAuthentication = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const response = await fetch("####URL DA API####", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch("/usersData.json");
 
-      const data = await response.json();
+      const usersData = await response.json();
 
-      if (response.ok) {
-        router.push("/inside");
+      const user = usersData.find((user: User) => user.email === email && user.password === password);
+
+      if (user) {
+        router.push(`/inside`);
+        console.log(user.id)
       } else {
-        setError(data.message || "E-mail ou senha inválido");
+        setError("E-mail ou senha inválido");
       }
-    } catch (error) {
+    } catch (error: any) {
       setError("Erro ao fazer login");
       console.error("Erro ao fazer login:", error);
     }
@@ -68,7 +66,7 @@ const App: React.FC = () => {
               FAÇA LOGIN AGORA MESMO!
             </p>
             <p>E-mail</p>
-            <Form.Item<FieldType>
+            <Form.Item<User>
               name="email"
               rules={[{ required: true, message: "Insira seu e-mail!" }]}
             >
@@ -79,7 +77,7 @@ const App: React.FC = () => {
             </Form.Item>
 
             <p>Senha</p>
-            <Form.Item<FieldType>
+            <Form.Item<User>
               name="password"
               rules={[{ required: true, message: "Insira sua senha!" }]}
               className="mb-0"
@@ -102,7 +100,7 @@ const App: React.FC = () => {
             </Form.Item>
 
             <Form.Item className="mb-0">
-              <ButtonLogin onClick={loginAuthentication}>ENTRAR</ButtonLogin>
+              <ButtonLogin onClick={loginAuthentication} type="submit">ENTRAR</ButtonLogin>
             </Form.Item>
 
             <Form.Item wrapperCol={{ span: 11 }}>

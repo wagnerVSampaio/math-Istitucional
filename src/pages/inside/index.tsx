@@ -38,7 +38,7 @@ const Principal: React.FC = () => {
           <style.StyledRadioButton value={1}>
             <style.Home />
           </style.StyledRadioButton>
-          <style.StyledRadioButton value={2}>
+          <style.StyledRadioButton value={2} disabled={true}>
             <style.Friends />
           </style.StyledRadioButton>
           <style.StyledRadioButton value={3}>
@@ -47,7 +47,7 @@ const Principal: React.FC = () => {
           <style.StyledRadioButton value={4}>
             <style.Notifications />
           </style.StyledRadioButton>
-          <style.StyledRadioButton value={5}>
+          <style.StyledRadioButton value={5} disabled={true}>
             <style.Chat />
           </style.StyledRadioButton>
           <style.StyledRadioButton value={6}>
