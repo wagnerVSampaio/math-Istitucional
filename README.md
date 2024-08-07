@@ -1,18 +1,20 @@
-##TELA DE LOGIN:
-App > Page.tsx
+## TELA DE LOGIN
+- Onde está sendo chamado: `App > Page.tsx`
 
-##TELA DE CADASTRO DO SERVIDOR:
-Onde está sendo chamado: pages > register
-Onde está: components > servant
+## TELA DE CADASTRO DO SERVIDOR
+- Onde está sendo chamado: `pages > register`
+- Onde está: `components > servant`
 
-##TELA DE CADASTRO DO RECRUTADOR:
-Onde está sendo chamado: pages > register
-Onde está: components > recruiter
+## TELA DE CADASTRO DO RECRUTADOR
+- Onde está sendo chamado: `pages > register`
+- Onde está: `components > recruiter`
 
-##ARÉA DO PERFIL: 
-Onde está: components > profile
-Onde está sendo chamado: Pages > inside 
+## ÁREA DO PERFIL
+- Onde está sendo chamado: `Pages > inside`
+- Onde está: `components > profile`
 
-##ARÉA DAS VAGAS:
-Onde está sendo chamado: Pages > inside
-Onde está: (components > jobs) e (pages > jobsPage)
+## ÁREA DAS VAGAS
+- Onde está sendo chamado: `Pages > inside`
+- Onde está: 
+  - `components > jobs`
+  - `pages > jobsPage`
