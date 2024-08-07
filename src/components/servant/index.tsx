@@ -5,7 +5,6 @@ import Link from "next/link";
 import type { CheckboxProps } from "antd/lib";
 import { ButtonLabelDate, DateBirthUpload, UploadButtonDate, } from "./style";
 
-
 type FieldType = {
   name: string;
   email: string;

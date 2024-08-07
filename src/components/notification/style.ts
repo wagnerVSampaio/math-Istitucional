@@ -1,11 +1,13 @@
 import styled from "styled-components";
 
 export const DivNotification = styled.div`
-    margin: 20px auto;
+    margin: 25px auto;
     width: 80%;
     border-radius: 10px;
     color: #272727;
-    margin-top: 50px;
+    margin-top: 80px;
+    height: 500px;
+    overflow-x: auto;
 `;
 export const ButtonDelete = styled.button`
     background-color: transparent;
@@ -26,5 +28,4 @@ export const StyledLi = styled.ul`
     display: flex;
     justify-content: space-between;
     align-items: center;
-
 `;
