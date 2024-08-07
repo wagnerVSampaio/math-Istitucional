@@ -5,6 +5,7 @@ export const DivNotification = styled.div`
     width: 80%;
     border-radius: 10px;
     color: #272727;
+    margin-top: 50px;
 `;
 export const ButtonDelete = styled.button`
     background-color: transparent;

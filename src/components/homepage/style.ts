@@ -8,6 +8,7 @@ export const DivTopHomePage = styled.div`
     border-radius: 10px;
     position: relative;
     overflow: hidden;
+    margin-top: 80px;
 `;
 export const DivMenu = styled.div`
   position: fixed;

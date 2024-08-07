@@ -176,15 +176,15 @@ export const jobsData = [
     contact: "contato@xinguara.edu.br"
   },
   {
-    "id": 17,
-    "title": "Analista de Sistemas",
-    "description": "Responsável por desenvolver, testar e implementar sistemas e aplicações no Campus Belterra. O analista deverá garantir a funcionalidade e a segurança dos sistemas, além de oferecer suporte técnico aos usuários.",
-    "requirements": "Bacharelado em Ciência da Computação ou áreas afins, experiência mínima de 3 anos em desenvolvimento de sistemas, conhecimento em diversas linguagens de programação e bancos de dados.",
-    "benefits": "Plano de saúde, vale-refeição, auxílio-transporte, plano de carreira.",
-    "location": "Campus Belterra",
-    "postedAgo": "2 semanas atrás",
-    "salary": "R$ 4.000 - R$ 5.500",
-    "contact": "contato@belterra.edu.br"
+    id: 17,
+    title: "Analista de Sistemas",
+    description: "Responsável por desenvolver, testar e implementar sistemas e aplicações no Campus Belterra. O analista deverá garantir a funcionalidade e a segurança dos sistemas, além de oferecer suporte técnico aos usuários.",
+    requirements: "Bacharelado em Ciência da Computação ou áreas afins, experiência mínima de 3 anos em desenvolvimento de sistemas, conhecimento em diversas linguagens de programação e bancos de dados.",
+    benefits: "Plano de saúde, vale-refeição, auxílio-transporte, plano de carreira.",
+    location: "Campus Belterra",
+    postedAgo: "2 semanas atrás",
+    salary: "R$ 4.000 - R$ 5.500",
+    contact: "contato@belterra.edu.br"
   }
   
 ];

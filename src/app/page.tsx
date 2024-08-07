@@ -3,7 +3,6 @@ import React, {useState} from "react";
 import { Form, Input } from "antd/lib";
 import Link from "next/link";
 import Image from "next/image";
-import NavLogin from "../components/header-login";
 import {
   ButtonLogin,
   ButtonWithEmail,
@@ -13,6 +12,7 @@ import {
 import { ConfigProvider } from "antd/lib";
 import "../app/globals.css";
 import { useRouter } from 'next/navigation';
+import HeaderOverall from "../components/header-overall";
 
 interface User {
   id: number;
@@ -50,7 +50,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      <NavLogin />
+      <HeaderOverall />
       <ConfigProvider theme={{ token: { colorPrimary: "#006b3f" } }}>
         <section className="flex flex-col md:flex-row justify-center items-center md:mt-10 mx-4 md:mx-auto max-w-7xl">
           <Form
@@ -116,18 +116,18 @@ const App: React.FC = () => {
             </Form.Item>
 
             <Form.Item>
-              <Link href={"../"}>
-                <ButtonWithEmail>Continue com o Google</ButtonWithEmail>
+              <Link href={"../register"}>
+                <ButtonWithEmail>CADASTRE-SE</ButtonWithEmail>
               </Link>
             </Form.Item>
           </Form>
           <div className="mt-6 md:mt-0">
             <Image
-              src={"/img-3.png"}
+              src={"/page-login-img.png"}
               alt={"Login"}
-              width={500}
-              height={450}
-              style={{ width: "500px", height: "450px", marginLeft: "auto" }}
+              width={450}
+              height={400}
+              style={{  width: "400px", height: "400px",marginLeft: "auto" }}
             />
           </div>
         </section>

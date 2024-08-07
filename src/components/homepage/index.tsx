@@ -10,7 +10,7 @@ const images = [
   "/sobre-nos.png",
 ];
 
-const HomePage = () => {
+const HomePageContainer = () => {
   const [value, setValue] = useState(1);
   const [imageUrl, setImageUrl] = useState(images[0]);
 
@@ -69,4 +69,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default HomePageContainer;

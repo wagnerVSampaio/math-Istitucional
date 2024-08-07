@@ -7,6 +7,7 @@ export const DivTop = styled.div`
     height: 300px;
     border-radius: 10px;
     position: relative;
+    margin-top: 50px;
 `;
 
 export const ImageWrapper = styled.div`

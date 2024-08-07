@@ -34,7 +34,7 @@ const Jobs: React.FC = () => {
     paginaAtual * itemsPerPage
   );
   return (
-    <div>
+    <div className="mt-[50px]">
       <DivSelect>
         <Select
           showSearch

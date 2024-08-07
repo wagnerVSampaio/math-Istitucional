@@ -4,8 +4,8 @@ import type { RadioChangeEvent } from "antd/lib";
 import NavServidor from "@/components/servant";
 import NavRecrutador from "@/components/recruiter";
 import { Itens } from "./style";
-import HeaderOverall from "@/components/header-overall";
 import { useRouter } from 'next/navigation';
+import HeaderOverall from "@/components/header-overall";
 
 type FieldType = {
   nome: string;
@@ -40,7 +40,7 @@ const NavRegister = () => {
       const data = await response.json();
       
       if (response.ok) {
-        router.push("/inside");  
+        router.push("/inside-recruiter");  
       } else {
         console.error(data.message || "Erro ao cadastrar usuário");
       }

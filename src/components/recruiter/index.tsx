@@ -109,7 +109,7 @@ const NavRecrutador = () => {
                   Voltar
                 </Button>
               </Link>
-              <Link href={"./inside"}>
+              <Link href={"./inside-recruiter"}>
                 <Button
                   type="primary"
                   className="w-[250px] font-extrabold"

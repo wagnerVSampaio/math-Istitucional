@@ -20,6 +20,7 @@ import {
   Textarea,
 } from "./style";
 
+
 import { FaCamera } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
 import { FaShareAltSquare } from "react-icons/fa";

@@ -215,7 +215,7 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
               Voltar
             </Button>
           </Link>
-          <Link href={"./teste"}>
+          <Link href={"./inside"}>
             <Button htmlType="submit" className="w-[250px] font-extrabold" type="primary">
               Criar conta
             </Button>
