@@ -7,7 +7,7 @@ import { ButtonLabelDate, DateBirthUpload, UploadButtonDate, } from "./style";
 
 
 type FieldType = {
-  nome: string;
+  name: string;
   email: string;
   photo: string;
   dateBirth: string;
@@ -89,7 +89,7 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
             Nome completo <strong className="text-red-500"> *</strong>
           </p>
           <Form.Item<FieldType>
-            name="nome"
+            name="name"
             rules={[{ required: true, message: "Por favor, insira o nome!" }]}
           >
             <Input className="w-[350px]" />

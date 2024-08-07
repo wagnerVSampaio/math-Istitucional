@@ -19,14 +19,24 @@ import {
   DivP,
   Textarea,
 } from "./style";
-
-
 import { FaCamera } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
 import { FaShareAltSquare } from "react-icons/fa";
 import { MdEditNote } from "react-icons/md";
 import { AiOutlineSave } from "react-icons/ai";
 import Link from "next/link";
+
+type FieldType = {
+  name: string;
+  profilePhoto: string;
+  coverPhoto: string;
+  biography: string;
+  skills: string;
+  education: string;
+  campus: string;
+  degree: string;
+};
+
 
 const ProfileContainer: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | undefined>(
