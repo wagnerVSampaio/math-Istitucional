@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { SlArrowDown, SlArrowUp } from "react-icons/sl";
 import { Form, Input } from "antd/lib";
 import { AddButton } from "./style";
-import { Flex } from "antd";
 import FooterExpandable from "@/components/footer-expandable";
+import HeaderOverall from "@/components/header-overall";
 
 type FieldType = {
   nome?: string;
@@ -33,6 +33,7 @@ const CadastroExpansivel: React.FC = () => {
 
   return (
     <>
+    <HeaderOverall/>
       <div className="flex justify-center items-center flex-col">
         <div>
           <form>

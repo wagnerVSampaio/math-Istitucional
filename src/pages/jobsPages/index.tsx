@@ -1,6 +1,5 @@
-import React from "react";
+import React, {useState} from "react";
 import { Select, Pagination } from "antd/lib";
-import type { PaginationProps } from "antd/lib";
 import JobCard from "@/components/jobs";
 import { DivSelect, DivVacancies, DivFooter } from "@/components/jobs/style";
 import { jobsData } from "@/const";
@@ -19,16 +18,23 @@ const filterOption = (
   option?: { label: string; value: string }
 ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
-const onShowSizeChange: PaginationProps["onShowSizeChange"] = (
-  current,
-  pageSize
-) => {
-  console.log(current, pageSize);
-};
 
 const Jobs: React.FC = () => {
+  const [paginaAtual, setPaginaAtual] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(8);
+
+  const totalPaginas = Math.ceil(jobsData.length / itemsPerPage);
+
+  const handleClickPagina = (pagina: number) => {
+    setPaginaAtual(pagina);
+  };
+
+  const itensDaPaginaAtual = jobsData.slice(
+    (paginaAtual - 1) * itemsPerPage,
+    paginaAtual * itemsPerPage
+  );
   return (
-    <div>
+    <div className="mt-[50px]">
       <DivSelect>
         <Select
           showSearch
@@ -105,7 +111,7 @@ const Jobs: React.FC = () => {
       </DivSelect>
 
       <DivVacancies>
-        {jobsData.map((job) => (
+        {itensDaPaginaAtual.map((job) => (
           <JobCard
             key={job.id}
             title={job.title}
@@ -117,11 +123,12 @@ const Jobs: React.FC = () => {
       </DivVacancies>
 
       <DivFooter>
-        <Pagination
-          showSizeChanger
-          onShowSizeChange={onShowSizeChange}
-          defaultCurrent={3}
-          total={500}
+      <Pagination
+          defaultCurrent={1}
+          total={jobsData.length}
+          pageSize={itemsPerPage}
+          current={paginaAtual}
+          onChange={handleClickPagina}
         />
       </DivFooter>
     </div>

@@ -1,12 +1,13 @@
 import React from "react";
 import { Tooltip } from "antd/lib";
-import { DivVacanciesContainer, IconWrapper, JobTime, CalendarIcon, LocationIcon, UserIcon, DescriptionWrapper } from "./style";
+import { DivVacanciesContainer, IconWrapper, JobTime, CalendarIcon, LocationIcon, UserIcon, DescriptionWrapper, ContainerLocation } from "./style";
 
 interface JobCardProps {
   title: string;
   description: string;
   location: string;
   postedAgo: string;
+  
 }
 
 const JobCard: React.FC<JobCardProps> = ({ title, description, location, postedAgo }) => {
@@ -21,9 +22,9 @@ const JobCard: React.FC<JobCardProps> = ({ title, description, location, postedA
       </>
     }>
      
-      <IconWrapper>
+      <ContainerLocation>
         <LocationIcon /> <span>{location}</span>
-      </IconWrapper>
+      </ContainerLocation>
 
         <DescriptionWrapper>{description}</DescriptionWrapper>
 

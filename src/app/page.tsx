@@ -1,95 +1,139 @@
 "use client"
-import React from "react";
-import { Form, Input } from "antd";
+import React, {useState} from "react";
+import { Form, Input } from "antd/lib";
 import Link from "next/link";
 import Image from "next/image";
-import NavLogin from "../components/header-login";
 import {
   ButtonLogin,
   ButtonWithEmail,
   ParagraphPassword,
-  StyledInput
+  StyledInput,
 } from "./style";
 import { ConfigProvider } from "antd/lib";
+import "../app/globals.css";
+import { useRouter } from 'next/navigation';
+import HeaderOverall from "../components/header-overall";
 
-type FieldType = {
-  username?: string;
-  password?: string;
+interface User {
+  id: number;
+  email: string;
+  password: string;
 };
 
-const App: React.FC = () => (
-  <>
-    <NavLogin />
-    <ConfigProvider theme={{token: {colorPrimary: "#228B22"}}}>
-    <section className="flex flex-col md:flex-row justify-center items-center md:mt-10 mx-4 md:mx-auto max-w-7xl">
-      <Form
-        name="basic"
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
-        style={{ maxWidth: 600 }}
-        initialValues={{ remember: true }}
-        autoComplete="off"
-        className="md:mr-8"
-      >
-        <p className="text-green-900 font-bold text-2xl mb-4">FAÇA LOGIN AGORA MESMO!</p>
-        <p>E-mail</p>
-        <Form.Item<FieldType>
-          name="username"
-          rules={[{ required: true, message: "Insira seu e-mail!" }]}
-        >
-          <StyledInput />
-        </Form.Item>
+const App: React.FC = () => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
-        <p>Senha</p>
-        <Form.Item<FieldType>
-          name="password"
-          rules={[{ required: true, message: "Insira sua senha!" }]}
-          className="mb-0"
-        >
-          <StyledInput />
-        </Form.Item>
+  //Metodo de autenticação de login
+  const loginAuthentication = async (event: React.FormEvent) => {
+    event.preventDefault();
+    try {
+      const response = await fetch("/usersData.json");
 
-        <Form.Item
-          wrapperCol={{ offset: 1, span: 16 }}
-          className="text-customDark"
-        >
-          <Link href={"../register"}>
-            <ParagraphPassword className="text-xs">Esqueceu a senha?</ParagraphPassword>
-          </Link>
-        </Form.Item>
+      const usersData = await response.json();
 
-        <Form.Item className="mb-0">
-          <ButtonLogin>
-            <Link href={"../register"}>ENTRAR</Link>
-          </ButtonLogin>
-        </Form.Item>
+      const user = usersData.find((user: User) => user.email === email && user.password === password);
 
-        <Form.Item wrapperCol={{ span: 11 }}>
-          <p className="text-customDark text-xs mt-6">Ao clicar em Continuar para se cadastrar ou entrar, você aceita os <strong>Termos de Uso</strong> e <strong>Política de Privacidade</strong> da Match Institucional.</p>
-        </Form.Item>
+      if (user) {
+        router.push(`/inside`);
+        console.log(user.id)
+      } else {
+        setError("E-mail ou senha inválido");
+      }
+    } catch (error: any) {
+      setError("Erro ao fazer login");
+      console.error("Erro ao fazer login:", error);
+    }
+  };
 
-        <Form.Item wrapperCol={{ offset: 1, span: 16 }}>
-          <p className="text-customDark">———————— ou ————————</p>
-        </Form.Item>
+  return (
+    <>
+      <HeaderOverall />
+      <ConfigProvider theme={{ token: { colorPrimary: "#006b3f" } }}>
+        <section className="flex flex-col md:flex-row justify-center items-center md:mt-10 mx-4 md:mx-auto max-w-7xl">
+          <Form
+            name="basic"
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
+            style={{ maxWidth: 600 }}
+            initialValues={{ remember: true }}
+            autoComplete="off"
+            className="md:mr-8"
+          >
+            <p className="text-green-900 font-bold text-2xl mb-4">
+              FAÇA LOGIN AGORA MESMO!
+            </p>
+            <p>E-mail</p>
+            <Form.Item<User>
+              name="email"
+              rules={[{ required: true, message: "Insira seu e-mail!" }]}
+            >
+              <StyledInput
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </Form.Item>
 
-        <Form.Item>
-          <ButtonWithEmail>
-            <Link href={"../"}>Continue com o Google</Link>
-          </ButtonWithEmail>
-        </Form.Item>
-      </Form>
-      <div className="mt-6 md:mt-0">
-        <Image
-          src={"/img-3.png"}
-          alt={"Login"}
-          width={500}
-          height={450}
-          style={{ width: "500px", height: "450px", marginLeft: "auto" }}
-        />
-      </div>
-    </section>
-    </ConfigProvider>
-  </>
-);
+            <p>Senha</p>
+            <Form.Item<User>
+              name="password"
+              rules={[{ required: true, message: "Insira sua senha!" }]}
+              className="mb-0"
+            >
+              <StyledInput
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Form.Item>
+
+            <Form.Item
+              wrapperCol={{ offset: 1, span: 16 }}
+              className="text-customDark"
+            >
+              <Link href={"../register"}>
+                <ParagraphPassword className="text-xs">
+                  Esqueceu a senha?
+                </ParagraphPassword>
+              </Link>
+            </Form.Item>
+
+            <Form.Item className="mb-0">
+              <ButtonLogin onClick={loginAuthentication} type="submit">ENTRAR</ButtonLogin>
+            </Form.Item>
+
+            <Form.Item wrapperCol={{ span: 11 }}>
+              <p className="text-customDark text-xs mt-6">
+                Ao clicar em Continuar para se cadastrar ou entrar, você aceita
+                os <strong>Termos de Uso</strong> e{" "}
+                <strong>Política de Privacidade</strong> da Match Institucional.
+              </p>
+            </Form.Item>
+
+            <Form.Item wrapperCol={{ span: 16 }}>
+              <p className="text-customDark">———————— ou —————————</p>
+            </Form.Item>
+
+            <Form.Item>
+              <Link href={"../register"}>
+                <ButtonWithEmail>CADASTRE-SE</ButtonWithEmail>
+              </Link>
+            </Form.Item>
+          </Form>
+          <div className="mt-6 md:mt-0">
+            <Image
+              src={"/page-login-img.png"}
+              alt={"Login"}
+              width={450}
+              height={400}
+              style={{  width: "400px", height: "400px",marginLeft: "auto" }}
+            />
+          </div>
+        </section>
+      </ConfigProvider>
+    </>
+  );
+};
 
 export default App;

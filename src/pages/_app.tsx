@@ -5,10 +5,14 @@ import "../app/globals.css";
 
 const MyApp = ({ Component, pageProps }: AppProps) => (
   <ConfigProvider
-    theme={{ token: { fontFamily: "Arial", colorPrimary: "#228B22", colorBorder: "#228B22" } }}
+    theme={{
+      token: {
+        fontFamily: "Arial", // Substitua por 'xxx' ou outro valor desejado
+        colorPrimary: "#006B3F",
+        colorBorder: "#006B3F",
+      },
+    }}
   >
-    {" "}
-    {/* Substitua 'Arial' por 'xxx' ou outro valor desejado */}
     <Component {...pageProps} />
   </ConfigProvider>
 );

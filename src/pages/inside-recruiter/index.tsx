@@ -3,12 +3,11 @@ import React, { useState } from "react";
 import type { RadioChangeEvent } from "antd/lib";
 import type { SearchProps } from "antd/es/input/Search";
 import HomePage from "@/pages/homePages";
-import People from "@/components/people";
 import ProfilePages from "@/pages/profilePages";
 import Message from "@/components/message";
-import Jobs from "../jobsPages";
 import * as style from "./style";
 import NotificationPages from "../notificationPages";
+import Professionals from "@/components/professionals";
 
 const Principal: React.FC = () => {
   const [value, setValue] = useState(1);
@@ -38,19 +37,16 @@ const Principal: React.FC = () => {
           <style.StyledRadioButton value={1}>
             <style.Home />
           </style.StyledRadioButton>
-          <style.StyledRadioButton value={2} disabled={true}>
+          <style.StyledRadioButton value={2}>
             <style.Friends />
           </style.StyledRadioButton>
           <style.StyledRadioButton value={3}>
-            <style.Bag />
-          </style.StyledRadioButton>
-          <style.StyledRadioButton value={4}>
             <style.Notifications />
           </style.StyledRadioButton>
-          <style.StyledRadioButton value={5} disabled={true}>
+          <style.StyledRadioButton value={4} disabled={true}>
             <style.Chat />
           </style.StyledRadioButton>
-          <style.StyledRadioButton value={6}>
+          <style.StyledRadioButton value={5}>
             <style.Circle />
           </style.StyledRadioButton>
         </style.RadioGroup>
@@ -59,12 +55,10 @@ const Principal: React.FC = () => {
       {value === 1 ? (
         <HomePage />
       ) : value === 2 ? (
-        <People />
+        <Professionals />
       ) : value === 3 ? (
-        <Jobs />
-      ) : value === 4 ? (
         <NotificationPages />
-      ) : value === 5 ? (
+      ) : value === 4 ? (
         <Message />
       ) : (
         <ProfilePages />

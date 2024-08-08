@@ -1,9 +1,10 @@
 import styled, { css } from "styled-components";
 import { Radio, Input, Space } from "antd/lib";
 import { AiFillHome } from "react-icons/ai";
-import { FaUserFriends, FaUserCircle } from "react-icons/fa";
+import { FaUserCircle } from "react-icons/fa";
 import { IoBag, IoNotifications } from "react-icons/io5";
 import { MdChat } from "react-icons/md";
+import { BsPeopleFill } from "react-icons/bs";
 
 const { Search } = Input;
 
@@ -74,7 +75,7 @@ export const Home = styled(AiFillHome)`
   ${iconStyle}
 `;
 
-export const Friends = styled(FaUserFriends)`
+export const Friends = styled(BsPeopleFill)`
   ${iconStyle}
 `;
 
