@@ -33,7 +33,7 @@ const PasswordReset: React.FC = () => {
                     VOLTAR
                   </StyledButtonGoBack>
               </Link>
-              <StyledButton type="submit">AVANÇAR</StyledButton>
+              <Link href={'../code-password-reset'}><StyledButton type="submit">AVANÇAR</StyledButton></Link>
             </div>
           </div>
         </StyledForm>
