@@ -5,6 +5,7 @@ import {
   StyledForm,
   StyledInput,
   StyledPasswordReset,
+  StyledSpan
 } from "./style";
 import HeaderOverall from "@/components/header-overall";
 import Link from "next/link";
@@ -28,6 +29,7 @@ const PasswordReset: React.FC = () => {
           <div>
             <StyledInput type="text" placeholder="E-mail" />
             <div>
+            <p className='mb-[20px]'>Esqueceu o e-mail? <StyledSpan>Recuperar</StyledSpan></p>
               <Link href={'./'}>
                   <StyledButtonGoBack type="submit">
                     VOLTAR

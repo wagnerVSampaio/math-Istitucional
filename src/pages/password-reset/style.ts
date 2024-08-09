@@ -19,7 +19,7 @@ export const StyledInput = styled.input`
     padding: 5px;
     width: 100%;
     margin-top: 15px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     &:focus{
         border: 1px solid #006B3F;
         outline: none;
@@ -55,4 +55,13 @@ export const StyledButton = styled.button`
         background-color: white;
         color: #006B3F;
     };
+`;
+
+export const StyledSpan = styled.span`
+    cursor: pointer;
+    transition: text-decoration 0.3s ease;
+
+    &:hover {
+        text-decoration: underline;
+    }
 `;

@@ -16,11 +16,8 @@ export const StyledForm = styled.form`
 export const StyledInput = styled.input`
     border: 1px solid #006B3F;
     border-radius: 5px;
-    margin-left: 15px;
-    width: 50px;
-    height: 50px;
-    text-align: center;
-    font-size: 20px;
+    padding: 5px;
+    width: 100%;
     margin-top: 15px;
     margin-bottom: 15px;
     &:focus{
@@ -28,7 +25,6 @@ export const StyledInput = styled.input`
         outline: none;
     }
 `;
-
 export const StyledButtonGoBack = styled.button`
     background-color: white;
     color: #006B3F;
@@ -50,7 +46,7 @@ export const StyledButton = styled.button`
     font-weight: bold;
     border-radius: 5px;
     padding: 6px 60px;
-    margin-left: 18px;
+    margin-left: 15px;
     cursor: pointer;
     transition: .2s;
     border: 1px solid #006B3F;
@@ -59,13 +55,4 @@ export const StyledButton = styled.button`
         background-color: white;
         color: #006B3F;
     };
-`;
-
-export const StyledSpan = styled.span`
-    cursor: pointer;
-    transition: text-decoration 0.3s ease;
-
-    &:hover {
-        text-decoration: underline;
-    }
 `;

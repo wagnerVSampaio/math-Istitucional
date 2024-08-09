@@ -5,6 +5,7 @@ import {
     StyledForm,
     StyledInput,
     StyledPasswordReset,
+    StyledSpan
   } from "./style";
 import HeaderOverall from "../../components/header-overall"
 import Link from "next/link";
@@ -64,12 +65,13 @@ const CodePasswordReset: React.FC = () => {
             />
           ))}
             <div>
+                <p className='mb-[20px]'>Não recebeu o código? <StyledSpan>Reenviar</StyledSpan></p>
               <Link href={'../password-reset'}>
                   <StyledButtonGoBack type="submit">
                     VOLTAR
                   </StyledButtonGoBack>
               </Link>
-              <Link href={''}><StyledButton type="submit">AVANÇAR</StyledButton></Link>
+              <Link href={'../new-password'}><StyledButton type="submit">AVANÇAR</StyledButton></Link>
             </div>
           </div>
         </StyledForm>
