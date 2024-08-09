@@ -92,7 +92,7 @@ const App: React.FC = () => {
               wrapperCol={{ offset: 1, span: 16 }}
               className="text-customDark"
             >
-              <Link href={"../register"}>
+              <Link href={"../password-reset"}>
                 <ParagraphPassword className="text-xs">
                   Esqueceu a senha?
                 </ParagraphPassword>

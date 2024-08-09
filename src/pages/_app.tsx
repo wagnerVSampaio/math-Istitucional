@@ -7,7 +7,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => (
   <ConfigProvider
     theme={{
       token: {
-        fontFamily: "Arial", // Substitua por 'xxx' ou outro valor desejado
         colorPrimary: "#006B3F",
         colorBorder: "#006B3F",
       },
