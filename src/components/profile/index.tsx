@@ -27,6 +27,7 @@ import { AiOutlineSave } from "react-icons/ai";
 import Link from "next/link";
 
 type FieldType = {
+  id: number;
   name: string;
   profilePhoto: string;
   coverPhoto: string;
@@ -38,7 +39,7 @@ type FieldType = {
 };
 
 
-const ProfileContainer: React.FC = () => {
+const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   const [profileImage, setProfileImage] = useState<string | undefined>(
     undefined
   );
@@ -68,6 +69,29 @@ const ProfileContainer: React.FC = () => {
 
   const handleSaveBio = () => {
     setIsEditingBio(false);
+  };
+
+  const profileLink = `${window.location.origin}/profile/${id}`;
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Meu Perfil',
+          text: 'Venha ver o meu perfil na Match Institucional:',
+          url: profileLink,
+        });
+      } catch (error) {
+        console.error('Erro ao compartilhar:', error);
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(profileLink);
+        alert('Link do perfil copiado para a área de transferência!');
+      } catch (error) {
+        console.error('Erro ao copiar o link:', error);
+      }
+    }
   };
 
   return (
@@ -110,7 +134,7 @@ const ProfileContainer: React.FC = () => {
       <DivParagraph>
         <p>Nome completo do usuário</p>
         <DivIconShare>
-          <FaShareAltSquare />
+          <FaShareAltSquare onClick={handleShare}/>
         </DivIconShare>
       </DivParagraph>
 
