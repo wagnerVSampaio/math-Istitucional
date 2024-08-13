@@ -17,15 +17,34 @@ export const ButtonDelete = styled.button`
     font-size: 25px;
 `;
 export const StyledUl = styled.ul`
-    list-style-type: none;
-    padding: 0;
+  margin: 20px;
+  list-style-type: none;
+  padding: 0;
+  border: 1px solid #ddd;
+  background-color: #f4f4f4;
+  list-style-type: none;
 `;
-export const StyledLi = styled.ul`
-    padding: 15px;
-    margin: 10px 0;
-    cursor: pointer;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+
+export const StyledLi = styled.li`
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.3s ease;
+
+
+  .expanded-details {
+    margin: 20px;
+    font-size: 16px;
+    color: #333;
+  }
+
+  .delete-button-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
 `;
+

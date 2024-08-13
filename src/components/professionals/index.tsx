@@ -18,10 +18,12 @@ interface ProfessionalsProps {
 const Professionals: React.FC<ProfessionalsProps> = ({ highlightedId }) => {
   const professionals = ProfessionalsData;
 
-  // Separar a vaga destacada do restante
   const highlightedProfessional = professionals.find(professional => professional.id === highlightedId) || null;
   const otherProfessionals = professionals.filter(professional => professional.id !== highlightedId);
 
+  const handleContactClick = (email: string) => {
+    window.location.href = `mailto:${email}`;
+  };
   return (
     <style.DivNotification>
       <style.StyledUl>
@@ -66,8 +68,19 @@ const Professionals: React.FC<ProfessionalsProps> = ({ highlightedId }) => {
                 <style.Address /> {professional.address}
               </style.StyledP>
               <style.StyledP>
-                <style.Email />
-                <span>{professional.contact}</span>
+              <style.Email />{" "}
+                <span
+                  style={{ textDecoration: "none" }}
+                  onMouseOver={(e) =>
+                    (e.currentTarget.style.textDecoration = "underline")
+                  }
+                  onMouseOut={(e) =>
+                    (e.currentTarget.style.textDecoration = "none")
+                  }
+                  onClick={() => handleContactClick(professional.contact)}
+                >
+                  {professional.contact}
+                </span>
               </style.StyledP>
               <style.StyledP className="mt-[20px]">{professional.experience}</style.StyledP>
             </div>
