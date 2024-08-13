@@ -34,7 +34,6 @@ export const StyledLi = styled.li`
   position: relative;
   transition: background-color 0.3s ease;
 
-
   .expanded-details {
     margin: 20px;
     font-size: 16px;

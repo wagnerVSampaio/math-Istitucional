@@ -1,9 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect, useCallback } from 'react';
-import { DivTopHomePage, DivMenu, ImageHome, DivRadio, ParagraphStyled } from './style';
+import { DivTopHomePage, DivMenu, ImageHome, DivRadio, StyledParagraph, ImageCover, ImageWrapper } from './style';
 import type { RadioChangeEvent } from 'antd/lib';
 import { Radio } from 'antd/lib';
-import Link from 'next/link';
 
 const images = [
   "/bem-vindo.png",
@@ -13,6 +12,10 @@ const images = [
 const HomePageContainer = () => {
   const [value, setValue] = useState(1);
   const [imageUrl, setImageUrl] = useState(images[0]);
+  const [profileImage, setProfileImage] = useState<string | undefined>(
+    undefined
+  );
+  const [coverImage, setCoverImage] = useState<string | undefined>(undefined);
 
   const updateImage = (index: number) => {
     setImageUrl(images[index]);
@@ -61,8 +64,24 @@ const HomePageContainer = () => {
           </Radio.Group>
         </DivRadio>
         <DivMenu>
-            <Link href={""}><ParagraphStyled>Sobre nós</ParagraphStyled></Link>
-            <Link href={""}><ParagraphStyled>Contato</ParagraphStyled></Link>
+        <div>
+          <ImageCover className="relative">
+          <img
+            src={coverImage || "/cover.png"}
+            alt="Cover"
+            className="w-full h-[50px] object-cover"
+          />
+        </ImageCover>
+  
+        <ImageWrapper className="relative">
+          <img
+            src={profileImage || "/profile.png"}
+            alt="Profile"
+            className="w-full h-[40px] object-cover"
+          />
+          </ImageWrapper>
+          <StyledParagraph>Nome do usuário</StyledParagraph>
+        </div>
         </DivMenu>
       </DivTopHomePage>
     </>
