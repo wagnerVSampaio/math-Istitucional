@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import * as style from "./style";
 import { ProfessionalsData } from "@/professionals-const";
 
@@ -11,42 +11,65 @@ interface Professional {
   experience: string;
 }
 
-const Professionals: React.FC = () => {
-  const [professionals, setProfessionals] =
-    useState<Professional[]>(ProfessionalsData);
+interface ProfessionalsProps {
+  highlightedId: number | null;
+}
 
-  const handleContactClick = (email: string) => {
-    window.location.href = `mailto:${email}`;
-  };
+const Professionals: React.FC<ProfessionalsProps> = ({ highlightedId }) => {
+  const professionals = ProfessionalsData;
+
+  // Separar a vaga destacada do restante
+  const highlightedProfessional = professionals.find(professional => professional.id === highlightedId) || null;
+  const otherProfessionals = professionals.filter(professional => professional.id !== highlightedId);
+
   return (
     <style.DivNotification>
       <style.StyledUl>
-        {professionals.map((professional) => (
-          <style.StyledLi key={professional.id}>
-            <div className="flex flex-col">
-              <style.StyledParagraph >{professional.name}</style.StyledParagraph>
+        {highlightedProfessional && (
+          <style.StyledLi
+            key={highlightedProfessional.id}
+            style={{ 
+              width: "100%",
+              backgroundColor: '#d3f9d8'
+            }}
+          >
+            <div className="flex flex-col m-[20px]">
+              <style.StyledParagraph>{highlightedProfessional.name}</style.StyledParagraph>
+              <style.StyledP>
+                <style.Degree /> {highlightedProfessional.formation}
+              </style.StyledP>
+              <style.StyledP>
+                <style.Address /> {highlightedProfessional.address}
+              </style.StyledP>
+              <style.StyledP>
+                <style.Email />
+                <span>{highlightedProfessional.contact}</span>
+              </style.StyledP>
+              <style.StyledP className="mt-[20px]">{highlightedProfessional.experience}</style.StyledP>
+            </div>
+          </style.StyledLi>
+        )}
+
+        {otherProfessionals.map((professional) => (
+          <style.StyledLi
+            key={professional.id}
+            style={{ 
+              backgroundColor: '#fff'
+            }}
+          >
+            <div className="flex flex-col m-[20px]">
+              <style.StyledParagraph>{professional.name}</style.StyledParagraph>
               <style.StyledP>
                 <style.Degree /> {professional.formation}
               </style.StyledP>
               <style.StyledP>
-                <style.Address /> {professional.address}{" "}
+                <style.Address /> {professional.address}
               </style.StyledP>
               <style.StyledP>
-                <style.Email />{" "}
-                <span
-                  style={{ textDecoration: "none" }}
-                  onMouseOver={(e) =>
-                    (e.currentTarget.style.textDecoration = "underline")
-                  }
-                  onMouseOut={(e) =>
-                    (e.currentTarget.style.textDecoration = "none")
-                  }
-                  onClick={() => handleContactClick(professional.contact)}
-                >
-                  {professional.contact}
-                </span>
+                <style.Email />
+                <span>{professional.contact}</span>
               </style.StyledP>
-              <style.StyledP className="mt-[20px]"> {professional.experience}</style.StyledP>
+              <style.StyledP className="mt-[20px]">{professional.experience}</style.StyledP>
             </div>
           </style.StyledLi>
         ))}

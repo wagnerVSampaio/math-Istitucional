@@ -14,12 +14,13 @@ export const DivNotification = styled.div`
 
 export const StyledUl = styled.ul`
   margin: 20px;
-  padding: 20px;
+  list-style-type: none;
+  padding: 0;
   border: 1px solid #ddd;
   background-color: #f4f4f4;
   list-style-type: none;
 `;
-export const StyledLi = styled.ul`
+export const StyledLi = styled.li`
   display: grid;
   grid-template-columns: 120px 1fr 150px 150px 120px;
   gap: 20px;
