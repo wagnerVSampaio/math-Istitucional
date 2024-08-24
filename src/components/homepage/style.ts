@@ -8,26 +8,25 @@ export const DivTopHomePage = styled.div`
     border-radius: 10px;
     position: relative;
     overflow: hidden;
-    margin-top: 80px;
+    margin-top: 65px;
 `;
 export const DivMenu = styled.div`
   position: fixed;
   left: 0;
-  bottom: 0;
   width: 150px;
-  height: 90%; 
+  height: 40%; 
   z-index: 3; 
+  color: #272727;
+  background-color: white;
+  border: 1px solid #ddd;
 `;
-export const ParagraphStyled = styled.div`
-    margin-left: 15px;
-    color: #272727;
-    background-color: white;
-    border-radius: 10px;
-    gap: 10px;
-    padding: 10px;
-    margin-bottom: 5px;
+export const StyledParagraph = styled.div`
+    margin-top: 50px;
+    padding-bottom: 10px;
+    font-size: 14px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
 `;
-
 export const ImageHome = styled.div`
   position: absolute;
   top: 0;
@@ -46,4 +45,20 @@ export const DivRadio = styled.div`
     height: 50px;
     z-index: 2;
     color: #272727;
+`;
+export const ImageWrapper = styled.div`
+  position: absolute;
+  left: 70px; 
+  transform: translateX(-50%); 
+  width: 50px; 
+  height: 50px; 
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid #fff; 
+  background-color: #f0f0f0;  
+`;
+export const ImageCover = styled.div`
+  position: relative;
+  width: 100%;
+  height: 20px; 
 `;

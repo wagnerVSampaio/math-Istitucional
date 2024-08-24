@@ -39,13 +39,14 @@ const Notification: React.FC = () => {
     <DivNotification>
       <StyledUl>
         {notifications.map(notification => (
+          
           <StyledLi
             key={notification.id}
             onClick={() => markAsRead(notification.id)}
-            style={{backgroundColor: notification.read ? '#fff' : '#006b3e49'}}
+            style={{backgroundColor: notification.read ? '#fff' : '#006b3e52'}}
           >
             <div className='flex flex-col'>
-              <p className='font-extrabold text-[16px]'>Nova oportunidade disponível: {notification.title}</p>
+              <p className='font-extrabold text-[16px]' style={{fontWeight: notification.read ? '400' : '800'}}>Nova oportunidade disponível: {notification.title}</p>
               <p>Local: {notification.location} | Publicada: {notification.postedAgo}</p>
             </div>
             <ButtonDelete

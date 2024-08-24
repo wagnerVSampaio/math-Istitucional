@@ -6,8 +6,8 @@ import HomePage from "@/pages/homePages";
 import ProfilePages from "@/pages/profilePages";
 import Message from "@/components/message";
 import * as style from "./style";
-import NotificationPages from "../notificationPages";
-import Professionals from "@/components/professionals";
+import NotificationRecruiterPages from "../notificationRecruiter";
+import ProfessionalsPage from "../professionalsPages";
 
 const Principal: React.FC = () => {
   const [value, setValue] = useState(1);
@@ -55,9 +55,9 @@ const Principal: React.FC = () => {
       {value === 1 ? (
         <HomePage />
       ) : value === 2 ? (
-        <Professionals />
+        <ProfessionalsPage />
       ) : value === 3 ? (
-        <NotificationPages />
+        <NotificationRecruiterPages />
       ) : value === 4 ? (
         <Message />
       ) : (

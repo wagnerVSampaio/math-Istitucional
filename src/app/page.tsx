@@ -62,7 +62,7 @@ const App: React.FC = () => {
             autoComplete="off"
             className="md:mr-8"
           >
-            <p className="text-green-900 font-bold text-2xl mb-4">
+            <p className="text-green-900 font-bold text-[20px] mb-4">
               FAÇA LOGIN AGORA MESMO!
             </p>
             <p>E-mail</p>
