@@ -45,7 +45,6 @@ export const DivVacanciesContainer = styled(Card)`
   width: 300px;
   height: 260px;
   box-shadow: 0 5px 5px rgba(42, 42, 238, 0.322);
-  padding: 10px;
   color: black;
   cursor: pointer;
   transition: background-color 0.3s;
@@ -63,16 +62,15 @@ export const IconWrapper = styled.div`
 
 export const ContainerLocation = styled.div`
   position: relative;
-  margin-top: -20px;
+  margin-top: -30px;
   text-align: left;
   width: 300px;
   justify-content: center;
 `;
 
 export const JobTime = styled.p`
-  font-size: 12px;
-  color: gray;
-  margin: 5px 0;
+  margin: 2px 0;
+  font-size: 14px;
 `;
 
 export const LocationIcon = styled(EnvironmentOutlined)`
@@ -87,8 +85,12 @@ export const UserIcon = styled(UserOutlined)`
   margin-right: 5px;
 `;
 
-export const DescriptionWrapper = styled.p`
-  display: flex;
+export const DescriptionWrapper = styled.div`
+  position: relative;
+  overflow: hidden;
+`;
+export const ParagraphDescription = styled.p`
+  font-size: 13px;
 `;
 export const DescriptionWrapperExpandable = styled.p`
   text-align: justify;
@@ -105,7 +107,7 @@ export const DescriptionWrapperExpandable = styled.p`
 
 export const DivButtons = styled.div`
   position: absolute;
-  bottom: 20px;
+  bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -128,6 +130,11 @@ export const ButtonFavorite = styled.p`
   color: white;
   font-size: 24px;
   margin: 0;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  &:hover {
+    transform: scale(1.05);
+  }
 `;
 
 export const IconClose = styled(VscChromeClose)`
@@ -136,7 +143,7 @@ export const IconClose = styled(VscChromeClose)`
 `;
 export const ButtonClose = styled.p`
   border-radius: 50%;
-  background-color: red;
+  background-color: #ff5864;
   width: 40px;
   height: 40px;
   display: flex;
@@ -145,6 +152,11 @@ export const ButtonClose = styled.p`
   color: white;
   font-size: 24px;
   margin: 0;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  &:hover {
+    transform: scale(1.05);
+  }
 `;
 
 export const IconDown = styled(BsChevronDown)`

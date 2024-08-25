@@ -1,28 +1,52 @@
-import React from "react";
+import React, { useState } from "react";
 import { Tooltip } from "antd/lib";
 
-import { DivVacanciesContainer, IconWrapper, JobTime, CalendarIcon, LocationIcon, UserIcon, DescriptionWrapper, ContainerLocation, ButtonFavorite, IconFavorite, IconDown, ButtonClose, IconClose, DivButtons } from "./style";
+import {
+  DivVacanciesContainer,
+  IconWrapper,
+  JobTime,
+  CalendarIcon,
+  LocationIcon,
+  DescriptionWrapper,
+  ContainerLocation,
+  ButtonFavorite,
+  IconFavorite,
+  ButtonClose,
+  IconClose,
+  DivButtons,
+  ParagraphDescription
+} from "./style";
+import { jobsData } from "@/const";
 
 interface JobCardProps {
   title: string;
   description: string;
   location: string;
   postedAgo: string;
-  
 }
 
-const JobCard: React.FC<JobCardProps> = ({ title, description, location, postedAgo }) => {
-  return (
-    <DivVacanciesContainer title={
-      <>
-       <Tooltip title={title} className=" text-customGreen font-bold">
-  
-       <span style={{fontSize: "20px"}}>{title}</span>
+const JobCard: React.FC<JobCardProps> = ({
+  title,
+  description,
+  location,
+  postedAgo,
+}) => {
 
-      </Tooltip>
-      </>
-    }>
-     
+  const truncateDescription = (text: string, maxLength: number) => {
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength) + "...";
+  };
+
+  return (
+    <DivVacanciesContainer
+      title={
+        <>
+          <Tooltip title={title} className=" text-customGreen font-bold">
+            <span style={{ fontSize: "20px"}}>{title}</span>
+          </Tooltip>
+        </>
+      }
+    >
       <ContainerLocation>
         <LocationIcon /> <span>{location}</span>
       </ContainerLocation>
@@ -30,14 +54,19 @@ const JobCard: React.FC<JobCardProps> = ({ title, description, location, postedA
       <IconWrapper>
         <CalendarIcon /> <JobTime>{postedAgo}</JobTime>
       </IconWrapper>
-      
-        <DescriptionWrapper>Mais informações <IconDown /></DescriptionWrapper>
+
+      <DescriptionWrapper >
+      <ParagraphDescription>{truncateDescription(description, 170)}</ParagraphDescription>
+      </DescriptionWrapper>
 
       <DivButtons>
-        <ButtonClose><IconClose /></ButtonClose>
-        <ButtonFavorite><IconFavorite /></ButtonFavorite>
+        <ButtonClose>
+          <IconClose />
+        </ButtonClose>
+        <ButtonFavorite>
+          <IconFavorite />
+        </ButtonFavorite>
       </DivButtons>
-      
     </DivVacanciesContainer>
   );
 };
