@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {Input} from "antd/lib"
+import {Input, Form} from "antd/lib"
 
 export const Section=styled.section`
     display: flex;

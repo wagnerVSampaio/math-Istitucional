@@ -5,6 +5,9 @@ import {
   EnvironmentOutlined,
   UserOutlined,
 } from "@ant-design/icons/lib";
+import { MdOutlineFavorite } from "react-icons/md";
+import { BsChevronDown } from "react-icons/bs";
+import { VscChromeClose } from "react-icons/vsc";
 
 export const DivFooter = styled.div`
   position: fixed;
@@ -13,12 +16,12 @@ export const DivFooter = styled.div`
   justify-content: center;
   color: #fff;
   width: 100%;
-  height: 40px;
+  height: 30px;
   background-color: #EAE5FF;
 `;
 
 export const DivSelect = styled.div`
-  margin: 10px auto;
+  margin: 3px auto;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -40,13 +43,14 @@ export const DivVacanciesContainer = styled(Card)`
   border: 1px solid #228b22;
   border-radius: 10px;
   width: 300px;
-  height: 250px;
+  height: 260px;
   box-shadow: 0 5px 5px rgba(42, 42, 238, 0.322);
   padding: 10px;
   color: black;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin: 5px;
+  position: relative;
+  margin: 2px;
   &:hover {
     background-color: #f0f0f0;
   }
@@ -54,20 +58,15 @@ export const DivVacanciesContainer = styled(Card)`
 
 export const IconWrapper = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 5px;
+  margin: 3px;
 `;
 
 export const ContainerLocation = styled.div`
   position: relative;
-  margin-left: -30px;
   margin-top: -20px;
   text-align: left;
-  font-weight: bold;
   width: 300px;
   justify-content: center;
-  margin-bottom: 5px;
 `;
 
 export const JobTime = styled.p`
@@ -89,7 +88,10 @@ export const UserIcon = styled(UserOutlined)`
 `;
 
 export const DescriptionWrapper = styled.p`
-text-align: justify;
+  display: flex;
+`;
+export const DescriptionWrapperExpandable = styled.p`
+  text-align: justify;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;
@@ -98,4 +100,56 @@ text-align: justify;
   -webkit-box-orient: vertical;
   height: 7.6;
   line-height: 1.5em;
+  display: flex;
 `;
+
+export const DivButtons = styled.div`
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 30px;
+`;
+
+export const IconFavorite = styled(MdOutlineFavorite)`
+  color: white;
+  font-size: 30px;
+`;
+
+export const ButtonFavorite = styled.p`
+  border-radius: 50%;
+  background-color: #006B3F;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  margin: 0;
+`;
+
+export const IconClose = styled(VscChromeClose)`
+  color: white;
+  font-size: 30px;
+`;
+export const ButtonClose = styled.p`
+  border-radius: 50%;
+  background-color: red;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  margin: 0;
+`;
+
+export const IconDown = styled(BsChevronDown)`
+  color: black;
+  font-size: 20px;
+`;
+
+

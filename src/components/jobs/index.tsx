@@ -1,6 +1,7 @@
 import React from "react";
 import { Tooltip } from "antd/lib";
-import { DivVacanciesContainer, IconWrapper, JobTime, CalendarIcon, LocationIcon, UserIcon, DescriptionWrapper, ContainerLocation } from "./style";
+
+import { DivVacanciesContainer, IconWrapper, JobTime, CalendarIcon, LocationIcon, UserIcon, DescriptionWrapper, ContainerLocation, ButtonFavorite, IconFavorite, IconDown, ButtonClose, IconClose, DivButtons } from "./style";
 
 interface JobCardProps {
   title: string;
@@ -14,9 +15,9 @@ const JobCard: React.FC<JobCardProps> = ({ title, description, location, postedA
   return (
     <DivVacanciesContainer title={
       <>
-       <Tooltip title={title}>
+       <Tooltip title={title} className=" text-customGreen font-bold">
   
-          <UserIcon /> <span>{title}</span>
+       <span style={{fontSize: "20px"}}>{title}</span>
 
       </Tooltip>
       </>
@@ -26,11 +27,17 @@ const JobCard: React.FC<JobCardProps> = ({ title, description, location, postedA
         <LocationIcon /> <span>{location}</span>
       </ContainerLocation>
 
-        <DescriptionWrapper>{description}</DescriptionWrapper>
-
       <IconWrapper>
         <CalendarIcon /> <JobTime>{postedAgo}</JobTime>
       </IconWrapper>
+      
+        <DescriptionWrapper>Mais informações <IconDown /></DescriptionWrapper>
+
+      <DivButtons>
+        <ButtonClose><IconClose /></ButtonClose>
+        <ButtonFavorite><IconFavorite /></ButtonFavorite>
+      </DivButtons>
+      
     </DivVacanciesContainer>
   );
 };
