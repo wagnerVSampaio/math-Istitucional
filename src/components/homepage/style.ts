@@ -12,13 +12,14 @@ export const DivTopHomePage = styled.div`
 `;
 export const DivMenu = styled.div`
   position: fixed;
-  left: 0;
+  left: 2%;
   width: 150px;
-  height: 40%; 
+  height: 35%; 
   z-index: 3; 
   color: #272727;
   background-color: white;
   border: 1px solid #ddd;
+  border-radius: 10px;
 `;
 export const StyledParagraph = styled.div`
     margin-top: 50px;
@@ -61,4 +62,24 @@ export const ImageCover = styled.div`
   position: relative;
   width: 100%;
   height: 20px; 
+`;
+export const StyleP = styled.p`
+    display: inline-block; 
+    font-size: 13px;
+    color: #333;
+    text-align: center;
+    cursor: pointer;
+    user-select: none; 
+    margin: 8px;
+    &:hover {
+        color: #006B3F;
+    }
+
+    &:last-child {
+        margin-right: 0;
+    }
+`;
+export const DivInfo = styled.div`
+  margin-top: 20px;
+  text-align: center;
 `;
