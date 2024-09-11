@@ -151,6 +151,7 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
           </p>
           <Form.Item<FieldType>
             name="dateBirth"
+            style={{marginRight: "8px"}}
             >
             <DatePicker
               className="custom-date-picker w-[250px]"
