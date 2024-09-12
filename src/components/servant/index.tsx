@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Checkbox, DatePicker, Form, Input, Button, Flex } from "antd/lib";
 import Link from "next/link";
 import type { CheckboxProps } from "antd/lib";
-import { ButtonLabelDate, DateBirthUpload, UploadButtonDate, } from "./style";
+import { ButtonLabelDate, DateBirthUpload, StyledForm, UploadButtonDate, } from "./style";
 
 type FieldType = {
   name: string;
@@ -72,14 +72,13 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
   };
 
   return (
-    <Form
+    <StyledForm
       labelCol={{ span: 1 }}
       wrapperCol={{ span: 14 }}
       layout="horizontal"
       initialValues={{ size: componentSize }}
       onValuesChange={onFormLayoutChange}
       size={componentSize as SizeType}
-      onFinish={onFinish}
       className="max-w-[600px]"
     >
       <div className="flex">
@@ -155,7 +154,6 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
             >
             <DatePicker
               className="custom-date-picker w-[250px]"
-              placeholder="Selecione a data de nascimento"
             />
           </Form.Item>
         </div>
@@ -222,7 +220,7 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
           </Link>
         </Flex>
       </div>
-    </Form>
+    </StyledForm>
   );
 };
 

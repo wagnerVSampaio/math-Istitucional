@@ -66,6 +66,11 @@ const NavRecrutador = () => {
     }
   };
 
+  const [cpf, setCpf] = useState('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCpf(e.target.value);
+  };
   return (
     <>
       <StyledForm
@@ -95,9 +100,14 @@ const NavRecrutador = () => {
             <Form.Item<FieldType>
               name="cpf"
               rules={[{ required: true, message: "Por favor, insira o CPF!" }]}
-              className="custom-form-item"
             >
-              <Input className="w-[350px]" />
+              <Input
+                type="text"
+                id="cpf"
+                value={cpf}
+                maxLength={11}
+                className="w-[350px]"
+              />
             </Form.Item>
           </div>
 

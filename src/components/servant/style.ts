@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import {Form} from "antd/lib"
+
 export const DateBirthUpload = styled.div`
   width: 120px; 
   height: 120px; 
@@ -15,4 +17,9 @@ export const UploadButtonDate = styled.input`
 export const ButtonLabelDate = styled.label`
   display: inline-block; 
   cursor: pointer;
+`;
+export const StyledForm = styled(Form)`
+  .ant-form-item {
+       margin-bottom: 7px !important;
+}
 `;
