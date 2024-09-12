@@ -108,8 +108,8 @@ const NavRecrutador = () => {
                 maxLength={11}
                 className="w-[350px]"
               />
-            </Form.Item>
-          </div>
+            </Form.Item>  
+            </div>
 
           <div>
             <p className="mb-[3px]">
