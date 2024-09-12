@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Checkbox, Form, Input, Button, Flex } from "antd/lib";
+import { Checkbox, Form, Input, Button, Flex, Select } from "antd/lib";
 import Link from "next/link";
 import type { CheckboxProps } from "antd/lib";
 import {
@@ -126,31 +126,65 @@ const NavRecrutador = () => {
           </div>
         </div>
         <div className="flex">
-        <div className="mr-[50px]">
-          <p className="mb-[3px]">
-            Lotação <strong className="text-red-500"> *</strong>
-          </p>
-          <Form.Item<FieldType>
-            rules={[
-              { required: true, message: "Por favor, insira o telefone!" },
-            ]}
-          >
-            <Input className="w-[250px]" />
-          </Form.Item>
-        </div>
-
-        <div>
-          <p className="mb-[3px]">
-            Campus <strong className="text-red-500"> * </strong>
-          </p>
-          <Form.Item<FieldType>
+          <div className="mr-[50px]">
+            <p className="mb-[3px]">
+              Lotação <strong className="text-red-500"> *</strong>
+            </p>
+            <Form.Item<FieldType>
+              rules={[
+                { required: true, message: "Por favor, insira o telefone!" },
+              ]}
             >
-            <Input
-              className=" w-[250px]"
+              <Input className="w-[250px]" />
+            </Form.Item>
+          </div>
+
+          <div>
+            <p className="mb-[3px]">
+              Campus <strong className="text-red-500"> * </strong>
+            </p>
+            <Select
+              showSearch
+              className="w-[250px]"
+              optionFilterProp="label"
+              filterSort={(optionA, optionB) =>
+                (optionA?.label ?? "")
+                  .toLowerCase()
+                  .localeCompare((optionB?.label ?? "").toLowerCase())
+              }
+              options={[
+                {
+                  value: "1",
+                  label: "Santarém (Campus sede)",
+                },
+                {
+                  value: "2",
+                  label: "Campus Alenquer",
+                },
+                {
+                  value: "3",
+                  label: "Campus Itaituba",
+                },
+                {
+                  value: "4",
+                  label: "Campus Monte Alegre",
+                },
+                {
+                  value: "5",
+                  label: "Campus Juruti",
+                },
+                {
+                  value: "6",
+                  label: "Campus Óbidos",
+                },
+                {
+                  value: "7",
+                  label: "Campus Oriximiná",
+                },
+              ]}
             />
-          </Form.Item>
+          </div>
         </div>
-      </div>
         <div className="flex">
           <div className="mr-[50px]">
             <p className="mb-[3px]">
@@ -185,6 +219,7 @@ const NavRecrutador = () => {
             </Form.Item>
           </div>
         </div>
+
         <div className="mb-[20px] flex">
           <Checkbox
             checked={checked}
