@@ -2,8 +2,8 @@ import styled from "styled-components";
 import {Form} from "antd/lib"
 
 export const DateBirthUpload = styled.div`
-  width: 120px; 
-  height: 120px; 
+  width: 100px; 
+  height: 100px; 
   border-radius: 10px;
   overflow: hidden;
   border: 2px dotted #006b3f;
