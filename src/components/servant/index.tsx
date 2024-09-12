@@ -1,9 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from "react";
-import { Checkbox, DatePicker, Form, Input, Button, Flex } from "antd/lib";
+import { Checkbox, DatePicker, Form, Input, Button, Flex, Space } from "antd/lib";
 import Link from "next/link";
 import type { CheckboxProps } from "antd/lib";
 import { ButtonLabelDate, DateBirthUpload, StyledForm, UploadButtonDate, } from "./style";
+import dayjs, { Dayjs } from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 type FieldType = {
   name: string;
@@ -27,6 +29,10 @@ const normFile = (e: any) => {
 interface NavServidorProps {
   onRegister: (values: FieldType) => Promise<void>;
 }
+
+dayjs.extend(customParseFormat);
+
+const dateFormat = 'DD/MM/YYYY'; 
 
 const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
   const [value, setValue] = useState(1);
@@ -69,6 +75,16 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
   const onChangeCheck: CheckboxProps["onChange"] = (e) => {
     console.log("checked = ", e.target.checked);
     setChecked(e.target.checked);
+  };
+
+  const [selectedDate, setSelectedDate] = useState<Dayjs | undefined>(undefined); 
+
+  const handleDateChange = (date: Dayjs | null) => {
+    if (date && date.isValid()) {
+      setSelectedDate(date);
+    } else {
+      setSelectedDate(undefined); 
+    }
   };
 
   return (
@@ -152,9 +168,15 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
             name="dateBirth"
             style={{marginRight: "8px"}}
             >
-            <DatePicker
-              className="custom-date-picker w-[250px]"
-            />
+    <Space direction="vertical" size={12}>
+      <DatePicker
+        value={selectedDate} 
+        format={dateFormat} 
+        onChange={handleDateChange} 
+        placeholder="Selecione a data"
+        className="w-[250px]"
+      />
+    </Space>
           </Form.Item>
         </div>
       </div>

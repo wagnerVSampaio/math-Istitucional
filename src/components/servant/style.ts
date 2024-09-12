@@ -1,9 +1,10 @@
 import styled from "styled-components";
-import {Form} from "antd/lib"
+import { Form } from "antd/lib";
+import { DatePicker } from "antd";
 
 export const DateBirthUpload = styled.div`
-  width: 100px; 
-  height: 100px; 
+  width: 100px;
+  height: 100px;
   border-radius: 10px;
   overflow: hidden;
   border: 2px dotted #006b3f;
@@ -15,11 +16,12 @@ export const UploadButtonDate = styled.input`
 `;
 
 export const ButtonLabelDate = styled.label`
-  display: inline-block; 
+  display: inline-block;
   cursor: pointer;
 `;
 export const StyledForm = styled(Form)`
   .ant-form-item {
-       margin-bottom: 7px !important;
-}
+    margin-bottom: 7px !important;
+  }
 `;
+
