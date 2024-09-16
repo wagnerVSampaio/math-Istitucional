@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { 
-    Container, Title, Question, Answer, FAQItem
+    Container, Title, Question, Answer, FAQItem,
+    HelpIcon
   } from './style';
+
 
 function Help() {
 
@@ -23,7 +25,7 @@ function Help() {
   return (
     <>
     <Container>
-      <Title>Central de Ajuda</Title>
+      <div className='flex justify-center'><Title>Central de Ajuda</Title><HelpIcon /></div>
       {faqData.map((item, index) => (
         <FAQItem key={index}>
           <Question>{item.question}</Question>
