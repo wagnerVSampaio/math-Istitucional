@@ -24,6 +24,6 @@ export const ButtonLabelDate = styled.label`
 
 export const StyledForm = styled(Form)`
   .ant-form-item {
-       margin-bottom: 7px !important;
+  margin-bottom: 7px !important;
 }
 `;
