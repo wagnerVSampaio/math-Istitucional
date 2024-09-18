@@ -175,6 +175,7 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
         onChange={handleDateChange} 
         placeholder="Selecione a data"
         className="w-[250px]"
+        
       />
     </Space>
           </Form.Item>
