@@ -45,6 +45,33 @@ const iconsStyle = css`
 `;
 
 
+export const ButtonApprove = styled.button`
+    padding: 8px 40px;
+    border: 1px solid #006B3F;
+    background-color: #006B3F;
+    color: white;
+    border-radius: 10px;
+    margin-left: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s;
+    &:hover{
+        box-shadow:  0 4px 8px rgba(0, 107, 63, 0.3);
+    }
+`;
+export const ButtonRefuse = styled.button`
+    padding: 8px 40px;
+    border: 1px solid #006B3F;
+    border-radius: 10px;
+    color: #006B3F;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s;
+    &:hover{
+        box-shadow:  0 4px 8px rgba(0, 107, 63, 0.3);
+    }
+`;
+
 export const Email = styled( IoMdMail )`
   ${iconsStyle}
 `;

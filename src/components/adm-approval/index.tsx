@@ -1,6 +1,7 @@
 import React from "react";
 import * as style from "./style";
 import { AdmData } from "@/adm-const";
+import { ButtonApprove, ButtonRefuse } from "./style";
 
 interface Adm {
   id: number;
@@ -25,28 +26,6 @@ const AdmApproval: React.FC<AdmProps> = ({ highlightedId }) => {
   return (
     <style.DivNotification>
       <style.StyledUl>
-        {highlightedAdm && (
-          <style.StyledLi
-            key={highlightedAdm.id}
-            style={{ 
-              width: "100%",
-              backgroundColor: '#d3f9d8'
-            }}
-          >
-            <div className="flex flex-col m-[20px]">
-              <style.StyledParagraph>{highlightedAdm.name}</style.StyledParagraph>
-              <style.StyledP>
-                <style.Degree /> {highlightedAdm.campus}
-              </style.StyledP>
-              <style.StyledP>
-                <style.Email />
-                <span>{highlightedAdm.email}</span>
-              </style.StyledP>
-              <style.StyledP className="mt-[20px]"></style.StyledP>
-            </div>
-          </style.StyledLi>
-        )}
-
         {otherAdm.map((adm) => (
           <style.StyledLi
             key={adm.id}
@@ -74,7 +53,10 @@ const AdmApproval: React.FC<AdmProps> = ({ highlightedId }) => {
                   {adm.email}
                 </span>
               </style.StyledP>
-              <style.StyledP className="mt-[20px]">Adicionar aq</style.StyledP>
+              <div className="flex mt-[40px]">
+                <ButtonRefuse>Recusar</ButtonRefuse>
+                <ButtonApprove>Aprovar</ButtonApprove>
+              </div>
             </div>
           </style.StyledLi>
         ))}
