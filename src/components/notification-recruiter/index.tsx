@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ButtonDelete, DivNotification, StyledLi, StyledUl } from './style';
+import { ButtonDelete, DivNotification, H2Name, StyledLi, StyledUl } from './style';
 import { MdDeleteForever } from "react-icons/md";
 import { ProfessionalsData } from "@/professionals-const";
 import { Modal, Button } from 'antd/lib';
@@ -39,7 +39,7 @@ const NotificationRecruiter: React.FC = () => {
       )
     );
   };
-  
+
   const showMoreInfoModal = (professional: Professional) => {
     setSelectedProfessional(professional); // Armazena os dados do profissional selecionado
     setIsModalVisible(true); // Exibe o modal
@@ -71,7 +71,7 @@ const NotificationRecruiter: React.FC = () => {
             style={{ backgroundColor: professional.read ? '#fff' : '#006b3e4b' }} // Cor muda para branco se "lido"
           >
             <div className='flex flex-col m-[20px]'>
-              <p className='font-extrabold text-[16px]'>
+              <p className='font-bold text-[16px]'>
                 {professional.name}, {professional.formation}
               </p>
               <p>Local: {professional.address}</p>
@@ -96,17 +96,19 @@ const NotificationRecruiter: React.FC = () => {
         onCancel={handleModalClose}
         footer={null} // Remove os botões de OK/Cancelar
         width={800} // Largura personalizada para o modal maior
+        height={1000}
       >
         {selectedProfessional && (
           <div>
-            <h2>{selectedProfessional.name}</h2>
+            <H2Name>{selectedProfessional.name}</H2Name>
             <p><strong>Formação:</strong> {selectedProfessional.formation}</p>
             <p><strong>Endereço:</strong> {selectedProfessional.address}</p>
             <p><strong>Contato:</strong> {selectedProfessional.contact}</p>
             <p><strong>Experiência:</strong> {selectedProfessional.experience}</p>
-            {/* Adicione outros detalhes aqui, como currículo ou habilidades */}
+
             <Button
               type="primary"
+              className='mt-3'
               href={generateMailtoLink(selectedProfessional.contact, selectedProfessional.name)} // Link mailto com assunto e corpo
             >
               Entrar em contato

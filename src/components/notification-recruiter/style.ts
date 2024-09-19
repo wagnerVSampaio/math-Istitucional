@@ -47,3 +47,9 @@ export const StyledLi = styled.li`
   }
 `;
 
+export const H2Name = styled.h2`
+  font-size: 20px;
+  color: #006B3F;
+  font-weight: bold;
+  margin-bottom: 8px;
+`;
