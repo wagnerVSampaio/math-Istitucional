@@ -8,6 +8,7 @@ import Message from "@/components/message";
 import * as style from "./style";
 import NotificationRecruiterPages from "../notificationRecruiter";
 import ProfessionalsPage from "../professionalsPages";
+import AddJobsPages from "../addJobsPages";
 
 const Principal: React.FC = () => {
   const [value, setValue] = useState(1);
@@ -41,12 +42,15 @@ const Principal: React.FC = () => {
             <style.Friends />
           </style.StyledRadioButton>
           <style.StyledRadioButton value={3}>
+            <style.Add />
+          </style.StyledRadioButton>
+          <style.StyledRadioButton value={4}>
             <style.Notifications />
           </style.StyledRadioButton>
-          <style.StyledRadioButton value={4} disabled={true}>
+          <style.StyledRadioButton value={5} disabled={true}>
             <style.Chat />
           </style.StyledRadioButton>
-          <style.StyledRadioButton value={5}>
+          <style.StyledRadioButton value={6}>
             <style.Circle />
           </style.StyledRadioButton>
         </style.RadioGroup>
@@ -57,8 +61,10 @@ const Principal: React.FC = () => {
       ) : value === 2 ? (
         <ProfessionalsPage />
       ) : value === 3 ? (
-        <NotificationRecruiterPages />
+        <AddJobsPages />
       ) : value === 4 ? (
+        <NotificationRecruiterPages />
+      ) : value === 5 ? (
         <Message />
       ) : (
         <ProfilePages />
