@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ButtonDelete, DivNotification, StyledLi, StyledUl } from './style';
 import { MdDeleteForever } from "react-icons/md";
 import { ProfessionalsData } from "@/professionals-const";
+import { Modal, Button } from 'antd/lib';
 
 interface Professional {
   id: number;
@@ -11,18 +12,21 @@ interface Professional {
   contact: string;
   experience: string;
   read: boolean;
-  expanded: boolean; // Novo campo para controle de expansão
+  expanded: boolean;
 }
 
 const initialProfessionalsData: Professional[] = ProfessionalsData.map(professional => ({
   ...professional,
-  read: false,
-  expanded: false // Inicialmente não expandido
+  read: false, // Inicialmente não lido
+  expanded: false
 }));
 
 const NotificationRecruiter: React.FC = () => {
   const [professionals, setProfessionals] = useState<Professional[]>(initialProfessionalsData);
+  const [isModalVisible, setIsModalVisible] = useState(false); // Controle do modal
+  const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null); 
 
+  // Marca o profissional como lido
   const markAsRead = (id: number) => {
     setProfessionals(prevProfessionals =>
       prevProfessionals.map(professional =>
@@ -37,21 +41,19 @@ const NotificationRecruiter: React.FC = () => {
     );
   };
 
-  const toggleExpand = (id: number) => {
-    setProfessionals(prevProfessionals =>
-      prevProfessionals.map(professional =>
-        professional.id === id ? { ...professional, expanded: !professional.expanded } : professional
-      )
-    );
-  };
-
-  const handleProfessionalClick = (id: number) => {
-    markAsRead(id);
-    toggleExpand(id);
-  };
-
   const handleContactClick = (email: string) => {
     window.location.href = `mailto:${email}`;
+  };
+
+  const showMoreInfoModal = (professional: Professional) => {
+    setSelectedProfessional(professional); // Armazena os dados do profissional selecionado
+    setIsModalVisible(true); // Exibe o modal
+    markAsRead(professional.id); // Marca o profissional como lido ao abrir o modal
+  };
+
+  const handleModalClose = () => {
+    setIsModalVisible(false); // Fecha o modal
+    setSelectedProfessional(null); // Limpa o profissional selecionado
   };
 
   return (
@@ -60,8 +62,11 @@ const NotificationRecruiter: React.FC = () => {
         {professionals.map((professional) => (
           <StyledLi
             key={professional.id}
-            onClick={() => handleProfessionalClick(professional.id)}
-            style={{ backgroundColor: professional.read ? '#fff' : '#ccc' }}
+            onClick={(e) => {
+              e.stopPropagation();
+              showMoreInfoModal(professional); 
+            }}
+            style={{ backgroundColor: professional.read ? '#fff' : '#006b3e4b' }} // Cor muda para branco se "lido"
           >
             <div className='flex flex-col m-[20px]'>
               <p className='font-extrabold text-[16px]'>
@@ -71,34 +76,43 @@ const NotificationRecruiter: React.FC = () => {
             </div>
             <div className='delete-button-container'>
               <ButtonDelete
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deleteProfessional(professional.id);
-                }}
+              onClick={(e) => {
+                e.stopPropagation();
+                deleteProfessional(professional.id);
+              }}
               >
                 <MdDeleteForever />
               </ButtonDelete>
             </div>
-            {professional.expanded && (
-              <div className='expanded-details '>
-                <p>Contato: 
-                <span
-                  style={{ textDecoration: "none" }}
-                  onMouseOver={(e) =>
-                    (e.currentTarget.style.textDecoration = "underline")
-                  }
-                  onMouseOut={(e) =>
-                    (e.currentTarget.style.textDecoration = "none")
-                  }
-                  onClick={() => handleContactClick(professional.contact)}
-                >
-                  {professional.contact}
-                </span></p>
-              </div>
-            )}
           </StyledLi>
         ))}
       </StyledUl>
+
+      {/* Modal com mais informações sobre o profissional */}
+      <Modal
+        title="Mais Informações"
+        visible={isModalVisible}
+        onCancel={handleModalClose}
+        footer={null} // Remove os botões de OK/Cancelar
+        width={800} // Largura personalizada para o modal maior
+        height={1000}
+      >
+        {selectedProfessional && (
+          <div>
+            <h2>{selectedProfessional.name}</h2>
+            <p><strong>Formação:</strong> {selectedProfessional.formation}</p>
+            <p><strong>Endereço:</strong> {selectedProfessional.address}</p>
+            <p><strong>Contato:</strong> {selectedProfessional.contact}</p>
+            <p><strong>Experiência:</strong> {selectedProfessional.experience}</p>
+            <Button
+              type="primary"
+              onClick={() => handleContactClick(selectedProfessional.contact)}
+            >
+              Entrar em contato
+            </Button>
+          </div>
+        )}
+      </Modal>
     </DivNotification>
   );
 };
