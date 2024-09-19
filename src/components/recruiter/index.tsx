@@ -18,6 +18,8 @@ type FieldType = {
   passwordconfirmation: string;
 };
 
+const { Option } = Select;
+
 type SizeType = Parameters<typeof Form>[0]["size"];
 
 const normFile = (e: any) => {
@@ -66,7 +68,7 @@ const NavRecrutador = () => {
     }
   };
 
-  const [cpf, setCpf] = useState('');
+  const [cpf, setCpf] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCpf(e.target.value);
@@ -108,8 +110,8 @@ const NavRecrutador = () => {
                 maxLength={11}
                 className="w-[350px]"
               />
-            </Form.Item>  
-            </div>
+            </Form.Item>
+          </div>
 
           <div>
             <p className="mb-[3px]">
@@ -135,18 +137,20 @@ const NavRecrutador = () => {
             </Form.Item>
           </div>
         </div>
-        <div className="flex">
+        <div className="flex mb-2">
           <div className="mr-[50px]">
             <p className="mb-[3px]">
               Lotação <strong className="text-red-500"> *</strong>
             </p>
-            <Form.Item<FieldType>
-              rules={[
-                { required: true, message: "Por favor, insira o telefone!" },
-              ]}
-            >
-              <Input className="w-[250px]" />
-            </Form.Item>
+              <Select placeholder="Selecione uma lotação" className="w-[250px]">
+                <Option value="PROGEP">PROGEP</Option>
+                <Option value="PROAP">PROAP</Option>
+                <Option value="PROPLAN">PROPLAN</Option>
+                <Option value="PROGES">PROGES</Option>
+                <Option value="PROEN">PROEN</Option>
+                <Option value="PROEX">PROEX</Option>
+                <Option value="PROINT">PROINT</Option>
+              </Select>
           </div>
 
           <div>
