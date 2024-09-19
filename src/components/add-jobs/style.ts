@@ -9,6 +9,7 @@ export const Container = styled.div`
   background-color: #fff;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  height: 550px;
   overflow-x: auto;
 `;
 
