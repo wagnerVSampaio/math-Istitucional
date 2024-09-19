@@ -12,13 +12,14 @@ export const DivTopHomePage = styled.div`
 `;
 export const DivMenu = styled.div`
   position: fixed;
-  left: 0;
+  left: 20px;
   width: 150px;
   height: 40%; 
   z-index: 3; 
   color: #272727;
   background-color: white;
   border: 1px solid #ddd;
+  border-radius: 10px;
 `;
 export const StyledParagraph = styled.div`
     margin-top: 50px;
@@ -61,4 +62,9 @@ export const ImageCover = styled.div`
   position: relative;
   width: 100%;
   height: 20px; 
+  border-radius: 10px 10px 0 0;
+`;
+export const ButtonStyled = styled.button`
+  font-size: 14px;
+  margin: 10px;
 `;
