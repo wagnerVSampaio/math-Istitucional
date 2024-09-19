@@ -27,6 +27,8 @@ export const StyledParagraph = styled.div`
     font-size: 14px;
     text-align: center;
     border-bottom: 1px solid #ddd;
+    color: #006B3F;
+    font-weight: bold;
 `;
 export const ImageHome = styled.div`
   position: absolute;
