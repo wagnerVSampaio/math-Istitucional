@@ -17,23 +17,14 @@ interface Professional {
 
 const initialProfessionalsData: Professional[] = ProfessionalsData.map(professional => ({
   ...professional,
-  read: false, // Inicialmente não lido
+  read: false,
   expanded: false
 }));
 
 const NotificationRecruiter: React.FC = () => {
   const [professionals, setProfessionals] = useState<Professional[]>(initialProfessionalsData);
   const [isModalVisible, setIsModalVisible] = useState(false); // Controle do modal
-  const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null); 
-
-  // Marca o profissional como lido
-  const markAsRead = (id: number) => {
-    setProfessionals(prevProfessionals =>
-      prevProfessionals.map(professional =>
-        professional.id === id ? { ...professional, read: true } : professional
-      )
-    );
-  };
+  const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
 
   const deleteProfessional = (id: number) => {
     setProfessionals(prevProfessionals =>
@@ -41,19 +32,30 @@ const NotificationRecruiter: React.FC = () => {
     );
   };
 
-  const handleContactClick = (email: string) => {
-    window.location.href = `mailto:${email}`;
+  const markAsRead = (id: number) => {
+    setProfessionals(prevProfessionals =>
+      prevProfessionals.map(professional =>
+        professional.id === id ? { ...professional, read: true } : professional
+      )
+    );
   };
-
+  
   const showMoreInfoModal = (professional: Professional) => {
     setSelectedProfessional(professional); // Armazena os dados do profissional selecionado
     setIsModalVisible(true); // Exibe o modal
     markAsRead(professional.id); // Marca o profissional como lido ao abrir o modal
-  };
+  }
 
   const handleModalClose = () => {
     setIsModalVisible(false); // Fecha o modal
     setSelectedProfessional(null); // Limpa o profissional selecionado
+  };
+
+  // Função para gerar o link mailto
+  const generateMailtoLink = (contact: string, name: string) => {
+    const subject = encodeURIComponent(`Contato sobre oportunidade de trabalho`);
+    const body = encodeURIComponent(`Olá ${name},\n\nGostaria de conversar sobre uma oportunidade de trabalho. Por favor, entre em contato.\n\nAtenciosamente,\nUniversidade Federal do Oeste do Pará`);
+    return `mailto:${contact}?subject=${subject}&body=${body}`;
   };
 
   return (
@@ -88,14 +90,12 @@ const NotificationRecruiter: React.FC = () => {
         ))}
       </StyledUl>
 
-      {/* Modal com mais informações sobre o profissional */}
       <Modal
         title="Mais Informações"
         visible={isModalVisible}
         onCancel={handleModalClose}
         footer={null} // Remove os botões de OK/Cancelar
         width={800} // Largura personalizada para o modal maior
-        height={1000}
       >
         {selectedProfessional && (
           <div>
@@ -104,9 +104,10 @@ const NotificationRecruiter: React.FC = () => {
             <p><strong>Endereço:</strong> {selectedProfessional.address}</p>
             <p><strong>Contato:</strong> {selectedProfessional.contact}</p>
             <p><strong>Experiência:</strong> {selectedProfessional.experience}</p>
+            {/* Adicione outros detalhes aqui, como currículo ou habilidades */}
             <Button
               type="primary"
-              onClick={() => handleContactClick(selectedProfessional.contact)}
+              href={generateMailtoLink(selectedProfessional.contact, selectedProfessional.name)} // Link mailto com assunto e corpo
             >
               Entrar em contato
             </Button>
