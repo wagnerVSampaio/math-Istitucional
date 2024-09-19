@@ -158,6 +158,7 @@ const NavRecrutador = () => {
               Campus <strong className="text-red-500"> * </strong>
             </p>
             <Select
+              placeholder="Selecione o Campus"
               showSearch
               className="w-[250px]"
               optionFilterProp="label"
