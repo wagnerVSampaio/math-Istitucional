@@ -113,7 +113,15 @@ const NavRecrutador = () => {
               />
             </Form.Item>
 
-            
+          <p className="mt-[3px] mb-[3px]">
+            E-mail <strong className="text-red-500"> *</strong>
+          </p>
+          <Form.Item<FieldType>
+            name="email"
+            rules={[{ required: true, message: "Por favor, insira o e-mail!" }]}
+          >
+            <Input className="w-[350px]" />
+          </Form.Item>
           </div>
 
           <div>
