@@ -24,6 +24,12 @@ import {
   ListItem,
   CompanyName,
   Period,
+  Wrapper,
+  Heading,
+  EducationItem,
+  DegreeTitle,
+  TimePeriod,
+  EducationList,
 } from "./style";
 import { FaCamera } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
@@ -91,6 +97,11 @@ const experiences = [
     period: "2019 a 2022",
     role: "Cientista de Dados",
   },
+];
+
+const educationData = [
+  { degree: 'Bacharel em Ciência da Computação', institution: 'Universidade ABC', period: '2014 a 2018' },
+  { degree: 'Mestrado em Engenharia de Software', institution: 'Universidade XYZ', period: '2019 a 2021' }
 ];
 
 const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
@@ -236,6 +247,18 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
           </DivP>
         </DivBio>
       </DivTop>
+
+      <Wrapper>
+      <Heading>Formação</Heading>
+      <EducationList>
+        {educationData.map((edu, index) => (
+          <EducationItem key={index}>
+            <DegreeTitle>{edu.degree}</DegreeTitle>
+            <TimePeriod>{edu.institution} - {edu.period}</TimePeriod>
+          </EducationItem>
+        ))}
+      </EducationList>
+    </Wrapper>
 
       <Container>
         <Title>Experiências</Title>

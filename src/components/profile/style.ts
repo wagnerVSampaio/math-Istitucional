@@ -28,7 +28,7 @@ export const UploadButton = styled.input`
 `;
 
 export const ButtonLabel = styled.label`
-    position: absolute;
+  position: absolute;
   bottom: 25px;
   right: 15px;  
   background-color: white; 
@@ -162,7 +162,7 @@ export const Textarea = styled.textarea`
 
 export const Container = styled.div`
   width: 80%;
-  margin: 50px auto;
+  margin: 1px auto;
   padding: 20px;
   background-color: #f7f7f7;
   border-radius: 10px;
@@ -198,5 +198,47 @@ export const CompanyName = styled.span`
 export const Period = styled.span`
   font-style: italic;
   color: black;
+  margin-top: 5px;
+`;
+
+export const Wrapper = styled.div`
+  width: 80%;
+  margin: 15px auto;
+  margin-top: 50px;
+  padding: 20px;
+  background-color: #f7f7f7;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+`;
+
+export const EducationList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+`;
+
+export const EducationItem = styled.li`
+  background-color: #fff;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+`;
+
+export const Heading = styled.h1`
+  color: #272727;
+  font-weight: bold;
+  margin-bottom: 20px;
+`;
+
+export const DegreeTitle = styled.span`
+  font-weight: bold;
+  color: #006B3F;
+`;
+
+export const TimePeriod = styled.span`
+  font-style: italic;
+  color: #272727;
   margin-top: 5px;
 `;
