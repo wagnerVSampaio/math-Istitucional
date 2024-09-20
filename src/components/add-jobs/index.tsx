@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Select } from 'antd/lib';
-import { Container, Title} from "./style"
+import { Form, Input, Button, Select, Modal } from 'antd/lib';
+import { ButtonAdd, Container, DivAdd, Title} from "./style"
 
 const { Option } = Select;
 
@@ -16,7 +16,26 @@ const AddJobs: React.FC = () => {
     form.resetFields();
   };
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  // Função para exibir o modal
+  const showModalAdd = () => {
+    setIsModalVisible(true);
+  };
+
+  // Função para fechar o modal
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
   return (
+    <>
+    <ButtonAdd onClick={showModalAdd}>Adicionar vaga</ButtonAdd>
+    <Modal
+    open={isModalVisible}
+    onCancel={handleCancel}
+    footer={null}
+  >
     <Container>
       <Title>Adicionar Vaga</Title>
       <Form
@@ -71,6 +90,11 @@ const AddJobs: React.FC = () => {
         </Form.Item>
       </Form>
     </Container>
+  </Modal>
+  <DivAdd>
+    <p>Ainda não há vagas cadastradas!</p>
+  </DivAdd>
+    </>
   );
 };
 
