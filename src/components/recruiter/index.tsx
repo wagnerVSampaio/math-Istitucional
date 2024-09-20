@@ -12,6 +12,7 @@ import {
 type FieldType = {
   name: string;
   cpf: string;
+  email: string;
   photo: string;
   lotacao: string;
   password: string;
@@ -111,6 +112,8 @@ const NavRecrutador = () => {
                 className="w-[350px]"
               />
             </Form.Item>
+
+            
           </div>
 
           <div>

@@ -9,6 +9,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 type FieldType = {
   name: string;
+  cpf: string;
   email: string;
   photo: string;
   dateBirth: string;
@@ -36,6 +37,7 @@ const dateFormat = 'DD/MM/YYYY';
 
 const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
   const [value, setValue] = useState(1);
+  const [cpf, setCpf] = useState("");
   const [checked, setChecked] = useState(true);
   const [disabled, setDisabled] = useState(false);
   const [RegisterImage, setRegisterImage] = useState<string | undefined>(
@@ -108,6 +110,22 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
           >
             <Input className="w-[350px]" />
           </Form.Item>
+
+          <p className="mt-[3px] mb-[3px]">
+              CPF <strong className="text-red-500"> *</strong>
+            </p>
+            <Form.Item<FieldType>
+              name="cpf"
+              rules={[{ required: true, message: "Por favor, insira o CPF!" }]}
+            >
+              <Input
+                type="text"
+                id="cpf"
+                value={cpf}
+                maxLength={11}
+                className="w-[350px]"
+              />
+            </Form.Item>
 
           <p className="mt-[3px] mb-[3px]">
             E-mail <strong className="text-red-500"> *</strong>
