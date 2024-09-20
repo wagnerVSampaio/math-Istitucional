@@ -92,7 +92,7 @@ const NotificationRecruiter: React.FC = () => {
 
       <Modal
         title="Mais Informações"
-        visible={isModalVisible}
+        open={isModalVisible}
         onCancel={handleModalClose}
         footer={null} // Remove os botões de OK/Cancelar
         width={800} // Largura personalizada para o modal maior

@@ -22,8 +22,11 @@ const Professionals: React.FC<ProfessionalsProps> = ({ highlightedId }) => {
   const otherProfessionals = professionals.filter(professional => professional.id !== highlightedId);
 
   const handleContactClick = (email: string) => {
-    window.location.href = `mailto:${email}`;
+    const subject = "Contato sobre oportunidade de trabalho";
+    const body = `Olá, ${email},\n\nGostaria de discutir uma oportunidade de trabalho com você.  Por favor, entre em contato.\n\nAtenciosamente,\nUniversidade Federal do Oeste do Pará`;
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
+
   return (
     <style.DivNotification>
       <style.StyledUl>
@@ -68,7 +71,7 @@ const Professionals: React.FC<ProfessionalsProps> = ({ highlightedId }) => {
                 <style.Address /> {professional.address}
               </style.StyledP>
               <style.StyledP>
-              <style.Email />{" "}
+                <style.Email />{" "}
                 <span
                   style={{ textDecoration: "none" }}
                   onMouseOver={(e) =>
