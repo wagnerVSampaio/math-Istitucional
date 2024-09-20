@@ -8,10 +8,14 @@ import {
   StyledParagraph,
   ImageCover,
   ImageWrapper,
-  ButtonStyled
+  ButtonStyled,
+  DivBottom,
+  LiStyled,
+  UlStyled
 } from "./style";
 import type { RadioChangeEvent } from "antd/lib";
 import { Radio, Modal, Button } from "antd/lib";
+import * as style from "./style";
 
 const images = ["/bem-vindo.png", "/sobre-nos.png"];
 
@@ -107,8 +111,19 @@ const HomePageContainer = () => {
               />
             </ImageWrapper>
             <StyledParagraph>Nome do usuário</StyledParagraph>
+            <div>
+              <nav>
+                <UlStyled>
+                  <LiStyled>Sobre</LiStyled>
+                  <LiStyled>Central de ajuda</LiStyled>
+                  <LiStyled>Termos e privacidade</LiStyled>
+                </UlStyled>
+              </nav>
+            </div>
+            <DivBottom>
             <ButtonStyled onClick={showModal}>
               Sair
+              <style.Exit/>
             </ButtonStyled>
             <Modal
               title="Confirmação"
@@ -120,6 +135,7 @@ const HomePageContainer = () => {
             >
               <p>Tem certeza que deseja sair?</p>
             </Modal>
+            </DivBottom>
           </div>
         </DivMenu>
       </DivTopHomePage>

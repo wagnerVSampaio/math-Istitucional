@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { MdOutlineExitToApp } from "react-icons/md";
 
 export const DivTopHomePage = styled.div`
     background-color: white;
@@ -14,7 +15,7 @@ export const DivMenu = styled.div`
   position: fixed;
   left: 20px;
   width: 150px;
-  height: 40%; 
+  height: 33%; 
   z-index: 3; 
   color: #272727;
   background-color: white;
@@ -69,4 +70,25 @@ export const ImageCover = styled.div`
 export const ButtonStyled = styled.button`
   font-size: 14px;
   margin: 10px;
+  display: flex;
+`;
+
+export const DivBottom = styled.div`
+  border-top: 1px solid #ddd;
+`;
+
+export const Exit = styled(MdOutlineExitToApp)`
+  font-size: 15px;
+  margin-top: 4px;
+  margin-left: 4px;
+`;
+
+export const LiStyled = styled.li`
+  font-size: 12px;
+`;
+export const UlStyled = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0 10px 10px;
 `;
