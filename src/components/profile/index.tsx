@@ -18,6 +18,12 @@ import {
   DivSave,
   DivP,
   Textarea,
+  Container,
+  Title,
+  List,
+  ListItem,
+  CompanyName,
+  Period,
 } from "./style";
 import { FaCamera } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
@@ -38,6 +44,54 @@ type FieldType = {
   degree: string;
 };
 
+const experiences = [
+  {
+    company: "Empresa ABC",
+    period: "2018 a 2022",
+    role: "Desenvolvedor Full-Stack",
+  },
+  {
+    company: "Tech Solutions",
+    period: "2016 a 2018",
+    role: "Engenheiro de Software",
+  },
+  {
+    company: "Startup XYZ",
+    period: "2014 a 2016",
+    role: "Desenvolvedor Front-End",
+  },
+  {
+    company: "Global Corp",
+    period: "2022 a presente",
+    role: "Gerente de Projetos",
+  },
+  {
+    company: "E-commerce Experts",
+    period: "2020 a 2022",
+    role: "Líder de Desenvolvimento",
+  },
+  {
+    company: "EduTech Solutions",
+    period: "2017 a 2020",
+    role: "Desenvolvedor Back-End",
+  },
+  {
+    company: "FinTech Innovations",
+    period: "2015 a 2017",
+    role: "Analista de Sistemas",
+  },
+  { company: "Retail Masters", period: "2019 a 2021", role: "Consultor de TI" },
+  {
+    company: "Cloud Solutions",
+    period: "2021 a presente",
+    role: "Arquiteto de Software",
+  },
+  {
+    company: "AI Innovations",
+    period: "2019 a 2022",
+    role: "Cientista de Dados",
+  },
+];
 
 const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   const [profileImage, setProfileImage] = useState<string | undefined>(
@@ -77,109 +131,126 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Meu Perfil',
-          text: 'Venha ver o meu perfil na Match Institucional:',
+          title: "Meu Perfil",
+          text: "Venha ver o meu perfil na Match Institucional:",
           url: profileLink,
         });
       } catch (error) {
-        console.error('Erro ao compartilhar:', error);
+        console.error("Erro ao compartilhar:", error);
       }
     } else {
       try {
         await navigator.clipboard.writeText(profileLink);
-        alert('Link do perfil copiado para a área de transferência!');
+        alert("Link do perfil copiado para a área de transferência!");
       } catch (error) {
-        console.error('Erro ao copiar o link:', error);
+        console.error("Erro ao copiar o link:", error);
       }
     }
   };
 
   return (
-    <DivTop>
-      <ImageCover className="relative">
-        <img
-          src={coverImage || "/cover.png"}
-          alt="Cover"
-          className="w-full h-[100px] object-cover"
-        />
-        <UploadButton
-          type="file"
-          accept="image/*"
-          id="coverImageUpload"
-          onChange={handleCoverImageChange}
-        />
-        <ButtonCoverLabel htmlFor="coverImageUpload">
-          <FaCamera />
-          <span className="ml-2">Adicionar foto de capa</span>
-        </ButtonCoverLabel>
-      </ImageCover>
+    <>
+      <DivTop>
+        <ImageCover className="relative">
+          <img
+            src={coverImage || "/cover.png"}
+            alt="Cover"
+            className="w-full h-[100px] object-cover"
+          />
+          <UploadButton
+            type="file"
+            accept="image/*"
+            id="coverImageUpload"
+            onChange={handleCoverImageChange}
+          />
+          <ButtonCoverLabel htmlFor="coverImageUpload">
+            <FaCamera />
+            <span className="ml-2">Adicionar foto de capa</span>
+          </ButtonCoverLabel>
+        </ImageCover>
 
-      <ImageWrapper className="relative">
-        <img
-          src={profileImage || "/profile.png"}
-          alt="Profile"
-          className="w-full h-[150px] object-cover"
-        />
-        <UploadButton
-          type="file"
-          accept="image/*"
-          id="profileImageUpload"
-          onChange={handleProfileImageChange}
-        />
-        <ButtonLabel htmlFor="profileImageUpload">
-          <FaCamera />
-        </ButtonLabel>
-      </ImageWrapper>
+        <ImageWrapper className="relative">
+          <img
+            src={profileImage || "/profile.png"}
+            alt="Profile"
+            className="w-full h-[150px] object-cover"
+          />
+          <UploadButton
+            type="file"
+            accept="image/*"
+            id="profileImageUpload"
+            onChange={handleProfileImageChange}
+          />
+          <ButtonLabel htmlFor="profileImageUpload">
+            <FaCamera />
+          </ButtonLabel>
+        </ImageWrapper>
 
-      <DivParagraph>
-        <p>Nome completo do usuário</p>
-        <DivIconShare>
-          <FaShareAltSquare onClick={handleShare}/>
-        </DivIconShare>
-      </DivParagraph>
+        <DivParagraph>
+          <p>Nome completo do usuário</p>
+          <DivIconShare>
+            <FaShareAltSquare onClick={handleShare} />
+          </DivIconShare>
+        </DivParagraph>
 
-      <DivButton>
-        <ProfileButton>Tenho interesse em ...</ProfileButton>
-        <Link href={"../expandable"}>
-          <EditProfileButton>Editar perfil</EditProfileButton>
-        </Link>
-        <DivIcon>
-          <IoSettingsSharp />
-        </DivIcon>
-      </DivButton>
+        <DivButton>
+          <ProfileButton>Meus Salvos</ProfileButton>
+          <Link href={"../expandable"}>
+            <EditProfileButton>Editar perfil</EditProfileButton>
+          </Link>
+          <DivIcon>
+            <IoSettingsSharp />
+          </DivIcon>
+        </DivButton>
 
-      <DivBio>
-        <DivP>
-          {isEditingBio ? (
-            <div>
-              <p>
-                <span className="font-bold">Biografia:</span>
-                <Textarea
-                  placeholder="Experimente escrever uma curta biografia sobre você, incluindo suas principais conquistas, habilidades e objetivos de carreira."
-                  value={bioText}
-                  onChange={(e) => setBioText(e.target.value)}
-                />
-              </p>
-              <DivSave onClick={handleSaveBio}>
-                <AiOutlineSave />
-              </DivSave>
-            </div>
-          ) : (
-            <div>
-              <p className="font-bold">Biografia:</p>
-              <p
-                style={{ color: "#272727", opacity: "0.8", padding: "10px" }}
-              >
-                {bioText || "Experimente escrever uma curta biografia sobre você, incluindo suas principais conquistas, habilidades e objetivos de carreira."}
-              </p>
-              <DivEdit onClick={handleEditBio}>
-                <MdEditNote />
-              </DivEdit>
-            </div>
-          )}
-        </DivP>
-      </DivBio>
-    </DivTop>
+        <DivBio>
+          <DivP>
+            {isEditingBio ? (
+              <div>
+                <p>
+                  <span className="font-bold">Biografia:</span>
+                  <Textarea
+                    placeholder="Experimente escrever uma curta biografia sobre você, incluindo suas principais conquistas, habilidades e objetivos de carreira."
+                    value={bioText}
+                    onChange={(e) => setBioText(e.target.value)}
+                  />
+                </p>
+                <DivSave onClick={handleSaveBio}>
+                  <AiOutlineSave />
+                </DivSave>
+              </div>
+            ) : (
+              <div>
+                <p className="font-bold">Biografia:</p>
+                <p
+                  style={{ color: "#272727", opacity: "0.8", padding: "10px" }}
+                >
+                  {bioText ||
+                    "Experimente escrever uma curta biografia sobre você, incluindo suas principais conquistas, habilidades e objetivos de carreira."}
+                </p>
+                <DivEdit onClick={handleEditBio}>
+                  <MdEditNote />
+                </DivEdit>
+              </div>
+            )}
+          </DivP>
+        </DivBio>
+      </DivTop>
+
+      <Container>
+        <Title>Experiências</Title>
+        <List>
+          {experiences.map((experience, index) => (
+            <ListItem key={index}>
+              <CompanyName>{experience.role} </CompanyName>
+              <Period>
+                <span>{experience.company}</span> - {experience.period}
+              </Period>
+            </ListItem>
+          ))}
+        </List>
+      </Container>
+    </>
   );
 };
 

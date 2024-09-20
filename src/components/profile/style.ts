@@ -94,13 +94,13 @@ export const EditProfileButton = styled.button`
   font-weight: bold;
 `;
 export const ProfileButton = styled.button`
-  padding: 8px 100px;
+  padding: 8px 120px;
   background-color: white;
   color: #272727;
   border: 1px solid #272727;
   border-radius: 10px;
   margin-left: 200px;
-  margin-right: 15px;
+  margin-right: 26px;
   font-weight: bold;
 `;
 export const DivIcon = styled.div`
@@ -111,7 +111,7 @@ export const DivIcon = styled.div`
 export const DivBio = styled.div`
   position: relative;
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: #ffff;
   border-radius: 10px;
   color: #272727;
   display: flex;
@@ -158,4 +158,45 @@ export const Textarea = styled.textarea`
     outline: none; 
     
   }
+`;
+
+export const Container = styled.div`
+  width: 80%;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #f7f7f7;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+`;
+
+export const List = styled.ul`
+  list-style-type: none;
+  padding: 0;
+`;
+
+export const ListItem = styled.li`
+  background-color: #fff;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+`;
+
+export const Title = styled.h1`
+  margin-bottom: 20px;
+  color: #272727;
+  font-weight: bold;
+`;
+
+export const CompanyName = styled.span`
+  font-weight: bold;
+  color: #006B3F;
+`;
+
+export const Period = styled.span`
+  font-style: italic;
+  color: black;
+  margin-top: 5px;
 `;

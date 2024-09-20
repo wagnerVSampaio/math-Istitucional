@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ButtonDelete, DivNotification, H2Name, StyledLi, StyledUl } from './style';
-import { MdDeleteForever } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import { ProfessionalsData } from "@/professionals-const";
 import { Modal, Button } from 'antd/lib';
 
@@ -83,7 +83,7 @@ const NotificationRecruiter: React.FC = () => {
                 deleteProfessional(professional.id);
               }}
               >
-                <MdDeleteForever />
+                <MdDelete />
               </ButtonDelete>
             </div>
           </StyledLi>
