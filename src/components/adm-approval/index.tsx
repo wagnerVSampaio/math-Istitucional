@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import * as style from "./style";
 import { AdmData } from "@/adm-const";
 import { ButtonApprove, ButtonRefuse } from "./style";
+import { Modal } from "antd/lib";
 
 interface Adm {
   id: number;
@@ -23,6 +24,24 @@ const AdmApproval: React.FC<AdmProps> = ({ highlightedId }) => {
   const handleContactClick = (email: string) => {
     window.location.href = `mailto:${email}`;
   };
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  // Função para exibir o modal
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  // Função para fechar o modal
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  // Função para confirmar a saída
+  const handleConfirm = () => {
+    setIsModalVisible(false);
+  };
+
   return (
     <style.DivNotification>
       <style.StyledUl>
@@ -55,12 +74,21 @@ const AdmApproval: React.FC<AdmProps> = ({ highlightedId }) => {
               </style.StyledP>
               <div className="flex mt-[40px]">
                 <ButtonRefuse>Recusar</ButtonRefuse>
-                <ButtonApprove>Aprovar</ButtonApprove>
+                <ButtonApprove onClick={showModal}>Aprovar</ButtonApprove>
               </div>
             </div>
           </style.StyledLi>
         ))}
       </style.StyledUl>
+      <Modal
+              title="Deseja prosseguir com a aprovação?"
+              open={isModalVisible}
+              onOk={handleConfirm}
+              onCancel={handleCancel}
+              okText="Sim"
+              cancelText="Não"
+            >
+            </Modal>
     </style.DivNotification>
   );
 };

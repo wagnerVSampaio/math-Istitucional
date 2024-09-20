@@ -36,6 +36,7 @@ import {
   ProgressBarContainer,
   ProgressBar,
   SkillPercentage,
+  Star,
 } from "./style";
 import { FaCamera } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
@@ -225,7 +226,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
         </DivParagraph>
 
         <DivButton>
-          <ProfileButton>Meus Salvos</ProfileButton>
+          <ProfileButton>Favoritos <Star/></ProfileButton>
           <Link href={"../expandable"}>
             <EditProfileButton>Editar perfil</EditProfileButton>
           </Link>

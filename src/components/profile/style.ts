@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { FaStar } from "react-icons/fa";
 
 export const DivTop = styled.div`
     background-color: white;
@@ -97,12 +98,13 @@ export const EditProfileButton = styled.button`
 export const ProfileButton = styled.button`
   padding: 8px 120px;
   background-color: white;
-  color: #272727;
-  border: 1px solid #272727;
+  color: #006B3F;
+  border: 1px solid #006B3F;
   border-radius: 10px;
   margin-left: 200px;
   margin-right: 26px;
   font-weight: bold;
+  display: flex;
 `;
 export const DivIcon = styled.div`
   font-size: 40px;
@@ -291,4 +293,10 @@ export const ProgressBar = styled.div<{ percentage: number }>`
   background-color: #76c7c0;
   height: 10px; /* Ajuste a altura da barra de progresso aqui */
   border-radius: 5px;
+`;
+
+export const Star = styled(FaStar)`
+  font-size: 15px;
+  margin-left: 10px;
+  margin-top: 5px;
 `;

@@ -127,7 +127,7 @@ const HomePageContainer = () => {
             </ButtonStyled>
             <Modal
               title="Confirmação"
-              visible={isModalVisible}
+              open={isModalVisible}
               onOk={handleConfirm}
               onCancel={handleCancel}
               okText="Sim"
