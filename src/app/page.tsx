@@ -82,9 +82,10 @@ const App: React.FC = () => {
               rules={[{ required: true, message: "Insira sua senha!" }]}
               className="mb-0"
             >
-              <StyledInput
+              <StyledInput.Password
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                style={{width: "270px", border: "1px solid #228B22", padding: "6px"}}
               />
             </Form.Item>
 
