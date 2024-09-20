@@ -77,7 +77,7 @@ export const DivIconShare = styled.div`
   font-size: 40px;
   color: #006b3f;
   display: flex;
-  padding-right: 25px;
+  padding-right: 23px;
   margin-top: 5px;
   margin-left: auto;
 `;
@@ -106,7 +106,7 @@ export const ProfileButton = styled.button`
 export const DivIcon = styled.div`
   font-size: 40px;
   color: #006b3f;
-  margin-left: 20px;
+  margin-left: 60px;
 `;
 export const DivBio = styled.div`
   position: relative;
