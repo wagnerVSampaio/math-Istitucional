@@ -128,6 +128,7 @@ const Jobs: React.FC = () => {
         open={isModalVisible}
         onCancel={handleCloseModal}
         footer={null}
+        width={700}
       >
         {selectedJob && (
           <JobDetails

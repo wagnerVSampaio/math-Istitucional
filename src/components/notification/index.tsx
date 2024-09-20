@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { ButtonDelete, DivNotification, StyledLi, StyledUl } from './style';
+import { ButtonDelete, DivNotification, H2Name, StyledLi, StyledUl } from './style';
 import { MdDeleteForever } from "react-icons/md";
 import { jobsData } from '@/const';
+import { Modal, Button } from 'antd/lib';
 
 interface JobNotification {
   id: number;
@@ -20,6 +21,8 @@ const initialJobsData: JobNotification[] = jobsData.map(job => ({
 
 const Notification: React.FC = () => {
   const [notifications, setNotifications] = useState<JobNotification[]>(initialJobsData);
+  const [isModalVisible, setIsModalVisible] = useState(false); // Controle do modal
+  const [selectedNotification, setSelectedNotification] = useState<JobNotification | null>(null);
 
   const markAsRead = (id: number) => {
     setNotifications(prevNotifications =>
@@ -35,18 +38,30 @@ const Notification: React.FC = () => {
     );
   };
 
+  const showMoreInfoModal = (notification: JobNotification) => {
+    setSelectedNotification(notification); // Armazena os dados da notificação selecionada
+    setIsModalVisible(true); // Exibe o modal
+    markAsRead(notification.id); // Marca a notificação como lida ao abrir o modal
+  }
+
+  const handleModalClose = () => {
+    setIsModalVisible(false); // Fecha o modal
+    setSelectedNotification(null); // Limpa a notificação selecionada
+  };
+
   return (
     <DivNotification>
       <StyledUl>
         {notifications.map(notification => (
-          
           <StyledLi
             key={notification.id}
-            onClick={() => markAsRead(notification.id)}
+            onClick={() => showMoreInfoModal(notification)} // Mostra o modal ao clicar
             style={{backgroundColor: notification.read ? '#fff' : '#006b3e52'}}
           >
             <div className='flex flex-col'>
-              <p className='font-extrabold text-[16px]' style={{fontWeight: notification.read ? '400' : '800'}}>Nova oportunidade disponível: {notification.title}</p>
+              <p className='font-extrabold text-[16px]' style={{fontWeight: notification.read ? '400' : '800'}}>
+                Nova oportunidade disponível: {notification.title}
+              </p>
               <p>Local: {notification.location} | Publicada: {notification.postedAgo}</p>
             </div>
             <ButtonDelete
@@ -60,6 +75,23 @@ const Notification: React.FC = () => {
           </StyledLi>
         ))}
       </StyledUl>
+
+      <Modal
+        title="Detalhes da Oportunidade"
+        open={isModalVisible}
+        onCancel={handleModalClose}
+        footer={null} 
+        width={800}
+      >
+        {selectedNotification && (
+          <div>
+            <H2Name>{selectedNotification.title}</H2Name>
+            <p><strong>Descrição:</strong> {selectedNotification.description}</p>
+            <p><strong>Local:</strong> {selectedNotification.location}</p>
+            <p><strong>Publicado:</strong> {selectedNotification.postedAgo}</p>
+          </div>
+        )}
+      </Modal>
     </DivNotification>
   );
 };

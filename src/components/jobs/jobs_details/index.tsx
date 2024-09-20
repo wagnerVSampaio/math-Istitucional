@@ -26,7 +26,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({
   contact
 }) => {
   return (
-    <Card style={{ margin: '20px' }}>
+    <Card style={{ margin: '20px'}}>
       <Title level={3}>{title}</Title>
       <Paragraph type="secondary">{location} - {postedAgo}</Paragraph>
 

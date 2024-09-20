@@ -22,10 +22,16 @@ export const StyledUl = styled.ul`
 `;
 export const StyledLi = styled.ul`
     padding: 15px;
-    margin: 10px 0;
+    margin: 5px 0;
     cursor: pointer;
     border-radius: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+`;
+export const H2Name = styled.h2`
+  font-size: 20px;
+  color: #006B3F;
+  font-weight: bold;
+  margin-bottom: 8px;
 `;
