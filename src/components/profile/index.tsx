@@ -30,6 +30,12 @@ import {
   DegreeTitle,
   TimePeriod,
   EducationList,
+  SkillsContainer,
+  SkillItem,
+  SkillTitle,
+  ProgressBarContainer,
+  ProgressBar,
+  SkillPercentage,
 } from "./style";
 import { FaCamera } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
@@ -103,6 +109,20 @@ const educationData = [
   { degree: 'Bacharel em Ciência da Computação', institution: 'Universidade ABC', period: '2014 a 2018' },
   { degree: 'Mestrado em Engenharia de Software', institution: 'Universidade XYZ', period: '2019 a 2021' }
 ];
+
+const skillsData = [
+  { skill: 'JavaScript', level: 90 },
+  { skill: 'React', level: 85 },
+  { skill: 'Node.js', level: 80 },
+  { skill: 'TypeScript', level: 75 },
+  { skill: 'CSS', level: 70 },
+  { skill: 'HTML', level: 95 },
+  { skill: 'Python', level: 60 },
+  { skill: 'SQL', level: 65 },
+  { skill: 'Git', level: 85 },
+  { skill: 'Docker', level: 50 }
+];
+
 
 const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   const [profileImage, setProfileImage] = useState<string | undefined>(
@@ -273,6 +293,24 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
           ))}
         </List>
       </Container>
+
+      <SkillsContainer>
+      <Title>Habilidades</Title>
+      {skillsData.map(({ skill, level }) => (
+        <SkillItem key={skill}>
+          <SkillTitle>{skill}</SkillTitle>
+          
+          <div className="flex">
+          <div>
+          <ProgressBarContainer>
+            <ProgressBar percentage={level} />
+          </ProgressBarContainer>
+          </div>
+          <SkillPercentage>{level}%</SkillPercentage>
+          </div>
+        </SkillItem>
+      ))}
+    </SkillsContainer>
     </>
   );
 };

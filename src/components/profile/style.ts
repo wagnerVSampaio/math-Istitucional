@@ -8,6 +8,7 @@ export const DivTop = styled.div`
     border-radius: 10px;
     position: relative;
     margin-top: 50px;
+
 `;
 
 export const ImageWrapper = styled.div`
@@ -241,4 +242,53 @@ export const TimePeriod = styled.span`
   font-style: italic;
   color: #272727;
   margin-top: 5px;
+`;
+
+
+export const SkillsContainer = styled.div`
+  width: 80%;
+  margin: 1px auto;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f7f7f7;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+`;
+
+export const SkillItem = styled.div`
+  list-style-type: none;
+  background-color: #fff;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+`;
+
+export const SkillTitle = styled.span`
+  font-weight: bold;
+  margin-right: 10px;
+  color: #006B3F;
+`;
+
+export const SkillPercentage = styled.span`
+  font-size: 0.8em; 
+  color: #555;
+  margin-left: 10px;
+`;
+
+export const ProgressBarContainer = styled.div`
+  width: 150px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 5px;
+`;
+
+export const ProgressBar = styled.div<{ percentage: number }>`
+  width: ${({ percentage }) => percentage}%;
+  background-color: #76c7c0;
+  height: 10px; /* Ajuste a altura da barra de progresso aqui */
+  border-radius: 5px;
 `;
