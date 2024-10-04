@@ -1,7 +1,10 @@
 import styled, {css} from "styled-components";
-import { FaStar } from "react-icons/fa";
+import { FaSave, FaStar } from "react-icons/fa";
 import { BiSolidEdit } from "react-icons/bi";
-import { IoIosArrowDown, IoMdAdd } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowUp, IoMdAdd } from "react-icons/io";
+import { MdDeleteSweep } from "react-icons/md";
+import { RiArrowGoBackFill } from "react-icons/ri";
+
 
 export const GeneralItens = styled.div`
     margin: 5px auto;
@@ -191,8 +194,6 @@ export const ListItem = styled.li`
   padding: 15px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
 `;
 
 export const Title = styled.h1`
@@ -322,4 +323,90 @@ export const Add = styled(IoMdAdd)`
 `;
 export const ArrowDown = styled(IoIosArrowDown)`
   ${StyleIcon}
+`;
+export const ArrowUp = styled(IoIosArrowUp)`
+  ${StyleIcon}
+`;
+export const Delete = styled(MdDeleteSweep)`
+  ${StyleIcon}
+`;
+export const Save = styled(FaSave)`
+  font-size: 20px;
+  color: #006B3F;
+`;
+export const GoBack = styled(RiArrowGoBackFill)`
+  font-size: 20px;
+  color: #006B3F;
+`;
+export const Profile = styled.input`
+    border: 1px solid #228B22;
+    padding: 2px;
+    border-radius: 5px;
+    &:focus {
+    outline: none;
+  }
+`;
+export const Input = styled.input`
+  width: 450px;
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  
+  &:focus { 
+    outline: none;
+  }
+`;
+
+export const Button = styled.button`
+  padding: 10px;
+  margin-top: 8px;
+`;
+
+export const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; 
+`;
+
+export const ModalContent = styled.div`
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 500px; 
+`;
+
+export const CloseButton = styled.button`
+  margin-top: 30px;
+  border: 1px solid #006B3F;
+  border-radius: 8px;
+  background-color: #ffff;
+  cursor: pointer;
+  padding: 8px 20px;
+  font-weight: bold;
+  color: #006B3F;
+`;
+export const AddExpButton = styled.button`
+  margin-top: 30px;
+  border: 1px solid #006B3F;
+  border-radius: 8px;
+  background-color: #006B3F;
+  color: #ffff;
+  cursor: pointer;
+  padding: 8px 20px;
+  margin-left: 20px;
+  font-weight: bold;
+`;
+export const H2Exp = styled.h2`
+  font-size: 20px;
+  color: #005B3F;
+  font-weight: bold;
+  text-align: center;
 `;
