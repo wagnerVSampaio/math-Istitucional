@@ -37,7 +37,10 @@ import {
   ProgressBar,
   SkillPercentage,
   Star,
-  GeneralItens
+  GeneralItens,
+  Add,
+  Editing,
+  ArrowDown
 } from "./style";
 import { FaCamera } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
@@ -272,7 +275,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
       </DivTop>
 
       <Wrapper>
-      <Heading>Formação</Heading>
+      <Heading>Formação <div className="flex gap-4"><Add/><Editing/><ArrowDown/></div></Heading>
       <EducationList>
         {educationData.map((edu, index) => (
           <EducationItem key={index}>
@@ -284,7 +287,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
     </Wrapper>
 
       <Container>
-        <Title>Experiências</Title>
+        <Title>Experiências <div className="flex gap-4"><Add/><Editing/><ArrowDown/></div></Title>
         <List>
           {experiences.map((experience, index) => (
             <ListItem key={index}>
@@ -298,7 +301,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
       </Container>
 
       <SkillsContainer>
-      <Title>Habilidades</Title>
+      <Title>Habilidades <div className="flex gap-4"><Add/><Editing/><ArrowDown/></div></Title>
       {skillsData.map(({ skill, level }) => (
         <SkillItem key={skill}>
           <SkillTitle>{skill}</SkillTitle>

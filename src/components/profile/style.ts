@@ -1,13 +1,15 @@
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import { FaStar } from "react-icons/fa";
+import { BiSolidEdit } from "react-icons/bi";
+import { IoIosArrowDown, IoMdAdd } from "react-icons/io";
 
 export const GeneralItens = styled.div`
-  margin: 5px auto;
+    margin: 5px auto;
     width: 80%;
     border-radius: 10px;
     color: #272727;
     margin-top: 60px;
-    height: 500px;
+    height: 550px;
     overflow-x: auto;
 
 `;
@@ -197,6 +199,8 @@ export const Title = styled.h1`
   margin-bottom: 20px;
   color: #272727;
   font-weight: bold;
+  display: flex;
+  justify-content: space-between;
 `;
 
 export const CompanyName = styled.span`
@@ -238,7 +242,9 @@ export const Heading = styled.h1`
   color: #272727;
   font-weight: bold;
   margin-bottom: 20px;
-`;
+  display: flex;
+  justify-content: space-between;
+  `;
 
 export const DegreeTitle = styled.span`
   font-weight: bold;
@@ -303,4 +309,17 @@ export const Star = styled(FaStar)`
   font-size: 15px;
   margin-left: 10px;
   margin-top: 5px;
+`;
+const StyleIcon = css`
+  font-size: 25px;
+  color: #006B3F;
+`;
+export const Editing = styled(BiSolidEdit)`
+  ${StyleIcon}
+`;
+export const Add = styled(IoMdAdd)`
+  ${StyleIcon}
+`;
+export const ArrowDown = styled(IoIosArrowDown)`
+  ${StyleIcon}
 `;

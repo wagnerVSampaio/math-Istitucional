@@ -1,10 +1,13 @@
 import React from 'react';
 import ProfileContainer from '@/components/profile';
+import { useRouter } from 'next/router';
 
 const ProfilePage: React.FC = () => {
+  const router = useRouter();
+  const { id } = router.query;
   return (
     <div>
-      <ProfileContainer />
+      <ProfileContainer id={Number(id)}/>
     </div>
   );
 };
