@@ -1,14 +1,21 @@
 import styled from "styled-components";
 import { FaStar } from "react-icons/fa";
 
+export const GeneralItens = styled.div`
+  margin: 5px auto;
+    width: 80%;
+    border-radius: 10px;
+    color: #272727;
+    margin-top: 60px;
+    height: 500px;
+    overflow-x: auto;
+
+`;
 export const DivTop = styled.div`
     background-color: white;
-    margin: 10px auto;
-    width: 80%;
     height: 300px;
     border-radius: 10px;
     position: relative;
-    margin-top: 50px;
 
 `;
 
@@ -164,7 +171,6 @@ export const Textarea = styled.textarea`
 `;
 
 export const Container = styled.div`
-  width: 80%;
   margin: 1px auto;
   padding: 20px;
   background-color: #f7f7f7;
@@ -205,7 +211,6 @@ export const Period = styled.span`
 `;
 
 export const Wrapper = styled.div`
-  width: 80%;
   margin: 15px auto;
   margin-top: 50px;
   padding: 20px;
@@ -248,7 +253,6 @@ export const TimePeriod = styled.span`
 
 
 export const SkillsContainer = styled.div`
-  width: 80%;
   margin: 1px auto;
   margin-top: 20px;
   padding: 20px;

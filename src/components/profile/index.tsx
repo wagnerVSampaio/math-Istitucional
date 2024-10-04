@@ -37,6 +37,7 @@ import {
   ProgressBar,
   SkillPercentage,
   Star,
+  GeneralItens
 } from "./style";
 import { FaCamera } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
@@ -182,6 +183,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
 
   return (
     <>
+      <GeneralItens>
       <DivTop>
         <ImageCover className="relative">
           <img
@@ -312,6 +314,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
         </SkillItem>
       ))}
     </SkillsContainer>
+      </GeneralItens>
     </>
   );
 };
