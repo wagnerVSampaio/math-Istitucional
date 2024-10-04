@@ -39,6 +39,9 @@ const Principal: React.FC = () => {
             <style.Friends />
           </style.StyledRadioButton>
           <style.StyledRadioButton value={3}>
+            <style.ListProfessinals />
+          </style.StyledRadioButton>
+          <style.StyledRadioButton value={4}>
             <style.Circle />
           </style.StyledRadioButton>
         </style.RadioGroup>
@@ -47,6 +50,8 @@ const Principal: React.FC = () => {
       {value === 1 ? (
         <HomePage />
       ) : value === 2 ? (
+        <AdmPage />
+      ) : value === 3 ? (
         <AdmPage />
       ) : (
         <ProfilePages />

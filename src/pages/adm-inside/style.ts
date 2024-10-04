@@ -3,7 +3,9 @@ import { Radio, Input, Space } from "antd/lib";
 import { AiFillHome } from "react-icons/ai";
 import { FaUserCircle } from "react-icons/fa";
 import { IoBag } from "react-icons/io5";
-import { MdVerifiedUser } from "react-icons/md";
+import { FaListCheck } from "react-icons/fa6";
+import { PiUserListBold } from "react-icons/pi";
+
 const { Search } = Input;
 
 export const AppContainer = styled.div`
@@ -73,7 +75,7 @@ export const Home = styled(AiFillHome)`
   ${iconStyle}
 `;
 
-export const Friends = styled(MdVerifiedUser)`
+export const Friends = styled(FaListCheck)`
   ${iconStyle}
 `;
 
@@ -83,4 +85,21 @@ export const Bag = styled(IoBag)`
 
 export const Circle = styled(FaUserCircle)`
   ${iconStyle}
+`;
+
+export const ListProfessinals = styled(PiUserListBold)`
+  font-size: 35px;
+  margin-top: 2px;
+
+  @media (max-width: 700px) {
+    width: 15px;
+  }
+
+  @media (min-width: 701px) and (max-width: 1199px) {
+    width: 40px;
+  }
+
+  @media (min-width: 1200px) {
+    width: 100px;
+  }
 `;
