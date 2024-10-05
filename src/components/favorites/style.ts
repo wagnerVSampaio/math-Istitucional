@@ -2,8 +2,6 @@ import styled, {css} from "styled-components";
 import { IoMdMail } from "react-icons/io";
 import { PiStudentFill } from "react-icons/pi";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { FaRegStar } from "react-icons/fa";
-import { FaStar } from "react-icons/fa";
 export const DivNotification = styled.div`
     margin: 25px auto;
     width: 70%;
@@ -42,17 +40,6 @@ export const StyledParagraph = styled.ul`
 export const StyledP = styled.ul`
   display: flex;
 `;
-export const ButtonFavorite = styled.button`
-  padding: 8px 30px;
-  border: 1px solid #006B3F;
-  border-radius: 10px;
-  color: #006B3F;
-  cursor: pointer;
-  font-weight: bold;
-  display: flex;
-  margin-top: 10px;
-`;
-
 const iconsStyle = css`
   margin-right: 15px;
 `;
@@ -68,18 +55,4 @@ export const Degree = styled( PiStudentFill )`
 
 export const Address = styled(FaMapMarkerAlt)`
   ${iconsStyle}
-`;
-export const FavoriteNoSelect = styled(FaRegStar)`
-  margin-top: 3px;
-  margin-left: 5px;
-  font-size: 15px;
-  color: #006B3F;
-  cursor: pointer;
-`;
-export const FavoriteSelect = styled(FaStar)`
-  margin-top: 3px;
-  margin-left: 5px;
-  font-size: 15px;
-  color: #006B3F;
-  cursor: pointer;
 `;

@@ -293,7 +293,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
           </DivParagraph>
 
           <DivButton>
-            <ProfileButton>Favoritos <Star /></ProfileButton>
+            <Link href={"../favoritesPages"}><ProfileButton>Favoritos <Star /></ProfileButton></Link>
             <Link href={"../expandable"}>
               <EditProfileButton>Editar perfil</EditProfileButton>
             </Link>

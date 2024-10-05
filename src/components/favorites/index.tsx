@@ -12,15 +12,11 @@ interface Professional {
   favorite: boolean;
 }
 
-interface ProfessionalsProps {
-  highlightedId: number | null;
-}
-
-const Professionals: React.FC<ProfessionalsProps> = ({ highlightedId }) => {
-  // Estado que armazena os profissionais e seu status de favorito
+const FavoritesPage: React.FC = () => {
+  // Estado que armazena os profissionais e o status de favoritos
   const [professionals, setProfessionals] = useState<Professional[]>(ProfessionalsData);
 
-  // Função para alternar o status de favorito
+  // Função para remover dos favoritos
   const toggleFavorite = (id: number) => {
     setProfessionals((prevProfessionals) =>
       prevProfessionals.map((professional) =>
@@ -29,9 +25,10 @@ const Professionals: React.FC<ProfessionalsProps> = ({ highlightedId }) => {
     );
   };
 
-  const highlightedProfessional = professionals.find(professional => professional.id === highlightedId) || null;
-  const otherProfessionals = professionals.filter(professional => professional.id !== highlightedId);
+  // Filtrar apenas os profissionais que são favoritos
+  const favoriteProfessionals = professionals.filter(professional => professional.favorite);
 
+  // Função de contato por email
   const handleContactClick = (email: string) => {
     const subject = "Contato sobre oportunidade de trabalho";
     const body = `Olá, ${email},\n\nGostaria de discutir uma oportunidade de trabalho com você. Por favor, entre em contato.\n\nAtenciosamente,\nUniversidade Federal do Oeste do Pará`;
@@ -40,14 +37,18 @@ const Professionals: React.FC<ProfessionalsProps> = ({ highlightedId }) => {
 
   return (
     <style.DivNotification>
-      <style.StyledUl>
-        {otherProfessionals.map((professional) => (
-          <style.StyledLi
-            key={professional.id}
-            style={{
-              backgroundColor: '#fff'
-            }}
-          >
+      <h2>Meus Favoritos</h2>
+      {favoriteProfessionals.length === 0 ? (
+        <p>Nenhum profissional foi adicionado aos favoritos.</p>
+      ) : (
+        <style.StyledUl>
+          {favoriteProfessionals.map((professional) => (
+            <style.StyledLi
+              key={professional.id}
+              style={{
+                backgroundColor: '#fff',
+              }}
+            >
               <div className="flex flex-col m-[20px]">
                 <style.StyledParagraph>{professional.name}</style.StyledParagraph>
                 <style.StyledP>
@@ -57,15 +58,11 @@ const Professionals: React.FC<ProfessionalsProps> = ({ highlightedId }) => {
                   <style.Address /> {professional.address}
                 </style.StyledP>
                 <style.StyledP>
-                  <style.Email />{" "}
+                  <style.Email />
                   <span
                     style={{ textDecoration: "none" }}
-                    onMouseOver={(e) =>
-                      (e.currentTarget.style.textDecoration = "underline")
-                    }
-                    onMouseOut={(e) =>
-                      (e.currentTarget.style.textDecoration = "none")
-                    }
+                    onMouseOver={(e) => (e.currentTarget.style.textDecoration = "underline")}
+                    onMouseOut={(e) => (e.currentTarget.style.textDecoration = "none")}
                     onClick={() => handleContactClick(professional.contact)}
                   >
                     {professional.contact}
@@ -73,18 +70,17 @@ const Professionals: React.FC<ProfessionalsProps> = ({ highlightedId }) => {
                 </style.StyledP>
                 <style.StyledP className="mt-[20px]">{professional.experience}</style.StyledP>
 
-                {/* Botão para adicionar/remover dos favoritos */}
-                <div>
+                {/* Botão para remover dos favoritos */}
                 <button onClick={() => toggleFavorite(professional.id)}>
-                  {professional.favorite ? <style.ButtonFavorite>Salvar<style.FavoriteSelect /></style.ButtonFavorite> : <style.ButtonFavorite>Salvo<style.FavoriteNoSelect /></style.ButtonFavorite>}
+                  Remover dos Favoritos
                 </button>
-            </div>
               </div>
-          </style.StyledLi>
-        ))}
-      </style.StyledUl>
+            </style.StyledLi>
+          ))}
+        </style.StyledUl>
+      )}
     </style.DivNotification>
   );
 };
 
-export default Professionals;
+export default FavoritesPage;
