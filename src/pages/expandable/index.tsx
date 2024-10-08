@@ -144,6 +144,8 @@ const CadastroExpansivel: React.FC = () => {
             </div>
           </form>
         </div>
+        
+        {/*
         <div className="mt-[20px]">
           <form>
             <div style={{ color: "black" }}>
@@ -207,8 +209,10 @@ const CadastroExpansivel: React.FC = () => {
               )}
             </div>
           </form>
-        </div>
-        <div className="mt-[20px]">
+        </div> */}
+
+
+        {/*<div className="mt-[20px]">
           <form>
             <div style={{ color: "black" }}>
               <div
@@ -270,7 +274,7 @@ const CadastroExpansivel: React.FC = () => {
               )}
             </div>
           </form>
-        </div>
+        </div> */}
       </div>
       <FooterExpandable />
     </>

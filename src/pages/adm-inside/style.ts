@@ -10,6 +10,24 @@ const { Search } = Input;
 
 export const AppContainer = styled.div`
   width: 100%;
+  
+  @media (max-width: 1200px) {
+    width: 90%; /* Ajusta a largura em telas menores */
+    height: 500px; /* Ajusta a altura */
+  }
+
+  @media (max-width: 768px) {
+    width: 95%;
+    height: 450px;
+    margin-top: 30px; /* Reduz a margem superior */
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+    height: auto; /* Altura automática para se adaptar ao conteúdo */
+    margin-top: 20px; /* Reduz ainda mais a margem superior */
+    border-radius: 5px; /* Menos arredondamento em telas muito pequenas */
+  }
 `;
 
 export const Header = styled.div`
