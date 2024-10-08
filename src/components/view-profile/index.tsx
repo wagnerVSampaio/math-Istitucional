@@ -31,7 +31,9 @@ import {
   SkillPercentage,
   GeneralItens,
   ArrowDown,
-  ArrowUp
+  ArrowUp,
+  DivContact,
+  ParagraphContact
 } from "./style";
 import { FaCamera } from "react-icons/fa";
 import { FaShareAltSquare } from "react-icons/fa";
@@ -73,14 +75,20 @@ const skillsData = [
   { skill: 'Docker', level: 50 }
 ];
 
+const contactData = [
+  { email: 'email@gmail.com' }
+]
 const ViewProfile: React.FC<{ id: number, profileLinkView: string }> = ({ id, profileLinkView }) => {
   const [profileImage, setProfileImage] = useState<string | undefined>(
     undefined
   );
   const [coverImage, setCoverImage] = useState<string | undefined>(undefined);
   const [bioText, setBioText] = useState<string | undefined>("");
+  const [isFormacaoExpanded, setIsFormacaoExpanded] = useState(false);
+  const [isExperienceExpanded, setIsExperienceExpanded] = useState(false);
+  const [isSkillsExpanded, setIsSkillsExpanded] = useState(false);
 
-  {/*ALTERA FOTO DE PERFIL*/}
+  {/*ALTERA FOTO DE PERFIL*/ }
   const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -89,7 +97,7 @@ const ViewProfile: React.FC<{ id: number, profileLinkView: string }> = ({ id, pr
     }
   };
 
-  {/*ALTERA A FOTO DE CAPA*/}
+  {/*ALTERA A FOTO DE CAPA*/ }
   const handleCoverImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -100,7 +108,7 @@ const ViewProfile: React.FC<{ id: number, profileLinkView: string }> = ({ id, pr
 
   const profileLink = `${window.location.origin}/profile/${id}`;
 
-  {/*COMPARTILHA O PERFIL*/}
+  {/*COMPARTILHA O PERFIL*/ }
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -122,7 +130,7 @@ const ViewProfile: React.FC<{ id: number, profileLinkView: string }> = ({ id, pr
     }
   };
 
-  {/*LISTA TEMPORARIA*/}
+  {/*LISTA TEMPORARIA*/ }
   const [experiences, setExperiences] = useState<Experience[]>([
     {
       company: "Empresa ABC",
@@ -172,24 +180,27 @@ const ViewProfile: React.FC<{ id: number, profileLinkView: string }> = ({ id, pr
     },
   ]);
 
-  const [isFormacaoExpanded, setIsFormacaoExpanded] = useState(false);
-  const [isExperienceExpanded, setIsExperienceExpanded] = useState(false);
-  const [isSkillsExpanded, setIsSkillsExpanded] = useState(false);
-
-  {/* EXPANDIR FORMAÇÃO */}
+  {/* EXPANDIR FORMAÇÃO */ }
   const toggleExpandFormacao = () => {
     setIsFormacaoExpanded(!isFormacaoExpanded);
   };
 
-  {/* EXPANDIR EXPERIÊNCIA */}
+  {/* EXPANDIR EXPERIÊNCIA */ }
   const toggleExpandExperience = () => {
     setIsExperienceExpanded(!isExperienceExpanded);
   };
 
-  {/*EXPANDIR HABILIDADES*/}
+  {/*EXPANDIR HABILIDADES*/ }
   const toggleExpandSkills = () => {
     setIsSkillsExpanded(!isSkillsExpanded);
   };
+
+  const handleContactProfile = (email: string) => {
+    const subject = "Contato sobre oportunidade de trabalho";
+    const body = `Olá, ${email},\n\nGostaria de discutir uma oportunidade de trabalho com você. Por favor, entre em contato.\n\nAtenciosamente,\nUniversidade Federal do Oeste do Pará`;
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
   return (
     <>
       <GeneralItens>
@@ -236,29 +247,44 @@ const ViewProfile: React.FC<{ id: number, profileLinkView: string }> = ({ id, pr
             </DivIconShare>
           </DivParagraph>
 
-         <DivBio>
+          <DivBio>
             <DivP>
-                <div>
-                  <p className="font-bold">Biografia:</p>
-                  <p
-                    style={{ color: "#272727", opacity: "0.8", padding: "10px" }}
-                  >
-                    {bioText ||
-                      "Experimente escrever uma curta biografia sobre você, incluindo suas principais conquistas, habilidades e objetivos de carreira."}
-                  </p>
-                  
-                </div>
+              <div>
+                <p className="font-bold">Biografia:</p>
+                <p
+                  style={{ color: "#272727", opacity: "0.8", padding: "10px" }}
+                >
+                  {bioText ||
+                    "Experimente escrever uma curta biografia sobre você, incluindo suas principais conquistas, habilidades e objetivos de carreira."}
+                </p>
+
+              </div>
             </DivP>
           </DivBio>
+          <DivContact>
+            <ParagraphContact>Contato:</ParagraphContact>
+                {contactData.map((contact) => (
+                  <button style={{ textDecoration: "none" }}
+                  onMouseOver={(e) =>
+                    (e.currentTarget.style.textDecoration = "underline")
+                  }
+                  onMouseOut={(e) =>
+                    (e.currentTarget.style.textDecoration = "none")
+                  }
+                  onClick={() => handleContactProfile(contact.email)}>
+                  <span>{contact.email}</span>
+                  </button>
+                ))}
+          </DivContact>
         </DivTop>
 
         <Wrapper>
           <Heading>Formação <div className="flex gap-4">
             {isFormacaoExpanded ? (
-            <ArrowUp onClick={toggleExpandFormacao} style={{ cursor: 'pointer' }} />
-          ) : (
-            <ArrowDown onClick={toggleExpandFormacao} style={{ cursor: 'pointer' }} />
-          )}</div></Heading>
+              <ArrowUp onClick={toggleExpandFormacao} style={{ cursor: 'pointer' }} />
+            ) : (
+              <ArrowDown onClick={toggleExpandFormacao} style={{ cursor: 'pointer' }} />
+            )}</div></Heading>
           <EducationList>
             {educationData.slice(0, isFormacaoExpanded ? educationData.length : 2).map((edu) => (
               <EducationItem>
@@ -284,13 +310,13 @@ const ViewProfile: React.FC<{ id: number, profileLinkView: string }> = ({ id, pr
             {experiences.slice(0, isExperienceExpanded ? experiences.length : 2).map((experience) => (
               <ListItem style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <>
-                      <CompanyName>
-                        {experience.role}
-                      </CompanyName>
-                      <Period>
-                        <span>{experience.company}</span> - {experience.period}
-                      </Period>
-                    </>
+                  <CompanyName>
+                    {experience.role}
+                  </CompanyName>
+                  <Period>
+                    <span>{experience.company}</span> - {experience.period}
+                  </Period>
+                </>
               </ListItem>
             ))}
           </List>

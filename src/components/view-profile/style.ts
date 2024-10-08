@@ -10,13 +10,29 @@ export const GeneralItens = styled.div`
     height: 550px;
     overflow-x: auto;
 
+  @media (max-width: 1200px) {
+    width: 90%; 
+    height: 500px;
+  }
+
+  @media (max-width: 768px) {
+    width: 95%;
+    height: 450px;
+    margin-top: 30px; 
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+    height: auto; 
+    margin-top: 20px; 
+    border-radius: 5px;
+  }
 `;
 export const DivTop = styled.div`
     background-color: white;
-    height: 300px;
+    height: auto;
     border-radius: 10px;
     position: relative;
-
 `;
 
 export const ImageWrapper = styled.div`
@@ -99,10 +115,20 @@ export const DivBio = styled.div`
   color: #272727;
   display: flex;
   margin-top: 55px;
+  height: auto;
 `;
 export const DivP = styled.div`
     width: 95%;
-    height: 100px;
+    height: auto;
+`;
+
+export const DivContact = styled.div`
+    padding: 20px;
+    display: flex;
+`;
+export const ParagraphContact = styled.p`
+    font-weight: bold;
+    margin-right: 10px;
 `;
 
 export const Container = styled.div`
@@ -147,7 +173,7 @@ export const Period = styled.span`
 
 export const Wrapper = styled.div`
   margin: 15px auto;
-  margin-top: 50px;
+  margin-top: 20px;
   padding: 20px;
   background-color: #f7f7f7;
   border-radius: 10px;
@@ -247,8 +273,6 @@ export const ArrowDown = styled(IoIosArrowDown)`
 export const ArrowUp = styled(IoIosArrowUp)`
   ${StyleIcon}
 `;
-
-
 
 export const Button = styled.button`
   padding: 10px;
