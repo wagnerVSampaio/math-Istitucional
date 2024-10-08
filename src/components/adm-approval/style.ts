@@ -2,6 +2,7 @@ import styled, {css} from "styled-components";
 import { IoMdMail } from "react-icons/io";
 import { PiStudentFill } from "react-icons/pi";
 import { FaMapMarkerAlt } from "react-icons/fa";
+
 export const DivNotification = styled.div`
     margin: 5px auto;
     width: 70%;
