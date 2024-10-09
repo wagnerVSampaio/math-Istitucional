@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { ButtonDelete, DivNotification, H2Name, StyledLi, StyledUl } from './style';
+import { ButtonDelete, ButtonDeleteEmail, DivNotification, H2Name, StyledLi, StyledUl } from './style';
 import { MdDelete } from "react-icons/md";
 import { ProfessionalsData } from "@/professionals-const";
-import { Modal, Button } from 'antd/lib';
+import { Modal, Button, message } from 'antd/lib';
 
 interface Professional {
   id: number;
@@ -23,13 +23,14 @@ const initialProfessionalsData: Professional[] = ProfessionalsData.map(professio
 
 const NotificationRecruiter: React.FC = () => {
   const [professionals, setProfessionals] = useState<Professional[]>(initialProfessionalsData);
-  const [isModalVisible, setIsModalVisible] = useState(false); // Controle do modal
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
 
   const deleteProfessional = (id: number) => {
     setProfessionals(prevProfessionals =>
       prevProfessionals.filter(professional => professional.id !== id)
     );
+    message.success('E-mail deletado com sucesso!');
   };
 
   const markAsRead = (id: number) => {
@@ -41,21 +42,27 @@ const NotificationRecruiter: React.FC = () => {
   };
 
   const showMoreInfoModal = (professional: Professional) => {
-    setSelectedProfessional(professional); // Armazena os dados do profissional selecionado
-    setIsModalVisible(true); // Exibe o modal
-    markAsRead(professional.id); // Marca o profissional como lido ao abrir o modal
+    setSelectedProfessional(professional);
+    setIsModalVisible(true);
+    markAsRead(professional.id);
   }
 
   const handleModalClose = () => {
-    setIsModalVisible(false); // Fecha o modal
-    setSelectedProfessional(null); // Limpa o profissional selecionado
+    setIsModalVisible(false);
+    setSelectedProfessional(null);
   };
 
-  // Função para gerar o link mailto
   const generateMailtoLink = (contact: string, name: string) => {
     const subject = encodeURIComponent(`Contato sobre oportunidade de trabalho`);
     const body = encodeURIComponent(`Olá ${name},\n\nGostaria de conversar sobre uma oportunidade de trabalho. Por favor, entre em contato.\n\nAtenciosamente,\nUniversidade Federal do Oeste do Pará`);
     return `mailto:${contact}?subject=${subject}&body=${body}`;
+  };
+
+  const handleDeleteFromModal = () => {
+    if (selectedProfessional) {
+      deleteProfessional(selectedProfessional.id);
+      handleModalClose();
+    }
   };
 
   return (
@@ -66,22 +73,20 @@ const NotificationRecruiter: React.FC = () => {
             key={professional.id}
             onClick={(e) => {
               e.stopPropagation();
-              showMoreInfoModal(professional); 
+              showMoreInfoModal(professional);
             }}
-            style={{ backgroundColor: professional.read ? '#fff' : '#006b3e4b' }} // Cor muda para branco se "lido"
+            style={{ backgroundColor: professional.read ? '#fff' : '#ddd' }}
           >
             <div className='flex flex-col m-[20px]'>
-              <p className='font-bold text-[16px]'>
-                {professional.name}, {professional.formation}
-              </p>
+              <p className='font-bold text-[16px]'>{professional.name}, {professional.formation}</p>
               <p>Local: {professional.address}</p>
             </div>
             <div className='delete-button-container'>
               <ButtonDelete
-              onClick={(e) => {
-                e.stopPropagation();
-                deleteProfessional(professional.id);
-              }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  deleteProfessional(professional.id);
+                }}
               >
                 <MdDelete />
               </ButtonDelete>
@@ -89,14 +94,12 @@ const NotificationRecruiter: React.FC = () => {
           </StyledLi>
         ))}
       </StyledUl>
-
       <Modal
         title="Mais Informações"
         open={isModalVisible}
         onCancel={handleModalClose}
-        footer={null} // Remove os botões de OK/Cancelar
-        width={800} // Largura personalizada para o modal maior
-        height={1000}
+        footer={null}
+        width={800}
       >
         {selectedProfessional && (
           <div>
@@ -109,10 +112,19 @@ const NotificationRecruiter: React.FC = () => {
             <Button
               type="primary"
               className='mt-3'
-              href={generateMailtoLink(selectedProfessional.contact, selectedProfessional.name)} // Link mailto com assunto e corpo
+              href={generateMailtoLink(selectedProfessional.contact, selectedProfessional.name)}
             >
               Entrar em contato
             </Button>
+            <ButtonDeleteEmail
+              className='mt-3'
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteFromModal();
+              }}
+            >
+              Deletar e-mail
+            </ButtonDeleteEmail>
           </div>
         )}
       </Modal>

@@ -6,7 +6,7 @@ import { IoMdMail } from "react-icons/io";
 
 export const DivSearch = styled.div`
     margin: 5px auto;
-    width: 70%;
+    width: 65%;
     border-radius: 10px;
     margin-top: 60px;
     color: #272727;
@@ -29,24 +29,38 @@ export const DivSearch = styled.div`
   }
 `;
 export const DivTopSearch = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  flex-direction: column;
+  margin: 8px auto;
+  left: 10px;
+  width: 220px;
+  height: 33%; 
+  z-index: 3; 
+  color: #272727;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  box-shadow: 0 4px 8px rgba(0, 107, 63, 0.4);
 `;
 
 
 export const StyleInput = styled.div`
-    width: 300px;
+    width: 200px;
 `;
 
 export const ButtonAddUser = styled.button`
-    padding: 4px;
+    margin-top: 20px;
+    padding: 4px 20px;
     border: 1px solid #006B3F;
     border-radius: 8px;
-    margin-left: 30px;
     background-color: #ffff;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
+    display: flex;
+    color: #006B3F;
   
   &:hover {
     border-color: #004c2b;
@@ -62,16 +76,19 @@ export const AddUser = styled(BsPersonFillAdd)`
     font-size: 30px;
     color: #005B3F;
     cursor: pointer;
+    margin-left: 2px;
 `;
 
 export const ButtonRemoveUser = styled.button`
-    padding: 4px;
+    margin-top: 5px;
     border: 1px solid #006B3F;
     border-radius: 8px;
-    margin-left: 10px;
     background-color: #ffff;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
+    display: flex;
+    padding: 4px 20px;
+    color: #006B3F;
   
   &:hover {
     border-color: #004c2b;
@@ -87,11 +104,11 @@ export const RemoveUser = styled(MdPersonRemoveAlt1)`
     font-size: 30px;
     color: #005B3F;
     cursor: pointer;
+    margin-left: 6px;
 `;
 
 export const DivNotification = styled.div`
     margin: 5px auto;
-    border-radius: 10px;
     color: #272727;
     width: 100%;
     height: 550px;
@@ -99,7 +116,7 @@ export const DivNotification = styled.div`
 `;
 
 export const StyledUl = styled.ul`
-  margin: 20px;
+  margin: 10px;
   list-style-type: none;
   padding: 0;
   border: 1px solid #ddd;
@@ -110,10 +127,10 @@ export const StyledUl = styled.ul`
 export const StyledLi = styled.li`
   display: grid;
   grid-template-columns: 120px 1fr 150px 150px 120px;
-  gap: 20px;
+  gap: 5px;
   align-items: center;
   border-bottom: 1px solid #ddd;
-  padding: 40px 0;
+  padding: 5px 0;
   display: flex;
   justify-content: space-between;
   align-items: center;

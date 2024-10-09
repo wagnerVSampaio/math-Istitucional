@@ -1,6 +1,5 @@
 import { UserOutlined } from '@ant-design/icons/lib/icons'
 import React, { useState } from 'react'
-import { AddUser, DivSearch, StyleInput, ButtonAddUser, RemoveUser, ButtonRemoveUser, DivTopSearch } from './style'
 import { Input } from 'antd/lib'
 import { AdmData } from "@/adm-const";
 import * as style from "./style";
@@ -44,18 +43,20 @@ const Search: React.FC<AdmProps> = ({ highlightedId }) => {
   };
   return (
     <>
-      <DivSearch>
-        <DivTopSearch>
-          <StyleInput>
+      <style.DivSearch>
+        <style.DivTopSearch>
+          <style.StyleInput>
             <Input size="large" prefix={<UserOutlined />} />
-          </StyleInput>
-          <ButtonAddUser>
-            <AddUser />
-          </ButtonAddUser>
-          <ButtonRemoveUser>
-            <RemoveUser />
-          </ButtonRemoveUser>
-        </DivTopSearch>
+          </style.StyleInput>
+          <style.ButtonAddUser>
+            Adicionar usuário
+            <style.AddUser />
+          </style.ButtonAddUser>
+          <style.ButtonRemoveUser>
+            Remover usuário
+            <style.RemoveUser />
+          </style.ButtonRemoveUser>
+        </style.DivTopSearch>
      
 
       <div>
@@ -94,7 +95,7 @@ const Search: React.FC<AdmProps> = ({ highlightedId }) => {
           </style.StyledUl>
         </style.DivNotification>
       </div>
-      </DivSearch>
+      </style.DivSearch>
     </>
 
   )

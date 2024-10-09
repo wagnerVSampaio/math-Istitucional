@@ -13,7 +13,7 @@ export const ButtonDelete = styled.button`
     background-color: transparent;
     border: none;
     cursor: pointer;
-    color: black;
+    color: #006B3F;
     font-size: 25px;
 `;
 export const StyledUl = styled.ul`
@@ -26,10 +26,9 @@ export const StyledUl = styled.ul`
 `;
 
 export const StyledLi = styled.li`
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #d3d3d3;
   display: flex;
   flex-direction: column;
-  border-radius: 5px;
   cursor: pointer;
   position: relative;
   transition: background-color 0.3s ease;
@@ -42,7 +41,7 @@ export const StyledLi = styled.li`
 
   .delete-button-container {
     position: absolute;
-    top: 10px;
+    top: 30px;
     right: 10px;
   }
 `;
@@ -52,4 +51,12 @@ export const H2Name = styled.h2`
   color: #006B3F;
   font-weight: bold;
   margin-bottom: 8px;
+`;
+export const ButtonDeleteEmail = styled.button`
+  padding: 5px 30px;
+  margin-left: 20px;
+  border: 1.5px solid #006B3F;
+  border-radius: 8px;
+  color: #006B3F;
+  font-weight: 500;
 `;
