@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { Checkbox, Form, Input, Button, Flex, Select } from "antd/lib";
 import Link from "next/link";
+import { useRouter } from 'next/router';
+import axios from 'axios';
 import type { CheckboxProps } from "antd/lib";
 import {
+  ButtonCreate,
+  ButtonExit,
   ButtonLabelDate,
   DateBirthUpload,
   StyledForm,
@@ -15,6 +19,7 @@ type FieldType = {
   email: string;
   photo: string;
   lotacao: string;
+  campus: string;
   password: string;
   passwordconfirmation: string;
 };
@@ -32,19 +37,26 @@ const normFile = (e: any) => {
 
 const NavRecrutador = () => {
   const [value, setValue] = useState(1);
-  const [RegisterImage, setRegisterImage] = useState<string | undefined>(
-    undefined
-  );
   const [componentSize, setComponentSize] = useState<SizeType | "default">(
     "default"
   );
-
+  const [formData, setFormData] = useState<FieldType>({
+    name: '',
+    cpf: '',
+    email: '',
+    photo: '',
+    lotacao: '',
+    campus: '',
+    password: '',
+    passwordconfirmation: '',
+  });
+  const [registerImage, setRegisterImage] = useState<string | undefined>(undefined);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [checked, setChecked] = useState(true);
+  const [disabled, setDisabled] = useState(false);
   const onFormLayoutChange = ({ size }: { size: SizeType }) => {
     setComponentSize(size);
   };
-
-  const [checked, setChecked] = useState(true);
-  const [disabled, setDisabled] = useState(false);
 
   const toggleChecked = () => {
     setChecked(!checked);
@@ -74,6 +86,56 @@ const NavRecrutador = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCpf(e.target.value);
   };
+
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  // Função para lidar com o upload da imagem
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setRegisterImage(imageUrl);
+      setFormData({
+        ...formData,
+        photo: file.name, // Apenas salva o nome do arquivo; ajuste conforme necessidade
+      });
+    }
+  };
+
+  {/*Função para realizar o cadastro usando Axios*/ }
+  const registerUser = async () => {
+    const router = useRouter();
+    try {
+      if (formData.password !== formData.passwordconfirmation) {
+        setErrorMessage('As senhas não coincidem');
+        return;
+      }
+
+      {/* Cria um objeto FormData para enviar os dados do formulário*/ }
+      const formDataToSend = new FormData();
+      formDataToSend.append('name', formData.name);
+      formDataToSend.append('cpf', formData.cpf);
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('photo', formData.photo);
+      formDataToSend.append('lotacao', formData.lotacao);
+      formDataToSend.append('password', formData.password);
+
+      {/*Faz a requisição POST usando Axios*/ }
+      const response = await axios.post('https://api.seuservidor.com/cadastro', formDataToSend);
+
+      router.push('/inside-recruiter');
+    } catch (error: any) {
+      console.error('Erro no cadastro:', error.response?.data || error.message);
+      setErrorMessage('Erro ao cadastrar usuário');
+    }
+  };
   return (
     <>
       <StyledForm
@@ -84,6 +146,7 @@ const NavRecrutador = () => {
         onValuesChange={onFormLayoutChange}
         size={componentSize as SizeType}
         className="max-w-[600px]"
+        onFinish={registerUser}
       >
         <div className="flex">
           <div className="mr-[75px]">
@@ -113,15 +176,15 @@ const NavRecrutador = () => {
               />
             </Form.Item>
 
-          <p className="mt-[3px] mb-[3px]">
-            E-mail <strong className="text-red-500"> *</strong>
-          </p>
-          <Form.Item<FieldType>
-            name="email"
-            rules={[{ required: true, message: "Por favor, insira o e-mail!" }]}
-          >
-            <Input className="w-[350px]" />
-          </Form.Item>
+            <p className="mt-[3px] mb-[3px]">
+              E-mail <strong className="text-red-500"> *</strong>
+            </p>
+            <Form.Item<FieldType>
+              name="email"
+              rules={[{ required: true, message: "Por favor, insira o e-mail!" }]}
+            >
+              <Input className="w-[350px]" />
+            </Form.Item>
           </div>
 
           <div>
@@ -132,7 +195,7 @@ const NavRecrutador = () => {
               <ButtonLabelDate htmlFor="registerImageUpload">
                 <DateBirthUpload className="relative">
                   <img
-                    src={RegisterImage || "background-upload.png"}
+                    src={registerImage || "background-upload.png"}
                     alt="Register"
                     className="w-full object-cover"
                   />
@@ -148,12 +211,13 @@ const NavRecrutador = () => {
             </Form.Item>
           </div>
         </div>
-        <div className="flex mb-2">
+        <div className="flex mb-1">
           <div className="mr-[50px]">
             <p className="mb-[3px]">
               Lotação <strong className="text-red-500"> *</strong>
             </p>
-              <Select placeholder="Selecione uma lotação" className="w-[250px]">
+            <Form.Item<FieldType> name="campus">
+              <Select placeholder="Selecione uma lotação" style={{ width: '250px' }}>
                 <Option value="PROGEP">PROGEP</Option>
                 <Option value="PROAP">PROAP</Option>
                 <Option value="PROPLAN">PROPLAN</Option>
@@ -162,53 +226,56 @@ const NavRecrutador = () => {
                 <Option value="PROEX">PROEX</Option>
                 <Option value="PROINT">PROINT</Option>
               </Select>
+            </Form.Item>
           </div>
 
           <div>
             <p className="mb-[3px]">
               Campus <strong className="text-red-500"> * </strong>
             </p>
-            <Select
-              placeholder="Selecione o Campus"
-              showSearch
-              className="w-[250px]"
-              optionFilterProp="label"
-              filterSort={(optionA, optionB) =>
-                (optionA?.label ?? "")
-                  .toLowerCase()
-                  .localeCompare((optionB?.label ?? "").toLowerCase())
-              }
-              options={[
-                {
-                  value: "1",
-                  label: "Santarém (Campus sede)",
-                },
-                {
-                  value: "2",
-                  label: "Campus Alenquer",
-                },
-                {
-                  value: "3",
-                  label: "Campus Itaituba",
-                },
-                {
-                  value: "4",
-                  label: "Campus Monte Alegre",
-                },
-                {
-                  value: "5",
-                  label: "Campus Juruti",
-                },
-                {
-                  value: "6",
-                  label: "Campus Óbidos",
-                },
-                {
-                  value: "7",
-                  label: "Campus Oriximiná",
-                },
-              ]}
-            />
+            <Form.Item<FieldType> name="campus">
+              <Select
+                placeholder="Selecione o Campus"
+                showSearch
+                style={{ width: '250px' }}
+                optionFilterProp="label"
+                filterSort={(optionA, optionB) =>
+                  (optionA?.label ?? "")
+                    .toLowerCase()
+                    .localeCompare((optionB?.label ?? "").toLowerCase())
+                }
+                options={[
+                  {
+                    value: "1",
+                    label: "Santarém (Campus sede)",
+                  },
+                  {
+                    value: "2",
+                    label: "Campus Alenquer",
+                  },
+                  {
+                    value: "3",
+                    label: "Campus Itaituba",
+                  },
+                  {
+                    value: "4",
+                    label: "Campus Monte Alegre",
+                  },
+                  {
+                    value: "5",
+                    label: "Campus Juruti",
+                  },
+                  {
+                    value: "6",
+                    label: "Campus Óbidos",
+                  },
+                  {
+                    value: "7",
+                    label: "Campus Oriximiná",
+                  },
+                ]}
+              />
+            </Form.Item>
           </div>
         </div>
         <div className="flex">
@@ -263,15 +330,13 @@ const NavRecrutador = () => {
         <div className="mt-[40px]">
           <Flex gap="small" wrap>
             <Link href={"/"}>
-              <Button className="w-[250px] mr-[40px] text-customGreen font-bold border-[1px] border-[#006b3f]">
+              <ButtonExit>
                 Voltar
-              </Button>
+              </ButtonExit>
             </Link>
-            <Link href={"./inside-recruiter"}>
-              <Button type="primary" className="w-[250px] font-extrabold">
-                Criar conta
-              </Button>
-            </Link>
+            <ButtonCreate name="submit" >
+              Criar conta
+            </ButtonCreate>
           </Flex>
         </div>
       </StyledForm>
