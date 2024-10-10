@@ -29,6 +29,7 @@ const HoverText = styled.div<{ isVisible: boolean }>`
   white-space: nowrap;
   display: inline-block;
   height: auto; 
+  z-index: 1000;
 `;
 
 const App: React.FC = () => {
@@ -36,7 +37,7 @@ const App: React.FC = () => {
 
   return (
     <Container>
-      <HoverText isVisible={isHovered}>Texto ao passar o cursor</HoverText>
+      <HoverText isVisible={isHovered}>Compartilhar o perfil</HoverText>
       <HoverContainer
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}

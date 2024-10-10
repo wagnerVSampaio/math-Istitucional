@@ -1,4 +1,4 @@
-import NotificationRecruiter from '@/components/notification-recruiter';
+import NotificationRecruiter from '../../components/recruiter/notification-recruiter';
 import React from 'react';
 
 const NotificationRecruiterPages = () => {

@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from "react";
 import { Select, Pagination, Modal } from "antd/lib";
-import JobCard from "@/components/jobs";
-import { DivSelect, DivVacancies, DivFooter } from "@/components/jobs/style";
+import JobCard from "@/components/servant/jobs";
+import { DivSelect, DivVacancies, DivFooter } from "@/components/servant/jobs/style";
 import { jobsData } from "@/const";
-import JobDetails, { JobDetailsProps } from "@/components/jobs/jobs_details";
+import JobDetails, { JobDetailsProps } from "@/components/servant/jobs/jobs_details";
 
 const Jobs: React.FC = () => {
   const [paginaAtual, setPaginaAtual] = useState(1);

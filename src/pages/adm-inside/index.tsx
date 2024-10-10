@@ -6,7 +6,7 @@ import HomePage from "@/pages/homePages";
 import ProfilePages from "@/pages/profilePages";
 import * as style from "./style";
 import AdmPage from "../admPages";
-import Search from "../../components/search-professionals";
+import Search from "../../components/adm/search-professionals";
 
 const Principal: React.FC = () => {
   const [value, setValue] = useState(1);
@@ -53,7 +53,7 @@ const Principal: React.FC = () => {
       ) : value === 2 ? (
         <AdmPage />
       ) : value === 3 ? (
-        <Search />
+        <Search highlightedId={null} />
       ) : (
         <ProfilePages />
       )}

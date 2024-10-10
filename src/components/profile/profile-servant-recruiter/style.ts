@@ -94,6 +94,21 @@ export const DivIconShare = styled.div`
   padding-right: 23px;
   margin-top: 5px;
   margin-left: auto;
+  
+`;
+export const HoverText = styled.div<{ isVisible: boolean }>`
+  background-color: black;
+  color: white;
+  font-size: 12px;
+  padding: 5px;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  opacity: ${(props) => (props.isVisible ? 0.6 : 0)};
+  transition: opacity 0.3s ease-in-out;
+  white-space: nowrap;
+  display: inline-block;
+  height: auto; 
+  z-index: 1000; /* Garante que esteja acima de outros elementos */
 `;
 
 export const DivButton = styled.div`
@@ -106,17 +121,19 @@ export const EditProfileButton = styled.button`
   color: white;
   border-radius: 10px;
   font-weight: bold;
+  position: relative;
 `;
 export const ProfileButton = styled.button`
   padding: 8px 120px;
   background-color: white;
-  color: #006B3F;
-  border: 1px solid #006B3F;
+  color: #ddd;
+  border: 1px solid #ddd;
   border-radius: 10px;
   margin-left: 200px;
   margin-right: 26px;
   font-weight: bold;
   display: flex;
+  cursor: not-allowed;
 `;
 export const DivIcon = styled.div`
   font-size: 40px;

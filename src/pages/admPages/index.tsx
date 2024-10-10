@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import AdmApproval from '@/components/adm-approval';
+import AdmApproval from '@/components/adm/adm-approval';
 
 const AdmPage: React.FC = () => {
   const router = useRouter();

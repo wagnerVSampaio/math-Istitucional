@@ -10,20 +10,18 @@ const AddJobs: React.FC = () => {
 
   const onFinish = (values: any) => {
     setLoading(true);
-    // Aqui você faria a lógica para enviar as informações ao backend.
-    console.log('Vaga Adicionada: ', values);
     setLoading(false);
     form.resetFields();
   };
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  // Função para exibir o modal
+  {/*EXIBE O MODAL*/}
   const showModalAdd = () => {
     setIsModalVisible(true);
   };
 
-  // Função para fechar o modal
+ {/*FECHA O MODAL*/}
   const handleCancel = () => {
     setIsModalVisible(false);
   };

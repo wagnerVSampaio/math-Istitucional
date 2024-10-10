@@ -26,6 +26,7 @@ const NotificationRecruiter: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
 
+  {/*DELETA EMAIL*/}
   const deleteProfessional = (id: number) => {
     setProfessionals(prevProfessionals =>
       prevProfessionals.filter(professional => professional.id !== id)
@@ -33,6 +34,7 @@ const NotificationRecruiter: React.FC = () => {
     message.success('E-mail deletado com sucesso!');
   };
 
+  {/*MARCA O EMAIL COMO LIDO QUANDO CLICADO*/}
   const markAsRead = (id: number) => {
     setProfessionals(prevProfessionals =>
       prevProfessionals.map(professional =>
@@ -41,23 +43,27 @@ const NotificationRecruiter: React.FC = () => {
     );
   };
 
+  {/*MODAL VISÍVEL*/}
   const showMoreInfoModal = (professional: Professional) => {
     setSelectedProfessional(professional);
     setIsModalVisible(true);
     markAsRead(professional.id);
   }
 
+  {/*FECHAR MODAL*/}
   const handleModalClose = () => {
     setIsModalVisible(false);
     setSelectedProfessional(null);
   };
 
+  {/*MINI EMAIL PRONTO PARA ENTRAR EM CONTATO COM OS USUÁRIOS*/}
   const generateMailtoLink = (contact: string, name: string) => {
     const subject = encodeURIComponent(`Contato sobre oportunidade de trabalho`);
     const body = encodeURIComponent(`Olá ${name},\n\nGostaria de conversar sobre uma oportunidade de trabalho. Por favor, entre em contato.\n\nAtenciosamente,\nUniversidade Federal do Oeste do Pará`);
     return `mailto:${contact}?subject=${subject}&body=${body}`;
   };
 
+  {/*DELETAR EMAIL PELO MODAL*/}
   const handleDeleteFromModal = () => {
     if (selectedProfessional) {
       deleteProfessional(selectedProfessional.id);

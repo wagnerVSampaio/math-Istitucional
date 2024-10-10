@@ -59,4 +59,5 @@ export const ButtonDeleteEmail = styled.button`
   border-radius: 8px;
   color: #006B3F;
   font-weight: 500;
+  box-shadow: 0px 4px 6px rgba(0, 107, 63, 0.2);
 `;

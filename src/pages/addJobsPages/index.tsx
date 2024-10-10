@@ -1,4 +1,4 @@
-import AddJobs from '@/components/add-jobs'
+import AddJobs from '@/components/recruiter/add-jobs'
 import React from 'react'
 
 function AddJobsPages() {

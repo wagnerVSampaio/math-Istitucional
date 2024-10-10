@@ -17,27 +17,26 @@ interface AdmProps {
 
 const AdmApproval: React.FC<AdmProps> = ({ highlightedId }) => {
   const Adm = AdmData;
-
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const highlightedAdm = Adm.find(Adm => Adm.id === highlightedId) || null;
   const otherAdm = Adm.filter(Adm => Adm.id !== highlightedId);
 
+  {/*ENTRA EM CONTATO*/}
   const handleContactClick = (email: string) => {
     window.location.href = `mailto:${email}`;
   };
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  // Função para exibir o modal
+  {/*EXIBE O MODAL*/}
   const showModal = () => {
     setIsModalVisible(true);
   };
 
-  // Função para fechar o modal
+  {/*FECHA O MODAL*/}
   const handleCancel = () => {
     setIsModalVisible(false);
   };
 
-  // Função para confirmar a saída
+  {/*CONFIRMAR SAIDA*/}
   const handleConfirm = () => {
     setIsModalVisible(false);
   };

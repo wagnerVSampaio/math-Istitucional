@@ -1,5 +1,5 @@
 // pages/index.tsx
-import JobDetails from '@/components/jobs/jobs_details';
+import JobDetails from '@/components/servant/jobs/jobs_details';
 import React from 'react';
 
 

@@ -51,7 +51,8 @@ import {
   CloseButton,
   Input,
   AddExpButton,
-  H2Exp
+  H2Exp,
+  HoverText
 } from "./style";
 import { FaCamera } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
@@ -97,7 +98,6 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   const [coverImage, setCoverImage] = useState<string | undefined>(undefined);
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [bioText, setBioText] = useState<string | undefined>("");
-
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editedExperience, setEditedExperience] = useState<Experience | null>(null);
   const [isModalOpenEdu, setIsModalOpenEdu] = useState(false);
@@ -106,9 +106,8 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   const [isEducationExpanded, setIsEducationExpanded] = useState(false);
   const [isExperienceExpanded, setIsExperienceExpanded] = useState(false);
   const [isSkillsExpanded, setIsSkillsExpanded] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
 
-  {/*ALTERA FOTO DE PERFIL */}
+  {/*ALTERA FOTO DE PERFIL */ }
   const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -117,7 +116,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
     }
   };
 
-  {/*ALTERA FOTO DE CAPA*/}
+  {/*ALTERA FOTO DE CAPA*/ }
   const handleCoverImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -126,19 +125,19 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
     }
   };
 
-  {/*EDITA BIO*/}
+  {/*EDITA BIO*/ }
   const handleEditBio = () => {
     setIsEditingBio(true);
   };
 
-  {/*SALVA A BIO*/}
+  {/*SALVA A BIO*/ }
   const handleSaveBio = () => {
     setIsEditingBio(false);
   };
 
   const profileLink = `${window.location.origin}/profile/${id}`;
 
-  {/*COMPARTILHA O PERFIL*/}
+  {/*COMPARTILHA O PERFIL*/ }
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -160,13 +159,13 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
     }
   };
 
-  {/*LISTA TEMPORARIA DA FORMACAO*/}
+  {/*LISTA TEMPORARIA DA FORMACAO*/ }
   const [educations, setEducations] = useState<Education[]>([
     { degree: 'Bacharel em Ciência da Computação', institution: 'Universidade ABC', period: '2014 a 2018' },
     { degree: 'Mestrado em Engenharia de Software', institution: 'Universidade XYZ', period: '2019 a 2021' }
   ]);
 
-  {/*LISTA TEMPORARIA DA EXPERIENCIA*/}
+  {/*LISTA TEMPORARIA DA EXPERIENCIA*/ }
   const [experiences, setExperiences] = useState<Experience[]>([
     {
       company: "Empresa ABC",
@@ -216,7 +215,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
     },
   ]);
 
-  {/*LISTA TEMPORARIA DA HABILIDADE*/}
+  {/*LISTA TEMPORARIA DA HABILIDADE*/ }
   const [skills, setSkills] = useState<Skills[]>([
     { skill: 'JavaScript', level: 90 },
     { skill: 'React', level: 85 },
@@ -245,19 +244,19 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
     setIsSkillsExpanded(!isSkillsExpanded);
   };
 
-  {/*EDITA EXPERIENCIA*/}
+  {/*EDITA EXPERIENCIA*/ }
   const handleEditExperience = (index: number) => {
     setEditIndex(index);
     setEditedExperience(experiences[index]);
   };
 
-  {/*DELETA EXPERIENCIA*/}
+  {/*DELETA EXPERIENCIA*/ }
   const handleDeleteExperience = (index: number) => {
     const newExperiences = experiences.filter((_, i) => i !== index);
     setExperiences(newExperiences);
   };
 
-  {/*SALVA EXPERIENCIA*/}
+  {/*SALVA EXPERIENCIA*/ }
   const handleSaveEditExperience = () => {
     if (editIndex !== null && editedExperience) {
       const updatedExperiences = experiences.map((exp, index) =>
@@ -270,20 +269,22 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   };
 
 
-  {/*ADICIONA EXPERIENCIA*/}
+  {/*ADICIONA EXPERIENCIA*/ }
   const handleAddEducation = (education: Education) => {
     setEducations([...educations, education]);
   };
 
-  {/*ADICIONA EXPERIENCIA*/}
+  {/*ADICIONA EXPERIENCIA*/ }
   const handleAddExperience = (experience: Experience) => {
     setExperiences([...experiences, experience]);
   };
 
-  {/*ADICIONA HABILIDADE*/}
+  {/*ADICIONA HABILIDADE*/ }
   const handleAddSkills = (skill: Skills) => {
     setSkills([...skills, skill]);
   };
+
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <>
@@ -327,17 +328,19 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
           <DivParagraph>
             <p>Nome completo do usuário</p>
             <DivIconShare>
-              <FaShareAltSquare onClick={handleShare} />
+              <HoverText isVisible={isHovered}>Compartilha o perfil</HoverText>
+              <FaShareAltSquare onClick={handleShare} onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)} />
             </DivIconShare>
           </DivParagraph>
 
           <DivButton>
-            <Link href={"../favoritesPages"}><ProfileButton>Favoritos <Star /></ProfileButton></Link>
+            <ProfileButton disabled>Favoritos <Star /></ProfileButton>
             <Link href={"../expandable"}>
               <EditProfileButton>Editar perfil</EditProfileButton>
             </Link>
             <DivIcon>
-              <IoSettingsSharp />
+              <IoSettingsSharp/>
             </DivIcon>
           </DivButton>
 
@@ -377,13 +380,13 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
 
         <Wrapper>
           <Heading>Formação <div className="flex gap-4"><button style={{ cursor: 'pointer' }} onClick={() => setIsModalOpenEdu(true)}><Add /></button>
-          {isEducationExpanded ? (
-            <ArrowUp onClick={toggleExpandEducation} style={{ cursor: 'pointer' }} />
-          ) : (
-            <ArrowDown onClick={toggleExpandEducation} style={{ cursor: 'pointer' }} />
-          )}</div></Heading>
+            {isEducationExpanded ? (
+              <ArrowUp onClick={toggleExpandEducation} style={{ cursor: 'pointer' }} />
+            ) : (
+              <ArrowDown onClick={toggleExpandEducation} style={{ cursor: 'pointer' }} />
+            )}</div></Heading>
           <EducationList>
-          {educations.slice(0, isEducationExpanded ? educations.length : 2).map((education, index) => (
+            {educations.slice(0, isEducationExpanded ? educations.length : 2).map((education, index) => (
               <EducationItem key={index}>
                 <DegreeTitle>{education.degree}</DegreeTitle>
                 <TimePeriod>{education.institution} - {education.period}</TimePeriod>
@@ -548,7 +551,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
           <Title>
             Habilidades
             <div className="flex gap-4">
-            <button style={{ cursor: 'pointer' }} onClick={() => setIsModalOpenSkills(true)}><Add /></button>
+              <button style={{ cursor: 'pointer' }} onClick={() => setIsModalOpenSkills(true)}><Add /></button>
               {isSkillsExpanded ? (
                 <ArrowUp onClick={toggleExpandSkills} style={{ cursor: 'pointer' }} />
               ) : (
@@ -574,40 +577,40 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
 
         </SkillsContainer>
         {isModalOpenSkills && (
-            <ModalOverlay>
-              <ModalContent>
-                <H2Exp>Adicionar nova habilidade</H2Exp>
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    const newSkills = {
-                      skill: (e.target as any).skill.value,
-                      level: (e.target as any).level.value,
-                    };
-                    handleAddSkills(newSkills);
-                    setIsModalOpenSkills(false);
-                  }}
-                >
-                  <Input
-                    type="text"
-                    name="skill"
-                    placeholder="Habilidade"
-                    required
-                  />
-                  <Input
-                    type="text"
-                    name="level"
-                    placeholder="Nível de conhecimento"
-                    required
-                  />
-                  <div className="flex align-center justify-center">
-                    <CloseButton onClick={() => setIsModalOpenSkills(false)}>Fechar</CloseButton>
-                    <AddExpButton type="submit">Adicionar</AddExpButton>
-                  </div>
-                </form>
-              </ModalContent>
-            </ModalOverlay>
-          )}
+          <ModalOverlay>
+            <ModalContent>
+              <H2Exp>Adicionar nova habilidade</H2Exp>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const newSkills = {
+                    skill: (e.target as any).skill.value,
+                    level: (e.target as any).level.value,
+                  };
+                  handleAddSkills(newSkills);
+                  setIsModalOpenSkills(false);
+                }}
+              >
+                <Input
+                  type="text"
+                  name="skill"
+                  placeholder="Habilidade"
+                  required
+                />
+                <Input
+                  type="text"
+                  name="level"
+                  placeholder="Nível de conhecimento"
+                  required
+                />
+                <div className="flex align-center justify-center">
+                  <CloseButton onClick={() => setIsModalOpenSkills(false)}>Fechar</CloseButton>
+                  <AddExpButton type="submit">Adicionar</AddExpButton>
+                </div>
+              </form>
+            </ModalContent>
+          </ModalOverlay>
+        )}
       </GeneralItens>
     </>
   );

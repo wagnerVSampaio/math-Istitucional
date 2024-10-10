@@ -13,10 +13,9 @@ interface Professional {
 }
 
 const FavoritesPage: React.FC = () => {
-  // Estado que armazena os profissionais e o status de favoritos
   const [professionals, setProfessionals] = useState<Professional[]>(ProfessionalsData);
 
-  // Função para remover dos favoritos
+  {/*REMOVE DOS FAVORITOS*/}
   const toggleFavorite = (id: number) => {
     setProfessionals((prevProfessionals) =>
       prevProfessionals.map((professional) =>
@@ -25,10 +24,10 @@ const FavoritesPage: React.FC = () => {
     );
   };
 
-  // Filtrar apenas os profissionais que são favoritos
+  {/*FILTRA APENAS OS FAVORITOS*/}
   const favoriteProfessionals = professionals.filter(professional => professional.favorite);
 
-  // Função de contato por email
+  {/*CONTATO POR EMAIL*/}
   const handleContactClick = (email: string) => {
     const subject = "Contato sobre oportunidade de trabalho";
     const body = `Olá, ${email},\n\nGostaria de discutir uma oportunidade de trabalho com você. Por favor, entre em contato.\n\nAtenciosamente,\nUniversidade Federal do Oeste do Pará`;
