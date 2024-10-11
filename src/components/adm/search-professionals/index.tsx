@@ -47,23 +47,19 @@ const Search: React.FC<AdmProps> = ({ highlightedId }) => {
 
   return (
     <>
+      <style.Total>
       <style.DivSearch>
         <style.DivTopSearch>
           <style.StyleInput>
             <Input
-              size="large"
+              
               prefix={<UserOutlined />}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Pesquisar usuário"
             />
           </style.StyleInput>
-          <style.ButtonAddUser>
-            Adicionar usuário
-            <style.AddUser />
-          </style.ButtonAddUser>
-          <style.ButtonRemoveUser>
-            Remover usuário
+          <style.ButtonRemoveUser value={"Remover usuario"}>
             <style.RemoveUser />
           </style.ButtonRemoveUser>
         </style.DivTopSearch>
@@ -105,6 +101,7 @@ const Search: React.FC<AdmProps> = ({ highlightedId }) => {
           </style.DivNotification>
         </div>
       </style.DivSearch>
+      </style.Total>
     </>
   );
 };
