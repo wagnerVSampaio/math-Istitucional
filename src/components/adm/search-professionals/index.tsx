@@ -1,6 +1,6 @@
 import { UserOutlined } from '@ant-design/icons/lib/icons';
 import React, { useState } from 'react';
-import { Input } from 'antd/lib';
+import { Input, Tooltip } from 'antd/lib';
 import { AdmData } from "@/adm-const";
 import * as style from "./style";
 
@@ -59,9 +59,11 @@ const Search: React.FC<AdmProps> = ({ highlightedId }) => {
               placeholder="Pesquisar usuário"
             />
           </style.StyleInput>
-          <style.ButtonRemoveUser value={"Remover usuario"}>
+          <Tooltip title="Remover usuário">
+          <style.ButtonRemoveUser>
             <style.RemoveUser />
           </style.ButtonRemoveUser>
+          </Tooltip>
         </style.DivTopSearch>
 
         <div>

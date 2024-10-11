@@ -60,6 +60,7 @@ import { FaShareAltSquare } from "react-icons/fa";
 import { MdEditNote } from "react-icons/md";
 import { AiOutlineSave } from "react-icons/ai";
 import Link from "next/link";
+import { Tooltip } from "antd/lib";
 
 type FieldType = {
   id: number;
@@ -269,7 +270,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   };
 
 
-  {/*ADICIONA EXPERIENCIA*/ }
+  {/*ADICIONA EDUCAÇÃO*/ }
   const handleAddEducation = (education: Education) => {
     setEducations([...educations, education]);
   };
@@ -283,8 +284,6 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   const handleAddSkills = (skill: Skills) => {
     setSkills([...skills, skill]);
   };
-
-  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <>
@@ -328,9 +327,9 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
           <DivParagraph>
             <p>Nome completo do usuário</p>
             <DivIconShare>
-              <HoverText isVisible={isHovered}>Compartilha o perfil</HoverText>
-              <FaShareAltSquare onClick={handleShare} onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)} />
+              <Tooltip title="Compartilhar o perfil" placement="left">
+                <FaShareAltSquare />
+              </Tooltip>
             </DivIconShare>
           </DivParagraph>
 
@@ -340,7 +339,9 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
               <EditProfileButton>Editar perfil</EditProfileButton>
             </Link>
             <DivIcon>
-              <IoSettingsSharp/>
+              <Tooltip title="Configurações da conta" placement="left">
+                <IoSettingsSharp />
+              </Tooltip>
             </DivIcon>
           </DivButton>
 
@@ -356,9 +357,11 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                       onChange={(e) => setBioText(e.target.value)}
                     />
                   </p>
-                  <DivSave onClick={handleSaveBio}>
-                    <AiOutlineSave />
-                  </DivSave>
+                  <Tooltip title="Salvar biografia" placement="left">
+                    <DivSave onClick={handleSaveBio}>
+                      <AiOutlineSave />
+                    </DivSave>
+                  </Tooltip>
                 </div>
               ) : (
                 <div>
@@ -369,9 +372,11 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                     {bioText ||
                       "Experimente escrever uma curta biografia sobre você, incluindo suas principais conquistas, habilidades e objetivos de carreira."}
                   </p>
-                  <DivEdit onClick={handleEditBio}>
-                    <MdEditNote />
-                  </DivEdit>
+                  <Tooltip title="Editar biografia" placement="left">
+                    <DivEdit onClick={handleEditBio}>
+                      <MdEditNote />
+                    </DivEdit>
+                  </Tooltip>
                 </div>
               )}
             </DivP>
@@ -379,11 +384,20 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
         </DivTop>
 
         <Wrapper>
-          <Heading>Formação <div className="flex gap-4"><button style={{ cursor: 'pointer' }} onClick={() => setIsModalOpenEdu(true)}><Add /></button>
+          <Heading>Formação <div className="flex gap-4"><button style={{ cursor: 'pointer' }} onClick={() => setIsModalOpenEdu(true)}>
+            <Tooltip title="Adicionar nova formação">
+              <Add />
+            </Tooltip>
+          </button>
             {isEducationExpanded ? (
-              <ArrowUp onClick={toggleExpandEducation} style={{ cursor: 'pointer' }} />
+              <Tooltip title="Esconder formações adicionadas">
+                <ArrowUp onClick={toggleExpandEducation} style={{ cursor: 'pointer' }} />
+              </Tooltip>
+
             ) : (
-              <ArrowDown onClick={toggleExpandEducation} style={{ cursor: 'pointer' }} />
+              <Tooltip title="Mostrar todas as formações adicionadas">
+                <ArrowDown onClick={toggleExpandEducation} style={{ cursor: 'pointer' }} />
+              </Tooltip>
             )}</div></Heading>
           <EducationList>
             {educations.slice(0, isEducationExpanded ? educations.length : 2).map((education, index) => (
@@ -441,11 +455,17 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
           <Title>
             Experiências
             <div className="flex gap-4">
-              <button style={{ cursor: 'pointer' }} onClick={() => setIsModalOpenExperience(true)}><Add /></button>
+              <button style={{ cursor: 'pointer' }} onClick={() => setIsModalOpenExperience(true)}><Tooltip title="Adicionar nova experiência">
+                <Add />
+              </Tooltip></button>
               {isExperienceExpanded ? (
-                <ArrowUp onClick={toggleExpandExperience} style={{ cursor: 'pointer' }} />
+                <Tooltip title="Esconder experiências adicionadas">
+                  <ArrowUp onClick={toggleExpandExperience} style={{ cursor: 'pointer' }} />
+                </Tooltip>
               ) : (
-                <ArrowDown onClick={toggleExpandExperience} style={{ cursor: 'pointer' }} />
+                <Tooltip title="Mostrar todas as experiências adicionadas">
+                  <ArrowDown onClick={toggleExpandExperience} style={{ cursor: 'pointer' }} />
+                </Tooltip>
               )}
             </div>
           </Title>
@@ -497,7 +517,9 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                       <button style={{ cursor: 'pointer' }} onClick={handleSaveEditExperience}><Save /></button>
                     </>
                   )}
+                  <Tooltip title="Excluir experiência" placement="left">
                   <button style={{ cursor: 'pointer' }} onClick={() => handleDeleteExperience(index)}><Delete /></button>
+                  </Tooltip>
                 </div>
               </ListItem>
             ))}
@@ -551,11 +573,17 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
           <Title>
             Habilidades
             <div className="flex gap-4">
-              <button style={{ cursor: 'pointer' }} onClick={() => setIsModalOpenSkills(true)}><Add /></button>
+              <button style={{ cursor: 'pointer' }} onClick={() => setIsModalOpenSkills(true)}><Tooltip title="Adicionar nova habilidade">
+                <Add />
+              </Tooltip></button>
               {isSkillsExpanded ? (
+                <Tooltip title="Esconder habilidades adicionadas">
                 <ArrowUp onClick={toggleExpandSkills} style={{ cursor: 'pointer' }} />
+                </Tooltip>
               ) : (
+                <Tooltip title="Mostrar todas as habilidades adicionadas">
                 <ArrowDown onClick={toggleExpandSkills} style={{ cursor: 'pointer' }} />
+                </Tooltip>
               )}
             </div>
           </Title>
