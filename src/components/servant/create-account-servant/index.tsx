@@ -1,11 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from "react";
-import { Checkbox, DatePicker, Form, Input, Button, Flex, Space } from "antd/lib";
+import { Checkbox, DatePicker, Form, Input, Button, Flex, Space} from "antd/lib";
 import Link from "next/link";
 import type { CheckboxProps } from "antd/lib";
 import { ButtonLabelDate, DateBirthUpload, StyledForm, UploadButtonDate, } from "./style";
 import dayjs, { Dayjs } from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+
 
 type FieldType = {
   name: string;
@@ -33,7 +34,7 @@ interface NavServidorProps {
 
 dayjs.extend(customParseFormat);
 
-const dateFormat = 'DD/MM/YYYY'; 
+const dateFormat = 'DD/MM/YYYY';
 
 const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
   const [value, setValue] = useState(1);
@@ -79,8 +80,7 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
     setChecked(e.target.checked);
   };
 
-  const [selectedDate, setSelectedDate] = useState<Dayjs | undefined>(undefined); 
-
+  const [selectedDate, setSelectedDate] = useState<Dayjs | undefined>(undefined);
   const handleDateChange = (date: Dayjs | null) => {
     if (date && date.isValid()) {
       setSelectedDate(date);
@@ -112,20 +112,20 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
           </Form.Item>
 
           <p className="mt-[3px] mb-[3px]">
-              CPF <strong className="text-red-500"> *</strong>
-            </p>
-            <Form.Item<FieldType>
-              name="cpf"
-              rules={[{ required: true, message: "Por favor, insira o CPF!" }]}
-            >
-              <Input
-                type="text"
-                id="cpf"
-                value={cpf}
-                maxLength={11}
-                className="w-[350px]"
-              />
-            </Form.Item>
+            CPF <strong className="text-red-500"> *</strong>
+          </p>
+          <Form.Item<FieldType>
+            name="cpf"
+            rules={[{ required: true, message: "Por favor, insira o CPF!" }]}
+          >
+            <Input
+              type="text"
+              id="cpf"
+              value={cpf}
+              maxLength={11}
+              className="w-[350px]"
+            />
+          </Form.Item>
 
           <p className="mt-[3px] mb-[3px]">
             E-mail <strong className="text-red-500"> *</strong>
@@ -142,7 +142,7 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
           <p className="mb-[3px]">Foto <strong className="text-red-500"> *</strong> </p>
           <Form.Item<FieldType>
             name="photo"
-            >
+          >
             <ButtonLabelDate htmlFor="registerImageUpload">
               <DateBirthUpload className="relative">
                 <img
@@ -150,12 +150,12 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
                   alt="Register"
                   className="w-full object-cover"
                 />
-                <UploadButtonDate 
+                <UploadButtonDate
                   type="file"
                   accept="image/*"
                   id="registerImageUpload"
                   onChange={handleRegisterImageChange}
-                  style={{display: "none"}}
+                  style={{ display: "none" }}
                 />
               </DateBirthUpload>
             </ButtonLabelDate>
@@ -182,21 +182,21 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
           <p className="mb-[3px]">
             Data de nascimento <strong className="text-red-500"> * </strong>
           </p>
-          <Form.Item<FieldType>
-            name="dateBirth"
-            style={{marginRight: "8px"}}
+            <Form.Item<FieldType>
+              name="dateBirth"
+              style={{ marginRight: "8px" }}
             >
-    <Space direction="vertical" size={12}>
-      <DatePicker
-        value={selectedDate} 
-        format={dateFormat} 
-        onChange={handleDateChange} 
-        placeholder="Selecione a data"
-        className="w-[250px]"
-        
-      />
-    </Space>
-          </Form.Item>
+              <Space direction="vertical" size={12}>
+                <DatePicker
+                  value={selectedDate}
+                  format={dateFormat}
+                  onChange={handleDateChange}
+                  placeholder="Selecione a data"
+                  className="w-[250px]"
+
+                />
+              </Space>
+            </Form.Item>
         </div>
       </div>
       <div className="flex">

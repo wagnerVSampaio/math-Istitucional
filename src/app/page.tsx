@@ -119,7 +119,7 @@ const App: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             </Form.Item>
 
             <Form.Item className="mb-0">
-              <ButtonLogin  type="submit" onClick={Login}>ENTRAR</ButtonLogin>
+              <ButtonLogin  type="submit">ENTRAR</ButtonLogin>
             </Form.Item>
 
             <Form.Item wrapperCol={{ span: 11 }}>

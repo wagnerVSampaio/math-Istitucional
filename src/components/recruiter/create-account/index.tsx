@@ -217,14 +217,14 @@ const NavRecrutador = () => {
               Lotação <strong className="text-red-500"> *</strong>
             </p>
             <Form.Item<FieldType> name="campus">
-              <Select placeholder="Selecione uma lotação" style={{ width: '250px' }}>
-                <Option value="PROGEP">PROGEP</Option>
-                <Option value="PROAP">PROAP</Option>
-                <Option value="PROPLAN">PROPLAN</Option>
-                <Option value="PROGES">PROGES</Option>
-                <Option value="PROEN">PROEN</Option>
-                <Option value="PROEX">PROEX</Option>
-                <Option value="PROINT">PROINT</Option>
+              <Select placeholder="" style={{ width: '250px' }}>
+                <Option value="PROAD">PROAD - Pró-Reitoria de Administração</Option>
+                <Option value="PROCCE">PROCCE -  Pró-Reitoria da Cultura,Comunidade e Extensão</Option>
+                <Option value="PROPLAN">PROPLAN - Pró-Reitoria de Planejamento e Desenvolvimento Institucional</Option>
+                <Option value="PROGES">PROGES - Pró-Reitoria de Gestão Estudantil</Option>
+                <Option value="PROEN">PROEN -  Pró-Reitoria de Ensino de Graduação</Option>
+                <Option value="PROGEP">PROGEP -  Pró-Reitoria de Gestão de Pessoas</Option>
+                <Option value="PROPPIT">PROPPIT -  Pró-Reitoria de Pesquisa, Pós-Graduação e Inovação Tecnológica</Option>
               </Select>
             </Form.Item>
           </div>

@@ -1,6 +1,6 @@
-import { UserOutlined } from '@ant-design/icons/lib/icons'
-import React, { useState } from 'react'
-import { Input } from 'antd/lib'
+import { UserOutlined } from '@ant-design/icons/lib/icons';
+import React, { useState } from 'react';
+import { Input } from 'antd/lib';
 import { AdmData } from "@/adm-const";
 import * as style from "./style";
 
@@ -16,10 +16,16 @@ interface AdmProps {
 }
 
 const Search: React.FC<AdmProps> = ({ highlightedId }) => {
+  const [searchTerm, setSearchTerm] = useState(''); 
   const Adm = AdmData;
 
+  {/* Filtrar usuários com base no termo de busca */}
+  const filteredAdm = Adm.filter(adm =>
+    adm.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const highlightedAdm = Adm.find(Adm => Adm.id === highlightedId) || null;
-  const otherAdm = Adm.filter(Adm => Adm.id !== highlightedId);
+  const otherAdm = filteredAdm.filter(adm => adm.id !== highlightedId);
 
   const handleContactClick = (email: string) => {
     window.location.href = `mailto:${email}`;
@@ -27,26 +33,30 @@ const Search: React.FC<AdmProps> = ({ highlightedId }) => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  // Função para exibir o modal
   const showModal = () => {
     setIsModalVisible(true);
   };
 
-  // Função para fechar o modal
   const handleCancel = () => {
     setIsModalVisible(false);
   };
 
-  // Função para confirmar a saída
   const handleConfirm = () => {
     setIsModalVisible(false);
   };
+
   return (
     <>
       <style.DivSearch>
         <style.DivTopSearch>
           <style.StyleInput>
-            <Input size="large" prefix={<UserOutlined />} />
+            <Input
+              size="large"
+              prefix={<UserOutlined />}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Pesquisar usuário"
+            />
           </style.StyleInput>
           <style.ButtonAddUser>
             Adicionar usuário
@@ -57,47 +67,46 @@ const Search: React.FC<AdmProps> = ({ highlightedId }) => {
             <style.RemoveUser />
           </style.ButtonRemoveUser>
         </style.DivTopSearch>
-     
 
-      <div>
-        <style.DivNotification>
-          <style.StyledUl>
-            {otherAdm.map((adm) => (
-              <style.StyledLi
-                key={adm.id}
-                style={{
-                  backgroundColor: '#fff'
-                }}
-              >
-                <div className="flex flex-col m-[20px]">
-                  <style.StyledParagraph>{adm.name}</style.StyledParagraph>
-                  <style.StyledP>
-                    <style.Address /> {adm.campus}
-                  </style.StyledP>
-                  <style.StyledP>
-                    <style.Email />{" "}
-                    <span
-                      style={{ textDecoration: "none" }}
-                      onMouseOver={(e) =>
-                        (e.currentTarget.style.textDecoration = "underline")
-                      }
-                      onMouseOut={(e) =>
-                        (e.currentTarget.style.textDecoration = "none")
-                      }
-                      onClick={() => handleContactClick(adm.email)}
-                    >
-                      {adm.email}
-                    </span>
-                  </style.StyledP>
-                </div>
-              </style.StyledLi>
-            ))}
-          </style.StyledUl>
-        </style.DivNotification>
-      </div>
+        <div>
+          <style.DivNotification>
+            <style.StyledUl>
+              {otherAdm.map((adm) => (
+                <style.StyledLi
+                  key={adm.id}
+                  style={{
+                    backgroundColor: '#fff'
+                  }}
+                >
+                  <div className="flex flex-col m-[20px]">
+                    <style.StyledParagraph>{adm.name}</style.StyledParagraph>
+                    <style.StyledP>
+                      <style.Address /> {adm.campus}
+                    </style.StyledP>
+                    <style.StyledP>
+                      <style.Email />{" "}
+                      <span
+                        style={{ textDecoration: "none" }}
+                        onMouseOver={(e) =>
+                          (e.currentTarget.style.textDecoration = "underline")
+                        }
+                        onMouseOut={(e) =>
+                          (e.currentTarget.style.textDecoration = "none")
+                        }
+                        onClick={() => handleContactClick(adm.email)}
+                      >
+                        {adm.email}
+                      </span>
+                    </style.StyledP>
+                  </div>
+                </style.StyledLi>
+              ))}
+            </style.StyledUl>
+          </style.DivNotification>
+        </div>
       </style.DivSearch>
     </>
-
-  )
+  );
 };
+
 export default Search;
