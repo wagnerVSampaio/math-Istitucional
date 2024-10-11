@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { SlArrowDown, SlArrowUp } from "react-icons/sl";
 import { Form, Input } from "antd/lib";
-import { AddButton } from "./style";
 import FooterExpandable from "@/components/footer-expandable";
 import HeaderOverall from "@/components/header-overall";
 
@@ -144,6 +143,8 @@ const CadastroExpansivel: React.FC = () => {
             </div>
           </form>
         </div>
+        
+        {/*
         <div className="mt-[20px]">
           <form>
             <div style={{ color: "black" }}>
@@ -207,8 +208,10 @@ const CadastroExpansivel: React.FC = () => {
               )}
             </div>
           </form>
-        </div>
-        <div className="mt-[20px]">
+        </div> */}
+
+
+        {/*<div className="mt-[20px]">
           <form>
             <div style={{ color: "black" }}>
               <div
@@ -270,7 +273,7 @@ const CadastroExpansivel: React.FC = () => {
               )}
             </div>
           </form>
-        </div>
+        </div> */}
       </div>
       <FooterExpandable />
     </>

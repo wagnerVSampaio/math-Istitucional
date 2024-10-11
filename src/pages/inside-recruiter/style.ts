@@ -5,6 +5,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { IoBag, IoNotifications } from "react-icons/io5";
 import { MdChat } from "react-icons/md";
 import { BsPeopleFill } from "react-icons/bs";
+import { RiAddCircleFill } from "react-icons/ri";
 
 const { Search } = Input;
 
@@ -92,5 +93,9 @@ export const Chat = styled(MdChat)`
 `;
 
 export const Circle = styled(FaUserCircle)`
+  ${iconStyle}
+`;
+
+export const Add = styled(RiAddCircleFill)`
   ${iconStyle}
 `;

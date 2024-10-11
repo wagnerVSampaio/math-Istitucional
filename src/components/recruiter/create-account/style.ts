@@ -1,0 +1,43 @@
+import styled from "styled-components";
+import {Form, Button} from "antd/lib"
+
+export const PStyled = styled.p`
+    margin-bottom: 3px;
+`
+export const DateBirthUpload = styled.div`
+  width: 100px; 
+  height: 100px; 
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px dotted #006b3f;
+  position: relative;
+`;
+
+export const UploadButtonDate = styled.input`
+  display: none;
+`;
+
+export const ButtonLabelDate = styled.label`
+  display: inline-block; 
+  cursor: pointer;
+`;
+
+export const StyledForm = styled(Form)`
+  .ant-form-item {
+  margin-bottom: 7px !important;
+}
+`;
+export const ButtonCreate = styled(Button)`
+  color: #ffff;
+  background-color: #006B3F;
+  font-weight: bold;
+  width: 250px;
+`;
+export const ButtonExit = styled(Button)`
+  color: #006B3F;
+  background-color: #ffff;
+  font-weight: bold;
+  width: 250px;
+  margin-right: 40px;
+  border: 1px solid #006b3f;
+`;

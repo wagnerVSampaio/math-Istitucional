@@ -1,0 +1,281 @@
+import styled, {css} from "styled-components";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+
+export const GeneralItens = styled.div`
+    margin: 5px auto;
+    width: 80%;
+    border-radius: 10px;
+    color: #272727;
+    margin-top: 60px;
+    height: 550px;
+    overflow-x: auto;
+
+  @media (max-width: 1200px) {
+    width: 90%; 
+    height: 500px;
+  }
+
+  @media (max-width: 768px) {
+    width: 95%;
+    height: 450px;
+    margin-top: 30px; 
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+    height: auto; 
+    margin-top: 20px; 
+    border-radius: 5px;
+  }
+`;
+export const DivTop = styled.div`
+    background-color: white;
+    height: auto;
+    border-radius: 10px;
+    position: relative;
+`;
+
+export const ImageWrapper = styled.div`
+  position: absolute;
+  top: 50px; 
+  left: 100px; 
+  transform: translateX(-50%); 
+  width: 150px; 
+  height: 150px; 
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #fff; 
+  background-color: #f0f0f0; 
+`;
+
+export const UploadButton = styled.input`
+  display: none;
+`;
+
+export const ButtonLabel = styled.label`
+  position: absolute;
+  bottom: 25px;
+  right: 15px;  
+  background-color: white; 
+  color: #228b22;
+  padding: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  width: 30px; 
+  height: 30px; 
+
+`;
+
+export const ImageCover = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100px; 
+
+`;
+export const ButtonCoverLabel = styled.label`
+    position: absolute;
+  bottom: 10px; 
+  right: 10px;  
+  background-color: rgba(0, 0, 0, 0.5); 
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  
+`;
+export const DivParagraph = styled.div`
+   margin-left: 200px;
+   font-size: 24px;
+   color: #272727;
+   display: flex;
+   align-items: center;
+`;
+export const DivIconShare = styled.div`
+  font-size: 40px;
+  color: #006b3f;
+  display: flex;
+  padding-right: 23px;
+  margin-top: 5px;
+  margin-left: auto;
+`;
+
+export const DivBio = styled.div`
+  position: relative;
+  padding: 20px;
+  background-color: #ffff;
+  border-radius: 10px;
+  color: #272727;
+  display: flex;
+  margin-top: 55px;
+  height: auto;
+`;
+export const DivP = styled.div`
+    width: 95%;
+    height: auto;
+`;
+
+export const DivContact = styled.div`
+    padding: 20px;
+    display: flex;
+`;
+export const ParagraphContact = styled.p`
+    font-weight: bold;
+    margin-right: 10px;
+`;
+
+export const Container = styled.div`
+  margin: 1px auto;
+  padding: 20px;
+  background-color: #f7f7f7;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+`;
+
+export const List = styled.ul`
+  list-style-type: none;
+  padding: 0;
+`;
+
+export const ListItem = styled.li`
+  background-color: #fff;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+`;
+
+export const Title = styled.h1`
+  margin-bottom: 20px;
+  color: #272727;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const CompanyName = styled.span`
+  font-weight: bold;
+  color: #006B3F;
+`;
+
+export const Period = styled.span`
+  font-style: italic;
+  color: black;
+  margin-top: 5px;
+`;
+
+export const Wrapper = styled.div`
+  margin: 15px auto;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f7f7f7;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+`;
+
+export const EducationList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+`;
+
+export const EducationItem = styled.li`
+  background-color: #fff;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+`;
+
+export const Heading = styled.h1`
+  color: #272727;
+  font-weight: bold;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  `;
+
+export const DegreeTitle = styled.span`
+  font-weight: bold;
+  color: #006B3F;
+`;
+
+export const TimePeriod = styled.span`
+  font-style: italic;
+  color: #272727;
+  margin-top: 5px;
+`;
+
+
+export const SkillsContainer = styled.div`
+  margin: 1px auto;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f7f7f7;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+`;
+
+export const SkillItem = styled.div`
+  list-style-type: none;
+  background-color: #fff;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+`;
+
+export const SkillTitle = styled.span`
+  font-weight: bold;
+  margin-right: 10px;
+  color: #006B3F;
+`;
+
+export const SkillPercentage = styled.span`
+  font-size: 0.8em; 
+  color: #555;
+  margin-left: 10px;
+`;
+
+export const ProgressBarContainer = styled.div`
+  width: 150px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 5px;
+`;
+
+export const ProgressBar = styled.div<{ percentage: number }>`
+  width: ${({ percentage }) => percentage}%;
+  background-color: #76c7c0;
+  height: 10px; /* Ajuste a altura da barra de progresso aqui */
+  border-radius: 5px;
+`;
+
+const StyleIcon = css`
+  font-size: 25px;
+  color: #006B3F;
+`;
+
+export const ArrowDown = styled(IoIosArrowDown)`
+  ${StyleIcon}
+`;
+export const ArrowUp = styled(IoIosArrowUp)`
+  ${StyleIcon}
+`;
+
+export const Button = styled.button`
+  padding: 10px;
+  margin-top: 8px;
+`;
+

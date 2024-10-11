@@ -11,42 +11,57 @@ import {
 } from "./style";
 import { ConfigProvider } from "antd/lib";
 import "../app/globals.css";
-import { useRouter } from 'next/navigation';
 import HeaderOverall from "../components/header-overall";
 
-interface User {
-  id: number;
-  email: string;
-  password: string;
-};
+interface LoginProps {
+  onLoginSuccess: (email: string) => void;
+}
 
-const App: React.FC = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
+const App: React.FC<LoginProps> = ({ onLoginSuccess }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  //Metodo de autenticação de login
-  const loginAuthentication = async (event: React.FormEvent) => {
-    event.preventDefault();
+  {/*FUNÇÃO DE LOGIN*/}
+  const Login = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!email || !password) {
+      setErrorMessage('Email e senha são obrigatórios.');
+      return;
+    }
+
     try {
-      const response = await fetch("/usersData.json");
+      setLoading(true);
+      setErrorMessage('');
 
-      const usersData = await response.json();
+      {/*FAZENDO REQUISIÇÃO A API */}
+      const response = await fetch('https://sua-api.com/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
 
-      const user = usersData.find((user: User) => user.email === email && user.password === password);
+      const data = await response.json();
 
-      if (user) {
-        router.push(`/inside`);
-        console.log(user.id)
+      if (response.ok) {
+        onLoginSuccess(email);
       } else {
-        setError("E-mail ou senha inválido");
+        setErrorMessage(data.message || 'Credenciais inválidas.');
       }
-    } catch (error: any) {
-      setError("Erro ao fazer login");
-      console.error("Erro ao fazer login:", error);
+    } catch (error) {
+      setErrorMessage('Erro ao conectar com a API.');
+    } finally {
+      setLoading(false);
     }
   };
+
 
   return (
     <>
@@ -61,30 +76,34 @@ const App: React.FC = () => {
             initialValues={{ remember: true }}
             autoComplete="off"
             className="md:mr-8"
+            onFinish={Login}
           >
             <p className="text-green-900 font-bold text-[20px] mb-4">
               FAÇA LOGIN AGORA MESMO!
             </p>
             <p>E-mail</p>
-            <Form.Item<User>
-              name="email"
+            <Form.Item<LoginProps>
               rules={[{ required: true, message: "Insira seu e-mail!" }]}
             >
               <StyledInput
+                type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </Form.Item>
 
             <p>Senha</p>
-            <Form.Item<User>
-              name="password"
+            <Form.Item<LoginProps>
               rules={[{ required: true, message: "Insira sua senha!" }]}
               className="mb-0"
             >
-              <StyledInput
+              <StyledInput.Password
+                type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
+                style={{width: "270px", border: "1px solid #228B22", padding: "6px"}}
               />
             </Form.Item>
 
@@ -100,7 +119,7 @@ const App: React.FC = () => {
             </Form.Item>
 
             <Form.Item className="mb-0">
-              <ButtonLogin onClick={loginAuthentication} type="submit">ENTRAR</ButtonLogin>
+              <ButtonLogin  type="submit">ENTRAR</ButtonLogin>
             </Form.Item>
 
             <Form.Item wrapperCol={{ span: 11 }}>

@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Radio } from "antd/lib";
 import type { RadioChangeEvent } from "antd/lib";
-import NavServidor from "@/components/servant";
-import NavRecrutador from "@/components/recruiter";
+import NavServidor from "@/components/servant/create-account-servant";
+import NavRecrutador from "@/components/recruiter/create-account";
 import { Itens } from "./style";
 import { useRouter } from 'next/navigation';
 import HeaderOverall from "@/components/header-overall";
 
 type FieldType = {
-  nome: string;
+  name: string;
   email: string;
   photo: string;
   dateBirth: string;

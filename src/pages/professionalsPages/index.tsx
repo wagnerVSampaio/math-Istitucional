@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import Professionals from '@/components/professionals';
+import Professionals from '@/components/recruiter/professionals';
 
 const ProfessionalsPage: React.FC = () => {
   const router = useRouter();

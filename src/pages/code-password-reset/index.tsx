@@ -55,14 +55,19 @@ const CodePasswordReset: React.FC = () => {
           <div>
           {[...Array(6)].map((_, index) => (
             <StyledInput
-              key={index}
-              ref={(el) => (inputRefs.current[index] = el!)}
-              type="text"
-              value={code[index] || ''}
-              onChange={(e) => handleChange(e, index)}
-              onKeyDown={(e) => handleKeyDown(e, index)}
-              maxLength={1}
-            />
+            key={index}
+            ref={(el) => {
+              if (el) {
+                inputRefs.current[index] = el;
+              }
+            }}
+            type="text"
+            value={code[index] || ''}
+            onChange={(e) => handleChange(e, index)}
+            onKeyDown={(e) => handleKeyDown(e, index)}
+            maxLength={1}
+          />
+          
           ))}
             <div>
                 <p className='mb-[20px]'>Não recebeu o código? <StyledSpan>Reenviar</StyledSpan></p>
