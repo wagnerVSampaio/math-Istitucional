@@ -2,6 +2,8 @@ import styled, { css } from "styled-components";
 import { MdPersonRemoveAlt1 } from "react-icons/md";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
+import { RiDeleteBinLine } from "react-icons/ri";
+import { MdRemoveRedEye } from "react-icons/md";
 
 export const Total = styled.div`
   display: flex;
@@ -22,7 +24,6 @@ export const DivTopSearch = styled.div`
     margin-top: 60px;
     height: 60px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
 `;
 
@@ -39,9 +40,9 @@ export const ButtonRemoveUser = styled.button`
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   display: flex;
-  padding: 4px 20px;
+  padding: 4px;
   color: #006b3f;
-  margin-right: 10px;
+  margin-left: 20px;
 
   &:hover {
     border-color: #004c2b;
@@ -54,10 +55,14 @@ export const ButtonRemoveUser = styled.button`
 `;
 
 export const RemoveUser = styled(MdPersonRemoveAlt1)`
-  font-size: 30px;
+  font-size: 22px;
   color: #005b3f;
   cursor: pointer;
-  margin-left: 6px;
+`;
+export const ConfirmRemoveUser = styled(RiDeleteBinLine)`
+  font-size: 22px;
+  color: #005b3f;
+  cursor: pointer;
 `;
 
 export const DivNotification = styled.div`
@@ -92,6 +97,7 @@ export const StyledParagraph = styled.p`
   color: #006b3f;
   margin-bottom: 15px;
   font-weight: bold;
+  display: flex;
 `;
 
 export const StyledP = styled.p`
@@ -108,4 +114,9 @@ export const Address = styled(FaMapMarkerAlt)`
 
 export const Email = styled(IoMdMail)`
   ${iconsStyle}
+`;
+export const ViewProfile = styled(MdRemoveRedEye)`
+  margin-left: 20px;
+  margin-top: 8px;
+  font-size: 20px;
 `;
