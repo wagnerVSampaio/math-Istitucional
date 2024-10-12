@@ -1,6 +1,6 @@
-"use client"
-import React, {useState} from "react";
-import { Form, Input } from "antd/lib";
+"use client";
+import React, { useState } from "react";
+import { Form } from "antd/lib";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -8,60 +8,50 @@ import {
   ButtonWithEmail,
   ParagraphPassword,
   StyledInput,
+  StyledInputSenha,
 } from "./style";
 import { ConfigProvider } from "antd/lib";
 import "../app/globals.css";
+import { useRouter } from 'next/navigation';
 import HeaderOverall from "../components/header-overall";
 
-interface LoginProps {
-  onLoginSuccess: (email: string) => void;
-}
+const App: React.FC = () => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
-const App: React.FC<LoginProps> = ({ onLoginSuccess }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  {/*FUNÇÃO DE LOGIN*/}
-  const Login = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!email || !password) {
-      setErrorMessage('Email e senha são obrigatórios.');
-      return;
-    }
-
+  const loginAuthentication = async (values: { email: string; password: string; }) => {
     try {
-      setLoading(true);
-      setErrorMessage('');
-
-      {/*FAZENDO REQUISIÇÃO A API */}
-      const response = await fetch('https://sua-api.com/login', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3002/api/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+        body: JSON.stringify({ email: values.email, senha: values.password }), // Enviando como 'senha'
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        onLoginSuccess(email);
-      } else {
-        setErrorMessage(data.message || 'Credenciais inválidas.');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Erro na autenticação");
       }
-    } catch (error) {
-      setErrorMessage('Erro ao conectar com a API.');
-    } finally {
-      setLoading(false);
+
+      const userData = await response.json();
+
+      if (userData.id_usuario) {
+        router.push("/inside");
+      } else {
+        setError("E-mail ou senha inválidos");
+      }
+    } catch (error: any) {
+      setError(error.message || "Erro ao fazer login");
+      console.error("Erro ao fazer login:", error);
     }
   };
 
+  const onFinish = (values: { email: string; password: string; }) => {
+    loginAuthentication(values);
+  };
 
   return (
     <>
@@ -76,34 +66,33 @@ const App: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             initialValues={{ remember: true }}
             autoComplete="off"
             className="md:mr-8"
-            onFinish={Login}
+            onFinish={onFinish}
           >
             <p className="text-green-900 font-bold text-[20px] mb-4">
               FAÇA LOGIN AGORA MESMO!
             </p>
             <p>E-mail</p>
-            <Form.Item<LoginProps>
+            <Form.Item
+              name="email"
               rules={[{ required: true, message: "Insira seu e-mail!" }]}
             >
               <StyledInput
-                type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
               />
             </Form.Item>
 
             <p>Senha</p>
-            <Form.Item<LoginProps>
+            <Form.Item
+              name="password"
               rules={[{ required: true, message: "Insira sua senha!" }]}
               className="mb-0"
             >
-              <StyledInput.Password
-                type="password"
+              <StyledInputSenha
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
-                style={{width: "270px", border: "1px solid #228B22", padding: "6px"}}
+                placeholder="Insira sua senha"
+                aria-label="Senha"
               />
             </Form.Item>
 
@@ -119,8 +108,10 @@ const App: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             </Form.Item>
 
             <Form.Item className="mb-0">
-              <ButtonLogin  type="submit">ENTRAR</ButtonLogin>
+              <ButtonLogin type="submit">ENTRAR</ButtonLogin>
             </Form.Item>
+
+            {error && <p className="text-red-500">{error}</p>}
 
             <Form.Item wrapperCol={{ span: 11 }}>
               <p className="text-customDark text-xs mt-6">
@@ -146,7 +137,7 @@ const App: React.FC<LoginProps> = ({ onLoginSuccess }) => {
               alt={"Login"}
               width={450}
               height={400}
-              style={{  width: "400px", height: "400px",marginLeft: "auto" }}
+              style={{ width: "400px", height: "400px", marginLeft: "auto" }}
             />
           </div>
         </section>
