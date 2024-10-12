@@ -26,12 +26,8 @@ import {
   Period,
   Wrapper,
   Heading,
-  EducationItem,
-  DegreeTitle,
-  TimePeriod,
   EducationList,
   SkillsContainer,
-  SkillItem,
   SkillTitle,
   ProgressBarContainer,
   ProgressBar,
@@ -39,7 +35,6 @@ import {
   Star,
   GeneralItens,
   Add,
-  Editing,
   ArrowDown,
   ArrowUp,
   Delete,
@@ -51,8 +46,7 @@ import {
   CloseButton,
   Input,
   AddExpButton,
-  H2Exp,
-  HoverText
+  H2Exp
 } from "./style";
 import { FaCamera } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
@@ -99,8 +93,12 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   const [coverImage, setCoverImage] = useState<string | undefined>(undefined);
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [bioText, setBioText] = useState<string | undefined>("");
-  const [editIndex, setEditIndex] = useState<number | null>(null);
+  const [editIndexExperience, setEditIndexExperience] = useState<number | null>(null);
   const [editedExperience, setEditedExperience] = useState<Experience | null>(null);
+  const [editIndexEducations, setEditIndexEducations] = useState<number | null>(null);
+  const [editedEducations, setEditedEducations] = useState<Education | null>(null);
+  const [editIndexSkills, setEditIndexSkills] = useState<number | null>(null);
+  const [editedSkills, setEditedSkills] = useState<Skills | null>(null);
   const [isModalOpenEdu, setIsModalOpenEdu] = useState(false);
   const [isModalOpenExperience, setIsModalOpenExperience] = useState(false);
   const [isModalOpenSkills, setIsModalOpenSkills] = useState(false);
@@ -160,11 +158,8 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
     }
   };
 
-  {/*LISTA TEMPORARIA DA FORMACAO*/ }
-  const [educations, setEducations] = useState<Education[]>([
-    { degree: 'Bacharel em Ciência da Computação', institution: 'Universidade ABC', period: '2014 a 2018' },
-    { degree: 'Mestrado em Engenharia de Software', institution: 'Universidade XYZ', period: '2019 a 2021' }
-  ]);
+
+
 
   {/*LISTA TEMPORARIA DA EXPERIENCIA*/ }
   const [experiences, setExperiences] = useState<Experience[]>([
@@ -216,6 +211,85 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
     },
   ]);
 
+  {/* EXPANDIR EXPERIÊNCIA */ }
+  const toggleExpandExperience = () => {
+    setIsExperienceExpanded(!isExperienceExpanded);
+  };
+
+  {/*EDITA EXPERIENCIA*/ }
+  const handleEditExperience = (index: number) => {
+    setEditIndexExperience(index);
+    setEditedExperience(experiences[index]);
+  };
+
+  {/*DELETA EXPERIENCIA*/ }
+  const handleDeleteExperience = (index: number) => {
+    const newExperiences = experiences.filter((_, i) => i !== index);
+    setExperiences(newExperiences);
+  };
+
+  {/*SALVA EXPERIENCIA*/ }
+  const handleSaveEditExperience = () => {
+    if (editIndexExperience !== null && editedExperience) {
+      const updatedExperiences = experiences.map((exp, index) =>
+        index === editIndexExperience ? editedExperience : exp
+      );
+      setExperiences(updatedExperiences);
+      setEditIndexExperience(null);
+      setEditedExperience(null);
+    }
+  };
+
+  {/*ADICIONA EXPERIENCIA*/ }
+  const handleAddExperience = (experience: Experience) => {
+    setExperiences([...experiences, experience]);
+  };
+
+
+
+
+  {/*LISTA TEMPORARIA DA FORMACAO*/ }
+  const [educations, setEducations] = useState<Education[]>([
+    { degree: 'Bacharel em Ciência da Computação', institution: 'Universidade ABC', period: '2014 a 2018' },
+    { degree: 'Mestrado em Engenharia de Software', institution: 'Universidade XYZ', period: '2019 a 2021' }
+  ]);
+
+  {/*EDITA FORMAÇÃO*/ }
+  const handleEditEducation = (index: number) => {
+    setEditIndexEducations(index);
+    setEditedEducations(educations[index]);
+  };
+
+  {/*DELETA FORMAÇÃO*/ }
+  const handleDeleteEducation = (index: number) => {
+    const newEducations = educations.filter((_, i) => i !== index);
+    setEducations(newEducations);
+  };
+
+  {/*SALVA FORMAÇÃO*/ }
+  const handleSaveEditEducation = () => {
+    if (editIndexEducations !== null && editedEducations) {
+      const updatedEducations = educations.map((edu, index) =>
+        index === editIndexEducations ? editedEducations : edu
+      );
+      setEducations(updatedEducations);
+      setEditIndexEducations(null);
+      setEditedEducations(null);
+    }
+  };
+
+  {/* EXPANDIR FORMAÇÃO */ }
+  const toggleExpandEducation = () => {
+    setIsEducationExpanded(!isEducationExpanded);
+  };
+
+  {/*ADICIONA FORMAÇÃO*/ }
+  const handleAddEducation = (education: Education) => {
+    setEducations([...educations, education]);
+  };
+
+
+
   {/*LISTA TEMPORARIA DA HABILIDADE*/ }
   const [skills, setSkills] = useState<Skills[]>([
     { skill: 'JavaScript', level: 90 },
@@ -230,54 +304,33 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
     { skill: 'Docker', level: 50 }
   ]);
 
-  {/* EXPANDIR FORMAÇÃO */ }
-  const toggleExpandEducation = () => {
-    setIsEducationExpanded(!isEducationExpanded);
-  };
-
-  {/* EXPANDIR EXPERIÊNCIA */ }
-  const toggleExpandExperience = () => {
-    setIsExperienceExpanded(!isExperienceExpanded);
-  };
-
   {/*EXPANDIR HABILIDADES*/ }
   const toggleExpandSkills = () => {
     setIsSkillsExpanded(!isSkillsExpanded);
   };
 
-  {/*EDITA EXPERIENCIA*/ }
-  const handleEditExperience = (index: number) => {
-    setEditIndex(index);
-    setEditedExperience(experiences[index]);
+  {/*EDITA HABILIDADE*/ }
+  const handleEditSkills = (index: number) => {
+    setEditIndexSkills(index);
+    setEditedSkills(skills[index]);
   };
 
-  {/*DELETA EXPERIENCIA*/ }
-  const handleDeleteExperience = (index: number) => {
-    const newExperiences = experiences.filter((_, i) => i !== index);
-    setExperiences(newExperiences);
+  {/*DELETA HABILIDADE*/ }
+  const handleDeleteSkills = (index: number) => {
+    const newSkills = skills.filter((_, i) => i !== index);
+    setSkills(newSkills);
   };
 
-  {/*SALVA EXPERIENCIA*/ }
-  const handleSaveEditExperience = () => {
-    if (editIndex !== null && editedExperience) {
-      const updatedExperiences = experiences.map((exp, index) =>
-        index === editIndex ? editedExperience : exp
+  {/*SALVA HABILIDADE*/ }
+  const handleSaveEditSkills = () => {
+    if (editIndexSkills !== null && editedSkills) {
+      const updatedSkills = skills.map((skill, index) =>
+        index === editIndexSkills ? editedSkills : skill
       );
-      setExperiences(updatedExperiences);
-      setEditIndex(null);
-      setEditedExperience(null);
+      setSkills(updatedSkills);
+      setEditIndexSkills(null);
+      setEditedSkills(null);
     }
-  };
-
-
-  {/*ADICIONA EDUCAÇÃO*/ }
-  const handleAddEducation = (education: Education) => {
-    setEducations([...educations, education]);
-  };
-
-  {/*ADICIONA EXPERIENCIA*/ }
-  const handleAddExperience = (experience: Experience) => {
-    setExperiences([...experiences, experience]);
   };
 
   {/*ADICIONA HABILIDADE*/ }
@@ -400,11 +453,61 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
               </Tooltip>
             )}</div></Heading>
           <EducationList>
+
             {educations.slice(0, isEducationExpanded ? educations.length : 2).map((education, index) => (
-              <EducationItem key={index}>
-                <DegreeTitle>{education.degree}</DegreeTitle>
-                <TimePeriod>{education.institution} - {education.period}</TimePeriod>
-              </EducationItem>
+              <ListItem key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  {editIndexEducations === index ? (
+                    <>
+                      <Profile
+                        type="text"
+                        style={{ width: "350px" }}
+                        value={editedEducations?.degree || ''}
+                        onChange={(e) => setEditedEducations({ ...editedEducations!, degree: e.target.value })}
+                        placeholder="Curso"
+                      />
+                      <div className="flex">
+                        <Profile
+                          type="text"
+                          style={{ width: "200px", marginTop: '4px' }}
+                          value={editedEducations?.institution || ''}
+                          onChange={(e) => setEditedEducations({ ...editedEducations!, institution: e.target.value })}
+                          placeholder="Universidade"
+                        />
+                        <Profile
+                          type="text"
+                          style={{ width: "200px", marginTop: '4px', marginLeft: '10px' }}
+                          value={editedEducations?.period || ''}
+                          onChange={(e) => setEditedEducations({ ...editedEducations!, period: e.target.value })}
+                          placeholder="Período"
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <Tooltip title="Dê duplo click para editar">
+                      <CompanyName onClick={() => handleEditEducation(index)}>
+                        {education.degree}
+                      </CompanyName>
+                      </Tooltip>
+                      <Period>
+                        <span>{education.institution}</span> - {education.period}
+                      </Period>
+                    </>
+                  )}
+                </div>
+                <div style={{ display: 'flex', justifyContent: "space-between", gap: '20px' }}>
+                  {editIndexEducations === index && (
+                    <>
+                      <button style={{ cursor: 'pointer' }} onClick={() => { setEditIndexEducations(null); setEditedEducations(null); }}><GoBack /></button>
+                      <Tooltip title="Salvar alterações"><button style={{ cursor: 'pointer' }} onClick={handleSaveEditEducation}><Save /></button></Tooltip>
+                    </>
+                  )}
+                  <Tooltip title="Excluir formação" placement="left">
+                    <button style={{ cursor: 'pointer' }} onClick={() => handleDeleteEducation(index)}><Delete /></button>
+                  </Tooltip>
+                </div>
+              </ListItem>
             ))}
           </EducationList>
           {isModalOpenEdu && (
@@ -473,7 +576,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
             {experiences.slice(0, isExperienceExpanded ? experiences.length : 2).map((experience, index) => (
               <ListItem key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  {editIndex === index ? (
+                  {editIndexExperience === index ? (
                     <>
                       <Profile
                         type="text"
@@ -501,9 +604,11 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                     </>
                   ) : (
                     <>
+                     <Tooltip title="Dê duplo click para editar">
                       <CompanyName onClick={() => handleEditExperience(index)}>
                         {experience.role}
                       </CompanyName>
+                      </Tooltip>
                       <Period>
                         <span>{experience.company}</span> - {experience.period}
                       </Period>
@@ -511,14 +616,15 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                   )}
                 </div>
                 <div style={{ display: 'flex', justifyContent: "space-between", gap: '20px' }}>
-                  {editIndex === index && (
+                  {editIndexExperience === index && (
                     <>
-                      <button style={{ cursor: 'pointer' }} onClick={() => { setEditIndex(null); setEditedExperience(null); }}><GoBack /></button>
-                      <button style={{ cursor: 'pointer' }} onClick={handleSaveEditExperience}><Save /></button>
+                      <button style={{ cursor: 'pointer' }} onClick={() => { setEditIndexExperience(null); setEditedExperience(null); }}><GoBack /></button>
+                      <Tooltip title="Salvar alterações">
+                      <button style={{ cursor: 'pointer' }} onClick={handleSaveEditExperience}><Save /></button></Tooltip>
                     </>
                   )}
                   <Tooltip title="Excluir experiência" placement="left">
-                  <button style={{ cursor: 'pointer' }} onClick={() => handleDeleteExperience(index)}><Delete /></button>
+                    <button style={{ cursor: 'pointer' }} onClick={() => handleDeleteExperience(index)}><Delete /></button>
                   </Tooltip>
                 </div>
               </ListItem>
@@ -578,30 +684,79 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
               </Tooltip></button>
               {isSkillsExpanded ? (
                 <Tooltip title="Esconder habilidades adicionadas">
-                <ArrowUp onClick={toggleExpandSkills} style={{ cursor: 'pointer' }} />
+                  <ArrowUp onClick={toggleExpandSkills} style={{ cursor: 'pointer' }} />
                 </Tooltip>
               ) : (
                 <Tooltip title="Mostrar todas as habilidades adicionadas">
-                <ArrowDown onClick={toggleExpandSkills} style={{ cursor: 'pointer' }} />
+                  <ArrowDown onClick={toggleExpandSkills} style={{ cursor: 'pointer' }} />
                 </Tooltip>
               )}
             </div>
           </Title>
 
           {/* Renderização das habilidades */}
-          {skills.slice(0, isSkillsExpanded ? skills.length : 2).map(({ skill, level }) => (
-            <SkillItem key={skill}>
-              <SkillTitle>{skill}</SkillTitle>
-              <div className="flex">
-                <div>
-                  <ProgressBarContainer>
-                    <ProgressBar percentage={level} />
-                  </ProgressBarContainer>
-                </div>
-                <SkillPercentage>{level}%</SkillPercentage>
+          {skills.slice(0, isSkillsExpanded ? skills.length : 2).map((skillItem, index) => (
+            <ListItem key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {editIndexSkills === index ? (
+                  <>
+                    <Profile
+                      type="text"
+                      style={{ width: "350px" }}
+                      value={editedSkills?.skill || ''}
+                      onChange={(e) => setEditedSkills({ ...editedSkills!, skill: e.target.value })}
+                      placeholder="Habilidade"
+                    />
+                    <div className="flex">
+                      <Profile
+                        type="number"
+                        style={{ width: "200px", marginTop: '4px' }}
+                        value={editedSkills?.level || ''}
+                        onChange={(e) => setEditedSkills({ ...editedSkills!, level: Number(e.target.value) })}
+                        placeholder="Nível de conhecimento"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                  <Tooltip title="Dê duplo click para editar">
+                    <SkillTitle onClick={() => handleEditSkills(index)}>
+                      {skillItem.skill}
+                    </SkillTitle>
+                    </Tooltip>
+                    <div className="flex">
+                      <div>
+                        <ProgressBarContainer>
+                          <ProgressBar percentage={skillItem.level} />
+                        </ProgressBarContainer>
+                      </div>
+                      <SkillPercentage>{skillItem.level}%</SkillPercentage>
+                    </div>
+                  </>
+                )}
               </div>
-            </SkillItem>
+              <div style={{ display: 'flex', justifyContent: "space-between", gap: '20px' }}>
+                {editIndexSkills === index && (
+                  <>
+                    <button style={{ cursor: 'pointer' }} onClick={() => { setEditIndexSkills(null); setEditedSkills(null); }}>
+                      <GoBack />
+                    </button>
+                    <Tooltip title="Salvar alterações">
+                    <button style={{ cursor: 'pointer' }} onClick={handleSaveEditSkills}>
+                      <Save />
+                    </button>
+                    </Tooltip>
+                  </>
+                )}
+                <Tooltip title="Excluir educação">
+                  <button style={{ cursor: 'pointer' }} onClick={() => handleDeleteSkills(index)}>
+                    <Delete />
+                  </button>
+                </Tooltip>
+              </div>
+            </ListItem>
           ))}
+
 
         </SkillsContainer>
         {isModalOpenSkills && (
