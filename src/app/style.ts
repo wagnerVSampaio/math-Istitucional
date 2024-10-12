@@ -11,6 +11,12 @@ export const StyledInput = styled(Input)`
     border: 1px solid #228B22;
     padding: 6px;
 `;
+
+export const StyledInputSenha = styled(Input.Password)`
+    width: 270px;
+    border: 1px solid #228B22;
+    padding: 6px;
+`;
 export const ButtonLogin = styled.button`
     color: white;
     font-weight: 800;
