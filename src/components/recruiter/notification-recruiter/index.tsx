@@ -81,7 +81,7 @@ const NotificationRecruiter: React.FC = () => {
               e.stopPropagation();
               showMoreInfoModal(professional);
             }}
-            style={{ backgroundColor: professional.read ? '#fff' : '#ddd' }}
+            style={{ backgroundColor: professional.read ? '#fff' : '#e6f7ff' }}
           >
             <div className='flex flex-col m-[20px]'>
               <p className='font-bold text-[16px]'>{professional.name}, {professional.formation}</p>

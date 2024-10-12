@@ -22,9 +22,8 @@ export const StyledUl = styled.ul`
 `;
 export const StyledLi = styled.ul`
     padding: 15px;
-    margin: 5px 0;
+    border: 1px solid #ddd;
     cursor: pointer;
-    border-radius: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;

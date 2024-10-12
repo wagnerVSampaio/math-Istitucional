@@ -55,8 +55,8 @@ const Notification: React.FC = () => {
         {notifications.map(notification => (
           <StyledLi
             key={notification.id}
-            onClick={() => showMoreInfoModal(notification)} // Mostra o modal ao clicar
-            style={{backgroundColor: notification.read ? '#fff' : '#006b3e52'}}
+            onClick={() => showMoreInfoModal(notification)} 
+            style={{backgroundColor: notification.read ? '#fff' : '#e6f7ff'}}
           >
             <div className='flex flex-col'>
               <p className='font-extrabold text-[16px]' style={{fontWeight: notification.read ? '400' : '800'}}>
