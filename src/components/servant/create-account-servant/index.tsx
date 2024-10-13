@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import { Checkbox, DatePicker, Form, Input, Button, Flex, Space} from "antd/lib";
 import Link from "next/link";
 import type { CheckboxProps } from "antd/lib";
-import { ButtonLabelDate, DateBirthUpload, StyledForm, UploadButtonDate, } from "./style";
+import { ButtonLabelDate, DateBirthUpload, UploadButtonDate, } from "./style";
+import "./formEdited.css"
 import dayjs, { Dayjs } from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
@@ -34,16 +35,16 @@ interface NavServidorProps {
 
 dayjs.extend(customParseFormat);
 
-const dateFormat = 'DD/MM/YYYY';
+const dateFormat = 'DDMMYYYY';
 
 const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
   const [value, setValue] = useState(1);
   const [cpf, setCpf] = useState("");
   const [checked, setChecked] = useState(true);
   const [disabled, setDisabled] = useState(false);
-  const [RegisterImage, setRegisterImage] = useState<string | undefined>(
-    undefined
-  );
+  const [registerImage, setRegisterImage] = useState<string | undefined>(undefined);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const onFinish = (values: FieldType) => {
     if (checked) {
       onRegister(values);
@@ -80,7 +81,7 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
     setChecked(e.target.checked);
   };
 
-  const [selectedDate, setSelectedDate] = useState<Dayjs | undefined>(undefined);
+ const [selectedDate, setSelectedDate] = useState<Dayjs | undefined>(undefined);
   const handleDateChange = (date: Dayjs | null) => {
     if (date && date.isValid()) {
       setSelectedDate(date);
@@ -89,15 +90,55 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
     }
   };
 
+  const RegisterServidor = async (values: FieldType) => {
+    console.log("Formulário enviado!", values);
+    try {
+      const formData = new FormData(); // Crie uma instância de FormData
+  
+      // Adicione todos os campos ao FormData
+      formData.append('nome', values.name);
+      formData.append('email', values.email);
+      formData.append('senha', values.password);
+      formData.append('cpf', values.cpf);
+      formData.append('dataNascimento', values.dateBirth);
+      formData.append('telefone', values.phone);
+      formData.append('tipo_usuario', 'servidor');
+  
+      // Adicione o arquivo da imagem
+      if (registerImage) {
+        const file = await fetch(registerImage).then(r => r.blob()); // Obtenha o arquivo Blob da URL
+        formData.append('foto', file, 'photo.jpg'); // Nomeie o arquivo como você quiser
+      }
+  
+      const response = await fetch('http://localhost:3002/api/createusers', {
+        method: 'POST',
+        body: formData, // Envie o FormData
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        alert('Recrutador registrado com sucesso!');
+      } else {
+        console.error('Erro do servidor:', data);
+        setErrorMessage(data.error || 'Erro ao registrar');
+      }
+    } catch (error) {
+      console.error('Erro ao enviar dados:', error);
+      setErrorMessage('Erro ao registrar');
+    }
+  };
+  
   return (
-    <StyledForm
+    <Form
       labelCol={{ span: 1 }}
       wrapperCol={{ span: 14 }}
       layout="horizontal"
       initialValues={{ size: componentSize }}
       onValuesChange={onFormLayoutChange}
       size={componentSize as SizeType}
-      className="max-w-[600px]"
+      className="ant-form-item"
+      style={{maxWidth: "600px"}}
+      onFinish={RegisterServidor}
     >
       <div className="flex">
         <div className="mr-[75px]">
@@ -146,7 +187,7 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
             <ButtonLabelDate htmlFor="registerImageUpload">
               <DateBirthUpload className="relative">
                 <img
-                  src={RegisterImage || "background-upload.png"}
+                  src={registerImage || "background-upload.png"}
                   alt="Register"
                   className="w-full object-cover"
                 />
@@ -254,14 +295,12 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
               Voltar
             </Button>
           </Link>
-          <Link href={"./inside"}>
-            <Button htmlType="submit" className="w-[250px] font-extrabold" type="primary">
+            <Button type="primary" htmlType="submit" className="w-[250px] font-extrabold">
               Criar conta
             </Button>
-          </Link>
         </Flex>
       </div>
-    </StyledForm>
+    </Form>
   );
 };
 

@@ -19,9 +19,5 @@ export const ButtonLabelDate = styled.label`
   display: inline-block;
   cursor: pointer;
 `;
-export const StyledForm = styled(Form)`
-  .ant-form-item {
-    margin-bottom: 7px !important;
-  }
-`;
+
 

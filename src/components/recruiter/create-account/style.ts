@@ -22,11 +22,6 @@ export const ButtonLabelDate = styled.label`
   cursor: pointer;
 `;
 
-export const StyledForm = styled(Form)`
-  .ant-form-item {
-  margin-bottom: 7px !important;
-}
-`;
 export const ButtonCreate = styled(Button)`
   color: #ffff;
   background-color: #006B3F;
