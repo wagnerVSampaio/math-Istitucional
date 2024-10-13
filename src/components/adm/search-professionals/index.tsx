@@ -24,20 +24,26 @@ const Search: React.FC<AdmProps> = ({ highlightedId }) => {
   const [loading, setLoading] = useState(true); // Indicador de carregamento
 
   // Função para carregar os usuários da API
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch('http://localhost:3002/api/allUser');
-        const data = await response.json();
-        setUsers(data);
-      } catch (error) {
-        console.error('Erro ao carregar usuários:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUsers();
-  }, []);
+  // Função para carregar os usuários da API e filtrar os recrutadores
+useEffect(() => {
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('http://localhost:3002/api/allUser');
+      const data = await response.json();
+      
+      // Filtra apenas os usuários que são recrutadores
+      const recrutadores = data.filter((user: { tipo_usuario: string }) => user.tipo_usuario === 'recrutador');
+
+      setUsers(recrutadores);
+    } catch (error) {
+      console.error('Erro ao carregar usuários:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchUsers();
+}, []);
 
   // Função para alternar entre a seleção e a remoção
   const showModal = () => {
@@ -129,7 +135,7 @@ const Search: React.FC<AdmProps> = ({ highlightedId }) => {
 
           {filteredUsers.length === 0 ? (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
-              <span>Não foi encontrado nenhum usuário com este nome.</span>
+              <span>Não foi encontrado nenhum usuário.</span>
             </div>
           ) : (
             <div>

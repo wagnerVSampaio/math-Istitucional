@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Checkbox, Form, Input, Button, Flex, Select } from "antd/lib";
 import Link from "next/link";
-import { useRouter } from 'next/router';
-import axios from 'axios';
 import type { CheckboxProps } from "antd/lib";
 import {
   ButtonCreate,
@@ -19,6 +17,7 @@ type FieldType = {
   email: string;
   photo: string;
   lotacao: string;
+  tipo_usuario: string;
   campus: string;
   password: string;
   passwordconfirmation: string;
@@ -40,16 +39,6 @@ const NavRecrutador = () => {
   const [componentSize, setComponentSize] = useState<SizeType | "default">(
     "default"
   );
-  const [formData, setFormData] = useState<FieldType>({
-    name: '',
-    cpf: '',
-    email: '',
-    photo: '',
-    lotacao: '',
-    campus: '',
-    password: '',
-    passwordconfirmation: '',
-  });
   const [registerImage, setRegisterImage] = useState<string | undefined>(undefined);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [checked, setChecked] = useState(true);
@@ -88,7 +77,7 @@ const NavRecrutador = () => {
   };
 
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+{/*   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -107,35 +96,41 @@ const NavRecrutador = () => {
         photo: file.name, // Apenas salva o nome do arquivo; ajuste conforme necessidade
       });
     }
-  };
+  }; */}
 
-  {/*Função para realizar o cadastro usando Axios*/ }
-  const registerUser = async () => {
-    const router = useRouter();
+  const Register = async (value: any) => {
+    console.log("Formulário enviado!", value); // Verifica se o register é chamado
     try {
-      if (formData.password !== formData.passwordconfirmation) {
-        setErrorMessage('As senhas não coincidem');
-        return;
+      const response = await fetch('http://localhost:3002/api/createusers', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nome: value.name,
+          email: value.email,
+          senha: value.password,
+          foto: registerImage,
+          cpf: value.cpf,
+          lotacao: value.lotacao,
+          campus: value.campus,
+          tipo_usuario: 'recrutador'
+        }),
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        alert('Recrutador registrado com sucesso!');
+      } else {
+        setErrorMessage(data.error || 'Erro ao registrar');
       }
-
-      {/* Cria um objeto FormData para enviar os dados do formulário*/ }
-      const formDataToSend = new FormData();
-      formDataToSend.append('name', formData.name);
-      formDataToSend.append('cpf', formData.cpf);
-      formDataToSend.append('email', formData.email);
-      formDataToSend.append('photo', formData.photo);
-      formDataToSend.append('lotacao', formData.lotacao);
-      formDataToSend.append('password', formData.password);
-
-      {/*Faz a requisição POST usando Axios*/ }
-      const response = await axios.post('https://api.seuservidor.com/cadastro', formDataToSend);
-
-      router.push('/inside-recruiter');
-    } catch (error: any) {
-      console.error('Erro no cadastro:', error.response?.data || error.message);
-      setErrorMessage('Erro ao cadastrar usuário');
+    } catch (error) {
+      console.error('Erro ao enviar dados:', error);
+      setErrorMessage('Erro ao registrar');
     }
   };
+  
+
   return (
     <>
       <StyledForm
@@ -146,7 +141,7 @@ const NavRecrutador = () => {
         onValuesChange={onFormLayoutChange}
         size={componentSize as SizeType}
         className="max-w-[600px]"
-        onFinish={registerUser}
+        onFinish={Register}
       >
         <div className="flex">
           <div className="mr-[75px]">
@@ -216,7 +211,7 @@ const NavRecrutador = () => {
             <p className="mb-[3px]">
               Lotação <strong className="text-red-500"> *</strong>
             </p>
-            <Form.Item<FieldType> name="campus">
+            <Form.Item<FieldType> name="lotacao">
               <Select placeholder="" style={{ width: '250px' }}>
                 <Option value="PROAD">PROAD - Pró-Reitoria de Administração</Option>
                 <Option value="PROCCE">PROCCE -  Pró-Reitoria da Cultura,Comunidade e Extensão</Option>
@@ -334,7 +329,7 @@ const NavRecrutador = () => {
                 Voltar
               </ButtonExit>
             </Link>
-            <ButtonCreate name="submit" >
+            <ButtonCreate name="submit">
               Criar conta
             </ButtonCreate>
           </Flex>
