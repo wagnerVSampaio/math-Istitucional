@@ -1,12 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from "react";
-import { Checkbox, DatePicker, Form, Input, Button, Flex, Space } from "antd/lib";
+import { Checkbox, DatePicker, Form, Input, Button, Flex, Space, message } from "antd/lib";
 import Link from "next/link";
 import type { CheckboxProps } from "antd/lib";
 import { ButtonLabelDate, DateBirthUpload, UploadButtonDate } from "./style";
 import "./formEdited.css";
 import dayjs, { Dayjs } from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { useRouter } from 'next/navigation';
 
 type FieldType = {
   name: string;
@@ -42,7 +43,7 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
   const [disabled, setDisabled] = useState(false);
   const [registerImage, setRegisterImage] = useState<string | undefined>(undefined);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
+  const router = useRouter();
   const [componentSize, setComponentSize] = useState<SizeType | "default">("default");
   const [selectedDate, setSelectedDate] = useState<Dayjs | undefined>(undefined);
 
@@ -101,7 +102,8 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
 
       const data = await response.json();
       if (response.ok) {
-        window.location.href = "/";
+        router.push("/");
+        message.success('Cadastro realizado com sucesso! Realize o login.'); 
       } else {
         console.error("Erro do servidor:", data);
         setErrorMessage(data.error || "Erro ao registrar");

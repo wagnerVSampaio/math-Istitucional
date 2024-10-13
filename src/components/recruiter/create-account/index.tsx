@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Checkbox, Form, Input, Button, Flex, Select} from "antd/lib";
+import { Checkbox, Form, Input, Button, Flex, Select, Modal} from "antd/lib";
 import Link from "next/link";
 import type { CheckboxProps } from "antd/lib";
+import { useRouter } from 'next/navigation';
 import {
   ButtonCreate,
   ButtonExit,
@@ -11,7 +12,7 @@ import {
 } from "./style";
 import "./formEdited.css"
 type FieldType = {
-  name: string;
+  nome: string;
   cpf: string;
   email: string;
   photo: string;
@@ -43,6 +44,9 @@ const NavRecrutador = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [checked, setChecked] = useState(true);
   const [disabled, setDisabled] = useState(false);
+  const router = useRouter();
+  const [isModalVisible, setIsModalVisible] = useState(false); // Estado do modal
+  const [modalContent, setModalContent] = useState<string>("");
   const onFormLayoutChange = ({ size }: { size: SizeType }) => {
     setComponentSize(size);
   };
@@ -78,10 +82,10 @@ const NavRecrutador = () => {
 
 
   {/*   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { nome, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [nome]: value,
     });
   };
 
@@ -93,49 +97,60 @@ const NavRecrutador = () => {
       setRegisterImage(imageUrl);
       setFormData({
         ...formData,
-        photo: file.name, // Apenas salva o nome do arquivo; ajuste conforme necessidade
+        photo: file.nome, // Apenas salva o nome do arquivo; ajuste conforme necessidade
       });
     }
   }; */}
 
+  const handleOk = () => {
+    setIsModalVisible(false);
+    // Limpar o formulário ou redirecionar o usuário se necessário
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    router.push("/");
+  };
+
   const RegisterRecrutador = async (values: FieldType) => {
     console.log("Formulário enviado!", values);
     try {
-      const formData = new FormData(); // Crie uma instância de FormData
-  
-      // Adicione todos os campos ao FormData
-      formData.append('nome', values.name);
-      formData.append('email', values.email);
-      formData.append('senha', values.password);
-      formData.append('cpf', values.cpf);
-      formData.append('lotacao', values.lotacao);
-      formData.append('campus', values.campus);
-      formData.append('tipo_usuario', 'recrutador');
-  
-      // Adicione o arquivo da imagem
-      if (registerImage) {
-        const file = await fetch(registerImage).then(r => r.blob()); // Obtenha o arquivo Blob da URL
-        formData.append('foto', file, 'photo.jpg'); // Nomeie o arquivo como você quiser
-      }
-  
-      const response = await fetch('http://localhost:3002/api/createusers', {
-        method: 'POST',
-        body: formData, // Envie o FormData
-      });
-  
-      const data = await response.json();
-      if (response.ok) {
-        alert('Recrutador registrado com sucesso!');
-      } else {
-        console.error('Erro do servidor:', data);
-        setErrorMessage(data.error || 'Erro ao registrar');
-      }
+        const formData = new FormData(); // Crie uma instância de FormData
+
+        // Adicione todos os campos ao FormData
+        formData.append('nome_completo', values.nome);  // Nome completo do recrutador
+        formData.append('email', values.email);  // Email do recrutador
+        formData.append('senha', values.password);  // Senha do recrutador
+        formData.append('tipo_usuario', 'recrutador');  // Tipo de usuário
+        formData.append('cpf', values.cpf);  // CPF do recrutador
+        formData.append('lotacao', values.lotacao);  // Lotação do recrutador
+        formData.append('campus', values.campus);  // Campus do recrutador
+
+        // Adicione o arquivo da imagem se existir
+        if (registerImage) {
+            const file = await fetch(registerImage).then(r => r.blob()); // Obtenha o arquivo Blob da URL
+            formData.append('foto', file, 'photo.jpg'); // Nomeie o arquivo como você quiser
+        }
+
+        // Envia os dados para criar o usuário pendente
+        const response = await fetch('http://localhost:3002/api/createPendingUser', {
+            method: 'POST',
+            body: formData, // Envie o FormData
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            console.log('Usuário pendente criado com sucesso:', data);
+            setIsModalVisible(true); // Exibir modal de sucesso ou redirecionar
+        } else {
+            console.error('Erro do servidor:', data);
+            setErrorMessage(data.message || 'Erro ao registrar');
+        }
     } catch (error) {
-      console.error('Erro ao enviar dados:', error);
-      setErrorMessage('Erro ao registrar');
+        console.error('Erro ao enviar dados:', error);
+        setErrorMessage('Erro ao registrar');
     }
-  };
-  
+};
 
 
   return (
@@ -157,7 +172,7 @@ const NavRecrutador = () => {
                 Nome completo <strong className="text-red-500"> *</strong>
               </p>
               <Form.Item<FieldType>
-                name="name"
+                name="nome"
                 rules={[{ required: true, message: "Por favor, insira o nome!" }]}
               >
                 <Input className="w-[350px]" />
@@ -343,6 +358,18 @@ const NavRecrutador = () => {
             </Flex>
           </div>
         </Form>
+
+        {/* Modal para exibir informações do usuário */}
+      <Modal 
+        title="Solicitação de cadastro bem-Sucedido" 
+        open={isModalVisible} 
+        onOk={handleOk} 
+        onCancel={handleCancel}
+      >
+          <>
+            <p>Aguarde a aprovação da pró-reitoria selecionada no cadastro!</p>
+          </>
+      </Modal>
     </>
   );
 };
