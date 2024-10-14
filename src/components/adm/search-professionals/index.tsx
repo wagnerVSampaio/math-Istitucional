@@ -6,16 +6,16 @@ import * as style from "./style";
 interface Adm {
   id_usuario: number;
   nome_completo: string;
-  campus?: string;
+  campus: string;
   email: string;
   tipo_usuario: string;
 }
 
 interface AdmProps {
-  highlightedId: number | null;
+  usersId: number | null;
 }
 
-const Search: React.FC<AdmProps> = ({ highlightedId }) => {
+const Search: React.FC<AdmProps> = ({ usersId }) => {
   const [searchTerm, setSearchTerm] = useState(''); 
   const [selectedAdms, setSelectedAdms] = useState<number[]>([]); 
   const [isModalVisible, setIsModalVisible] = useState(false); 
@@ -23,27 +23,31 @@ const Search: React.FC<AdmProps> = ({ highlightedId }) => {
   const [users, setUsers] = useState<Adm[]>([]); // Dados da API
   const [loading, setLoading] = useState(true); // Indicador de carregamento
 
-  // Função para carregar os usuários da API
+
   // Função para carregar os usuários da API e filtrar os recrutadores
-useEffect(() => {
-  const fetchUsers = async () => {
-    try {
-      const response = await fetch('http://localhost:3002/api/allUser');
-      const data = await response.json();
-      
-      // Filtra apenas os usuários que são recrutadores
-      const recrutadores = data.filter((user: { tipo_usuario: string }) => user.tipo_usuario === 'recrutador');
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch('http://localhost:3002/api/recrutadorUsers');
+        const data: Adm[] = await response.json(); // Define o tipo do data como Adm[]
+  
+        // Filtra apenas os usuários que são recrutadores
+        const recrutadores = data.filter((user) => user.tipo_usuario === 'recrutador');
+  
+        setUsers(recrutadores);
+      } catch (error) {
+        console.error('Erro ao carregar usuários:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchUsers();
+  }, []);
+  
+  
+  
 
-      setUsers(recrutadores);
-    } catch (error) {
-      console.error('Erro ao carregar usuários:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchUsers();
-}, []);
 
   // Função para alternar entre a seleção e a remoção
   const showModal = () => {
@@ -105,8 +109,8 @@ useEffect(() => {
   );
 
   // Usuário destacado
-  const highlightedUser = users.find(user => user.id_usuario === highlightedId) || null;
-  const otherUsers = filteredUsers.filter(user => user.id_usuario !== highlightedId);
+  const Users = users.find(user => user.id_usuario === usersId) || null;
+  const otherUsers = filteredUsers.filter(user => user.id_usuario !== usersId);
 
   if (loading) {
     return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}><Spin size="large" /></div>;
@@ -151,7 +155,7 @@ useEffect(() => {
                       <div className="flex flex-col m-[20px]">
                         <style.StyledParagraph>{user.nome_completo} <Tooltip title="Visualizar perfil"><style.ViewProfile /></Tooltip></style.StyledParagraph>
                         <style.StyledP>
-                          <style.Address /> {user.campus || 'Campus não informado'}
+                          <style.Address /> {user.campus}
                         </style.StyledP>
                         <Tooltip title="Entrar em contato" placement='right'>
                           <style.StyledP>

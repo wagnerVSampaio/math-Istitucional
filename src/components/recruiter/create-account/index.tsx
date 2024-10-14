@@ -18,9 +18,10 @@ type FieldType = {
   photo: string;
   lotacao: string;
   tipo_usuario: string;
+  status: string;
   campus: string;
-  password: string;
-  passwordconfirmation: string;
+  senha: string;
+  senhaconfirmacao: string;
 };
 
 const { Option } = Select;
@@ -104,12 +105,8 @@ const NavRecrutador = () => {
 
   const handleOk = () => {
     setIsModalVisible(false);
-    // Limpar o formulário ou redirecionar o usuário se necessário
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
     router.push("/");
+    // Limpar o formulário ou redirecionar o usuário se necessário
   };
 
   const RegisterRecrutador = async (values: FieldType) => {
@@ -118,13 +115,14 @@ const NavRecrutador = () => {
         const formData = new FormData(); // Crie uma instância de FormData
 
         // Adicione todos os campos ao FormData
-        formData.append('nome_completo', values.nome);  // Nome completo do recrutador
+        formData.append('nome', values.nome);  // Nome completo do recrutador
         formData.append('email', values.email);  // Email do recrutador
-        formData.append('senha', values.password);  // Senha do recrutador
+        formData.append('senha', values.senha);  // Senha do recrutador
         formData.append('tipo_usuario', 'recrutador');  // Tipo de usuário
         formData.append('cpf', values.cpf);  // CPF do recrutador
         formData.append('lotacao', values.lotacao);  // Lotação do recrutador
         formData.append('campus', values.campus);  // Campus do recrutador
+        formData.append('status', 'pendente');  // Status do recrutador
 
         // Adicione o arquivo da imagem se existir
         if (registerImage) {
@@ -133,7 +131,7 @@ const NavRecrutador = () => {
         }
 
         // Envia os dados para criar o usuário pendente
-        const response = await fetch('http://localhost:3002/api/createPendingUser', {
+        const response = await fetch('http://localhost:3002/api/createusers', {
             method: 'POST',
             body: formData, // Envie o FormData
         });
@@ -302,7 +300,7 @@ const NavRecrutador = () => {
                 Senha <strong className="text-red-500"> *</strong>
               </p>
               <Form.Item<FieldType>
-                name="password"
+                name="senha"
                 rules={[
                   {
                     required: true,
@@ -318,7 +316,7 @@ const NavRecrutador = () => {
                 Confirmação de senha <strong className="text-red-500"> *</strong>
               </p>
               <Form.Item<FieldType>
-                name="passwordconfirmation"
+                name="senhaconfirmacao"
                 rules={[
                   {
                     required: true,
@@ -363,8 +361,7 @@ const NavRecrutador = () => {
       <Modal 
         title="Solicitação de cadastro bem-Sucedido" 
         open={isModalVisible} 
-        onOk={handleOk} 
-        onCancel={handleCancel}
+        onOk={handleOk}
       >
           <>
             <p>Aguarde a aprovação da pró-reitoria selecionada no cadastro!</p>
