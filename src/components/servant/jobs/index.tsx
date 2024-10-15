@@ -15,11 +15,11 @@ interface JobCardProps {
   title: string;
   description: string;
   location: string;
-  postedAgo: string;
+  postedago: string;
   onClick?: () => void; 
 }
 
-const JobCard: React.FC<JobCardProps> = ({ title, description, location, postedAgo, onClick }) => {
+const JobCard: React.FC<JobCardProps> = ({ title, description, location, postedago, onClick }) => {
   return (
     <DivVacanciesContainer onClick={onClick} title={<Tooltip title={title}>
     <UserIcon /> <span>{title}</span>
@@ -33,7 +33,7 @@ const JobCard: React.FC<JobCardProps> = ({ title, description, location, postedA
       <DescriptionWrapper>{description}</DescriptionWrapper>
 
       <IconWrapper>
-        <CalendarIcon /> <JobTime>{postedAgo}</JobTime>
+        <CalendarIcon /> <JobTime>{postedago}</JobTime>
       </IconWrapper>
     </DivVacanciesContainer>
   );

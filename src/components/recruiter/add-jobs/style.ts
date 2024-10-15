@@ -38,4 +38,5 @@ export const ButtonAdd = styled.div`
     text-align: center;
     font-size: 15px;
     font-weight: bold;
+    cursor: pointer;
 `;

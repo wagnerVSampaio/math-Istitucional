@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Typography, Descriptions, Button } from 'antd/lib';
-
+import dayjs from "dayjs"; 
 const { Title, Paragraph } = Typography;
 
 export type JobDetailsProps = {
@@ -10,7 +10,7 @@ export type JobDetailsProps = {
   requirements: string;
   benefits: string;
   location: string;
-  postedAgo: string;
+  postedago: string;
   salary: string;
   contact: string;
 };
@@ -21,14 +21,16 @@ const JobDetails: React.FC<JobDetailsProps> = ({
   requirements,
   benefits,
   location,
-  postedAgo,
+  postedago,
   salary,
   contact
 }) => {
+
+
   return (
     <Card style={{ margin: '20px'}}>
       <Title level={3}>{title}</Title>
-      <Paragraph type="secondary">{location} - {postedAgo}</Paragraph>
+      <Paragraph type="secondary">{location} - {postedago}</Paragraph>
 
       <Descriptions column={1} bordered>
         <Descriptions.Item label="Descrição">{description}</Descriptions.Item>

@@ -1,4 +1,4 @@
-// pages/index.tsx
+{/* // pages/index.tsx
 import JobDetails from '@/components/servant/jobs/jobs_details';
 import React from 'react';
 
@@ -23,4 +23,4 @@ const JobsDetails = () => {
   );
 };
 
-export default JobsDetails;
+export default JobsDetails; */}

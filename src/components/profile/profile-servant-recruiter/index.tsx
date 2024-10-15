@@ -56,9 +56,9 @@ import { AiOutlineSave } from "react-icons/ai";
 import Link from "next/link";
 import { Tooltip } from "antd/lib";
 
-type FieldType = {
+type UserData = {
   id: number;
-  name: string;
+  nome: string;
   profilePhoto: string;
   coverPhoto: string;
   biography: string;
@@ -378,7 +378,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
           </ImageWrapper>
 
           <DivParagraph>
-            <p>Nome completo do usuário</p>
+            <p>nome</p>
             <DivIconShare>
               <Tooltip title="Compartilhar o perfil" placement="left">
                 <FaShareAltSquare />

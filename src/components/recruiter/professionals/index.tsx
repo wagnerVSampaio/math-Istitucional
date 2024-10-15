@@ -73,12 +73,12 @@ const Professionals: React.FC<ProfessionalsProps> = ({ highlightedId }) => {
                 </style.StyledP>
                 <style.StyledP className="mt-[20px]">{professional.experience}</style.StyledP>
 
-                {/* Botão para adicionar/remover dos favoritos */}
+                {/* Botão para adicionar/remover dos favoritos 
                 <div>
                 <button onClick={() => toggleFavorite(professional.id)}>
                   {professional.favorite ? <style.ButtonFavorite>Salvar<style.FavoriteSelect /></style.ButtonFavorite> : <style.ButtonFavorite>Salvo<style.FavoriteNoSelect /></style.ButtonFavorite>}
                 </button>
-            </div>
+            </div> */}
               </div>
           </style.StyledLi>
         ))}
