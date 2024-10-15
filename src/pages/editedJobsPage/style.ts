@@ -19,13 +19,11 @@ export const DivTopSearch = styled.div`
     margin: 5px auto;
     width: 70%;
     border-radius: 10px;
-    border: 1px solid #ddd;
-    background-color: #ffff;
-    box-shadow: 0 4px 8px rgba(0, 107, 63, 0.4);
     margin-top: 60px;
     height: 60px;
     display: flex;
     align-items: center;
+    justify-content: center;
 `;
 
 export const StyleInput = styled.div`
@@ -149,7 +147,7 @@ export const ViewProfile = styled(MdRemoveRedEye)`
 `;
 export const ButtonAdd = styled.div`
     background-color: #006B3F;
-    padding: 6px 100px;
+    padding: 8px 100px;
     border-radius: 10px;
     position: relative;
     color: white;
@@ -157,7 +155,6 @@ export const ButtonAdd = styled.div`
     font-size: 15px;
     font-weight: bold;
     cursor: pointer;
-    margin-left: 5px;
 `;
 export const Container = styled.div`
   max-width: 600px;

@@ -16,6 +16,7 @@ import {
 import type { RadioChangeEvent } from "antd/lib";
 import { Radio, Modal, Button } from "antd/lib";
 import * as style from "./style";
+import Link from "next/link";
 
 const images = ["/bem-vindo.png", "/sobre-nos.png"];
 
@@ -116,7 +117,7 @@ const HomePageContainer = () => {
                 <UlStyled>
                   <LiStyled>Sobre</LiStyled>
                   <LiStyled>Central de ajuda</LiStyled>
-                  <LiStyled>Termos e privacidade</LiStyled>
+                  <Link href={'/termsAndPrivacy'}><LiStyled>Termos e privacidade</LiStyled></Link>
                 </UlStyled>
               </nav>
             </div>

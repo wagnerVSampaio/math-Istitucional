@@ -36,7 +36,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({
         <Descriptions.Item label="Descrição">{description}</Descriptions.Item>
         <Descriptions.Item label="Requisitos">{requirements}</Descriptions.Item>
         <Descriptions.Item label="Benefícios">{benefits}</Descriptions.Item>
-        <Descriptions.Item label="Salário">{salary}</Descriptions.Item>
+        <Descriptions.Item label="Salário">R$ {salary}</Descriptions.Item>
       </Descriptions>
 
       <Button type="primary" style={{ marginTop: '20px' }} href={`mailto:${contact}`}>

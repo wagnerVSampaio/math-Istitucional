@@ -85,6 +85,7 @@ export const Exit = styled(MdOutlineExitToApp)`
 
 export const LiStyled = styled.li`
   font-size: 12px;
+  cursor: pointer;
 `;
 export const UlStyled = styled.ul`
   display: flex;

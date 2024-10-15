@@ -154,6 +154,7 @@ const Jobs: React.FC = () => {
         onCancel={handleCloseModal}
         footer={null}
         width={700}
+        style={{ top: 10 }}
       >
         {selectedJob && (
           <JobDetails

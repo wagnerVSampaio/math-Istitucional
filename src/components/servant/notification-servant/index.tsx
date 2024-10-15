@@ -1,94 +1,136 @@
 import React, { useState } from 'react';
-import { ButtonDelete, DivNotification, H2Name, StyledLi, StyledUl } from './style';
-import { MdDeleteForever } from "react-icons/md";
-import { jobsData } from '@/const';
-import { Modal, Button } from 'antd/lib';
+import { ButtonDelete, ButtonDeleteEmail, DivNotification, H2Name, StyledLi, StyledUl } from './style';
+import { MdDelete } from "react-icons/md";
+import { ProfessionalsData } from "@/professionals-const";
+import { Modal, Button, message } from 'antd/lib';
 
-interface JobNotification {
+interface Professional {
   id: number;
-  title: string;
-  description: string;
-  location: string;
-  postedAgo: string;
-  read: boolean; // Adicionada a propriedade 'read'
+  name: string;
+  formation: string;
+  address: string;
+  contact: string;
+  experience: string;
+  read: boolean;
+  expanded: boolean;
 }
 
-// Inicializar jobsData com a propriedade 'read'
-const initialJobsData: JobNotification[] = jobsData.map(job => ({
-  ...job,
-  read: false
+const initialProfessionalsData: Professional[] = ProfessionalsData.map(professional => ({
+  ...professional,
+  read: false,
+  expanded: false
 }));
 
-const Notification: React.FC = () => {
-  const [notifications, setNotifications] = useState<JobNotification[]>(initialJobsData);
-  const [isModalVisible, setIsModalVisible] = useState(false); // Controle do modal
-  const [selectedNotification, setSelectedNotification] = useState<JobNotification | null>(null);
+const NotificationRecruiter: React.FC = () => {
+  const [professionals, setProfessionals] = useState<Professional[]>(initialProfessionalsData);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
 
+  {/*DELETA EMAIL*/}
+  const deleteProfessional = (id: number) => {
+    setProfessionals(prevProfessionals =>
+      prevProfessionals.filter(professional => professional.id !== id)
+    );
+    message.success('E-mail deletado com sucesso!');
+  };
+
+  {/*MARCA O EMAIL COMO LIDO QUANDO CLICADO*/}
   const markAsRead = (id: number) => {
-    setNotifications(prevNotifications =>
-      prevNotifications.map(notification =>
-        notification.id === id ? { ...notification, read: true } : notification
+    setProfessionals(prevProfessionals =>
+      prevProfessionals.map(professional =>
+        professional.id === id ? { ...professional, read: true } : professional
       )
     );
   };
 
-  const deleteNotification = (id: number) => {
-    setNotifications(prevNotifications =>
-      prevNotifications.filter(notification => notification.id !== id)
-    );
-  };
-
-  const showMoreInfoModal = (notification: JobNotification) => {
-    setSelectedNotification(notification); // Armazena os dados da notificação selecionada
-    setIsModalVisible(true); // Exibe o modal
-    markAsRead(notification.id); // Marca a notificação como lida ao abrir o modal
+  {/*MODAL VISÍVEL*/}
+  const showMoreInfoModal = (professional: Professional) => {
+    setSelectedProfessional(professional);
+    setIsModalVisible(true);
+    markAsRead(professional.id);
   }
 
+  {/*FECHAR MODAL*/}
   const handleModalClose = () => {
-    setIsModalVisible(false); // Fecha o modal
-    setSelectedNotification(null); // Limpa a notificação selecionada
+    setIsModalVisible(false);
+    setSelectedProfessional(null);
+  };
+
+  {/*MINI EMAIL PRONTO PARA ENTRAR EM CONTATO COM OS USUÁRIOS*/}
+  const generateMailtoLink = (contact: string, name: string) => {
+    const subject = encodeURIComponent(`Contato sobre oportunidade de trabalho`);
+    const body = encodeURIComponent(`Olá ${name},\n\nGostaria de conversar sobre uma oportunidade de trabalho. Por favor, entre em contato.\n\nAtenciosamente,\nUniversidade Federal do Oeste do Pará`);
+    return `mailto:${contact}?subject=${subject}&body=${body}`;
+  };
+
+  {/*DELETAR EMAIL PELO MODAL*/}
+  const handleDeleteFromModal = () => {
+    if (selectedProfessional) {
+      deleteProfessional(selectedProfessional.id);
+      handleModalClose();
+    }
   };
 
   return (
     <DivNotification>
       <StyledUl>
-        {notifications.map(notification => (
+        {professionals.map((professional) => (
           <StyledLi
-            key={notification.id}
-            onClick={() => showMoreInfoModal(notification)} 
-            style={{backgroundColor: notification.read ? '#fff' : '#e6f7ff'}}
+            key={professional.id}
+            onClick={(e) => {
+              e.stopPropagation();
+              showMoreInfoModal(professional);
+            }}
+            style={{ backgroundColor: professional.read ? '#fff' : '#e6f7ff' }}
           >
-            <div className='flex flex-col'>
-              <p className='font-extrabold text-[16px]' style={{fontWeight: notification.read ? '400' : '800'}}>
-                Nova oportunidade disponível: {notification.title}
-              </p>
-              <p>Local: {notification.location} | Publicada: {notification.postedAgo}</p>
+            <div className='flex flex-col m-[20px]'>
+              <p className='font-bold text-[16px]'>{professional.name}, {professional.formation}</p>
+              <p>Local: {professional.address}</p>
             </div>
-            <ButtonDelete
-              onClick={(e) => {
-                e.stopPropagation();
-                deleteNotification(notification.id);
-              }}
-            >
-              <MdDeleteForever />
-            </ButtonDelete>
+            <div className='delete-button-container'>
+              <ButtonDelete
+                onClick={(e) => {
+                  e.stopPropagation();
+                  deleteProfessional(professional.id);
+                }}
+              >
+                <MdDelete />
+              </ButtonDelete>
+            </div>
           </StyledLi>
         ))}
       </StyledUl>
-
       <Modal
-        title="Detalhes da Oportunidade"
+        title="Mais Informações"
         open={isModalVisible}
         onCancel={handleModalClose}
-        footer={null} 
+        footer={null}
         width={800}
       >
-        {selectedNotification && (
+        {selectedProfessional && (
           <div>
-            <H2Name>{selectedNotification.title}</H2Name>
-            <p><strong>Descrição:</strong> {selectedNotification.description}</p>
-            <p><strong>Local:</strong> {selectedNotification.location}</p>
-            <p><strong>Publicado:</strong> {selectedNotification.postedAgo}</p>
+            <H2Name>{selectedProfessional.name}</H2Name>
+            <p><strong>Formação:</strong> {selectedProfessional.formation}</p>
+            <p><strong>Endereço:</strong> {selectedProfessional.address}</p>
+            <p><strong>Contato:</strong> {selectedProfessional.contact}</p>
+            <p><strong>Experiência:</strong> {selectedProfessional.experience}</p>
+
+            <Button
+              type="primary"
+              className='mt-3'
+              href={generateMailtoLink(selectedProfessional.contact, selectedProfessional.name)}
+            >
+              Entrar em contato
+            </Button>
+            <ButtonDeleteEmail
+              className='mt-3'
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteFromModal();
+              }}
+            >
+              Deletar e-mail
+            </ButtonDeleteEmail>
           </div>
         )}
       </Modal>
@@ -96,4 +138,4 @@ const Notification: React.FC = () => {
   );
 };
 
-export default Notification;
+export default NotificationRecruiter;
