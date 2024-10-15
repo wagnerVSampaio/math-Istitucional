@@ -1,9 +1,9 @@
-import React, { useState, useMemo } from "react";
-import { Select, Pagination, Modal } from "antd/lib";
+import React, { useState, useMemo, useEffect } from "react";
+import { Select, Pagination, Modal, Input } from "antd/lib";
 import JobCard from "@/components/servant/jobs";
 import { DivSelect, DivVacancies, DivFooter } from "@/components/servant/jobs/style";
-import { jobsData } from "@/const";
 import JobDetails, { JobDetailsProps } from "@/components/servant/jobs/jobs_details";
+import dayjs from "dayjs"; 
 
 const Jobs: React.FC = () => {
   const [paginaAtual, setPaginaAtual] = useState(1);
@@ -13,17 +13,36 @@ const Jobs: React.FC = () => {
     location: "",
     area: "",
     experience: "",
-    postedAgo: "",
+    postedago: "",
   });
 
   const [selectedJob, setSelectedJob] = useState<JobDetailsProps | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [jobs, setJobs] = useState<JobDetailsProps[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const totalPaginas = Math.ceil(jobsData.length / itemsPerPage);
+  useEffect(() => {
+    const fetchJobs = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch("http://localhost:3002/api/getVagas");
+        const data = await response.json();
+        
+        if (Array.isArray(data)) {
+          setJobs(data);
+        } else {
+          console.error("Resposta da API não é um array:", data);
+          setJobs([]);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar vagas:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleClickPagina = (pagina: number) => {
-    setPaginaAtual(pagina);
-  };
+    fetchJobs();
+  }, []);
 
   const handleFilterChange = (filterName: string, value: string) => {
     setFilters((prevFilters) => ({
@@ -33,16 +52,20 @@ const Jobs: React.FC = () => {
   };
 
   const filteredJobs = useMemo(() => {
-    return jobsData.filter((job) => {
+    return Array.isArray(jobs) ? jobs.filter((job) => {
+      const jobPostedDate = dayjs(job.postedago);
+      const filterPostedDate = filters.postedago ? dayjs().subtract(Number(filters.postedago), 'day') : null;
+  
       return (
-        (!filters.title || job.title.includes(filters.title)) &&
-        (!filters.location || job.location.includes(filters.location)) &&
-        (!filters.area || job.requirements.includes(filters.area)) &&
-        (!filters.experience || job.requirements.includes(filters.experience)) &&
-        (!filters.postedAgo || job.postedAgo.includes(filters.postedAgo))
+        (!filters.title || job.title.toLowerCase().includes(filters.title.toLowerCase())) &&
+        (!filters.location || job.location.toLowerCase().includes(filters.location.toLowerCase())) &&
+        (!filters.area || job.requirements.toLowerCase().includes(filters.area.toLowerCase())) &&
+        (!filters.experience || job.requirements.toLowerCase().includes(filters.experience.toLowerCase())) &&
+        (!filters.postedago || (filterPostedDate && jobPostedDate.isAfter(filterPostedDate)))
       );
-    });
-  }, [filters]);
+    }) : [];
+  }, [filters, jobs]);
+  
 
   const itensDaPaginaAtual = filteredJobs.slice(
     (paginaAtual - 1) * itemsPerPage,
@@ -59,58 +82,60 @@ const Jobs: React.FC = () => {
     setSelectedJob(null);
   };
 
-  const titles = Array.from(new Set(jobsData.map((job) => job.title)));
-  const locations = Array.from(new Set(jobsData.map((job) => job.location)));
-  const postedAges = Array.from(new Set(jobsData.map((job) => job.postedAgo)));
+  const titles = Array.from(new Set(jobs.map((job) => job.title)));
+  const locations = Array.from(new Set(jobs.map((job) => job.location)));
+  const postedAges = ["0", "7", "30"]; 
+  const [searchTerm, setSearchTerm] = useState("");
 
   return (
     <div className="mt-[50px]">
       <DivSelect>
-        <Select
-          showSearch
-          placeholder="Vagas"
-          optionFilterProp="children"
-          className="mr-[15px]"
-          onChange={(value) => handleFilterChange("title", value)}
-          options={titles.map((title) => ({ value: title, label: title }))}
-        />
+      <Input
+        placeholder="Pesquisar por vagas"
+        className="mr-[15px] w-[200px]"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
 
-        <Select
-          showSearch
-          placeholder="Campus"
-          optionFilterProp="children"
-          className="mr-[15px]"
-          onChange={(value) => handleFilterChange("location", value)}
-          options={locations.map((location) => ({
-            value: location,
-            label: location,
-          }))}
-        />
-
-        <Select
-          showSearch
-          placeholder="Data de publicação"
-          optionFilterProp="children"
-          className="mr-[15px]"
-          onChange={(value) => handleFilterChange("postedAgo", value)}
-          options={postedAges.map((postedAgo) => ({
-            value: postedAgo,
-            label: postedAgo,
-          }))}
-        />
+      <Select
+        showSearch
+        placeholder="Campus"
+        optionFilterProp="children"
+        className="mr-[15px]"
+        onChange={(value) => handleFilterChange("location", value)}
+        options={locations.map((location) => ({
+          value: location,
+          label: location,
+        }))}
+      />
+      <Select
+        showSearch
+        placeholder="Data de publicação"
+        optionFilterProp="children"
+        className="mr-[15px]"
+        onChange={(value) => handleFilterChange("postedago", value)}
+        options={postedAges.map((age) => ({
+          value: age,
+          label: age === "0" ? "Hoje" : age === "7" ? "Últimos 7 dias" : "Últimos 30 dias",
+        }))}
+      />
       </DivSelect>
 
       <DivVacancies>
-        {itensDaPaginaAtual.map((job) => (
-          <JobCard
-            key={job.id}
-            title={job.title}
-            description={job.description}
-            location={job.location}
-            postedAgo={job.postedAgo}
-            onClick={() => handleJobClick(job)}
-          />
-        ))}
+        {loading ? (
+          <p>Carregando...</p>
+        ) : (
+          itensDaPaginaAtual.map((job) => (
+            <JobCard
+              key={job.id}
+              title={job.title}
+              description={job.description}
+              location={job.location}
+              postedago={dayjs(job.postedago).format('DD/MM/YYYY HH:mm')} // Formatar a data aqui
+              onClick={() => handleJobClick(job)}
+            />
+          ))
+        )}
       </DivVacancies>
 
       <DivFooter>
@@ -119,7 +144,7 @@ const Jobs: React.FC = () => {
           total={filteredJobs.length}
           pageSize={itemsPerPage}
           current={paginaAtual}
-          onChange={handleClickPagina}
+          onChange={setPaginaAtual}
         />
       </DivFooter>
 
@@ -129,6 +154,7 @@ const Jobs: React.FC = () => {
         onCancel={handleCloseModal}
         footer={null}
         width={700}
+        style={{ top: 10 }}
       >
         {selectedJob && (
           <JobDetails
@@ -138,7 +164,7 @@ const Jobs: React.FC = () => {
             requirements={selectedJob.requirements}
             benefits={selectedJob.benefits}
             location={selectedJob.location}
-            postedAgo={selectedJob.postedAgo}
+            postedago={dayjs(selectedJob.postedago).format('DD/MM/YYYY HH:mm')} 
             salary={selectedJob.salary}
             contact={selectedJob.contact}
           />

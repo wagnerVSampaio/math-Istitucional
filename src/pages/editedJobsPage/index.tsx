@@ -43,9 +43,8 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
 
   // Envia os dados do formulário para o backend
   const onFinish = async (values: any) => {
-    setLoading(true); // Inicia o carregamento
-    const updatedUsers = jobs.filter(user => !selectedAdms.includes(user.id)); // Filtra os usuários (vagas)
-  
+    setLoading(true);
+    
     try {
       const response = await fetch("http://localhost:3002/api/createvagas", {
         method: "POST",
@@ -61,30 +60,26 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
           postedago: new Date().toISOString(), // Você pode alterar isso conforme necessário
           salary: values.salary || 0, // Valor padrão se não fornecido
           contact: values.contact || "", // Adapte conforme necessário
-          id_recrutador: 18, // fixo enquanto ainda não tem autenticação
+          id_recrutador: 18, // fixo enquanto ainda nao tem autenticação
         }),
       });
-  
+
       if (!response.ok) {
         throw new Error('Erro ao adicionar a vaga');
       }
-  
-      // Obtém a nova vaga criada
-      const newJob = await response.json();
-      
-      // Atualiza a lista de vagas incluindo a nova vaga criada
-      setJobs([...updatedUsers, newJob]); // Atualiza o estado com a nova vaga
-  
-      form.resetFields(); // Reseta os campos do formulário
+
+      const result = await response.json();
+
+      form.resetFields();
       handleCancelAdd(); // Fecha o modal após a adição bem-sucedida
     } catch (error) {
       console.error("Erro ao adicionar vaga:", error);
       // Aqui você pode exibir uma mensagem de erro para o usuário, se necessário
     } finally {
-      setLoading(false); // Para o carregamento
+      setLoading(false);
     }
   };
-  
+
   useEffect(() => {
     const fetchJobs = async () => {
       try {
@@ -213,14 +208,6 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
       <style.Total>
         <style.DivSearch>
           <style.DivTopSearch>
-          <style.StyleInput>
-              <Input
-                prefix={<UserOutlined />}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Pesquisar usuário"
-              />
-            </style.StyleInput>
             <style.ButtonAdd onClick={showModalAdd}>Adicionar vaga</style.ButtonAdd>
 
 

@@ -1,12 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from "react";
-import { Checkbox, DatePicker, Form, Input, Button, Flex, Space} from "antd/lib";
+import { Checkbox, DatePicker, Form, Input, Button, Flex, Space, message } from "antd/lib";
 import Link from "next/link";
 import type { CheckboxProps } from "antd/lib";
-import { ButtonLabelDate, DateBirthUpload, StyledForm, UploadButtonDate, } from "./style";
-import dayjs, { Dayjs } from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
-
+import { ButtonLabelDate, DateBirthUpload, UploadButtonDate } from "./style";
+import "./formEdited.css";
+import dayjs, { Dayjs } from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import { useRouter } from 'next/navigation';
 
 type FieldType = {
   name: string;
@@ -16,7 +17,7 @@ type FieldType = {
   dateBirth: string;
   password: string;
   passwordconfirmation: string;
-  phone: string;
+  telefone: string;
 };
 
 type SizeType = Parameters<typeof Form>[0]["size"];
@@ -34,21 +35,31 @@ interface NavServidorProps {
 
 dayjs.extend(customParseFormat);
 
-const dateFormat = 'DD/MM/YYYY';
+const dateFormat = "DD/MM/YYYY";
 
 const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
-  const [value, setValue] = useState(1);
   const [cpf, setCpf] = useState("");
   const [checked, setChecked] = useState(true);
   const [disabled, setDisabled] = useState(false);
-  const [RegisterImage, setRegisterImage] = useState<string | undefined>(
-    undefined
-  );
-  const onFinish = (values: FieldType) => {
-    if (checked) {
-      onRegister(values);
+  const [registerImage, setRegisterImage] = useState<string | undefined>(undefined);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const router = useRouter();
+  const [componentSize, setComponentSize] = useState<SizeType | "default">("default");
+  const [selectedDate, setSelectedDate] = useState<Dayjs | undefined>(undefined);
+
+  const onFormLayoutChange = ({ size }: { size: SizeType }) => {
+    setComponentSize(size);
+  };
+
+  const onChangeCheck: CheckboxProps["onChange"] = (e) => {
+    setChecked(e.target.checked);
+  };
+
+  const handleDateChange = (date: Dayjs | null) => {
+    if (date && date.isValid()) {
+      setSelectedDate(date);
     } else {
-      console.error("Você deve aceitar os termos e condições.");
+      setSelectedDate(undefined);
     }
   };
 
@@ -59,45 +70,61 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
       setRegisterImage(imageUrl);
     }
   };
-  const [componentSize, setComponentSize] = useState<SizeType | "default">(
-    "default"
-  );
 
-  const onFormLayoutChange = ({ size }: { size: SizeType }) => {
-    setComponentSize(size);
+  const formatDate = (date: Dayjs): string => {
+    return date.format("YYYY-MM-DD"); // Formato PostgreSQL
   };
 
-  const toggleChecked = () => {
-    setChecked(!checked);
-  };
+  const RegisterServidor = async (values: FieldType) => {
+    console.log("Formulário enviado!", values);
+    try {
+      const formData = new FormData(); // Crie uma instância de FormData
 
-  const toggleDisable = () => {
-    setDisabled(!disabled);
-  };
+      // Adicione todos os campos ao FormData
+      formData.append("nome", values.name);
+      formData.append("email", values.email);
+      formData.append("senha", values.password);
+      formData.append("cpf", values.cpf);
+      formData.append("dataNascimento", formatDate(selectedDate!)); // Formata a data no padrão do PostgreSQL
+      formData.append("telefone", values.telefone);
+      formData.append("tipo_usuario", "servidor");
 
-  const onChangeCheck: CheckboxProps["onChange"] = (e) => {
-    console.log("checked = ", e.target.checked);
-    setChecked(e.target.checked);
-  };
+      // Adicione o arquivo da imagem
+      if (registerImage) {
+        const file = await fetch(registerImage).then((r) => r.blob()); // Obtenha o arquivo Blob da URL
+        formData.append("foto", file, "photo.jpg"); // Nomeie o arquivo como você quiser
+      }
 
-  const [selectedDate, setSelectedDate] = useState<Dayjs | undefined>(undefined);
-  const handleDateChange = (date: Dayjs | null) => {
-    if (date && date.isValid()) {
-      setSelectedDate(date);
-    } else {
-      setSelectedDate(undefined); 
+      const response = await fetch("http://localhost:3002/api/createusers", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        router.push("/");
+        message.success('Cadastro realizado com sucesso! Realize o login.'); 
+      } else {
+        console.error("Erro do servidor:", data);
+        setErrorMessage(data.error || "Erro ao registrar");
+      }
+    } catch (error) {
+      console.error("Erro ao enviar dados:", error);
+      setErrorMessage("Erro ao registrar");
     }
   };
 
   return (
-    <StyledForm
+    <Form
       labelCol={{ span: 1 }}
       wrapperCol={{ span: 14 }}
       layout="horizontal"
       initialValues={{ size: componentSize }}
       onValuesChange={onFormLayoutChange}
       size={componentSize as SizeType}
-      className="max-w-[600px]"
+      className="ant-form-item"
+      style={{ maxWidth: "600px" }}
+      onFinish={RegisterServidor}
     >
       <div className="flex">
         <div className="mr-[75px]">
@@ -138,15 +165,15 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
           </Form.Item>
         </div>
 
-        <div >
-          <p className="mb-[3px]">Foto <strong className="text-red-500"> *</strong> </p>
-          <Form.Item<FieldType>
-            name="photo"
-          >
+        <div>
+          <p className="mb-[3px]">
+            Foto <strong className="text-red-500"> *</strong>
+          </p>
+          <Form.Item<FieldType> name="photo">
             <ButtonLabelDate htmlFor="registerImageUpload">
               <DateBirthUpload className="relative">
                 <img
-                  src={RegisterImage || "background-upload.png"}
+                  src={registerImage || "background-upload.png"}
                   alt="Register"
                   className="w-full object-cover"
                 />
@@ -169,10 +196,8 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
             Telefone <strong className="text-red-500"> *</strong>
           </p>
           <Form.Item<FieldType>
-            name="phone"
-            rules={[
-              { required: true, message: "Por favor, insira o telefone!" },
-            ]}
+            name="telefone"
+            rules={[{ required: true, message: "Por favor, insira o telefone!" }]}
           >
             <Input className="w-[250px]" />
           </Form.Item>
@@ -182,23 +207,20 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
           <p className="mb-[3px]">
             Data de nascimento <strong className="text-red-500"> * </strong>
           </p>
-            <Form.Item<FieldType>
-              name="dateBirth"
-              style={{ marginRight: "8px" }}
-            >
-              <Space direction="vertical" size={12}>
-                <DatePicker
-                  value={selectedDate}
-                  format={dateFormat}
-                  onChange={handleDateChange}
-                  placeholder="Selecione a data"
-                  className="w-[250px]"
-
-                />
-              </Space>
-            </Form.Item>
+          <Form.Item<FieldType> name="dateBirth" style={{ marginRight: "8px" }}>
+            <Space direction="vertical" size={12}>
+              <DatePicker
+                value={selectedDate}
+                format={dateFormat}
+                onChange={handleDateChange}
+                placeholder="Selecione a data"
+                className="w-[250px]"
+              />
+            </Space>
+          </Form.Item>
         </div>
       </div>
+
       <div className="flex">
         <div className="mr-[50px]">
           <p className="mb-[3px]">
@@ -206,40 +228,27 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
           </p>
           <Form.Item<FieldType>
             name="password"
-            rules={[
-              {
-                required: true,
-                message: "Por favor, insira a senha!",
-              },
-            ]}
+            rules={[{ required: true, message: "Por favor, insira a senha!" }]}
           >
             <Input.Password className="w-[250px]" />
           </Form.Item>
         </div>
+
         <div>
           <p className="mb-[3px]">
             Confirmação de senha <strong className="text-red-500"> *</strong>
           </p>
           <Form.Item<FieldType>
             name="passwordconfirmation"
-            rules={[
-              {
-                required: true,
-                message: "Por favor, insira a confirmação da senha!",
-              },
-            ]}
+            rules={[{ required: true, message: "Por favor, insira a confirmação da senha!" }]}
           >
             <Input.Password className="w-[250px] bg-white" />
           </Form.Item>
         </div>
       </div>
+
       <div className="mb-[20px] flex">
-        <Checkbox
-          checked={checked}
-          disabled={disabled}
-          onChange={onChangeCheck}
-          className="mr-[20px]"
-        />
+        <Checkbox checked={checked} disabled={disabled} onChange={onChangeCheck} className="mr-[20px]" />
         <p>
           Para prosseguir, por favor, clique no botão{" "}
           <strong className="text-customGreen">Aceitar Termos</strong> abaixo e
@@ -247,6 +256,7 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
           privacidade.
         </p>
       </div>
+
       <div className="mt-[40px]">
         <Flex gap="small" wrap>
           <Link href={"/"}>
@@ -254,14 +264,12 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
               Voltar
             </Button>
           </Link>
-          <Link href={"./inside"}>
-            <Button htmlType="submit" className="w-[250px] font-extrabold" type="primary">
-              Criar conta
-            </Button>
-          </Link>
+          <Button type="primary" htmlType="submit" className="w-[250px] font-extrabold">
+            Criar conta
+          </Button>
         </Flex>
       </div>
-    </StyledForm>
+    </Form>
   );
 };
 
