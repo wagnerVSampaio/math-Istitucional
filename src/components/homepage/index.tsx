@@ -22,7 +22,7 @@ import { useRouter } from "next/router";
 const images = ["/bem-vindo.png", "/sobre-nos.png"];
 
 const HomePageContainer = () => {
-  const [userData, setUserData] = useState<any>(null);
+  //const [userData, setUserData] = useState<any>(null);
   const router = useRouter();
   const [value, setValue] = useState(1);
   const [imageUrl, setImageUrl] = useState(images[0]);
