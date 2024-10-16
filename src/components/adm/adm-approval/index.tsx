@@ -111,9 +111,14 @@ const rejectUser = async (userId: number) => {
     setIsModalVisibleDelete(false);
     setSelectedUserId(null);
   };
+
+
   return (
+    
     <style.DivNotification>
-      <style.StyledUl>
+      
+      <div>
+        <style.StyledUl>
         {pendingUsers.map((user) => (
           <style.StyledLi key={user.id_user} style={{ backgroundColor: '#fff' }}>
             <div className="flex flex-col m-[20px]">
@@ -153,6 +158,8 @@ const rejectUser = async (userId: number) => {
       >
         <p>Você está prestes a reprovar o usuário. Deseja continuar?</p>
       </Modal>
+      </div>
+          
     </style.DivNotification>
   );
 };

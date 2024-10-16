@@ -86,11 +86,6 @@ export const ButtonEdit = styled.button`
     transform: scale(1.05);
   }
 `;
-export const EditJob = styled(FaRegEdit)`
-  font-size: 22px;
-  color: #005b3f;
-  cursor: pointer;
-`;
 
 export const DivNotification = styled.div`
     margin: 5px auto;
@@ -142,9 +137,9 @@ export const Address = styled(FaMapMarkerAlt)`
 export const Email = styled(IoMdMail)`
   ${iconsStyle}
 `;
-export const ViewProfile = styled(MdRemoveRedEye)`
+export const EditJob = styled(FaRegEdit)`
   margin-left: 20px;
-  margin-top: 8px;
+  margin-top: 5px;
   font-size: 20px;
 `;
 export const ButtonAdd = styled.div`

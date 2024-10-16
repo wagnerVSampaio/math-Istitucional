@@ -4,13 +4,14 @@ import { Form, Input, Tooltip, Modal, Checkbox, Button, InputNumber } from 'antd
 import * as style from "./style";
 
 type JobDetails = {
-    id: number;
+    id_job: number;
+    id_recruiter: number;
     title: string;
     description: string;
     requirements: string;
     benefits: string;
     location: string;
-    postedago: string;
+    posted_at: string;
     salary: string;
     contact: string;
   };
@@ -44,8 +45,8 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
   // Envia os dados do formulário para o backend
   const onFinish = async (values: any) => {
     setLoading(true); // Inicia o carregamento
-    const updatedUsers = jobs.filter(user => !selectedAdms.includes(user.id)); // Filtra os usuários (vagas)
-    const idRecrutador = userData ? userData.id_recrutador : null;
+    const updatedUsers = jobs.filter(user => !selectedAdms.includes(user.id_job)); // Filtra os usuários (vagas)
+    const idRecruiter = 2;
     try {
       const response = await fetch("http://localhost:3002/api/createvagas", {
         method: "POST",
@@ -58,10 +59,10 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
           requirements: values.requirements || "", // Adapte conforme necessário
           benefits: values.benefits || "", // Adapte conforme necessário
           location: values.location,
-          postedago: new Date().toISOString(), // Você pode alterar isso conforme necessário
+          posted_at: new Date().toISOString(), // Você pode alterar isso conforme necessário
           salary: values.salary || 0, // Valor padrão se não fornecido
           contact: values.contact || "", // Adapte conforme necessário
-          id_recrutador: idRecrutador, // fixo enquanto ainda não tem autenticação
+          id_recruiter: idRecruiter, // fixo enquanto ainda não tem autenticação
         }),
       });
   
@@ -90,6 +91,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
       try {
         const response = await fetch("http://localhost:3002/api/getVagas"); 
         const data = await response.json();
+        console.log(data); // Verifique se os dados estão corretos aqui
         if (Array.isArray(data)) {
           setJobs(data);
         } else {
@@ -99,10 +101,10 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
         console.error("Erro ao buscar vagas:", error);
       }
     };
-
+  
     fetchJobs();
   }, []);
-
+  
 /*   const handleEditJob = (job: JobDetails) => {
     setEditingJob(job);
     setIsModalVisible(true);
@@ -157,7 +159,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
   const handleRemoveJobs = async () => {
     try {
       // Filtra os usuários que não foram selecionados
-      const updatedUsers = jobs.filter(user => !selectedAdms.includes(user.id));
+      const updatedUsers = jobs.filter(user => !selectedAdms.includes(user.id_job));
 
       // Faz a requisição para deletar cada usuário selecionado
       for (let userId of selectedAdms) {
@@ -204,8 +206,8 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
   );
 
   // Usuário destacado
-  const Jobs = jobs.find(user => user.id === usersId) || null;
-  const otherUsers = filteredUsers.filter(user => user.id!== usersId);
+  const Jobs = jobs.find(user => user.id_job === usersId) || null;
+  const otherUsers = filteredUsers.filter(user => user.id_job!== usersId);
 
 
   return (
@@ -218,7 +220,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
                 prefix={<UserOutlined />}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Pesquisar usuário"
+                placeholder="Pesquisar"
               />
             </style.StyleInput>
             <style.ButtonAdd onClick={showModalAdd}>Adicionar vaga</style.ButtonAdd>
@@ -229,7 +231,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
                 {isSelecting ? <style.ConfirmRemoveUser /> : <style.RemoveUser />}
               </style.ButtonRemoveUser>
             </Tooltip>
-            <style.ButtonEdit><style.EditJob/></style.ButtonEdit>
+            {/* <style.ButtonEdit><style.EditJob/></style.ButtonEdit> */}
           </style.DivTopSearch>
 
           {filteredUsers.length === 0 ? (
@@ -240,15 +242,15 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
             <div>
               <style.DivNotification>
                 <style.StyledUl>
-                  {otherUsers.map((user) => (
+                  {jobs.map((user) => (
                     <style.StyledLi
-                      key={user.id}
+                      key={user.id_job}
                       style={{
-                        backgroundColor: selectedAdms.includes(user.id) ? '#e6f7ff' : '#fff',
+                        backgroundColor: selectedAdms.includes(user.id_job) ? '#e6f7ff' : '#fff',
                       }}
                     >
                       <div className="flex flex-col m-[20px]">
-                        <style.StyledParagraph>{user.title} <Tooltip title="Visualizar perfil"><style.ViewProfile /></Tooltip></style.StyledParagraph>
+                        <style.StyledParagraph>{user.title} <Tooltip title="Editar vaga"><style.EditJob/></Tooltip></style.StyledParagraph>
                         <style.StyledP>
                           <style.Address /> {user.location}
                         </style.StyledP>
@@ -269,8 +271,8 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
 
                       {isSelecting && (
                         <Checkbox
-                          checked={selectedAdms.includes(user.id)}
-                          onChange={() => toggleUserSelection(user.id)}
+                          checked={selectedAdms.includes(user.id_job)}
+                          onChange={() => toggleUserSelection(user.id_job)}
                           className="mr-[20px]"
                         />
                       )}

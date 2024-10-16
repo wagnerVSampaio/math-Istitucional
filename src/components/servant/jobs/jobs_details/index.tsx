@@ -10,7 +10,7 @@ export type JobDetailsProps = {
   requirements: string;
   benefits: string;
   location: string;
-  postedago: string;
+  posted_at: string;
   salary: string;
   contact: string;
 };
@@ -21,7 +21,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({
   requirements,
   benefits,
   location,
-  postedago,
+  posted_at,
   salary,
   contact
 }) => {
@@ -30,7 +30,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({
   return (
     <Card style={{ margin: '20px'}}>
       <Title level={3}>{title}</Title>
-      <Paragraph type="secondary">{location} - {postedago}</Paragraph>
+      <Paragraph type="secondary">{location} - {posted_at}</Paragraph>
 
       <Descriptions column={1} bordered>
         <Descriptions.Item label="Descrição">{description}</Descriptions.Item>

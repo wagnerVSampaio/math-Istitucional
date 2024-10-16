@@ -13,7 +13,7 @@ const Jobs: React.FC = () => {
     location: "",
     area: "",
     experience: "",
-    postedago: "",
+    posted_at: "",
   });
 
   const [selectedJob, setSelectedJob] = useState<JobDetailsProps | null>(null);
@@ -53,15 +53,15 @@ const Jobs: React.FC = () => {
 
   const filteredJobs = useMemo(() => {
     return Array.isArray(jobs) ? jobs.filter((job) => {
-      const jobPostedDate = dayjs(job.postedago);
-      const filterPostedDate = filters.postedago ? dayjs().subtract(Number(filters.postedago), 'day') : null;
+      const jobPostedDate = dayjs(job.posted_at);
+      const filterPostedDate = filters.posted_at ? dayjs().subtract(Number(filters.posted_at), 'day') : null;
   
       return (
         (!filters.title || job.title.toLowerCase().includes(filters.title.toLowerCase())) &&
         (!filters.location || job.location.toLowerCase().includes(filters.location.toLowerCase())) &&
         (!filters.area || job.requirements.toLowerCase().includes(filters.area.toLowerCase())) &&
         (!filters.experience || job.requirements.toLowerCase().includes(filters.experience.toLowerCase())) &&
-        (!filters.postedago || (filterPostedDate && jobPostedDate.isAfter(filterPostedDate)))
+        (!filters.posted_at || (filterPostedDate && jobPostedDate.isAfter(filterPostedDate)))
       );
     }) : [];
   }, [filters, jobs]);
@@ -131,7 +131,7 @@ const Jobs: React.FC = () => {
               title={job.title}
               description={job.description}
               location={job.location}
-              postedago={dayjs(job.postedago).format('DD/MM/YYYY HH:mm')} // Formatar a data aqui
+              posted_at={dayjs(job.posted_at).format('DD/MM/YYYY HH:mm')} // Formatar a data aqui
               onClick={() => handleJobClick(job)}
             />
           ))
@@ -164,7 +164,7 @@ const Jobs: React.FC = () => {
             requirements={selectedJob.requirements}
             benefits={selectedJob.benefits}
             location={selectedJob.location}
-            postedago={dayjs(selectedJob.postedago).format('DD/MM/YYYY HH:mm')} 
+            posted_at={dayjs(selectedJob.posted_at).format('DD/MM/YYYY HH:mm')} 
             salary={selectedJob.salary}
             contact={selectedJob.contact}
           />
