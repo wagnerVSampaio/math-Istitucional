@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ButtonLabel,
   ImageCover,
@@ -57,15 +57,15 @@ import Link from "next/link";
 import { Tooltip } from "antd/lib";
 
 type UserData = {
-  id: number;
-  nome: string;
-  profilePhoto: string;
-  coverPhoto: string;
+  id_user: number;
+  full_name: string;
+  profile_picture: string;
+  cover_photo: string;
   biography: string;
   skills: string;
   education: string;
   campus: string;
-  degree: string;
+  course: string;
 };
 
 
@@ -105,6 +105,16 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   const [isEducationExpanded, setIsEducationExpanded] = useState(false);
   const [isExperienceExpanded, setIsExperienceExpanded] = useState(false);
   const [isSkillsExpanded, setIsSkillsExpanded] = useState(false);
+  const [userData, setUserData] = useState<any>(null);
+
+  useEffect(() => {
+    const data = localStorage.getItem("userData");
+    if (data) {
+      setUserData(JSON.parse(data));
+      /* setProfileImage(JSON.parse(data).foto); // Assume que 'foto' é a URL da imagem de perfil
+      setCoverImage("/caminho/para/sua/imagem/capa.png"); // Aqui você pode definir a imagem de capa */
+    }
+  }, []);
 
   {/*ALTERA FOTO DE PERFIL */ }
   const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -378,7 +388,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
           </ImageWrapper>
 
           <DivParagraph>
-            <p>nome</p>
+            <p>Nome do usuário</p>
             <DivIconShare>
               <Tooltip title="Compartilhar o perfil" placement="left">
                 <FaShareAltSquare />

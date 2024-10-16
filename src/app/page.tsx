@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Form } from "antd/lib";
+import { Form, message } from "antd/lib";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -20,6 +20,7 @@ const App: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const [userData, setUserData] = useState<any>(null);
 
   const loginAuthentication = async (values: { email: string; password: string; }) => {
     try {
@@ -28,7 +29,7 @@ const App: React.FC = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email: values.email, senha: values.password }), // Enviando como 'senha'
+        body: JSON.stringify({ email: values.email, password: values.password }),
       });
 
       if (!response.ok) {
@@ -37,23 +38,30 @@ const App: React.FC = () => {
       }
 
       const userData = await response.json();
-
-      if (userData.id_usuario) {
+      console.log(userData);
+      
+      // Armazenar dados do usuário logado no localStorage
+      localStorage.setItem("userData", JSON.stringify(userData));
+    
+      // Atualiza o estado do userData
+      setUserData(userData);
+      
+      // Redirecionamento com base no tipo de usuário
+      if (userData.user_type === 'recruiter' && userData.status === 'approved') {
+        router.push("/inside-recruiter");
+      } else if (userData.user_type === 'server') {
         router.push("/inside");
-      } else {
-        setError("E-mail ou senha inválidos");
+      } else if (userData.user_type === 'recruiter' && userData.status === 'pending') {
+        message.info('Aguarde a aprovação', 5);
       }
     } catch (error: any) {
       setError(error.message || "Erro ao fazer login");
-      console.error("Erro ao fazer login:", error);
     }
   };
 
   const onFinish = (values: { email: string; password: string; }) => {
     loginAuthentication(values);
   };
-
-
   return (
     <>
       <HeaderOverall />
@@ -143,7 +151,6 @@ const App: React.FC = () => {
           </div>
         </section>
       </ConfigProvider>
-
     </>
   );
 };

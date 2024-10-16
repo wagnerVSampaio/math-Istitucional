@@ -4,10 +4,11 @@ import { ButtonApprove, ButtonRefuse } from "./style"; // Ajuste o estilo confor
 import { Modal } from "antd/lib";
 
 interface PendingUser {
-  id_usuario: number;
-  nome_completo: string;
+  id_user: number;
+  full_name: string;
   email: string;
-  campus: string; // Ou ajuste se houver outra informação relevante
+  campus: string; 
+  status: string;
 }
 
 const PendingUserApproval: React.FC = () => {
@@ -41,7 +42,7 @@ const approveUser = async (userId: number) => {
         if (response.ok) {
             // Atualiza o status do usuário no frontend
             setPendingUsers(pendingUsers.map(user => 
-                user.id_usuario === userId ? { ...user, status: 'aprovado' } : user
+                user.id_user === userId ? { ...user, status: 'approved' } : user
             ));
             console.log('Usuário aprovado com sucesso!');
         } else {
@@ -60,7 +61,7 @@ const rejectUser = async (userId: number) => {
 
       if (response.ok) {
           // Atualiza a lista de usuários pendentes após a recusa
-          setPendingUsers(pendingUsers.filter(user => user.id_usuario !== userId));
+          setPendingUsers(pendingUsers.filter(user => user.id_user !== userId));
           console.log('Usuário recusado com sucesso!');
       } else {
           console.error('Erro ao recusar usuário:', response.statusText);
@@ -114,9 +115,9 @@ const rejectUser = async (userId: number) => {
     <style.DivNotification>
       <style.StyledUl>
         {pendingUsers.map((user) => (
-          <style.StyledLi key={user.id_usuario} style={{ backgroundColor: '#fff' }}>
+          <style.StyledLi key={user.id_user} style={{ backgroundColor: '#fff' }}>
             <div className="flex flex-col m-[20px]">
-              <style.StyledParagraph>{user.nome_completo}</style.StyledParagraph>
+              <style.StyledParagraph>{user.full_name}</style.StyledParagraph>
               <style.StyledP>
                 <style.Email />{" "}
                 <span>{user.email}</span>
@@ -125,8 +126,8 @@ const rejectUser = async (userId: number) => {
                 <style.Address /> {user.campus}
               </style.StyledP>
               <div className="flex mt-[40px]">
-                <ButtonRefuse onClick={() => showModalDelete(user.id_usuario)}>Recusar</ButtonRefuse>
-                <ButtonApprove onClick={() => showModal(user.id_usuario)}>Aprovar</ButtonApprove>
+                <ButtonRefuse onClick={() => showModalDelete(user.id_user)}>Recusar</ButtonRefuse>
+                <ButtonApprove onClick={() => showModal(user.id_user)}>Aprovar</ButtonApprove>
               </div>
             </div>
           </style.StyledLi>

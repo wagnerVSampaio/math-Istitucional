@@ -4,11 +4,12 @@ import { Input, Tooltip, Modal, Checkbox, Spin } from 'antd/lib';
 import * as style from "./style";
 
 interface Adm {
-  id_usuario: number;
-  nome_completo: string;
+  id_user: number;
+  full_name: string;
   campus: string;
   email: string;
-  tipo_usuario: string;
+  user_type: string;
+  status: string
 }
 
 interface AdmProps {
@@ -26,25 +27,18 @@ const Search: React.FC<AdmProps> = ({ usersId }) => {
 
   // Função para carregar os usuários da API e filtrar os recrutadores
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch('http://localhost:3002/api/recrutadorUsers');
-        const data: Adm[] = await response.json(); // Define o tipo do data como Adm[]
-  
-        // Filtra apenas os usuários que são recrutadores
-        const recrutadores = data.filter((user) => user.tipo_usuario === 'recrutador');
-  
-        setUsers(recrutadores);
-      } catch (error) {
-        console.error('Erro ao carregar usuários:', error);
-      } finally {
-        setLoading(false);
-      }
+    const fetchPendingUsers = async () => {
+        try {
+            const response = await fetch("http://localhost:3002/api/recruiterOk"); // Rota para buscar usuários pendentes
+            const data = await response.json();
+            setUsers(data); // Armazena os usuários pendentes no estado
+        } catch (error) {
+            console.error("Erro ao buscar usuários pendentes:", error);
+        }
     };
-  
-    fetchUsers();
-  }, []);
-  
+
+    fetchPendingUsers();
+}, []);
   
   
 
@@ -61,33 +55,31 @@ const Search: React.FC<AdmProps> = ({ usersId }) => {
   // Função para remover os usuários selecionados
   const handleRemoveUsers = async () => {
     try {
-      // Filtra os usuários que não foram selecionados
-      const updatedUsers = users.filter(user => !selectedAdms.includes(user.id_usuario));
+        // Faz a requisição para deletar cada usuário selecionado
+        for (let userId of selectedAdms) {
+            const response = await fetch(`http://localhost:3002/api/deleteUser/${userId}`, {
+                method: 'DELETE', 
+            });
 
-      // Faz a requisição para deletar cada usuário selecionado
-      for (let userId of selectedAdms) {
-        const response = await fetch(`http://localhost:3002/api/deleteUser/${userId}`, {
-          method: 'DELETE',
-        });
-
-        if (!response.ok) {
-          throw new Error(`Erro ao deletar usuário com ID ${userId}`);
+            if (response.ok) {
+                // Remove o usuário do estado após deleção bem-sucedida
+                setUsers(prevUsers => prevUsers.filter(user => user.id_user !== userId));
+            } else {
+                console.error('Erro ao recusar usuário:', response.statusText);
+            }
         }
-      }
 
-      // Atualiza a lista de usuários no estado
-      setUsers(updatedUsers);
+        // Fecha o modal e reseta os estados
+        setIsModalVisible(false);
+        setSelectedAdms([]);
+        setIsSelecting(false);
 
-      // Fecha o modal e reseta os estados
-      setIsModalVisible(false);
-      setSelectedAdms([]);
-      setIsSelecting(false);
-
-      console.log('Usuários deletados com sucesso');
+        console.log('Usuários deletados com sucesso');
     } catch (error) {
-      console.error('Erro ao deletar usuários:', error);
+        console.error('Erro ao deletar usuários:', error);
     }
-  };
+};
+
 
   // Função para alternar a seleção de um usuário
   const toggleUserSelection = (id: number) => {
@@ -105,16 +97,13 @@ const Search: React.FC<AdmProps> = ({ usersId }) => {
 
   // Filtra os usuários com base no termo de pesquisa
   const filteredUsers = users.filter(user =>
-    user.nome_completo.toLowerCase().includes(searchTerm.toLowerCase())
+    user.full_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Usuário destacado
-  const Users = users.find(user => user.id_usuario === usersId) || null;
-  const otherUsers = filteredUsers.filter(user => user.id_usuario !== usersId);
+  const Users = users.find(user => user.id_user === usersId) || null;
+  const otherUsers = filteredUsers.filter(user => user.id_user !== usersId);
 
-  if (loading) {
-    return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}><Spin size="large" /></div>;
-  }
 
   return (
     <>
@@ -147,13 +136,13 @@ const Search: React.FC<AdmProps> = ({ usersId }) => {
                 <style.StyledUl>
                   {otherUsers.map((user) => (
                     <style.StyledLi
-                      key={user.id_usuario}
+                      key={user.id_user}
                       style={{
-                        backgroundColor: selectedAdms.includes(user.id_usuario) ? '#e6f7ff' : '#fff',
+                        backgroundColor: selectedAdms.includes(user.id_user) ? '#e6f7ff' : '#fff',
                       }}
                     >
                       <div className="flex flex-col m-[20px]">
-                        <style.StyledParagraph>{user.nome_completo} <Tooltip title="Visualizar perfil"><style.ViewProfile /></Tooltip></style.StyledParagraph>
+                        <style.StyledParagraph>{user.full_name} <Tooltip title="Visualizar perfil"><style.ViewProfile /></Tooltip></style.StyledParagraph>
                         <style.StyledP>
                           <style.Address /> {user.campus}
                         </style.StyledP>
@@ -174,8 +163,8 @@ const Search: React.FC<AdmProps> = ({ usersId }) => {
 
                       {isSelecting && (
                         <Checkbox
-                          checked={selectedAdms.includes(user.id_usuario)}
-                          onChange={() => toggleUserSelection(user.id_usuario)}
+                          checked={selectedAdms.includes(user.id_user)}
+                          onChange={() => toggleUserSelection(user.id_user)}
                           className="mr-[20px]"
                         />
                       )}

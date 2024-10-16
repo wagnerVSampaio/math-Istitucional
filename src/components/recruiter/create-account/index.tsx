@@ -12,16 +12,16 @@ import {
 } from "./style";
 import "./formEdited.css"
 type FieldType = {
-  nome: string;
+  full_name: string;
   cpf: string;
   email: string;
-  photo: string;
-  lotacao: string;
-  tipo_usuario: string;
+  profile_picture: string;
+  allocation: string;
+  user_type: string;
   status: string;
   campus: string;
-  senha: string;
-  senhaconfirmacao: string;
+  password: string;
+  passwordconfirmacao: string;
 };
 
 const { Option } = Select;
@@ -83,10 +83,10 @@ const NavRecrutador = () => {
 
 
   {/*   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { nome, value } = e.target;
+    const { full_name, value } = e.target;
     setFormData({
       ...formData,
-      [nome]: value,
+      [full_name]: value,
     });
   };
 
@@ -98,7 +98,7 @@ const NavRecrutador = () => {
       setRegisterImage(imageUrl);
       setFormData({
         ...formData,
-        photo: file.nome, // Apenas salva o nome do arquivo; ajuste conforme necessidade
+        photo: file.full_name, // Apenas salva o full_name do arquivo; ajuste conforme necessidade
       });
     }
   }; */}
@@ -115,19 +115,19 @@ const NavRecrutador = () => {
         const formData = new FormData(); // Crie uma instância de FormData
 
         // Adicione todos os campos ao FormData
-        formData.append('nome', values.nome);  // Nome completo do recrutador
+        formData.append('full_name', values.full_name);  // full_name completo do recrutador
         formData.append('email', values.email);  // Email do recrutador
-        formData.append('senha', values.senha);  // Senha do recrutador
-        formData.append('tipo_usuario', 'recrutador');  // Tipo de usuário
+        formData.append('password', values.password);  // Senha do recrutador
+        formData.append('user_type', 'recruiter');  // Tipo de usuário
         formData.append('cpf', values.cpf);  // CPF do recrutador
-        formData.append('lotacao', values.lotacao);  // Lotação do recrutador
+        formData.append('allocation', values.allocation);  // Lotação do recrutador
         formData.append('campus', values.campus);  // Campus do recrutador
-        formData.append('status', 'pendente');  // Status do recrutador
-
+        formData.append('status', 'pending');  // Status do recrutador
+        console.log(formData)
         // Adicione o arquivo da imagem se existir
         if (registerImage) {
             const file = await fetch(registerImage).then(r => r.blob()); // Obtenha o arquivo Blob da URL
-            formData.append('foto', file, 'photo.jpg'); // Nomeie o arquivo como você quiser
+            formData.append('profile_picture', file, 'photo.jpg'); // Nomeie o arquivo como você quiser
         }
 
         // Envia os dados para criar o usuário pendente
@@ -170,7 +170,7 @@ const NavRecrutador = () => {
                 Nome completo <strong className="text-red-500"> *</strong>
               </p>
               <Form.Item<FieldType>
-                name="nome"
+                name="full_name"
                 rules={[{ required: true, message: "Por favor, insira o nome!" }]}
               >
                 <Input className="w-[350px]" />
@@ -207,7 +207,7 @@ const NavRecrutador = () => {
               <p className="mb-[3px]">
                 Foto <strong className="text-red-500"> *</strong>{" "}
               </p>
-              <Form.Item<FieldType> name="photo">
+              <Form.Item<FieldType> name="profile_picture">
                 <ButtonLabelDate htmlFor="registerImageUpload">
                   <DateBirthUpload className="relative">
                     <img
@@ -232,7 +232,7 @@ const NavRecrutador = () => {
               <p className="mb-[3px]">
                 Lotação <strong className="text-red-500"> *</strong>
               </p>
-              <Form.Item<FieldType> name="lotacao">
+              <Form.Item<FieldType> name="allocation">
                 <Select placeholder="" style={{ width: '250px' }}>
                   <Option value="PROAD">PROAD - Pró-Reitoria de Administração</Option>
                   <Option value="PROCCE">PROCCE -  Pró-Reitoria da Cultura,Comunidade e Extensão</Option>
@@ -253,44 +253,15 @@ const NavRecrutador = () => {
                 <Select
                   placeholder="Selecione o Campus"
                   showSearch
-                  style={{ width: '250px' }}
-                  optionFilterProp="label"
-                  filterSort={(optionA, optionB) =>
-                    (optionA?.label ?? "")
-                      .toLowerCase()
-                      .localeCompare((optionB?.label ?? "").toLowerCase())
-                  }
-                  options={[
-                    {
-                      value: "Santarém (Campus sede)",
-                      label: "Santarém (Campus sede)",
-                    },
-                    {
-                      value: "Campus Alenquer",
-                      label: "Campus Alenquer",
-                    },
-                    {
-                      value: "Campus Itaituba",
-                      label: "Campus Itaituba",
-                    },
-                    {
-                      value: "Campus Monte Alegre",
-                      label: "Campus Monte Alegre",
-                    },
-                    {
-                      value: "Campus Juruti",
-                      label: "Campus Juruti",
-                    },
-                    {
-                      value: "Campus Óbidos",
-                      label: "Campus Óbidos",
-                    },
-                    {
-                      value: "Campus Oriximiná",
-                      label: "Campus Oriximiná",
-                    },
-                  ]}
-                />
+                  style={{ width: '250px' }}>
+                  <Option value="Santarém (Campus sede)">Santarém (Campus sede)</Option>
+                  <Option value="Campus Alenquer">Campus Alenquer</Option>
+                  <Option value="Campus Itaituba">Campus Itaituba</Option>
+                  <Option value="Campus Monte Alegre">Campus Monte Alegre</Option>
+                  <Option value="Campus Juruti">Campus Juruti</Option>
+                  <Option value="Campus Óbidos">Campus Óbidos</Option>
+                  <Option value="Campus Oriximiná">Campus Oriximiná</Option>
+                  </Select>
               </Form.Item>
             </div>
           </div>
@@ -300,7 +271,7 @@ const NavRecrutador = () => {
                 Senha <strong className="text-red-500"> *</strong>
               </p>
               <Form.Item<FieldType>
-                name="senha"
+                name="password"
                 rules={[
                   {
                     required: true,
@@ -316,7 +287,7 @@ const NavRecrutador = () => {
                 Confirmação de senha <strong className="text-red-500"> *</strong>
               </p>
               <Form.Item<FieldType>
-                name="senhaconfirmacao"
+                name="passwordconfirmacao"
                 rules={[
                   {
                     required: true,

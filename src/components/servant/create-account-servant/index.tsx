@@ -13,11 +13,11 @@ type FieldType = {
   name: string;
   cpf: string;
   email: string;
-  photo: string;
-  dateBirth: string;
+  profile_picture: string;
+  birth_date: string;
   password: string;
   passwordconfirmation: string;
-  telefone: string;
+  phone: string;
 };
 
 type SizeType = Parameters<typeof Form>[0]["size"];
@@ -81,13 +81,13 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
       const formData = new FormData(); // Crie uma instância de FormData
 
       // Adicione todos os campos ao FormData
-      formData.append("nome", values.name);
+      formData.append("full_name", values.name);
       formData.append("email", values.email);
-      formData.append("senha", values.password);
+      formData.append("password", values.password);
       formData.append("cpf", values.cpf);
-      formData.append("dataNascimento", formatDate(selectedDate!)); // Formata a data no padrão do PostgreSQL
-      formData.append("telefone", values.telefone);
-      formData.append("tipo_usuario", "servidor");
+      formData.append("birth_date", formatDate(selectedDate!)); // Formata a data no padrão do PostgreSQL
+      formData.append("phone", values.phone);
+      formData.append("user_type", "server");
 
       // Adicione o arquivo da imagem
       if (registerImage) {
@@ -169,7 +169,7 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
           <p className="mb-[3px]">
             Foto <strong className="text-red-500"> *</strong>
           </p>
-          <Form.Item<FieldType> name="photo">
+          <Form.Item<FieldType> name="profile_picture">
             <ButtonLabelDate htmlFor="registerImageUpload">
               <DateBirthUpload className="relative">
                 <img
@@ -196,7 +196,7 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
             Telefone <strong className="text-red-500"> *</strong>
           </p>
           <Form.Item<FieldType>
-            name="telefone"
+            name="phone"
             rules={[{ required: true, message: "Por favor, insira o telefone!" }]}
           >
             <Input className="w-[250px]" />
@@ -207,7 +207,7 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
           <p className="mb-[3px]">
             Data de nascimento <strong className="text-red-500"> * </strong>
           </p>
-          <Form.Item<FieldType> name="dateBirth" style={{ marginRight: "8px" }}>
+          <Form.Item<FieldType> name="birth_date" style={{ marginRight: "8px" }}>
             <Space direction="vertical" size={12}>
               <DatePicker
                 value={selectedDate}

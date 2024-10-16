@@ -17,10 +17,13 @@ import type { RadioChangeEvent } from "antd/lib";
 import { Radio, Modal, Button } from "antd/lib";
 import * as style from "./style";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const images = ["/bem-vindo.png", "/sobre-nos.png"];
 
 const HomePageContainer = () => {
+  const [userData, setUserData] = useState<any>(null);
+  const router = useRouter();
   const [value, setValue] = useState(1);
   const [imageUrl, setImageUrl] = useState(images[0]);
   const [profileImage, setProfileImage] = useState<string | undefined>(
@@ -48,6 +51,16 @@ const HomePageContainer = () => {
   );
 
   useEffect(() => {
+    const data = localStorage.getItem("userData");
+    if (data) {
+      setUserData(JSON.parse(data));
+      /* setProfileImage(JSON.parse(data).foto); // Assume que 'foto' é a URL da imagem de perfil
+      setCoverImage("/caminho/para/sua/imagem/capa.png"); // Aqui você pode definir a imagem de capa */
+    }
+  }, []);
+
+
+  useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
@@ -72,11 +85,31 @@ const HomePageContainer = () => {
     setIsModalVisible(false);
   };
 
-  // Função para confirmar a saída
+/*   // Função para confirmar a saída
   const handleConfirm = () => {
     setIsModalVisible(false);
-  };
+    
+    setUserData(null);
+    localStorage.removeItem("userData");
+  }; */
 
+  const handleConfirm = async () => {
+    try {
+        const response = await fetch('http://localhost:3002/logout', {
+            method: 'POST',
+            credentials: 'include', 
+        });
+
+        if (response.ok) {
+          setIsModalVisible(false);
+          router.push("/");
+        } else {
+            console.error('Erro ao fazer logout:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Erro ao fazer logout:', error);
+    }
+};
   return (
     <>
       <DivTopHomePage>
@@ -111,7 +144,7 @@ const HomePageContainer = () => {
                 className="w-full h-[40px] object-cover"
               />
             </ImageWrapper>
-            <StyledParagraph>Nome do usuário</StyledParagraph>
+            <StyledParagraph>Nome</StyledParagraph>
             <div>
               <nav>
                 <UlStyled>

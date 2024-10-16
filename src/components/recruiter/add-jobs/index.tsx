@@ -29,7 +29,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
   const [editingJob, setEditingJob] = useState<JobDetails | null>(null);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-
+  const [userData, setUserData] = useState<any>(null);
 
   // Exibe o modal
   const showModalAdd = () => {
@@ -45,7 +45,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
   const onFinish = async (values: any) => {
     setLoading(true); // Inicia o carregamento
     const updatedUsers = jobs.filter(user => !selectedAdms.includes(user.id)); // Filtra os usuários (vagas)
-  
+    const idRecrutador = userData ? userData.id_recrutador : null;
     try {
       const response = await fetch("http://localhost:3002/api/createvagas", {
         method: "POST",
@@ -61,7 +61,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
           postedago: new Date().toISOString(), // Você pode alterar isso conforme necessário
           salary: values.salary || 0, // Valor padrão se não fornecido
           contact: values.contact || "", // Adapte conforme necessário
-          id_recrutador: 18, // fixo enquanto ainda não tem autenticação
+          id_recrutador: idRecrutador, // fixo enquanto ainda não tem autenticação
         }),
       });
   
