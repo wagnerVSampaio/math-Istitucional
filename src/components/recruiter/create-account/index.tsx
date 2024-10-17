@@ -110,7 +110,6 @@ const NavRecrutador = () => {
   };
 
   const RegisterRecrutador = async (values: FieldType) => {
-    console.log("Formulário enviado!", values);
     try {
         const formData = new FormData(); // Crie uma instância de FormData
 
@@ -123,7 +122,7 @@ const NavRecrutador = () => {
         formData.append('allocation', values.allocation);  // Lotação do recrutador
         formData.append('campus', values.campus);  // Campus do recrutador
         formData.append('status', 'pending');  // Status do recrutador
-        console.log(formData)
+
         // Adicione o arquivo da imagem se existir
         if (registerImage) {
             const file = await fetch(registerImage).then(r => r.blob()); // Obtenha o arquivo Blob da URL

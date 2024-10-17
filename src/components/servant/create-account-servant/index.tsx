@@ -10,7 +10,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import { useRouter } from 'next/navigation';
 
 type FieldType = {
-  name: string;
+  full_name: string;
   cpf: string;
   email: string;
   profile_picture: string;
@@ -81,18 +81,18 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
       const formData = new FormData(); // Crie uma instância de FormData
 
       // Adicione todos os campos ao FormData
-      formData.append("full_name", values.name);
+      formData.append("full_name", values.full_name);
       formData.append("email", values.email);
       formData.append("password", values.password);
       formData.append("cpf", values.cpf);
       formData.append("birth_date", formatDate(selectedDate!)); // Formata a data no padrão do PostgreSQL
       formData.append("phone", values.phone);
-      formData.append("user_type", "server");
+      formData.append("user_type", 'server');
 
       // Adicione o arquivo da imagem
       if (registerImage) {
         const file = await fetch(registerImage).then((r) => r.blob()); // Obtenha o arquivo Blob da URL
-        formData.append("foto", file, "photo.jpg"); // Nomeie o arquivo como você quiser
+        formData.append("profile_picture", file, "photo.jpg"); // Nomeie o arquivo como você quiser
       }
 
       const response = await fetch("http://localhost:3002/api/createusers", {
@@ -103,7 +103,7 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
       const data = await response.json();
       if (response.ok) {
         router.push("/");
-        message.success('Cadastro realizado com sucesso! Realize o login.'); 
+        message.success('Cadastro realizado com sucesso! Realize o login.',5); 
       } else {
         console.error("Erro do servidor:", data);
         setErrorMessage(data.error || "Erro ao registrar");
@@ -132,7 +132,7 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
             Nome completo <strong className="text-red-500"> *</strong>
           </p>
           <Form.Item<FieldType>
-            name="name"
+            name="full_name"
             rules={[{ required: true, message: "Por favor, insira o nome!" }]}
           >
             <Input className="w-[350px]" />
