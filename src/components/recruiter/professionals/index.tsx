@@ -1,15 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as style from "./style";
-import { ProfessionalsData } from "@/professionals-const";
+
+interface Education {
+  id_education: number;
+  course: string;
+  institution: string;
+  start_date: string;
+  completion_date: string;
+}
+
+interface Experience {
+  id_experience: number;
+  position: string;
+  company: string;
+  start_date: string;
+  end_date: string;
+}
 
 interface Professional {
-  id: number;
-  name: string;
-  formation: string;
-  address: string;
-  contact: string;
-  experience: string;
-  favorite: boolean;
+  id_user: number;
+  full_name: string;
+  email: string;
+  profile_picture: string;
+  user_type: string;
+  phone: string | null;
+  birth_date: string | null;
+  education: Education[];
+  experience: Experience[];
 }
 
 interface ProfessionalsProps {
@@ -17,20 +34,31 @@ interface ProfessionalsProps {
 }
 
 const Professionals: React.FC<ProfessionalsProps> = ({ highlightedId }) => {
-  // Estado que armazena os profissionais e seu status de favorito
-  const [professionals, setProfessionals] = useState<Professional[]>(ProfessionalsData);
+  const [professionals, setProfessionals] = useState<Professional[]>([]);
+  const [loading, setLoading] = useState<boolean>(true); // Para controle de loading
 
-  // Função para alternar o status de favorito
-  const toggleFavorite = (id: number) => {
-    setProfessionals((prevProfessionals) =>
-      prevProfessionals.map((professional) =>
-        professional.id === id ? { ...professional, favorite: !professional.favorite } : professional
-      )
-    );
+  // Função para buscar os profissionais da API
+  const fetchProfessionals = async () => {
+    try {
+      const response = await fetch('http://localhost:3002/api/userServer'); 
+      if (!response.ok) {
+        throw new Error('Erro ao buscar profissionais');
+      }
+      const data = await response.json();
+      setProfessionals(data);
+    } catch (error) {
+      console.error('Erro ao obter dados:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const highlightedProfessional = professionals.find(professional => professional.id === highlightedId) || null;
-  const otherProfessionals = professionals.filter(professional => professional.id !== highlightedId);
+  useEffect(() => {
+    fetchProfessionals();
+  }, []);
+
+  const highlightedProfessional = professionals.find(professional => professional.id_user === highlightedId) || null;
+  const otherProfessionals = professionals.filter(professional => professional.id_user !== highlightedId);
 
   const handleContactClick = (email: string) => {
     const subject = "Contato sobre oportunidade de trabalho";
@@ -40,49 +68,46 @@ const Professionals: React.FC<ProfessionalsProps> = ({ highlightedId }) => {
 
   return (
     <style.DivNotification>
-      <style.StyledUl>
-        {otherProfessionals.map((professional) => (
-          <style.StyledLi
-            key={professional.id}
-            style={{
-              backgroundColor: '#fff'
-            }}
-          >
+      {loading ? ( // Exibe mensagem de loading enquanto os dados estão sendo carregados
+        <p>Carregando...</p>
+      ) : (
+        <style.StyledUl>
+          {otherProfessionals.map((professional) => (
+            <style.StyledLi key={professional.id_user} style={{ backgroundColor: '#fff' }}>
               <div className="flex flex-col m-[20px]">
-                <style.StyledParagraph>{professional.name}</style.StyledParagraph>
+                <style.StyledParagraph>{professional.full_name}</style.StyledParagraph>
                 <style.StyledP>
-                  <style.Degree /> {professional.formation}
+                  {professional.education.map((edu) => (
+                    <div key={edu.id_education} style={{display: 'flex'}}>
+                      <style.Degree /> {edu.course} - {edu.institution}
+                    </div>
+                  ))}
                 </style.StyledP>
                 <style.StyledP>
-                  <style.Address /> {professional.address}
+                  {professional.experience.map((exp) => (
+                    <div key={exp.id_experience} style={{display: 'flex'}}>
+                      <style.Address /> {exp.position} na {exp.company} 
+                    </div>
+                  ))}
                 </style.StyledP>
                 <style.StyledP>
                   <style.Email />{" "}
                   <span
                     style={{ textDecoration: "none" }}
-                    onMouseOver={(e) =>
-                      (e.currentTarget.style.textDecoration = "underline")
-                    }
-                    onMouseOut={(e) =>
-                      (e.currentTarget.style.textDecoration = "none")
-                    }
-                    onClick={() => handleContactClick(professional.contact)}
+                    onMouseOver={(e) => (e.currentTarget.style.textDecoration = "underline")}
+                    onMouseOut={(e) => (e.currentTarget.style.textDecoration = "none")}
+                    onClick={() => handleContactClick(professional.email)}
                   >
-                    {professional.contact}
+                    {professional.email}
                   </span>
                 </style.StyledP>
-                <style.StyledP className="mt-[20px]">{professional.experience}</style.StyledP>
 
-                {/* Botão para adicionar/remover dos favoritos 
-                <div>
-                <button onClick={() => toggleFavorite(professional.id)}>
-                  {professional.favorite ? <style.ButtonFavorite>Salvar<style.FavoriteSelect /></style.ButtonFavorite> : <style.ButtonFavorite>Salvo<style.FavoriteNoSelect /></style.ButtonFavorite>}
-                </button>
-            </div> */}
+
               </div>
-          </style.StyledLi>
-        ))}
-      </style.StyledUl>
+            </style.StyledLi>
+          ))}
+        </style.StyledUl>
+      )}
     </style.DivNotification>
   );
 };

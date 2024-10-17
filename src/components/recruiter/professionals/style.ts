@@ -1,9 +1,9 @@
 import styled, {css} from "styled-components";
 import { IoMdMail } from "react-icons/io";
-import { PiStudentFill } from "react-icons/pi";
-import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaRegStar } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
+import { GrCertificate } from "react-icons/gr";
+import { AiOutlineSafetyCertificate } from "react-icons/ai";
 export const DivNotification = styled.div`
     margin: 25px auto;
     width: 70%;
@@ -55,6 +55,7 @@ export const ButtonFavorite = styled.button`
 
 const iconsStyle = css`
   margin-right: 15px;
+  margin-top: 5px;
 `;
 
 
@@ -62,11 +63,11 @@ export const Email = styled( IoMdMail )`
   ${iconsStyle}
 `;
 
-export const Degree = styled( PiStudentFill )`
+export const Degree = styled( GrCertificate )`
   ${iconsStyle}
 `;
 
-export const Address = styled(FaMapMarkerAlt)`
+export const Address = styled(AiOutlineSafetyCertificate)`
   ${iconsStyle}
 `;
 export const FavoriteNoSelect = styled(FaRegStar)`

@@ -371,7 +371,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
     idExperiences(); 
   }, [])
 
-  
+
   const handleEditExp = (exp: Experience) => {
     setEditedExp({
       id_experience: exp.id_experience,
@@ -978,13 +978,13 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                     <>
                       <Tooltip title="Dê duplo click para editar">
                         <CompanyName onDoubleClick={() => handleEditExp(experience)}>
-                          {experience.company}
+                          {experience.position}
                         </CompanyName>
 
 
                       </Tooltip>
                       <Period>
-                        <span>{experience.company}</span> - {formatDate(experience.start_date)} a {formatDate(experience.end_date)}
+                        <span>{experience.company}</span> - {formatDate(experience.start_date)} - {formatDate(experience.end_date)}
                       </Period>
                     </>
                   )}
