@@ -46,50 +46,69 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
   const onFinish = async (values: any) => {
     setLoading(true); // Inicia o carregamento
     const updatedUsers = jobs.filter(user => !selectedAdms.includes(user.id_job)); // Filtra os usuários (vagas)
-    const idRecruiter = 2;
-    try {
-      const response = await fetch("http://localhost:3002/api/createvagas", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title: values.title,
-          description: values.description,
-          requirements: values.requirements || "", // Adapte conforme necessário
-          benefits: values.benefits || "", // Adapte conforme necessário
-          location: values.location,
-          posted_at: new Date().toISOString(), // Você pode alterar isso conforme necessário
-          salary: values.salary || 0, // Valor padrão se não fornecido
-          contact: values.contact || "", // Adapte conforme necessário
-          id_recruiter: idRecruiter, // fixo enquanto ainda não tem autenticação
-        }),
-      });
-  
-      if (!response.ok) {
-        throw new Error('Erro ao adicionar a vaga');
-      }
-  
-      // Obtém a nova vaga criada
-      const newJob = await response.json();
-      
-      // Atualiza a lista de vagas incluindo a nova vaga criada
-      setJobs([...updatedUsers, newJob]); // Atualiza o estado com a nova vaga
-  
-      form.resetFields(); // Reseta os campos do formulário
-      handleCancelAdd(); // Fecha o modal após a adição bem-sucedida
-    } catch (error) {
-      console.error("Erro ao adicionar vaga:", error);
-      // Aqui você pode exibir uma mensagem de erro para o usuário, se necessário
-    } finally {
-      setLoading(false); // Para o carregamento
+
+    // Recupera os dados do usuário do sessionStorage
+    const data = sessionStorage.getItem("userData");
+    if (!data) {
+        console.error('Usuário não encontrado.');
+        setLoading(false); // Para o carregamento em caso de erro
+        return;
     }
-  };
+    const userData = JSON.parse(data);
+    const idRecruiter = userData.id_user; // Obtém o ID do recrutador logado
+
+    try {
+        const response = await fetch("http://localhost:3002/api/createvagas", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                title: values.title,
+                description: values.description,
+                requirements: values.requirements || "", // Adapte conforme necessário
+                benefits: values.benefits || "", // Adapte conforme necessário
+                location: values.location,
+                posted_at: new Date().toISOString(), // Você pode alterar isso conforme necessário
+                salary: values.salary || 0, // Valor padrão se não fornecido
+                contact: values.contact || "", // Adapte conforme necessário
+                id_recruiter: idRecruiter, // ID do recrutador logado
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Erro ao adicionar a vaga');
+        }
+
+        // Obtém a nova vaga criada
+        const newJob = await response.json();
+        
+        // Atualiza a lista de vagas incluindo a nova vaga criada
+        setJobs([...updatedUsers, newJob]); // Atualiza o estado com a nova vaga
+
+        form.resetFields(); // Reseta os campos do formulário
+        handleCancelAdd(); // Fecha o modal após a adição bem-sucedida
+    } catch (error) {
+        console.error("Erro ao adicionar vaga:", error);
+        // Aqui você pode exibir uma mensagem de erro para o usuário, se necessário
+    } finally {
+        setLoading(false); // Para o carregamento
+    }
+};
+
   
   useEffect(() => {
     const fetchJobs = async () => {
+      const data = sessionStorage.getItem("userData");
+      if (!data) {
+          console.error('Usuário não encontrado.');
+          setLoading(false); // Para o carregamento em caso de erro
+          return;
+      }
+      const userData = JSON.parse(data);
+      const idRecruiter = userData.id_user; 
       try {
-        const response = await fetch("http://localhost:3002/api/getVagas"); 
+        const response = await fetch(`http://localhost:3002/api/getVagaIDRecruiter/${idRecruiter}`); 
         const data = await response.json();
         console.log(data); // Verifique se os dados estão corretos aqui
         if (Array.isArray(data)) {
@@ -236,7 +255,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
 
           {filteredUsers.length === 0 ? (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
-              <span>Não foi encontrado nenhum usuário.</span>
+              <span>Não foi encontrado nenhuma vaga cadastrada.</span>
             </div>
           ) : (
             <div>
