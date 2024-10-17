@@ -31,34 +31,35 @@ const App: React.FC = () => {
         },
         body: JSON.stringify({ email: values.email, password: values.password }),
       });
-
+  
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Erro na autenticação");
       }
-
-      const userData = await response.json();
-      console.log(userData);
+  
+      // Recebe o JWT e os dados do usuário
+      const { token, user } = await response.json();
       
-      // Armazenar dados do usuário logado no localStorage
-      localStorage.setItem("userData", JSON.stringify(userData));
+      if (response.ok){
+        sessionStorage.setItem("authToken", token);
+        sessionStorage.setItem("userData", JSON.stringify(user));
     
-      // Atualiza o estado do userData
-      setUserData(userData);
+        setUserData(user); // Atualiza o estado com os dados do usuário
       
       // Redirecionamento com base no tipo de usuário
-      if (userData.user_type === 'recruiter' && userData.status === 'approved') {
-        router.push("/inside-recruiter");
-      } else if (userData.user_type === 'server') {
-        router.push("/inside");
-      } else if (userData.user_type === 'recruiter' && userData.status === 'pending') {
-        message.info('Aguarde a aprovação', 5);
-      }
+        if (user.user_type === 'recruiter' && user.status === 'approved') {
+          router.push("/inside-recruiter");
+        } else if (user.user_type === 'server') {
+          router.push("/inside");
+        } else if (user.user_type === 'recruiter' && user.status === 'pending') {
+          message.info('Aguarde a aprovação', 5);
+        }
+    }
     } catch (error: any) {
-      setError(error.message || "Erro ao fazer login");
+      message.error(error.message || "Erro ao fazer login");
     }
   };
-
+  
   const onFinish = (values: { email: string; password: string; }) => {
     loginAuthentication(values);
   };

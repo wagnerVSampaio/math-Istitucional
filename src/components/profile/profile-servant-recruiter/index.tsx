@@ -82,8 +82,9 @@ interface Experience {
 }
 
 interface Skills {
+  id_job: number;
   skill: string;
-  level: number;
+  number: number;
 }
 
 const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
@@ -97,22 +98,16 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   const [editedExperience, setEditedExperience] = useState<Experience | null>(null);
   const [editIndexEducations, setEditIndexEducations] = useState<number | null>(null);
   const [editedEducations, setEditedEducations] = useState<Education | null>(null);
-  const [editIndexSkills, setEditIndexSkills] = useState<number | null>(null);
-  const [editedSkills, setEditedSkills] = useState<Skills | null>(null);
   const [isModalOpenEdu, setIsModalOpenEdu] = useState(false);
   const [isModalOpenExperience, setIsModalOpenExperience] = useState(false);
-  const [isModalOpenSkills, setIsModalOpenSkills] = useState(false);
   const [isEducationExpanded, setIsEducationExpanded] = useState(false);
   const [isExperienceExpanded, setIsExperienceExpanded] = useState(false);
-  const [isSkillsExpanded, setIsSkillsExpanded] = useState(false);
   const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
-    const data = localStorage.getItem("userData");
+    const data = sessionStorage.getItem("userData");
     if (data) {
       setUserData(JSON.parse(data));
-      /* setProfileImage(JSON.parse(data).foto); // Assume que 'foto' é a URL da imagem de perfil
-      setCoverImage("/caminho/para/sua/imagem/capa.png"); // Aqui você pode definir a imagem de capa */
     }
   }, []);
 
@@ -300,53 +295,145 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
 
 
 
-  {/*LISTA TEMPORARIA DA HABILIDADE*/ }
-  const [skills, setSkills] = useState<Skills[]>([
-    { skill: 'JavaScript', level: 90 },
-    { skill: 'React', level: 85 },
-    { skill: 'Node.js', level: 80 },
-    { skill: 'TypeScript', level: 75 },
-    { skill: 'CSS', level: 70 },
-    { skill: 'HTML', level: 95 },
-    { skill: 'Python', level: 60 },
-    { skill: 'SQL', level: 65 },
-    { skill: 'Git', level: 85 },
-    { skill: 'Docker', level: 50 }
-  ]);
 
-  {/*EXPANDIR HABILIDADES*/ }
+
+  const [skills, setSkills] = useState<Skills[]>([]);
+  const [isSkillsExpanded, setIsSkillsExpanded] = useState(false);
+  const [editIndexSkills, setEditIndexSkills] = useState<number | null>(null);
+  const [editedSkills, setEditedSkills] = useState<Skills | null>(null);
+  const [isModalOpenSkills, setIsModalOpenSkills] = useState(false);
+  const [newSkill, setNewSkill] = useState<Skills>({ skill: '', number: 0, id_job: 0 });
+
+  // Função para adicionar uma nova habilidade
+  const handleAddSkills = async (newSkill: Skills) => {
+    try {
+      // Recupera os dados do usuário logado do sessionStorage
+      const data = sessionStorage.getItem("userData");
+      if (!data) {
+        throw new Error("Usuário não está logado");
+      }
+  
+      // Converte os dados do usuário armazenados em JSON para um objeto
+      const userData = JSON.parse(data);
+      const idUser = userData.id_user; // Obtém o id_user do usuário logado
+  
+      // Inclui o id_user no objeto newSkill
+      const skillWithUser = { ...newSkill, id_user: idUser };
+  
+      // Fazendo a requisição para adicionar a habilidade ao banco de dados
+      const response = await fetch('http://localhost:3002/api/createSkill', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(skillWithUser), // Enviando o objeto skill com id_user como JSON
+      });
+  
+      if (!response.ok) {
+        throw new Error('Erro ao adicionar habilidade');
+      }
+  
+      // Adiciona a nova habilidade ao estado local
+      const addedSkill = await response.json(); // Supondo que a resposta seja o objeto adicionado
+      setSkills([...skills, addedSkill]);
+      setIsModalOpenSkills(false); // Fecha o modal após adicionar
+    } catch (error) {
+      console.error('Erro:', error);
+      // Adicionar uma notificação ou alerta para o usuário, se necessário
+    }
+  };
+  
+ /*  const handleSubmitNewSkill = () => {
+    if (newSkill.skill && newSkill.number && newSkill.id_job) {
+      handleAddSkills(newSkill);
+      // Limpar os campos após adicionar
+      setNewSkill({ skill: '', number: 0, id_job: 0 });
+    }
+  }; */
+
+
+   // Função para buscar as habilidades do usuário
+   const idSkills = async () => {
+    const data = sessionStorage.getItem("userData");
+    if (!data) {
+        console.error('Usuário não encontrado.');
+        return;
+    }
+
+    try {
+        const userData = JSON.parse(data);
+        const idUser = userData.id_user; // Obtém o id_user do sessionStorage
+
+        // Fazendo a requisição para buscar as habilidades do usuário específico
+        const response = await fetch(`http://localhost:3002/api/idSkill/${idUser}`); // Alterado para incluir id_user na URL
+        
+        if (!response.ok) {
+            throw new Error('Erro ao buscar habilidades: ' + response.statusText);
+        }
+
+        const skillsData = await response.json(); // Supondo que a resposta seja um array de habilidades
+        setSkills(skillsData); // Atualiza o estado com as habilidades obtidas
+    } catch (error) {
+        console.error('Erro ao buscar habilidades:', error);
+    }
+};
+
+// Efeito para buscar habilidades quando o componente é montado
+useEffect(() => {
+    idSkills();
+}, []);
+
+
   const toggleExpandSkills = () => {
     setIsSkillsExpanded(!isSkillsExpanded);
   };
 
-  {/*EDITA HABILIDADE*/ }
-  const handleEditSkills = (index: number) => {
-    setEditIndexSkills(index);
-    setEditedSkills(skills[index]);
-  };
 
-  {/*DELETA HABILIDADE*/ }
+
   const handleDeleteSkills = (index: number) => {
     const newSkills = skills.filter((_, i) => i !== index);
     setSkills(newSkills);
   };
 
-  {/*SALVA HABILIDADE*/ }
-  const handleSaveEditSkills = () => {
+  const handleEditSkills = (index: number) => {
+    setEditIndexSkills(index);
+    setEditedSkills(skills[index]);
+  };
+  const handleSaveEditSkills = async () => {
     if (editIndexSkills !== null && editedSkills) {
-      const updatedSkills = skills.map((skill, index) =>
-        index === editIndexSkills ? editedSkills : skill
-      );
-      setSkills(updatedSkills);
-      setEditIndexSkills(null);
-      setEditedSkills(null);
+      try {
+        // Fazendo a requisição para atualizar a habilidade no banco de dados
+        const response = await fetch(`http://localhost:3002/api/updateSkill/${editedSkills.id_job}`, {
+          method: 'PUT', // Usando o método PUT para atualizar
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(editedSkills), // Enviando os dados editados como JSON
+        });
+  
+        if (!response.ok) {
+          throw new Error('Erro ao editar habilidade');
+        }
+  
+        // Obtém a habilidade atualizada da resposta
+        const updatedSkill = await response.json(); 
+  
+        // Atualiza a lista de habilidades no estado local
+        const updatedSkills = skills.map((skill, index) =>
+          index === editIndexSkills ? updatedSkill : skill
+        );
+  
+        setSkills(updatedSkills); // Atualiza o estado com a habilidade editada
+        setEditIndexSkills(null); // Reseta o índice de edição
+        setEditedSkills(null); // Reseta as habilidades editadas
+      } catch (error) {
+        console.error('Erro:', error);
+        // Você pode adicionar uma notificação ou alerta para o usuário
+      }
     }
   };
+  
 
-  {/*ADICIONA HABILIDADE*/ }
-  const handleAddSkills = (skill: Skills) => {
-    setSkills([...skills, skill]);
-  };
 
   return (
     <>
@@ -388,7 +475,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
           </ImageWrapper>
 
           <DivParagraph>
-            <p>Nome do usuário</p>
+            <p>{userData?.full_name}</p>
             <DivIconShare>
               <Tooltip title="Compartilhar o perfil" placement="left">
                 <FaShareAltSquare />
@@ -686,124 +773,126 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
         </Container>
 
         <SkillsContainer>
-          <Title>
-            Habilidades
-            <div className="flex gap-4">
-              <button style={{ cursor: 'pointer' }} onClick={() => setIsModalOpenSkills(true)}><Tooltip title="Adicionar nova habilidade">
-                <Add />
-              </Tooltip></button>
-              {isSkillsExpanded ? (
-                <Tooltip title="Esconder habilidades adicionadas">
-                  <ArrowUp onClick={toggleExpandSkills} style={{ cursor: 'pointer' }} />
-                </Tooltip>
-              ) : (
-                <Tooltip title="Mostrar todas as habilidades adicionadas">
-                  <ArrowDown onClick={toggleExpandSkills} style={{ cursor: 'pointer' }} />
-                </Tooltip>
-              )}
-            </div>
-          </Title>
+      <Title>
+        Habilidades
+        <div className="flex gap-4">
+          <button style={{ cursor: 'pointer' }} onClick={() => setIsModalOpenSkills(true)}>
+            <Tooltip title="Adicionar nova habilidade">
+              <Add />
+            </Tooltip>
+          </button>
+          {isSkillsExpanded ? (
+            <Tooltip title="Esconder habilidades adicionadas">
+              <ArrowUp onClick={() => setIsSkillsExpanded(false)} style={{ cursor: 'pointer' }} />
+            </Tooltip>
+          ) : (
+            <Tooltip title="Mostrar todas as habilidades adicionadas">
+              <ArrowDown onClick={() => setIsSkillsExpanded(true)} style={{ cursor: 'pointer' }} />
+            </Tooltip>
+          )}
+        </div>
+      </Title>
 
-          {/* Renderização das habilidades */}
-          {skills.slice(0, isSkillsExpanded ? skills.length : 2).map((skillItem, index) => (
-            <ListItem key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {editIndexSkills === index ? (
-                  <>
-                    <Profile
-                      type="text"
-                      style={{ width: "350px" }}
-                      value={editedSkills?.skill || ''}
-                      onChange={(e) => setEditedSkills({ ...editedSkills!, skill: e.target.value })}
-                      placeholder="Habilidade"
-                    />
-                    <div className="flex">
-                      <Profile
-                        type="number"
-                        style={{ width: "200px", marginTop: '4px' }}
-                        value={editedSkills?.level || ''}
-                        onChange={(e) => setEditedSkills({ ...editedSkills!, level: Number(e.target.value) })}
-                        placeholder="Nível de conhecimento"
-                      />
-                    </div>
-                  </>
-                ) : (
-                  <>
-                  <Tooltip title="Dê duplo click para editar">
-                    <SkillTitle onClick={() => handleEditSkills(index)}>
-                      {skillItem.skill}
-                    </SkillTitle>
-                    </Tooltip>
-                    <div className="flex">
-                      <div>
-                        <ProgressBarContainer>
-                          <ProgressBar percentage={skillItem.level} />
-                        </ProgressBarContainer>
-                      </div>
-                      <SkillPercentage>{skillItem.level}%</SkillPercentage>
-                    </div>
-                  </>
-                )}
-              </div>
-              <div style={{ display: 'flex', justifyContent: "space-between", gap: '20px' }}>
-                {editIndexSkills === index && (
-                  <>
-                    <button style={{ cursor: 'pointer' }} onClick={() => { setEditIndexSkills(null); setEditedSkills(null); }}>
-                      <GoBack />
-                    </button>
-                    <Tooltip title="Salvar alterações">
-                    <button style={{ cursor: 'pointer' }} onClick={handleSaveEditSkills}>
-                      <Save />
-                    </button>
-                    </Tooltip>
-                  </>
-                )}
-                <Tooltip title="Excluir educação">
-                  <button style={{ cursor: 'pointer' }} onClick={() => handleDeleteSkills(index)}>
-                    <Delete />
+      {/* Renderização das habilidades */}
+      {skills.slice(0, isSkillsExpanded ? skills.length : 2).map((skillItem, index) => (
+        <ListItem key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {editIndexSkills === index ? (
+              <>
+                <Profile
+                  type="text"
+                  style={{ width: "350px" }}
+                  value={editedSkills?.skill || ''}
+                  onChange={(e) => setEditedSkills({ ...editedSkills!, skill: e.target.value })}
+                  placeholder="Habilidade"
+                />
+                <div className="flex">
+                  <Profile
+                    type="number"
+                    style={{ width: "200px", marginTop: '4px' }}
+                    value={editedSkills?.number || ''}
+                    onChange={(e) => setEditedSkills({ ...editedSkills!, number: Number(e.target.value) })}
+                    placeholder="Nível de conhecimento"
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <Tooltip title="Dê duplo click para editar">
+                  <SkillTitle onClick={() => handleEditSkills(index)}>
+                    {skillItem.skill}
+                  </SkillTitle>
+                </Tooltip>
+                <div className="flex">
+                  <div>
+                    <ProgressBarContainer>
+                      <ProgressBar percentage={skillItem.number} />
+                    </ProgressBarContainer>
+                  </div>
+                  <SkillPercentage>{skillItem.number}%</SkillPercentage>
+                </div>
+              </>
+            )}
+          </div>
+          <div style={{ display: 'flex', justifyContent: "space-between", gap: '20px' }}>
+            {editIndexSkills === index && (
+              <>
+                <button style={{ cursor: 'pointer' }} onClick={() => { setEditIndexSkills(null); setEditedSkills(null); }}>
+                  <GoBack />
+                </button>
+                <Tooltip title="Salvar alterações">
+                  <button style={{ cursor: 'pointer' }} onClick={handleSaveEditSkills}>
+                    <Save />
                   </button>
                 </Tooltip>
+              </>
+            )}
+            <Tooltip title="Excluir habilidade">
+              <button style={{ cursor: 'pointer' }} onClick={() => handleDeleteSkills(index)}>
+                <Delete />
+              </button>
+            </Tooltip>
+          </div>
+        </ListItem>
+      ))}
+
+      {isModalOpenSkills && (
+        <ModalOverlay>
+          <ModalContent>
+            <H2Exp>Adicionar nova habilidade</H2Exp>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault(); // Previne o comportamento padrão do formulário
+                const newSkills = {
+                  skill: (e.target as any).skill.value,
+                  number: Number((e.target as any).number.value), // Certifique-se de usar a propriedade correta e converter para número
+                  id_job: 0 
+                };
+                handleAddSkills(newSkills); // Passa o novo objeto de habilidade para a função
+                setIsModalOpenSkills(false); // Fecha o modal
+              }}
+            >
+              <Input
+                type="text"
+                name="skill"
+                placeholder="Habilidade"
+                required
+              />
+              <Input
+                type="number"
+                name="number"
+                placeholder="Nível de conhecimento"
+                required
+              />
+              <div className="flex align-center justify-center">
+                <CloseButton onClick={() => setIsModalOpenSkills(false)}>Fechar</CloseButton>
+                <AddExpButton type="submit">Adicionar</AddExpButton>
               </div>
-            </ListItem>
-          ))}
-
-
-        </SkillsContainer>
-        {isModalOpenSkills && (
-          <ModalOverlay>
-            <ModalContent>
-              <H2Exp>Adicionar nova habilidade</H2Exp>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  const newSkills = {
-                    skill: (e.target as any).skill.value,
-                    level: (e.target as any).level.value,
-                  };
-                  handleAddSkills(newSkills);
-                  setIsModalOpenSkills(false);
-                }}
-              >
-                <Input
-                  type="text"
-                  name="skill"
-                  placeholder="Habilidade"
-                  required
-                />
-                <Input
-                  type="text"
-                  name="level"
-                  placeholder="Nível de conhecimento"
-                  required
-                />
-                <div className="flex align-center justify-center">
-                  <CloseButton onClick={() => setIsModalOpenSkills(false)}>Fechar</CloseButton>
-                  <AddExpButton type="submit">Adicionar</AddExpButton>
-                </div>
-              </form>
-            </ModalContent>
-          </ModalOverlay>
-        )}
+            </form>
+          </ModalContent>
+        </ModalOverlay>
+      )}
+       </SkillsContainer>
       </GeneralItens>
     </>
   );

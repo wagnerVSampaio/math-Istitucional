@@ -14,7 +14,7 @@ import {
   UlStyled
 } from "./style";
 import type { RadioChangeEvent } from "antd/lib";
-import { Radio, Modal, Button } from "antd/lib";
+import { Radio, Modal, Button, message } from "antd/lib";
 import * as style from "./style";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -51,14 +51,11 @@ const HomePageContainer = () => {
   );
 
   useEffect(() => {
-    const data = localStorage.getItem("userData");
+    const data = sessionStorage.getItem("userData");
     if (data) {
       setUserData(JSON.parse(data));
-      /* setProfileImage(JSON.parse(data).foto); // Assume que 'foto' é a URL da imagem de perfil
-      setCoverImage("/caminho/para/sua/imagem/capa.png"); // Aqui você pode definir a imagem de capa */
     }
   }, []);
-
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
@@ -95,14 +92,19 @@ const HomePageContainer = () => {
 
   const handleConfirm = async () => {
     try {
-        const response = await fetch('http://localhost:3002/logout', {
+        const response = await fetch('http://localhost:3002/api/logout', {
             method: 'POST',
-            credentials: 'include', 
         });
 
+        const responseData = await response.json(); // Adicione isso para verificar a resposta
+        console.log('Resposta do servidor:', responseData); // Verifique a resposta aqui
+
         if (response.ok) {
-          setIsModalVisible(false);
-          router.push("/");
+            sessionStorage.removeItem("userData");
+
+            message.success('Logout realizado com sucesso!'); // Feedback ao usuário
+            setIsModalVisible(false);
+            router.push("/");
         } else {
             console.error('Erro ao fazer logout:', response.statusText);
         }
@@ -110,6 +112,8 @@ const HomePageContainer = () => {
         console.error('Erro ao fazer logout:', error);
     }
 };
+
+
   return (
     <>
       <DivTopHomePage>
@@ -144,7 +148,7 @@ const HomePageContainer = () => {
                 className="w-full h-[40px] object-cover"
               />
             </ImageWrapper>
-            <StyledParagraph>Nome</StyledParagraph>
+            <StyledParagraph>{userData?.full_name}</StyledParagraph>
             <div>
               <nav>
                 <UlStyled>

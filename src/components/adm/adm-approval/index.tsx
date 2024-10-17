@@ -52,25 +52,38 @@ const approveUser = async (userId: number) => {
         console.error('Erro ao aprovar usuário:', error);
     }
 };
-
-const rejectUser = async (userId: number) => {
-  try {
-      const response = await fetch(`http://localhost:3002/api/deleteUser/${userId}`, {
-          method: 'DELETE', // Método para recusar (deletar)
-      });
-
-      if (response.ok) {
-          // Atualiza a lista de usuários pendentes após a recusa
-          setPendingUsers(pendingUsers.filter(user => user.id_user !== userId));
-          console.log('Usuário recusado com sucesso!');
-      } else {
-          console.error('Erro ao recusar usuário:', response.statusText);
+useEffect(() => {
+  pendingUsers.forEach(user => {
+      if (user.status === 'pending') {
+          approveUser(user.id_user);
       }
-  } catch (error) {
-      console.error('Erro ao recusar usuário:', error);
-  }
-};
+  });
+}, [pendingUsers]); 
 
+  const rejectUser = async (userId: number) => {
+    try {
+        const response = await fetch(`http://localhost:3002/api/deleteUser/${userId}`, {
+            method: 'DELETE', // Método para recusar (deletar)
+        });
+
+        if (response.ok) {
+            // Atualiza a lista de usuários pendentes após a recusa
+            setPendingUsers(pendingUsers.filter(user => user.id_user !== userId));
+            console.log('Usuário recusado com sucesso!');
+        } else {
+            console.error('Erro ao recusar usuário:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Erro ao recusar usuário:', error);
+    }
+  };
+  useEffect(() => {
+    pendingUsers.forEach(user => {
+        if (user.status === 'pending') {
+            rejectUser(user.id_user);
+        }
+    });
+  }, [pendingUsers]); 
 
   // Função para exibir o modal de confirmação
   const showModal = (userId: number) => {
