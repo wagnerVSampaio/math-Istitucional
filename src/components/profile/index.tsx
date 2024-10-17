@@ -308,20 +308,24 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
 
   const handleDeleteEducation = async (id_education: number) => {
     try {
+      // Fazendo a requisição para excluir a educação no banco de dados
       const response = await fetch(`http://localhost:3002/api/deleteEdu/${id_education}`, {
         method: 'DELETE',
       });
-
+  
       if (!response.ok) {
         throw new Error('Erro ao excluir educação');
       }
-
-      const updatedEducations = educations.filter(education => education.id_education !== id_education);
-      setEducations(updatedEducations);
+  
+      // Atualiza a lista de educations no estado local
+      const updatedEducations = educations.filter(education => education.id_education !== Number(id_education)); // Certifica-se de que id_education seja um número
+      setEducations(updatedEducations); // Atualiza o estado com a lista de educations sem a excluída
     } catch (error) {
       console.error('Erro ao excluir educação:', error);
+      // Você pode adicionar uma notificação ou alerta para o usuário
     }
   };
+  
 
 
 
@@ -368,12 +372,13 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   };
 
   useEffect(() => {
-    idExperiences(); 
+    idExperiences();
   }, [])
 
 
   const handleEditExp = (exp: Experience) => {
     setEditedExp({
+      id_user: exp.id_user,
       id_experience: exp.id_experience,
       company: exp.company,
       position: exp.position,
@@ -588,7 +593,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
 
   const handleEditSkills = (skill: Skills) => {
     setEditedSkills({
-      id_skill: skill.id_skill, // Certifique-se de que o id_job está aqui
+      id_skill: skill.id_skill,
       skill: skill.skill,
       number: skill.number,
     });
@@ -675,17 +680,23 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   const formatDate = (dateString: string | undefined): string => {
     if (!dateString) return ''; // Retorna string vazia se não houver data
     const date = new Date(dateString);
-    
+
     // Definindo opções de formatação para exibir como "25 de janeiro de 2024"
-    const options: Intl.DateTimeFormatOptions = { 
-      day: 'numeric', 
-      month: 'long', 
-      year: 'numeric' 
+    const options: Intl.DateTimeFormatOptions = {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
     };
-  
+
     return date.toLocaleDateString('pt-BR', options);
   };
 
+  const formatDateForInput = (dateString: string | undefined): string => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0]; // Retorna apenas a parte da data no formato yyyy-mm-dd
+  };
+  
 
   return (
     <>
@@ -806,43 +817,43 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
             {educations.slice(0, isEducationExpanded ? educations.length : 2).map((education, index) => (
               <ListItem key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  {editIndexEducations === index ? (
+                  {editIndexEducation === index ? (
                     <>
                       <Profile
                         type="text"
                         style={{ width: "350px" }}
-                        value={editedEducations?.course || ''}
-                        onChange={(e) => setEditedEducations({ ...editedEducations!, course: e.target.value })}
+                        value={editedEducation?.course || ''}
+                        onChange={(e) => setEditedEducation({ ...editedEducations!, course: e.target.value })}
                         placeholder="Curso"
                       />
                       <div className="flex">
-                        <Profile
+                      <Profile
                           type="text"
                           style={{ width: "200px", marginTop: '4px' }}
-                          value={editedEducations?.institution || ''}
-                          onChange={(e) => setEditedEducations({ ...editedEducations!, institution: e.target.value })}
+                          value={editedEducation?.institution || ''}
+                          onChange={(e) => setEditedEducation({ ...editedEducations!, institution: e.target.value })}
                           placeholder="Universidade"
-                        />
-                        <Profile
-                          type="text"
+                      />
+                      <Profile
+                          type="date"
                           style={{ width: "200px", marginTop: '4px', marginLeft: '10px' }}
-                          value={editedEducations?.start_date || ''}
-                          onChange={(e) => setEditedEducations({ ...editedEducations!, start_date: e.target.value })}
+                          value={formatDateForInput(editedEducation?.start_date) || ''}
+                          onChange={(e) => setEditedEducation({ ...editedEducations!, start_date: e.target.value })}
                           placeholder="Período"
-                        />
-                        <Profile
-                          type="text"
+                      />
+                      <Profile
+                          type="date"
                           style={{ width: "200px", marginTop: '4px', marginLeft: '10px' }}
-                          value={editedEducations?.completion_date || ''}
-                          onChange={(e) => setEditedEducations({ ...editedEducations!, completion_date: e.target.value })}
+                          value={formatDateForInput(editedEducation?.completion_date) || ''}
+                          onChange={(e) => setEditedEducation({ ...editedEducations!, completion_date: e.target.value })}
                           placeholder="Período"
-                        />
+                      />
                       </div>
                     </>
                   ) : (
                     <>
                       <Tooltip title="Dê duplo click para editar">
-                        <CompanyName onClick={() => handleEditEducation(education)}>
+                        <CompanyName onDoubleClick={() => handleEditEducation(education)}>
                           {education.course}
                         </CompanyName>
                       </Tooltip>
@@ -853,16 +864,16 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                   )}
                 </div>
                 <div style={{ display: 'flex', justifyContent: "space-between", gap: '20px' }}>
-                  {editIndexEducations === index && (
+                  {editIndexEducation === index && (
                     <>
-                      <button style={{ cursor: 'pointer' }} onClick={() => { setEditIndexEducations(null); setEditedEducations(null); }}><GoBack /></button>
+                      <button style={{ cursor: 'pointer' }} onClick={() => { setEditIndexEducation(null); setEditedEducation(null); }}><GoBack /></button>
                       <Tooltip title="Salvar alterações"><button style={{ cursor: 'pointer' }} onClick={handleSaveEditEducation}><Save /></button></Tooltip>
                     </>
                   )}
                   <Tooltip title="Excluir formação" placement="left">
                     <button style={{ cursor: 'pointer' }} onClick={() => handleDeleteEducation(index)}><Delete /></button>
                   </Tooltip>
-                </div>
+                </div>                  
               </ListItem>
             ))}
           </EducationList>
@@ -874,7 +885,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                   onSubmit={(e) => {
                     e.preventDefault();
                     const newEducation = {
-                      id_education: 0, 
+                      id_education: 0,
                       institution: (e.target as any).institution.value,
                       course: (e.target as any).course.value,
                       start_date: (e.target as any).start_date.value,
@@ -918,6 +929,8 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
           )}
         </Wrapper>
 
+
+
         <Container>
           <Title>
             Experiências
@@ -938,61 +951,60 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
           </Title>
 
           <List>
-  {experiences.slice(0, isExperienceExpanded ? experiences.length : 2).map((experience, index) => (
-    <ListItem key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        {editIndexExperience === index ? (
-          <>
-            <Profile
-              type="text"
-              style={{ width: "350px" }}
-              value={editedExperience?.position || ''} // Corrigido para position
-              onChange={(e) => setEditedExperience({ ...editedExperience!, position: e.target.value })} // Corrigido para position
-              placeholder="Cargo"
-            />
-            <div className="flex">
-              <Profile
-                type="text"
-                style={{ width: "200px", marginTop: '4px' }}
-                value={editedExperience?.company || ''} // Este estava correto
-                onChange={(e) => setEditedExperience({ ...editedExperience!, company: e.target.value })}
-                placeholder="Empresa"
-              />
-              <Profile
-                type="date"
-                style={{ width: "200px", marginTop: '4px', marginLeft: '10px' }}
-                value={editedExperience?.start_date || ''}
-                onChange={(e) => setEditedExperience({ ...editedExperience!, start_date: e.target.value })}
-                placeholder="Data de Início"
-              />
-              <Profile
-                type="date"
-                style={{ width: "200px", marginTop: '4px', marginLeft: '10px' }}
-                value={editedExperience?.end_date || ''}
-                onChange={(e) => setEditedExperience({ ...editedExperience!, end_date: e.target.value })}
-                placeholder="Data de Conclusão"
-              />
-            </div>
-          </>
+            {experiences.slice(0, isExperienceExpanded ? experiences.length : 2).map((experience, index) => (
+              <ListItem key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  {editIndexExp === index ? (
+                    <>
+                      <Profile
+                        type="text"
+                        style={{ width: "350px" }}
+                        value={editedExp?.position || ''}
+                        onChange={(e) => setEditedExp({ ...editedExp!, position: e.target.value })}
+                        placeholder="Cargo"
+                      />
+                      <div className="flex">
+                      <Profile
+                          type="text"
+                          style={{ width: "200px", marginTop: '4px' }}
+                          value={editedExp?.company || ''}
+                          onChange={(e) => setEditedExp({ ...editedExp!, company: e.target.value })}
+                          placeholder="Empresa"
+                      />
+                      <Profile
+                          type="date"
+                          style={{ width: "200px", marginTop: '4px', marginLeft: '10px' }}
+                          value={formatDateForInput(editedExp?.start_date) || ''}
+                          onChange={(e) => setEditedExp({ ...editedExp!, start_date: e.target.value })}
+                          placeholder="Data de Início"
+                      />
+                      <Profile
+                          type="date"
+                          style={{ width: "200px", marginTop: '4px', marginLeft: '10px' }}
+                          value={formatDateForInput(editedExp?.end_date) || ''}
+                          onChange={(e) => setEditedExp({ ...editedExp!, end_date: e.target.value })}
+                          placeholder="Data de Conclusão"
+                      />
+                      </div>
+                    </>
                   ) : (
                     <>
                       <Tooltip title="Dê duplo click para editar">
                         <CompanyName onDoubleClick={() => handleEditExp(experience)}>
                           {experience.position}
                         </CompanyName>
-
-
                       </Tooltip>
                       <Period>
                         <span>{experience.company}</span> - {formatDate(experience.start_date)} - {formatDate(experience.end_date)}
                       </Period>
+
                     </>
                   )}
                 </div>
                 <div style={{ display: 'flex', justifyContent: "space-between", gap: '20px' }}>
-                  {editIndexExperience === index && (
+                  {editIndexExp === index && (
                     <>
-                      <button style={{ cursor: 'pointer' }} onClick={() => { setEditIndexExperience(null); setEditedExperience(null); }}>
+                      <button style={{ cursor: 'pointer' }} onClick={() => { setEditIndexExp(null); setEditedExp(null); }}>
                         <GoBack />
                       </button>
                       <Tooltip title="Salvar alterações">
@@ -1116,7 +1128,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                 ) : (
                   <>
                     <Tooltip title="Dê duplo click para editar">
-                      <SkillTitle onClick={() => handleEditSkills(skillItem)}>
+                      <SkillTitle onDoubleClick={() => handleEditSkills(skillItem)}>
                         {skillItem.skill}
                       </SkillTitle>
                     </Tooltip>

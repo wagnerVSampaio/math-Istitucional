@@ -39,7 +39,7 @@ const App: React.FC = () => {
   
       // Recebe o JWT e os dados do usuário
       const { token, user } = await response.json();
-      
+
       if (response.ok){
         sessionStorage.setItem("authToken", token);
         sessionStorage.setItem("userData", JSON.stringify(user));
