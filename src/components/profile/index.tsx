@@ -69,17 +69,24 @@ type UserData = {
 };
 
 
-interface Education {
-  degree: string;
-  institution: string;
-  period: string;
+interface Experience {
+  id_experience: number;
+  id_user?: number;
+  company: string;
+  position: string;
+  start_date: string;
+  end_date: string;
 }
 
-interface Experience {
-  role: string;
-  company: string;
-  period: string;
+interface Education {
+  id_education: number;
+  id_user?: number;
+  institution: string;
+  course: string;
+  start_date: string;
+  completion_date: string;
 }
+
 
 interface Skills {
   id_skill: number;
@@ -94,14 +101,19 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   const [coverImage, setCoverImage] = useState<string | undefined>(undefined);
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [bioText, setBioText] = useState<string | undefined>("");
-  const [editIndexExperience, setEditIndexExperience] = useState<number | null>(null);
-  const [editedExperience, setEditedExperience] = useState<Experience | null>(null);
+
   const [editIndexEducations, setEditIndexEducations] = useState<number | null>(null);
   const [editedEducations, setEditedEducations] = useState<Education | null>(null);
   const [isModalOpenEdu, setIsModalOpenEdu] = useState(false);
   const [isModalOpenExperience, setIsModalOpenExperience] = useState(false);
   const [isEducationExpanded, setIsEducationExpanded] = useState(false);
+
+
+
+  const [editIndexExperience, setEditIndexExperience] = useState<number | null>(null);
+  const [editedExperience, setEditedExperience] = useState<Experience | null>(null);
   const [isExperienceExpanded, setIsExperienceExpanded] = useState(false);
+
   const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
@@ -166,120 +178,264 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
 
 
 
-  {/*LISTA TEMPORARIA DA EXPERIENCIA*/ }
-  const [experiences, setExperiences] = useState<Experience[]>([
-    {
-      company: "Empresa ABC",
-      period: "2018 a 2022",
-      role: "Desenvolvedor Full-Stack",
-    },
-    {
-      company: "Tech Solutions",
-      period: "2016 a 2018",
-      role: "Engenheiro de Software",
-    },
-    {
-      company: "Startup XYZ",
-      period: "2014 a 2016",
-      role: "Desenvolvedor Front-End",
-    },
-    {
-      company: "Global Corp",
-      period: "2022 a presente",
-      role: "Gerente de Projetos",
-    },
-    {
-      company: "E-commerce Experts",
-      period: "2020 a 2022",
-      role: "Líder de Desenvolvimento",
-    },
-    {
-      company: "EduTech Solutions",
-      period: "2017 a 2020",
-      role: "Desenvolvedor Back-End",
-    },
-    {
-      company: "FinTech Innovations",
-      period: "2015 a 2017",
-      role: "Analista de Sistemas",
-    },
-    { company: "Retail Masters", period: "2019 a 2021", role: "Consultor de TI" },
-    {
-      company: "Cloud Solutions",
-      period: "2021 a presente",
-      role: "Arquiteto de Software",
-    },
-    {
-      company: "AI Innovations",
-      period: "2019 a 2022",
-      role: "Cientista de Dados",
-    },
-  ]);
 
-  {/* EXPANDIR EXPERIÊNCIA */ }
-  const toggleExpandExperience = () => {
-    setIsExperienceExpanded(!isExperienceExpanded);
-  };
+  const [educations, setEducations] = useState<Education[]>([]);
+  const [isEducationsExpanded, setIsEducationsExpanded] = useState(false);
+  const [editIndexEducation, setEditIndexEducation] = useState<number | null>(null);
+  const [editedEducation, setEditedEducation] = useState<Education | null>(null);
+  const [isModalOpenEducation, setIsModalOpenEducation] = useState(false);
+  const [newEducation, setNewEducation] = useState<Education>({
+    institution: '',
+    course: '',
+    start_date: '',
+    completion_date: '',
+    id_education: 0,
+  });
 
-  {/*EDITA EXPERIENCIA*/ }
-  const handleEditExperience = (index: number) => {
-    setEditIndexExperience(index);
-    setEditedExperience(experiences[index]);
-  };
+  const handleAddEducation = async (newEducation: Education) => {
+    try {
+      const data = sessionStorage.getItem("userData");
+      if (!data) {
+        throw new Error("Usuário não está logado");
+      }
 
-  {/*DELETA EXPERIENCIA*/ }
-  const handleDeleteExperience = (index: number) => {
-    const newExperiences = experiences.filter((_, i) => i !== index);
-    setExperiences(newExperiences);
-  };
+      const userData = JSON.parse(data);
+      const idUser = userData.id_user;
 
-  {/*SALVA EXPERIENCIA*/ }
-  const handleSaveEditExperience = () => {
-    if (editIndexExperience !== null && editedExperience) {
-      const updatedExperiences = experiences.map((exp, index) =>
-        index === editIndexExperience ? editedExperience : exp
-      );
-      setExperiences(updatedExperiences);
-      setEditIndexExperience(null);
-      setEditedExperience(null);
+      const educationWithUser = { ...newEducation, id_user: idUser };
+
+      const response = await fetch('http://localhost:3002/api/createEdu', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(educationWithUser),
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao adicionar educação');
+      }
+
+      const addedEducation = await response.json();
+      setEducations([...educations, addedEducation]);
+      setIsModalOpenEducation(false);
+    } catch (error) {
+      console.error('Erro:', error);
     }
   };
 
-  {/*ADICIONA EXPERIENCIA*/ }
-  const handleAddExperience = (experience: Experience) => {
-    setExperiences([...experiences, experience]);
+
+  const idEducations = async () => {
+    const data = sessionStorage.getItem("userData");
+    if (!data) {
+      console.error('Usuário não encontrado.');
+      return;
+    }
+
+    try {
+      const userData = JSON.parse(data);
+      const idUser = userData.id_user;
+
+      const response = await fetch(`http://localhost:3002/api/idEdu/${idUser}`);
+
+      if (!response.ok) {
+        throw new Error('Erro ao buscar educações: ' + response.statusText);
+      }
+
+      const educationsData = await response.json();
+      setEducations(educationsData);
+    } catch (error) {
+      console.error('Erro ao buscar educações:', error);
+    }
+  };
+
+  useEffect(() => {
+    idEducations();
+  }, []);
+
+
+  const handleEditEducation = (education: Education) => {
+    setEditedEducation({
+      id_education: education.id_education,
+      institution: education.institution,
+      course: education.course,
+      start_date: education.start_date,
+      completion_date: education.completion_date,
+      id_user: education.id_user,
+    });
+    setEditIndexEducation(educations.indexOf(education));
+  };
+
+  const handleSaveEditEducation = async () => {
+    const data = sessionStorage.getItem("userData");
+    if (!data) {
+      console.error('Usuário não encontrado.');
+      return;
+    }
+    const userData = JSON.parse(data);
+    const idUser = userData.id_user;
+
+    if (editIndexEducation !== null && editedEducation) {
+      try {
+        const educationWithUser: Education = { ...editedEducation, id_user: idUser };
+
+        const response = await fetch(`http://localhost:3002/api/updateEdu/${editedEducation.id_education}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(educationWithUser),
+        });
+
+        if (!response.ok) {
+          throw new Error('Erro ao editar educação');
+        }
+
+        const updatedEducation = await response.json();
+        const updatedEducations = educations.map((education, index) =>
+          index === editIndexEducation ? updatedEducation : education
+        );
+
+        setEducations(updatedEducations);
+        setEditIndexEducation(null);
+        setEditedEducation(null);
+      } catch (error) {
+        console.error('Erro:', error);
+      }
+    }
   };
 
 
+  const handleDeleteEducation = async (id_education: number) => {
+    try {
+      const response = await fetch(`http://localhost:3002/api/deleteEdu/${id_education}`, {
+        method: 'DELETE',
+      });
 
+      if (!response.ok) {
+        throw new Error('Erro ao excluir educação');
+      }
 
-  {/*LISTA TEMPORARIA DA FORMACAO*/ }
-  const [educations, setEducations] = useState<Education[]>([
-    { degree: 'Bacharel em Ciência da Computação', institution: 'Universidade ABC', period: '2014 a 2018' },
-    { degree: 'Mestrado em Engenharia de Software', institution: 'Universidade XYZ', period: '2019 a 2021' }
-  ]);
-
-  {/*EDITA FORMAÇÃO*/ }
-  const handleEditEducation = (index: number) => {
-    setEditIndexEducations(index);
-    setEditedEducations(educations[index]);
-  };
-
-  {/*DELETA FORMAÇÃO*/ }
-  const handleDeleteEducation = (index: number) => {
-    const newEducations = educations.filter((_, i) => i !== index);
-    setEducations(newEducations);
-  };
-
-  {/*SALVA FORMAÇÃO*/ }
-  const handleSaveEditEducation = () => {
-    if (editIndexEducations !== null && editedEducations) {
-      const updatedEducations = educations.map((edu, index) =>
-        index === editIndexEducations ? editedEducations : edu
-      );
+      const updatedEducations = educations.filter(education => education.id_education !== id_education);
       setEducations(updatedEducations);
-      setEditIndexEducations(null);
-      setEditedEducations(null);
+    } catch (error) {
+      console.error('Erro ao excluir educação:', error);
+    }
+  };
+
+
+
+
+
+
+
+  const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [isExpExpanded, setIsExpExpanded] = useState(false);
+  const [editIndexExp, setEditIndexExp] = useState<number | null>(null);
+  const [editedExp, setEditedExp] = useState<Experience | null>(null);
+  const [isModalOpenExp, setIsModalOpenExp] = useState(false);
+  const [newExp, setNewExp] = useState<Experience>({
+    company: '',
+    position: '',
+    start_date: '',
+    end_date: '',
+    id_experience: 0,
+  });
+
+
+  const idExperiences = async () => {
+    const data = sessionStorage.getItem("userData");
+    if (!data) {
+      console.error('Usuário não encontrado.');
+      return;
+    }
+
+    try {
+      const userData = JSON.parse(data);
+      const idUser = userData.id_user;
+
+      const response = await fetch(`http://localhost:3002/api/idExp/${idUser}`);
+
+      if (!response.ok) {
+        throw new Error('Erro ao buscar experiências: ' + response.statusText);
+      }
+
+      const expData = await response.json();
+      setExperiences(expData);
+    } catch (error) {
+      console.error('Erro ao buscar experiências:', error);
+    }
+  };
+
+  useEffect(() => {
+    idExperiences(); 
+  }, [])
+
+  
+  const handleEditExp = (exp: Experience) => {
+    setEditedExp({
+      id_experience: exp.id_experience,
+      company: exp.company,
+      position: exp.position,
+      start_date: exp.start_date,
+      end_date: exp.end_date,
+    });
+    setEditIndexExp(experiences.indexOf(exp));
+  };
+
+  const handleSaveEditExp = async () => {
+    const data = sessionStorage.getItem("userData");
+    if (!data) {
+      console.error('Usuário não encontrado.');
+      return;
+    }
+    const userData = JSON.parse(data);
+    const idUser = userData.id_user;
+
+    if (editIndexExp !== null && editedExp) {
+      try {
+        const expWithUser = { ...editedExp, id_user: idUser };
+
+        const response = await fetch(`http://localhost:3002/api/updateExp/${editedExp.id_experience}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(expWithUser),
+        });
+
+        if (!response.ok) {
+          throw new Error('Erro ao editar experiência');
+        }
+
+        const updatedExp = await response.json();
+        const updatedExperiences = experiences.map((exp, index) =>
+          index === editIndexExp ? updatedExp : exp
+        );
+
+        setExperiences(updatedExperiences);
+        setEditIndexExp(null);
+        setEditedExp(null);
+      } catch (error) {
+        console.error('Erro:', error);
+      }
+    }
+  };
+
+  const handleDeleteExp = async (id_experience: number) => {
+    try {
+      const response = await fetch(`http://localhost:3002/api/deleteExp/${id_experience}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao excluir experiência');
+      }
+
+      const updatedExperiences = experiences.filter(exp => exp.id_experience !== id_experience);
+      setExperiences(updatedExperiences);
+    } catch (error) {
+      console.error('Erro:', error);
     }
   };
 
@@ -288,10 +444,50 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
     setIsEducationExpanded(!isEducationExpanded);
   };
 
-  {/*ADICIONA FORMAÇÃO*/ }
-  const handleAddEducation = (education: Education) => {
-    setEducations([...educations, education]);
+
+  // Função para adicionar uma nova habilidade
+  const handleAddExp = async (newExp: Experience) => {
+    try {
+      // Recupera os dados do usuário logado do sessionStorage
+      const data = sessionStorage.getItem("userData");
+      if (!data) {
+        throw new Error("Usuário não está logado");
+      }
+
+      // Converte os dados do usuário armazenados em JSON para um objeto
+      const userData = JSON.parse(data);
+      const idUser = userData.id_user; // Obtém o id_user do usuário logado
+
+      // Inclui o id_user no objeto newSkill
+      const expWithUser = { ...newExp, id_user: idUser };
+
+      // Fazendo a requisição para adicionar a habilidade ao banco de dados
+      const response = await fetch('http://localhost:3002/api/createExp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(expWithUser), // Enviando o objeto skill com id_user como JSON
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao adicionar habilidade');
+      }
+
+      // Adiciona a nova habilidade ao estado local
+      const addedExp = await response.json(); // Supondo que a resposta seja o objeto adicionado
+      setSkills([...skills, addedExp]);
+      setIsModalOpenSkills(false); // Fecha o modal após adicionar
+    } catch (error) {
+      console.error('Erro:', error);
+      // Adicionar uma notificação ou alerta para o usuário, se necessário
+    }
   };
+
+  const toggleExpandExperience = () => {
+    setIsExperienceExpanded(!isExperienceExpanded);
+  };
+
 
 
 
@@ -303,6 +499,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   const [editedSkills, setEditedSkills] = useState<Skills | null>(null);
   const [isModalOpenSkills, setIsModalOpenSkills] = useState(false);
   const [newSkill, setNewSkill] = useState<Skills>({ skill: '', number: 0, id_skill: 0 });
+
 
   // Função para adicionar uma nova habilidade
   const handleAddSkills = async (newSkill: Skills) => {
@@ -343,13 +540,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
     }
   };
 
-  /*  const handleSubmitNewSkill = () => {
-     if (newSkill.skill && newSkill.number && newSkill.id_job) {
-       handleAddSkills(newSkill);
-       // Limpar os campos após adicionar
-       setNewSkill({ skill: '', number: 0, id_job: 0 });
-     }
-   }; */
+
 
 
   // Função para buscar as habilidades do usuário
@@ -384,9 +575,15 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   }, []);
 
 
+
+
+
+
   const toggleExpandSkills = () => {
     setIsSkillsExpanded(!isSkillsExpanded);
   };
+
+
 
 
   const handleEditSkills = (skill: Skills) => {
@@ -398,6 +595,9 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
     setEditIndexSkills(skills.indexOf(skill)); // Para saber qual habilidade está sendo editada
   };
 
+
+
+
   const handleSaveEditSkills = async () => {
     const data = sessionStorage.getItem("userData");
     if (!data) {
@@ -405,17 +605,17 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
       return;
     }
     const userData = JSON.parse(data);
-    const idUser = userData.id_user; 
+    const idUser = userData.id_user;
 
     if (editIndexSkills !== null && editedSkills) {
       try {
         // Verifique se editedSkills.skill e editedSkills.number não são null ou undefined
         const skill = editedSkills.skill ?? ""; // Use uma string vazia como fallback
         const number = editedSkills.number ?? 0; // Use 0 como fallback se number for null
-      
+
         // Inclui o id_user no objeto skillWithUser
         const skillWithUser = { ...editedSkills, skill, number, id_user: idUser };
-      
+
         // Fazendo a requisição para atualizar a habilidade no banco de dados
         const response = await fetch(`http://localhost:3002/api/updateSkill/${editedSkills.id_skill}`, {
           method: 'PUT', // Usando o método PUT para atualizar
@@ -424,29 +624,31 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
           },
           body: JSON.stringify(skillWithUser), // Enviando o objeto completo como JSON
         });
-      
+
         if (!response.ok) {
           throw new Error('Erro ao editar habilidade');
         }
-      
+
         const updatedSkill = await response.json(); // Obtém a habilidade atualizada da resposta
-      
+
         // Atualiza a lista de habilidades no estado local
         const updatedSkills = skills.map((skill, index) =>
           index === editIndexSkills ? updatedSkill : skill
         );
-      
+
         setSkills(updatedSkills); // Atualiza o estado com a habilidade editada
         setEditIndexSkills(null); // Reseta o índice de edição
         setEditedSkills(null); // Reseta as habilidades editadas
       } catch (error) {
         console.error('Erro:', error);
         // Você pode adicionar uma notificação ou alerta para o usuário
-      }      
+      }
     } else {
       console.error('Edit index or edited skills is null');
     }
   };
+
+
 
 
 
@@ -456,11 +658,11 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
       const response = await fetch(`http://localhost:3002/api/deleteSkill/${id_skill}`, {
         method: 'DELETE',
       });
-  
+
       if (!response.ok) {
         throw new Error('Erro ao excluir habilidade');
       }
-  
+
       // Atualiza a lista de habilidades no estado local
       const updatedSkills = skills.filter(skill => skill.id_skill !== Number(id_skill)); // Certifique-se de que id_skill seja um número
       setSkills(updatedSkills); // Atualiza o estado com a lista de habilidades sem a excluída
@@ -469,8 +671,20 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
       // Você pode adicionar uma notificação ou alerta para o usuário
     }
   };
-  
 
+  const formatDate = (dateString: string | undefined): string => {
+    if (!dateString) return ''; // Retorna string vazia se não houver data
+    const date = new Date(dateString);
+    
+    // Definindo opções de formatação para exibir como "25 de janeiro de 2024"
+    const options: Intl.DateTimeFormatOptions = { 
+      day: 'numeric', 
+      month: 'long', 
+      year: 'numeric' 
+    };
+  
+    return date.toLocaleDateString('pt-BR', options);
+  };
 
 
   return (
@@ -597,8 +811,8 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                       <Profile
                         type="text"
                         style={{ width: "350px" }}
-                        value={editedEducations?.degree || ''}
-                        onChange={(e) => setEditedEducations({ ...editedEducations!, degree: e.target.value })}
+                        value={editedEducations?.course || ''}
+                        onChange={(e) => setEditedEducations({ ...editedEducations!, course: e.target.value })}
                         placeholder="Curso"
                       />
                       <div className="flex">
@@ -612,8 +826,15 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                         <Profile
                           type="text"
                           style={{ width: "200px", marginTop: '4px', marginLeft: '10px' }}
-                          value={editedEducations?.period || ''}
-                          onChange={(e) => setEditedEducations({ ...editedEducations!, period: e.target.value })}
+                          value={editedEducations?.start_date || ''}
+                          onChange={(e) => setEditedEducations({ ...editedEducations!, start_date: e.target.value })}
+                          placeholder="Período"
+                        />
+                        <Profile
+                          type="text"
+                          style={{ width: "200px", marginTop: '4px', marginLeft: '10px' }}
+                          value={editedEducations?.completion_date || ''}
+                          onChange={(e) => setEditedEducations({ ...editedEducations!, completion_date: e.target.value })}
                           placeholder="Período"
                         />
                       </div>
@@ -621,12 +842,12 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                   ) : (
                     <>
                       <Tooltip title="Dê duplo click para editar">
-                        <CompanyName onClick={() => handleEditEducation(index)}>
-                          {education.degree}
+                        <CompanyName onClick={() => handleEditEducation(education)}>
+                          {education.course}
                         </CompanyName>
                       </Tooltip>
                       <Period>
-                        <span>{education.institution}</span> - {education.period}
+                        <span>{education.institution}</span> - {formatDate(education.start_date)} - {formatDate(education.completion_date)}
                       </Period>
                     </>
                   )}
@@ -653,9 +874,11 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                   onSubmit={(e) => {
                     e.preventDefault();
                     const newEducation = {
-                      degree: (e.target as any).degree.value,
+                      id_education: 0, 
                       institution: (e.target as any).institution.value,
-                      period: (e.target as any).period.value,
+                      course: (e.target as any).course.value,
+                      start_date: (e.target as any).start_date.value,
+                      completion_date: (e.target as any).completion_date.value,
                     };
                     handleAddEducation(newEducation);
                     setIsModalOpenEdu(false);
@@ -663,7 +886,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                 >
                   <Input
                     type="text"
-                    name="degree"
+                    name="course"
                     placeholder="Curso"
                     required
                   />
@@ -674,9 +897,15 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                     required
                   />
                   <Input
-                    type="text"
-                    name="period"
-                    placeholder="Período"
+                    type="date"
+                    name="start_date"
+                    placeholder="Início"
+                    required
+                  />
+                  <Input
+                    type="date"
+                    name="completion_date"
+                    placeholder="Conclusão"
                     required
                   />
                   <div className="flex align-center justify-center">
@@ -693,59 +922,69 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
           <Title>
             Experiências
             <div className="flex gap-4">
-              <button style={{ cursor: 'pointer' }} onClick={() => setIsModalOpenExperience(true)}><Tooltip title="Adicionar nova experiência">
-                <Add />
-              </Tooltip></button>
-              {isExperienceExpanded ? (
-                <Tooltip title="Esconder experiências adicionadas">
+              <button style={{ cursor: 'pointer' }} onClick={() => setIsModalOpenExperience(true)}>
+                <Tooltip title="Adicionar nova experiência">
+                  <Add />
+                </Tooltip>
+              </button>
+              <Tooltip title={isExperienceExpanded ? "Esconder experiências adicionadas" : "Mostrar todas as experiências adicionadas"}>
+                {isExperienceExpanded ? (
                   <ArrowUp onClick={toggleExpandExperience} style={{ cursor: 'pointer' }} />
-                </Tooltip>
-              ) : (
-                <Tooltip title="Mostrar todas as experiências adicionadas">
+                ) : (
                   <ArrowDown onClick={toggleExpandExperience} style={{ cursor: 'pointer' }} />
-                </Tooltip>
-              )}
+                )}
+              </Tooltip>
             </div>
           </Title>
+
           <List>
-            {experiences.slice(0, isExperienceExpanded ? experiences.length : 2).map((experience, index) => (
-              <ListItem key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  {editIndexExperience === index ? (
-                    <>
-                      <Profile
-                        type="text"
-                        style={{ width: "350px" }}
-                        value={editedExperience?.role || ''}
-                        onChange={(e) => setEditedExperience({ ...editedExperience!, role: e.target.value })}
-                        placeholder="Cargo"
-                      />
-                      <div className="flex">
-                        <Profile
-                          type="text"
-                          style={{ width: "200px", marginTop: '4px' }}
-                          value={editedExperience?.company || ''}
-                          onChange={(e) => setEditedExperience({ ...editedExperience!, company: e.target.value })}
-                          placeholder="Empresa"
-                        />
-                        <Profile
-                          type="text"
-                          style={{ width: "200px", marginTop: '4px', marginLeft: '10px' }}
-                          value={editedExperience?.period || ''}
-                          onChange={(e) => setEditedExperience({ ...editedExperience!, period: e.target.value })}
-                          placeholder="Período"
-                        />
-                      </div>
-                    </>
+  {experiences.slice(0, isExperienceExpanded ? experiences.length : 2).map((experience, index) => (
+    <ListItem key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        {editIndexExperience === index ? (
+          <>
+            <Profile
+              type="text"
+              style={{ width: "350px" }}
+              value={editedExperience?.position || ''} // Corrigido para position
+              onChange={(e) => setEditedExperience({ ...editedExperience!, position: e.target.value })} // Corrigido para position
+              placeholder="Cargo"
+            />
+            <div className="flex">
+              <Profile
+                type="text"
+                style={{ width: "200px", marginTop: '4px' }}
+                value={editedExperience?.company || ''} // Este estava correto
+                onChange={(e) => setEditedExperience({ ...editedExperience!, company: e.target.value })}
+                placeholder="Empresa"
+              />
+              <Profile
+                type="date"
+                style={{ width: "200px", marginTop: '4px', marginLeft: '10px' }}
+                value={editedExperience?.start_date || ''}
+                onChange={(e) => setEditedExperience({ ...editedExperience!, start_date: e.target.value })}
+                placeholder="Data de Início"
+              />
+              <Profile
+                type="date"
+                style={{ width: "200px", marginTop: '4px', marginLeft: '10px' }}
+                value={editedExperience?.end_date || ''}
+                onChange={(e) => setEditedExperience({ ...editedExperience!, end_date: e.target.value })}
+                placeholder="Data de Conclusão"
+              />
+            </div>
+          </>
                   ) : (
                     <>
                       <Tooltip title="Dê duplo click para editar">
-                        <CompanyName onClick={() => handleEditExperience(index)}>
-                          {experience.role}
+                        <CompanyName onDoubleClick={() => handleEditExp(experience)}>
+                          {experience.company}
                         </CompanyName>
+
+
                       </Tooltip>
                       <Period>
-                        <span>{experience.company}</span> - {experience.period}
+                        <span>{experience.company}</span> - {formatDate(experience.start_date)} a {formatDate(experience.end_date)}
                       </Period>
                     </>
                   )}
@@ -753,13 +992,20 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                 <div style={{ display: 'flex', justifyContent: "space-between", gap: '20px' }}>
                   {editIndexExperience === index && (
                     <>
-                      <button style={{ cursor: 'pointer' }} onClick={() => { setEditIndexExperience(null); setEditedExperience(null); }}><GoBack /></button>
+                      <button style={{ cursor: 'pointer' }} onClick={() => { setEditIndexExperience(null); setEditedExperience(null); }}>
+                        <GoBack />
+                      </button>
                       <Tooltip title="Salvar alterações">
-                        <button style={{ cursor: 'pointer' }} onClick={handleSaveEditExperience}><Save /></button></Tooltip>
+                        <button style={{ cursor: 'pointer' }} onClick={handleSaveEditExp}>
+                          <Save />
+                        </button>
+                      </Tooltip>
                     </>
                   )}
                   <Tooltip title="Excluir experiência" placement="left">
-                    <button style={{ cursor: 'pointer' }} onClick={() => handleDeleteExperience(index)}><Delete /></button>
+                    <button style={{ cursor: 'pointer' }} onClick={() => handleDeleteExp(index)}>
+                      <Delete />
+                    </button>
                   </Tooltip>
                 </div>
               </ListItem>
@@ -772,19 +1018,24 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                 <H2Exp>Adicionar nova experiência</H2Exp>
                 <form
                   onSubmit={(e) => {
-                    e.preventDefault();
-                    const newExperience = {
-                      role: (e.target as any).role.value,
+                    e.preventDefault(); // Previne o comportamento padrão do formulário
+
+                    // Acessa os valores dos campos usando e.target
+                    const newExp = {
+                      id_experience: 0, // Você pode definir um ID adequado ou gerá-lo na lógica de backend
                       company: (e.target as any).company.value,
-                      period: (e.target as any).period.value,
+                      position: (e.target as any).position.value,
+                      start_date: (e.target as any).start_date.value,
+                      end_date: (e.target as any).end_date.value,
                     };
-                    handleAddExperience(newExperience);
-                    setIsModalOpenExperience(false);
+
+                    handleAddExp(newExp); // Passa o novo objeto de experiência para a função
+                    setIsModalOpenExperience(false); // Fecha o modal
                   }}
                 >
                   <Input
                     type="text"
-                    name="role"
+                    name="position"
                     placeholder="Cargo"
                     required
                   />
@@ -795,9 +1046,15 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                     required
                   />
                   <Input
-                    type="text"
-                    name="period"
-                    placeholder="Período"
+                    type="date"
+                    name="start_date"
+                    placeholder="Data de Início"
+                    required
+                  />
+                  <Input
+                    type="date"
+                    name="end_date"
+                    placeholder="Data de Conclusão"
                     required
                   />
                   <div className="flex align-center justify-center">
@@ -809,6 +1066,8 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
             </ModalOverlay>
           )}
         </Container>
+
+
 
         <SkillsContainer>
           <Title>
