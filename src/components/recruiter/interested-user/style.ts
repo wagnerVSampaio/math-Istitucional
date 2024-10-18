@@ -34,14 +34,14 @@ export const StyledLi = styled.li`
   align-items: center;
 `;
 export const StyledParagraph = styled.ul`
-  font-size: 25px;
+  font-size: 30px;
   color: #006b3f;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   font-weight: bold;
 `;
 export const StyledP = styled.ul`
   display: flex;
-  font-size: 15px;
+  font-size: 18px;
 `;
 export const ButtonFavorite = styled.button`
   padding: 8px 30px;
@@ -84,4 +84,20 @@ export const FavoriteSelect = styled(FaStar)`
   font-size: 15px;
   color: #006B3F;
   cursor: pointer;
+`;
+export const StyledImageContainer = styled.div`
+width: 100px;           /* Largura do círculo */
+height: 100px;          /* Altura do círculo */
+border-radius: 50%;     /* Forma circular */
+overflow: hidden;       /* Esconde a parte da imagem que sai do círculo */
+display: flex;          /* Para centralizar a imagem */
+align-items: center;    /* Centraliza verticalmente */
+justify-content: center; /* Centraliza horizontalmente */
+margin-left: 30px;
+margin-right: 20px;
+`;
+export const StyledImage = styled.img`
+width: 100%;            /* Ajusta a largura da imagem ao contêiner */
+height: auto;           /* Mantém a proporção da imagem */
+object-fit: cover;      /* Cobre o contêiner, cortando as partes que sobram */
 `;
