@@ -3,7 +3,6 @@ import { AiTwotoneDelete } from "react-icons/ai";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { MdRemoveRedEye } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 
 export const Total = styled.div`
@@ -17,7 +16,7 @@ export const DivSearch = styled.div`
 
 export const DivTopSearch = styled.div`
     margin: 5px auto;
-    width: 70%;
+    width: 85%;
     border-radius: 10px;
     border: 1px solid #ddd;
     background-color: #ffff;
@@ -89,7 +88,7 @@ export const ButtonEdit = styled.button`
 
 export const DivNotification = styled.div`
     margin: 5px auto;
-    width: 70%;
+    width: 85%;
     border-radius: 10px;
     color: #272727;
     margin-top: 10px;
@@ -115,7 +114,7 @@ export const StyledLi = styled.li`
 `;
 
 export const StyledParagraph = styled.p`
-  font-size: 20px;
+  font-size: 22px;
   color: #006b3f;
   margin-bottom: 15px;
   font-weight: bold;

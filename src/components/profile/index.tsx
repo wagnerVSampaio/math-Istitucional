@@ -101,17 +101,9 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   const [coverImage, setCoverImage] = useState<string | undefined>(undefined);
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [bioText, setBioText] = useState<string | undefined>("");
-
-  const [editIndexEducations, setEditIndexEducations] = useState<number | null>(null);
-  const [editedEducations, setEditedEducations] = useState<Education | null>(null);
   const [isModalOpenEdu, setIsModalOpenEdu] = useState(false);
   const [isModalOpenExperience, setIsModalOpenExperience] = useState(false);
   const [isEducationExpanded, setIsEducationExpanded] = useState(false);
-
-
-
-  const [editIndexExperience, setEditIndexExperience] = useState<number | null>(null);
-  const [editedExperience, setEditedExperience] = useState<Experience | null>(null);
   const [isExperienceExpanded, setIsExperienceExpanded] = useState(false);
 
   const [userData, setUserData] = useState<any>(null);
@@ -119,25 +111,67 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   useEffect(() => {
     const data = sessionStorage.getItem("userData");
     if (data) {
-      setUserData(JSON.parse(data));
+      const parsedData = JSON.parse(data);
+      setUserData(parsedData);
+      const imageUrl = parsedData.profile_picture || "/profile.png"; // Define a imagem de perfil ou uma padrão
+      console.log('Imagem de perfil:', imageUrl); // Verifique a URL da imagem aqui
+      setProfileImage(imageUrl);
     }
   }, []);
 
   {/*ALTERA FOTO DE PERFIL */ }
-  const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCoverImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        setCoverImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  
+  
+  
+  const [updateImage, setUpdateImage] = useState<string | null>(null); // Estado para a imagem de atualização
+
+  const handleUpdateImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      setProfileImage(imageUrl);
+      setUpdateImage(imageUrl); // Atualiza a imagem de visualização
     }
   };
 
-  {/*ALTERA FOTO DE CAPA*/ }
-  const handleCoverImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setCoverImage(imageUrl);
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    const idUser = userData.id_user;
+    if (updateImage) {
+      // Converte a URL da imagem de volta em um arquivo se você precisar enviar a imagem para a API
+      const response = await fetch(updateImage);
+      const blob = await response.blob();
+      const file = new File([blob], 'profile_picture.jpg', { type: blob.type });
+      formData.append('profile_picture', file);
+    }
+
+    // Envie os dados do formulário para a sua API
+    try {
+      const response = await fetch(`http://localhost:3002/api/updatePhoto/${idUser}`, {
+        method: 'PUT',
+        body: formData,
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Imagem atualizada com sucesso:', result);
+        // Aqui você pode atualizar o estado global ou local conforme necessário
+      } else {
+        const errorData = await response.json();
+        console.error('Erro ao atualizar a imagem do perfil:', errorData.message);
+        // Manipule erros como necessário
+      }
+    } catch (error) {
+      console.error('Erro na requisição:', error);
     }
   };
 
@@ -174,7 +208,6 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
       }
     }
   };
-
 
 
 
@@ -702,6 +735,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
     <>
       <GeneralItens>
         <DivTop>
+          <form onSubmit={handleSubmit}>
           <ImageCover className="relative">
             <img
               src={coverImage || "/cover.png"}
@@ -722,21 +756,21 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
 
           <ImageWrapper className="relative">
             <img
-              src={profileImage || "/profile.png"}
-              alt="Profile"
-              className="w-full h-[150px] object-cover"
-            />
-            <UploadButton
-              type="file"
-              accept="image/*"
-              id="profileImageUpload"
-              onChange={handleProfileImageChange}
+                  src={`http://localhost:3002/uploads/${profileImage}`} 
+                  alt="Profile"
+                  className="w-full h-[150px] object-cover"
+                />
+                <UploadButton
+                  type="file"
+                  accept="image/*"
+                  id="profileImageUpload"
+                  onChange={handleUpdateImageChange}
             />
             <ButtonLabel htmlFor="profileImageUpload">
               <FaCamera />
             </ButtonLabel>
           </ImageWrapper>
-
+          </form>
           <DivParagraph>
             <p>{userData?.full_name}</p>
             <DivIconShare>
@@ -823,7 +857,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                         type="text"
                         style={{ width: "350px" }}
                         value={editedEducation?.course || ''}
-                        onChange={(e) => setEditedEducation({ ...editedEducations!, course: e.target.value })}
+                        onChange={(e) => setEditedEducation({ ...editedEducation!, course: e.target.value })}
                         placeholder="Curso"
                       />
                       <div className="flex">
@@ -831,21 +865,21 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                           type="text"
                           style={{ width: "200px", marginTop: '4px' }}
                           value={editedEducation?.institution || ''}
-                          onChange={(e) => setEditedEducation({ ...editedEducations!, institution: e.target.value })}
+                          onChange={(e) => setEditedEducation({ ...editedEducation!, institution: e.target.value })}
                           placeholder="Universidade"
                       />
                       <Profile
                           type="date"
                           style={{ width: "200px", marginTop: '4px', marginLeft: '10px' }}
                           value={formatDateForInput(editedEducation?.start_date) || ''}
-                          onChange={(e) => setEditedEducation({ ...editedEducations!, start_date: e.target.value })}
+                          onChange={(e) => setEditedEducation({ ...editedEducation!, start_date: e.target.value })}
                           placeholder="Período"
                       />
                       <Profile
                           type="date"
                           style={{ width: "200px", marginTop: '4px', marginLeft: '10px' }}
                           value={formatDateForInput(editedEducation?.completion_date) || ''}
-                          onChange={(e) => setEditedEducation({ ...editedEducations!, completion_date: e.target.value })}
+                          onChange={(e) => setEditedEducation({ ...editedEducation!, completion_date: e.target.value })}
                           placeholder="Período"
                       />
                       </div>

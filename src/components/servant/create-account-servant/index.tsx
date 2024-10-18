@@ -114,6 +114,21 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
     }
   };
 
+  const formateCPF = (value: string) => {
+    const apenasNumeros = value.replace(/\D/g, '');
+    const formatado = apenasNumeros
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    return formatado;
+};
+
+const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    const cpfFormatado = formateCPF(value);
+    setCpf(cpfFormatado);
+};
+
   return (
     <Form
       labelCol={{ span: 1 }}

@@ -1,6 +1,6 @@
 import { UserOutlined } from '@ant-design/icons/lib/icons';
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Tooltip, Modal, Checkbox, Button, InputNumber } from 'antd/lib';
+import { Form, Input, Tooltip, Modal, Checkbox, Button, InputNumber, message } from 'antd/lib';
 import * as style from "./style";
 
 type JobDetails = {
@@ -124,23 +124,15 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
     fetchJobs();
   }, []);
   
-/*   const handleEditJob = (job: JobDetails) => {
+  const handleEditJob = (job: JobDetails) => {
     setEditingJob(job);
     setIsModalVisible(true);
-  }; */
+  }; 
 
-/*   const handleDeleteJob = async (id: number) => {
-    try {
-      await fetch(`http://localhost:3002/api/deleteVaga/${id}`, { method: "DELETE" });
-      setJobs(jobs.filter((job) => job.id !== id));
-    } catch (error) {
-      console.error("Erro ao deletar a vaga:", error);
-    }
-  }; */
 
-  /* const handleModalOk = async (values: JobDetails) => {
+   const handleModalOk = async (values: JobDetails) => {
     try {
-      await fetch(`http://localhost:3002/api/updateVaga/${editingJob?.id}`, {
+      await fetch(`http://localhost:3002/api/updateVaga/${editingJob?.id_job}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -148,7 +140,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
         body: JSON.stringify(values),
       });
       setJobs((prevJobs) =>
-        prevJobs.map((job) => (job.id === editingJob?.id ? { ...job, ...values } : job))
+        prevJobs.map((job) => (job.id_job === editingJob?.id_job ? { ...job, ...values } : job))
       );
       setIsModalVisible(false);
       setEditingJob(null);
@@ -160,7 +152,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
   const handleModalCancel = () => {
     setIsModalVisible(false);
     setEditingJob(null);
-  }; */
+  }; 
 
 
   
@@ -229,6 +221,37 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
   const otherUsers = filteredUsers.filter(user => user.id_job!== usersId);
 
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [jobDetails, setJobDetails] = useState<JobDetails | null>(null);
+
+  useEffect(() => {
+    // Carrega as informações da vaga ao montar o componente
+    const fetchJobDetails = async (jobId: number) => {
+      setLoading(true);
+      try {
+        const response = await fetch(`http://localhost:3002/api/getVagaIDRecruiter/${jobId}`);
+        const data: JobDetails = await response.json();
+        setJobDetails(data);
+      } catch (error) {
+        console.error('Erro ao carregar detalhes da vaga:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (usersId) {
+      fetchJobDetails(usersId); // Aqui você deve passar o ID correto da vaga
+    }
+  }, [usersId]);
+
+  const handleEditClick = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
   return (
     <>
       <style.Total>
@@ -269,7 +292,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
                       }}
                     >
                       <div className="flex flex-col m-[20px]">
-                        <style.StyledParagraph>{user.title} <Tooltip title="Editar vaga"><style.EditJob/></Tooltip></style.StyledParagraph>
+                        <style.StyledParagraph>{user.title} <Tooltip title="Editar vaga"><style.EditJob onClick={handleEditClick} /></Tooltip></style.StyledParagraph>
                         <style.StyledP>
                           <style.Address /> {user.location}
                         </style.StyledP>
@@ -318,7 +341,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
         open={isModalVisibleAdd}
         onCancel={handleCancelAdd}
         footer={null}
-        width={600}
+        width={700}
         style={{top: 10}}
       >
         <style.Container>
@@ -383,28 +406,12 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
 
 
             <Form.Item
-              label="Contato"
+              label="E-mail para contato"
               name="contact"
               rules={[{ required: true, message: 'Por favor, insira o contato!' }]}
             >
-              <Input placeholder="Contato" />
+              <Input placeholder="Adicione o e-mail para contato" />
             </Form.Item>
-
-            {/* <Form.Item
-              label="Lotação"
-              name="prorectory"
-              rules={[{ required: true, message: 'Por favor, selecione a lotação!' }]}
-            >
-              <Select placeholder="Selecione uma Lotação">
-              <Option value="PROAD">PROAD - Pró-Reitoria de Administração</Option>
-                  <Option value="PROCCE">PROCCE -  Pró-Reitoria da Cultura,Comunidade e Extensão</Option>
-                  <Option value="PROPLAN">PROPLAN - Pró-Reitoria de Planejamento e Desenvolvimento Institucional</Option>
-                  <Option value="PROGES">PROGES - Pró-Reitoria de Gestão Estudantil</Option>
-                  <Option value="PROEN">PROEN -  Pró-Reitoria de Ensino de Graduação</Option>
-                  <Option value="PROGEP">PROGEP -  Pró-Reitoria de Gestão de Pessoas</Option>
-                  <Option value="PROPPIT">PROPPIT -  Pró-Reitoria de Pesquisa, Pós-Graduação e Inovação Tecnológica</Option>
-              </Select>
-            </Form.Item> */}
 
             <Form.Item>
               <Button type="primary" htmlType="submit" loading={loading} block>
@@ -414,6 +421,53 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
           </Form>
         </style.Container>
       </Modal>
+      {jobDetails && (
+        <Modal
+          title="Editar Vaga"
+          visible={isModalVisible}
+          onCancel={handleCancel}
+          footer={null}
+        >
+          <Form
+            layout="vertical"
+            initialValues={jobDetails}
+            /* onFinish={handleFinish} */
+          >
+            <Form.Item label="Título" name="title" rules={[{  message: 'Por favor, insira o título da vaga!' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Descrição" name="description" rules={[{  message: 'Por favor, insira a descrição!' }]}>
+              <Input.TextArea />
+            </Form.Item>
+            <Form.Item label="Requisitos" name="requirements" rules={[{  message: 'Por favor, insira os requisitos!' }]}>
+              <Input.TextArea />
+            </Form.Item>
+            <Form.Item label="Benefícios" name="benefits" rules={[{  message: 'Por favor, insira os benefícios!' }]}>
+              <Input.TextArea />
+            </Form.Item>
+            <Form.Item label="Localização" name="location" rules={[{  message: 'Por favor, insira a localização!' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Data de Publicação" name="posted_at" rules={[{  message: 'Por favor, insira a data de publicação!' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Salário" name="salary" rules={[{  message: 'Por favor, insira o salário!' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Contato" name="contact" rules={[{  message: 'Por favor, insira o contato!' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Salvar
+              </Button>
+              <Button onClick={handleCancel} style={{ marginLeft: '10px' }}>
+                Cancelar
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
+      )}
     </>
   );
 };

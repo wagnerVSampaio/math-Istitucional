@@ -46,7 +46,6 @@ const App: React.FC = () => {
     
         setUserData(user); // Atualiza o estado com os dados do usuário
       
-      // Redirecionamento com base no tipo de usuário
         if (user.user_type === 'recruiter' && user.status === 'approved') {
           router.push("/inside-recruiter");
         } else if (user.user_type === 'server') {
