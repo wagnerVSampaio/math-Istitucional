@@ -25,7 +25,7 @@ export const DivMenu = styled.div`
 export const StyledParagraph = styled.div`
     margin-top: 50px;
     padding-bottom: 10px;
-    font-size: 14px;
+    font-size: 11px;
     text-align: center;
     border-bottom: 1px solid #ddd;
     color: #006B3F;

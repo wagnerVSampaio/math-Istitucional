@@ -36,12 +36,13 @@ export const StyledLi = styled.li`
 export const StyledParagraph = styled.ul`
   font-size: 30px;
   color: #006b3f;
-  margin-bottom: 10px;
   font-weight: bold;
+  margin-bottom: 4px;
 `;
 export const StyledP = styled.ul`
   display: flex;
   font-size: 18px;
+  
 `;
 export const ButtonFavorite = styled.button`
   padding: 8px 30px;

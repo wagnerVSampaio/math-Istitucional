@@ -127,7 +127,7 @@ const Jobs: React.FC = () => {
         ) : (
           itensDaPaginaAtual.map((job) => (
             <JobCard
-              key={job.id}
+              key={job.id_job}
               title={job.title}
               description={job.description}
               location={job.location}
@@ -158,7 +158,7 @@ const Jobs: React.FC = () => {
       >
         {selectedJob && (
           <JobDetails
-            id={selectedJob.id}
+            id_job={selectedJob.id_job}
             title={selectedJob.title}
             description={selectedJob.description}
             requirements={selectedJob.requirements}
