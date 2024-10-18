@@ -1,53 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from "react";
-import {
-  ButtonLabel,
-  ImageCover,
-  DivTop,
-  ImageWrapper,
-  UploadButton,
-  ButtonCoverLabel,
-  DivButton,
-  DivParagraph,
-  EditProfileButton,
-  ProfileButton,
-  DivIcon,
-  DivIconShare,
-  DivBio,
-  DivEdit,
-  DivSave,
-  DivP,
-  Textarea,
-  Container,
-  Title,
-  List,
-  ListItem,
-  CompanyName,
-  Period,
-  Wrapper,
-  Heading,
-  EducationList,
-  SkillsContainer,
-  SkillTitle,
-  ProgressBarContainer,
-  ProgressBar,
-  SkillPercentage,
-  Star,
-  GeneralItens,
-  Add,
-  ArrowDown,
-  ArrowUp,
-  Delete,
-  Save,
-  GoBack,
-  Profile,
-  ModalOverlay,
-  ModalContent,
-  CloseButton,
-  Input,
-  AddExpButton,
-  H2Exp
-} from "./style";
+import * as style from "./style";
 import { FaCamera } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
 import { FaShareAltSquare } from "react-icons/fa";
@@ -56,7 +9,7 @@ import { AiOutlineSave } from "react-icons/ai";
 import Link from "next/link";
 import { Tooltip } from "antd/lib";
 
-type UserData = {
+export type UserData = {
   id_user: number;
   full_name: string;
   profile_picture: string;
@@ -69,7 +22,7 @@ type UserData = {
 };
 
 
-interface Experience {
+export interface Experience {
   id_experience: number;
   id_user?: number;
   company: string;
@@ -78,7 +31,7 @@ interface Experience {
   end_date: string;
 }
 
-interface Education {
+export interface Education {
   id_education: number;
   id_user?: number;
   institution: string;
@@ -88,7 +41,7 @@ interface Education {
 }
 
 
-interface Skills {
+export interface Skills {
   id_skill: number;
   skill: string;
   number: number;
@@ -113,8 +66,8 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
     if (data) {
       const parsedData = JSON.parse(data);
       setUserData(parsedData);
-      const imageUrl = parsedData.profile_picture || "/profile.png"; // Define a imagem de perfil ou uma padrão
-      console.log('Imagem de perfil:', imageUrl); // Verifique a URL da imagem aqui
+      const imageUrl = parsedData.profile_picture || "/profile.png";
+      console.log('Imagem de perfil:', imageUrl);
       setProfileImage(imageUrl);
     }
   }, []);
@@ -130,9 +83,9 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
       reader.readAsDataURL(file);
     }
   };
-  
-  
-  
+
+
+
   const [updateImage, setUpdateImage] = useState<string | null>(null); // Estado para a imagem de atualização
 
   const handleUpdateImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -160,7 +113,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
         method: 'PUT',
         body: formData,
       });
-      
+
       if (response.ok) {
         const result = await response.json();
         console.log('Imagem atualizada com sucesso:', result);
@@ -213,17 +166,9 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
 
 
   const [educations, setEducations] = useState<Education[]>([]);
-  const [isEducationsExpanded, setIsEducationsExpanded] = useState(false);
   const [editIndexEducation, setEditIndexEducation] = useState<number | null>(null);
   const [editedEducation, setEditedEducation] = useState<Education | null>(null);
   const [isModalOpenEducation, setIsModalOpenEducation] = useState(false);
-  const [newEducation, setNewEducation] = useState<Education>({
-    institution: '',
-    course: '',
-    start_date: '',
-    completion_date: '',
-    id_education: 0,
-  });
 
   const handleAddEducation = async (newEducation: Education) => {
     try {
@@ -345,20 +290,30 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
       const response = await fetch(`http://localhost:3002/api/deleteEdu/${id_education}`, {
         method: 'DELETE',
       });
-  
+
       if (!response.ok) {
         throw new Error('Erro ao excluir educação');
       }
-  
-      // Atualiza a lista de educations no estado local
-      const updatedEducations = educations.filter(education => education.id_education !== Number(id_education)); // Certifica-se de que id_education seja um número
-      setEducations(updatedEducations); // Atualiza o estado com a lista de educations sem a excluída
+
+
+      const updatedExp = await response.json();
+
+      const updatedExperience = skills.map((experience, index) =>
+        index === editIndexExp ? updatedExp : experience
+      );
+
+      setExperiences(updatedExperience);
+      setEditIndexExp(null);
+      setEditedExp(null);
+
+      const updatedEducations = educations.filter(education => education.id_education !== Number(id_education));
+      setEducations(updatedEducations);
     } catch (error) {
       console.error('Erro ao excluir educação:', error);
-      // Você pode adicionar uma notificação ou alerta para o usuário
     }
   };
-  
+
+
 
 
 
@@ -367,18 +322,8 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
 
 
   const [experiences, setExperiences] = useState<Experience[]>([]);
-  const [isExpExpanded, setIsExpExpanded] = useState(false);
   const [editIndexExp, setEditIndexExp] = useState<number | null>(null);
   const [editedExp, setEditedExp] = useState<Experience | null>(null);
-  const [isModalOpenExp, setIsModalOpenExp] = useState(false);
-  const [newExp, setNewExp] = useState<Experience>({
-    company: '',
-    position: '',
-    start_date: '',
-    end_date: '',
-    id_experience: 0,
-  });
-
 
   const idExperiences = async () => {
     const data = sessionStorage.getItem("userData");
@@ -461,6 +406,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   };
 
   const handleDeleteExp = async (id_experience: number) => {
+    console.log('ID da experiência a ser excluída:', id_experience); // Log do ID
     try {
       const response = await fetch(`http://localhost:3002/api/deleteExp/${id_experience}`, {
         method: 'DELETE',
@@ -470,12 +416,13 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
         throw new Error('Erro ao excluir experiência');
       }
 
-      const updatedExperiences = experiences.filter(exp => exp.id_experience !== id_experience);
+      const updatedExperiences = experiences.filter(experience => experience.id_experience !== Number(id_experience));
       setExperiences(updatedExperiences);
     } catch (error) {
       console.error('Erro:', error);
     }
   };
+
 
   {/* EXPANDIR FORMAÇÃO */ }
   const toggleExpandEducation = () => {
@@ -514,18 +461,20 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
 
       // Adiciona a nova habilidade ao estado local
       const addedExp = await response.json(); // Supondo que a resposta seja o objeto adicionado
-      setSkills([...skills, addedExp]);
-      setIsModalOpenSkills(false); // Fecha o modal após adicionar
+      setSkills([...experiences, addedExp]);
+      setIsModalOpenExperience(false); // Fecha o modal após adicionar
     } catch (error) {
       console.error('Erro:', error);
       // Adicionar uma notificação ou alerta para o usuário, se necessário
     }
   };
+  useEffect(() => {
+    idExperiences();
+  }, []);
 
   const toggleExpandExperience = () => {
     setIsExperienceExpanded(!isExperienceExpanded);
   };
-
 
 
 
@@ -542,39 +491,32 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   // Função para adicionar uma nova habilidade
   const handleAddSkills = async (newSkill: Skills) => {
     try {
-      // Recupera os dados do usuário logado do sessionStorage
       const data = sessionStorage.getItem("userData");
       if (!data) {
         throw new Error("Usuário não está logado");
       }
 
-      // Converte os dados do usuário armazenados em JSON para um objeto
       const userData = JSON.parse(data);
-      const idUser = userData.id_user; // Obtém o id_user do usuário logado
-
-      // Inclui o id_user no objeto newSkill
+      const idUser = userData.id_user;
       const skillWithUser = { ...newSkill, id_user: idUser };
 
-      // Fazendo a requisição para adicionar a habilidade ao banco de dados
       const response = await fetch('http://localhost:3002/api/createSkill', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(skillWithUser), // Enviando o objeto skill com id_user como JSON
+        body: JSON.stringify(skillWithUser),
       });
 
       if (!response.ok) {
         throw new Error('Erro ao adicionar habilidade');
       }
 
-      // Adiciona a nova habilidade ao estado local
-      const addedSkill = await response.json(); // Supondo que a resposta seja o objeto adicionado
+      const addedSkill = await response.json();
       setSkills([...skills, addedSkill]);
-      setIsModalOpenSkills(false); // Fecha o modal após adicionar
+      setIsModalOpenSkills(false);
     } catch (error) {
       console.error('Erro:', error);
-      // Adicionar uma notificação ou alerta para o usuário, se necessário
     }
   };
 
@@ -591,17 +533,16 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
 
     try {
       const userData = JSON.parse(data);
-      const idUser = userData.id_user; // Obtém o id_user do sessionStorage
+      const idUser = userData.id_user;
 
-      // Fazendo a requisição para buscar as habilidades do usuário específico
-      const response = await fetch(`http://localhost:3002/api/idSkill/${idUser}`); // Alterado para incluir id_user na URL
+      const response = await fetch(`http://localhost:3002/api/idSkill/${idUser}`);
 
       if (!response.ok) {
         throw new Error('Erro ao buscar habilidades: ' + response.statusText);
       }
 
-      const skillsData = await response.json(); // Supondo que a resposta seja um array de habilidades
-      setSkills(skillsData); // Atualiza o estado com as habilidades obtidas
+      const skillsData = await response.json();
+      setSkills(skillsData);
     } catch (error) {
       console.error('Erro ao buscar habilidades:', error);
     }
@@ -614,26 +555,14 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
 
 
 
-
-
-
-  const toggleExpandSkills = () => {
-    setIsSkillsExpanded(!isSkillsExpanded);
-  };
-
-
-
-
   const handleEditSkills = (skill: Skills) => {
     setEditedSkills({
       id_skill: skill.id_skill,
       skill: skill.skill,
       number: skill.number,
     });
-    setEditIndexSkills(skills.indexOf(skill)); // Para saber qual habilidade está sendo editada
+    setEditIndexSkills(skills.indexOf(skill));
   };
-
-
 
 
   const handleSaveEditSkills = async () => {
@@ -647,39 +576,35 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
 
     if (editIndexSkills !== null && editedSkills) {
       try {
-        // Verifique se editedSkills.skill e editedSkills.number não são null ou undefined
-        const skill = editedSkills.skill ?? ""; // Use uma string vazia como fallback
-        const number = editedSkills.number ?? 0; // Use 0 como fallback se number for null
 
-        // Inclui o id_user no objeto skillWithUser
+        const skill = editedSkills.skill ?? "";
+        const number = editedSkills.number ?? 0;
+
         const skillWithUser = { ...editedSkills, skill, number, id_user: idUser };
 
-        // Fazendo a requisição para atualizar a habilidade no banco de dados
         const response = await fetch(`http://localhost:3002/api/updateSkill/${editedSkills.id_skill}`, {
-          method: 'PUT', // Usando o método PUT para atualizar
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(skillWithUser), // Enviando o objeto completo como JSON
+          body: JSON.stringify(skillWithUser),
         });
 
         if (!response.ok) {
           throw new Error('Erro ao editar habilidade');
         }
 
-        const updatedSkill = await response.json(); // Obtém a habilidade atualizada da resposta
+        const updatedSkill = await response.json();
 
-        // Atualiza a lista de habilidades no estado local
         const updatedSkills = skills.map((skill, index) =>
           index === editIndexSkills ? updatedSkill : skill
         );
 
-        setSkills(updatedSkills); // Atualiza o estado com a habilidade editada
-        setEditIndexSkills(null); // Reseta o índice de edição
-        setEditedSkills(null); // Reseta as habilidades editadas
+        setSkills(updatedSkills);
+        setEditIndexSkills(null);
+        setEditedSkills(null);
       } catch (error) {
         console.error('Erro:', error);
-        // Você pode adicionar uma notificação ou alerta para o usuário
       }
     } else {
       console.error('Edit index or edited skills is null');
@@ -688,11 +613,8 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
 
 
 
-
-
   const handleDeleteSkills = async (id_skill: number) => {
     try {
-      // Fazendo a requisição para excluir a habilidade no banco de dados
       const response = await fetch(`http://localhost:3002/api/deleteSkill/${id_skill}`, {
         method: 'DELETE',
       });
@@ -701,14 +623,23 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
         throw new Error('Erro ao excluir habilidade');
       }
 
-      // Atualiza a lista de habilidades no estado local
-      const updatedSkills = skills.filter(skill => skill.id_skill !== Number(id_skill)); // Certifique-se de que id_skill seja um número
-      setSkills(updatedSkills); // Atualiza o estado com a lista de habilidades sem a excluída
+      const updatedSkills = skills.filter(skill => skill.id_skill !== Number(id_skill));
+      setSkills(updatedSkills);
     } catch (error) {
       console.error('Erro:', error);
-      // Você pode adicionar uma notificação ou alerta para o usuário
     }
   };
+
+  const toggleExpandSkills = () => {
+    setIsSkillsExpanded(!isSkillsExpanded);
+  };
+
+
+
+
+
+
+
 
   const formatDate = (dateString: string | undefined): string => {
     if (!dateString) return ''; // Retorna string vazia se não houver data
@@ -729,85 +660,85 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
     const date = new Date(dateString);
     return date.toISOString().split('T')[0]; // Retorna apenas a parte da data no formato yyyy-mm-dd
   };
-  
+
 
   return (
     <>
-      <GeneralItens>
-        <DivTop>
+      <style.GeneralItens>
+        <style.DivTop>
           <form onSubmit={handleSubmit}>
-          <ImageCover className="relative">
-            <img
-              src={coverImage || "/cover.png"}
-              alt="Cover"
-              className="w-full h-[100px] object-cover"
-            />
-            <UploadButton
-              type="file"
-              accept="image/*"
-              id="coverImageUpload"
-              onChange={handleCoverImageChange}
-            />
-            <ButtonCoverLabel htmlFor="coverImageUpload">
-              <FaCamera />
-              <span className="ml-2">Adicionar foto de capa</span>
-            </ButtonCoverLabel>
-          </ImageCover>
+            <style.ImageCover className="relative">
+              <img
+                src={coverImage || "/cover.png"}
+                alt="Cover"
+                className="w-full h-[100px] object-cover"
+              />
+              <style.UploadButton
+                type="file"
+                accept="image/*"
+                id="coverImageUpload"
+                onChange={handleCoverImageChange}
+              />
+              <style.ButtonCoverLabel htmlFor="coverImageUpload">
+                <FaCamera />
+                <span className="ml-2">Adicionar foto de capa</span>
+              </style.ButtonCoverLabel>
+            </style.ImageCover>
 
-          <ImageWrapper className="relative">
-            <img
-                  src={`http://localhost:3002/uploads/${profileImage}`} 
-                  alt="Profile"
-                  className="w-full h-[150px] object-cover"
-                />
-                <UploadButton
-                  type="file"
-                  accept="image/*"
-                  id="profileImageUpload"
-                  onChange={handleUpdateImageChange}
-            />
-            <ButtonLabel htmlFor="profileImageUpload">
-              <FaCamera />
-            </ButtonLabel>
-          </ImageWrapper>
+            <style.ImageWrapper className="relative">
+              <img
+                src={`http://localhost:3002/uploads/${profileImage}`}
+                alt="Profile"
+                className="w-full h-[150px] object-cover"
+              />
+              <style.UploadButton
+                type="file"
+                accept="image/*"
+                id="profileImageUpload"
+                onChange={handleUpdateImageChange}
+              />
+              <style.ButtonLabel htmlFor="profileImageUpload">
+                <FaCamera />
+              </style.ButtonLabel>
+            </style.ImageWrapper>
           </form>
-          <DivParagraph>
+          <style.DivParagraph>
             <p>{userData?.full_name}</p>
-            <DivIconShare>
+            <style.DivIconShare>
               <Tooltip title="Compartilhar o perfil" placement="left">
-                <FaShareAltSquare />
+                <FaShareAltSquare onClick={handleShare}/>
               </Tooltip>
-            </DivIconShare>
-          </DivParagraph>
+            </style.DivIconShare>
+          </style.DivParagraph>
 
-          <DivButton>
-            <ProfileButton disabled>Favoritos <Star /></ProfileButton>
+          <style.DivButton>
+            <style.ProfileButton disabled>Favoritos <style.Star /></style.ProfileButton>
             <Link href={"../expandable"}>
-              <EditProfileButton>Editar perfil</EditProfileButton>
+              <style.EditProfileButton>Editar perfil</style.EditProfileButton>
             </Link>
-            <DivIcon>
+            <style.DivIcon>
               <Tooltip title="Configurações da conta" placement="left">
                 <IoSettingsSharp />
               </Tooltip>
-            </DivIcon>
-          </DivButton>
+            </style.DivIcon>
+          </style.DivButton>
 
-          <DivBio>
-            <DivP>
+          <style.DivBio>
+            <style.DivP>
               {isEditingBio ? (
                 <div>
                   <p>
                     <span className="font-bold">Biografia:</span>
-                    <Textarea
+                    <style.Textarea
                       placeholder="Experimente escrever uma curta biografia sobre você, incluindo suas principais conquistas, habilidades e objetivos de carreira."
                       value={bioText}
                       onChange={(e) => setBioText(e.target.value)}
                     />
                   </p>
                   <Tooltip title="Salvar biografia" placement="left">
-                    <DivSave onClick={handleSaveBio}>
+                    <style.DivSave onClick={handleSaveBio}>
                       <AiOutlineSave />
-                    </DivSave>
+                    </style.DivSave>
                   </Tooltip>
                 </div>
               ) : (
@@ -820,40 +751,40 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                       "Experimente escrever uma curta biografia sobre você, incluindo suas principais conquistas, habilidades e objetivos de carreira."}
                   </p>
                   <Tooltip title="Editar biografia" placement="left">
-                    <DivEdit onClick={handleEditBio}>
+                    <style.DivEdit onClick={handleEditBio}>
                       <MdEditNote />
-                    </DivEdit>
+                    </style.DivEdit>
                   </Tooltip>
                 </div>
               )}
-            </DivP>
-          </DivBio>
-        </DivTop>
+            </style.DivP>
+          </style.DivBio>
+        </style.DivTop>
 
-        <Wrapper>
-          <Heading>Formação <div className="flex gap-4"><button style={{ cursor: 'pointer' }} onClick={() => setIsModalOpenEdu(true)}>
+        <style.Wrapper>
+          <style.Heading>Formação <div className="flex gap-4"><button style={{ cursor: 'pointer' }} onClick={() => setIsModalOpenEdu(true)}>
             <Tooltip title="Adicionar nova formação">
-              <Add />
+              <style.Add />
             </Tooltip>
           </button>
             {isEducationExpanded ? (
               <Tooltip title="Esconder formações adicionadas">
-                <ArrowUp onClick={toggleExpandEducation} style={{ cursor: 'pointer' }} />
+                <style.ArrowUp onClick={toggleExpandEducation} style={{ cursor: 'pointer' }} />
               </Tooltip>
 
             ) : (
               <Tooltip title="Mostrar todas as formações adicionadas">
-                <ArrowDown onClick={toggleExpandEducation} style={{ cursor: 'pointer' }} />
+                <style.ArrowDown onClick={toggleExpandEducation} style={{ cursor: 'pointer' }} />
               </Tooltip>
-            )}</div></Heading>
-          <EducationList>
+            )}</div></style.Heading>
+          <style.EducationList>
 
             {educations.slice(0, isEducationExpanded ? educations.length : 2).map((education, index) => (
-              <ListItem key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <style.ListItem key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                   {editIndexEducation === index ? (
                     <>
-                      <Profile
+                      <style.Profile
                         type="text"
                         style={{ width: "350px" }}
                         value={editedEducation?.course || ''}
@@ -861,60 +792,60 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                         placeholder="Curso"
                       />
                       <div className="flex">
-                      <Profile
+                        <style.Profile
                           type="text"
                           style={{ width: "200px", marginTop: '4px' }}
                           value={editedEducation?.institution || ''}
                           onChange={(e) => setEditedEducation({ ...editedEducation!, institution: e.target.value })}
                           placeholder="Universidade"
-                      />
-                      <Profile
+                        />
+                        <style.Profile
                           type="date"
                           style={{ width: "200px", marginTop: '4px', marginLeft: '10px' }}
                           value={formatDateForInput(editedEducation?.start_date) || ''}
                           onChange={(e) => setEditedEducation({ ...editedEducation!, start_date: e.target.value })}
                           placeholder="Período"
-                      />
-                      <Profile
+                        />
+                        <style.Profile
                           type="date"
                           style={{ width: "200px", marginTop: '4px', marginLeft: '10px' }}
                           value={formatDateForInput(editedEducation?.completion_date) || ''}
                           onChange={(e) => setEditedEducation({ ...editedEducation!, completion_date: e.target.value })}
                           placeholder="Período"
-                      />
+                        />
                       </div>
                     </>
                   ) : (
                     <>
                       <Tooltip title="Dê duplo click para editar">
-                        <CompanyName onDoubleClick={() => handleEditEducation(education)}>
+                        <style.CompanyName onDoubleClick={() => handleEditEducation(education)}>
                           {education.course}
-                        </CompanyName>
+                        </style.CompanyName>
                       </Tooltip>
-                      <Period>
+                      <style.Period>
                         <span>{education.institution}</span> - {formatDate(education.start_date)} - {formatDate(education.completion_date)}
-                      </Period>
+                      </style.Period>
                     </>
                   )}
                 </div>
                 <div style={{ display: 'flex', justifyContent: "space-between", gap: '20px' }}>
                   {editIndexEducation === index && (
                     <>
-                      <button style={{ cursor: 'pointer' }} onClick={() => { setEditIndexEducation(null); setEditedEducation(null); }}><GoBack /></button>
-                      <Tooltip title="Salvar alterações"><button style={{ cursor: 'pointer' }} onClick={handleSaveEditEducation}><Save /></button></Tooltip>
+                      <button style={{ cursor: 'pointer' }} onClick={() => { setEditIndexEducation(null); setEditedEducation(null); }}><style.GoBack /></button>
+                      <Tooltip title="Salvar alterações"><button style={{ cursor: 'pointer' }} onClick={handleSaveEditEducation}><style.Save /></button></Tooltip>
                     </>
                   )}
                   <Tooltip title="Excluir formação" placement="left">
-                    <button style={{ cursor: 'pointer' }} onClick={() => handleDeleteEducation(index)}><Delete /></button>
+                    <button style={{ cursor: 'pointer' }} onClick={() => handleDeleteEducation(education.id_education)}><style.Delete /></button>
                   </Tooltip>
-                </div>                  
-              </ListItem>
+                </div>
+              </style.ListItem>
             ))}
-          </EducationList>
+          </style.EducationList>
           {isModalOpenEdu && (
-            <ModalOverlay>
-              <ModalContent>
-                <H2Exp>Adicionar nova formação</H2Exp>
+            <style.ModalOverlay>
+              <style.ModalContent>
+                <style.H2Exp>Adicionar nova formação</style.H2Exp>
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
@@ -929,68 +860,68 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                     setIsModalOpenEdu(false);
                   }}
                 >
-                  <Input
+                  <style.Input
                     type="text"
                     name="course"
                     placeholder="Curso"
                     required
                   />
-                  <Input
+                  <style.Input
                     type="text"
                     name="institution"
                     placeholder="Universidade"
                     required
                   />
-                  <Input
+                  <style.Input
                     type="date"
                     name="start_date"
                     placeholder="Início"
                     required
                   />
-                  <Input
+                  <style.Input
                     type="date"
                     name="completion_date"
                     placeholder="Conclusão"
                     required
                   />
                   <div className="flex align-center justify-center">
-                    <CloseButton onClick={() => setIsModalOpenEdu(false)}>Fechar</CloseButton>
-                    <AddExpButton type="submit">Adicionar</AddExpButton>
+                    <style.CloseButton onClick={() => setIsModalOpenEdu(false)}>Fechar</style.CloseButton>
+                    <style.AddExpButton type="submit">Adicionar</style.AddExpButton>
                   </div>
                 </form>
-              </ModalContent>
-            </ModalOverlay>
+              </style.ModalContent>
+            </style.ModalOverlay>
           )}
-        </Wrapper>
+        </style.Wrapper>
 
 
 
-        <Container>
-          <Title>
+        <style.Container>
+          <style.Title>
             Experiências
             <div className="flex gap-4">
               <button style={{ cursor: 'pointer' }} onClick={() => setIsModalOpenExperience(true)}>
                 <Tooltip title="Adicionar nova experiência">
-                  <Add />
+                  <style.Add />
                 </Tooltip>
               </button>
               <Tooltip title={isExperienceExpanded ? "Esconder experiências adicionadas" : "Mostrar todas as experiências adicionadas"}>
                 {isExperienceExpanded ? (
-                  <ArrowUp onClick={toggleExpandExperience} style={{ cursor: 'pointer' }} />
+                  <style.ArrowUp onClick={toggleExpandExperience} style={{ cursor: 'pointer' }} />
                 ) : (
-                  <ArrowDown onClick={toggleExpandExperience} style={{ cursor: 'pointer' }} />
+                  <style.ArrowDown onClick={toggleExpandExperience} style={{ cursor: 'pointer' }} />
                 )}
               </Tooltip>
             </div>
-          </Title>
+          </style.Title>
 
-          <List>
+          <style.List>
             {experiences.slice(0, isExperienceExpanded ? experiences.length : 2).map((experience, index) => (
-              <ListItem key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <style.ListItem key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                   {editIndexExp === index ? (
                     <>
-                      <Profile
+                      <style.Profile
                         type="text"
                         style={{ width: "350px" }}
                         value={editedExp?.position || ''}
@@ -998,40 +929,39 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                         placeholder="Cargo"
                       />
                       <div className="flex">
-                      <Profile
+                        <style.Profile
                           type="text"
                           style={{ width: "200px", marginTop: '4px' }}
                           value={editedExp?.company || ''}
                           onChange={(e) => setEditedExp({ ...editedExp!, company: e.target.value })}
                           placeholder="Empresa"
-                      />
-                      <Profile
+                        />
+                        <style.Profile
                           type="date"
                           style={{ width: "200px", marginTop: '4px', marginLeft: '10px' }}
                           value={formatDateForInput(editedExp?.start_date) || ''}
                           onChange={(e) => setEditedExp({ ...editedExp!, start_date: e.target.value })}
                           placeholder="Data de Início"
-                      />
-                      <Profile
+                        />
+                        <style.Profile
                           type="date"
                           style={{ width: "200px", marginTop: '4px', marginLeft: '10px' }}
                           value={formatDateForInput(editedExp?.end_date) || ''}
                           onChange={(e) => setEditedExp({ ...editedExp!, end_date: e.target.value })}
                           placeholder="Data de Conclusão"
-                      />
+                        />
                       </div>
                     </>
                   ) : (
                     <>
                       <Tooltip title="Dê duplo click para editar">
-                        <CompanyName onDoubleClick={() => handleEditExp(experience)}>
+                        <style.CompanyName onDoubleClick={() => handleEditExp(experience)}>
                           {experience.position}
-                        </CompanyName>
+                        </style.CompanyName>
                       </Tooltip>
-                      <Period>
+                      <style.Period>
                         <span>{experience.company}</span> - {formatDate(experience.start_date)} - {formatDate(experience.end_date)}
-                      </Period>
-
+                      </style.Period>
                     </>
                   )}
                 </div>
@@ -1039,110 +969,57 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                   {editIndexExp === index && (
                     <>
                       <button style={{ cursor: 'pointer' }} onClick={() => { setEditIndexExp(null); setEditedExp(null); }}>
-                        <GoBack />
+                        <style.GoBack />
                       </button>
                       <Tooltip title="Salvar alterações">
                         <button style={{ cursor: 'pointer' }} onClick={handleSaveEditExp}>
-                          <Save />
+                          <style.Save />
                         </button>
                       </Tooltip>
                     </>
                   )}
                   <Tooltip title="Excluir experiência" placement="left">
-                    <button style={{ cursor: 'pointer' }} onClick={() => handleDeleteExp(index)}>
-                      <Delete />
+                    <button style={{ cursor: 'pointer' }} onClick={() => handleDeleteExp(experience.id_experience)}>
+                      <style.Delete />
                     </button>
                   </Tooltip>
                 </div>
-              </ListItem>
+              </style.ListItem>
             ))}
-          </List>
+          </style.List>
 
-          {isModalOpenExperience && (
-            <ModalOverlay>
-              <ModalContent>
-                <H2Exp>Adicionar nova experiência</H2Exp>
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault(); // Previne o comportamento padrão do formulário
-
-                    // Acessa os valores dos campos usando e.target
-                    const newExp = {
-                      id_experience: 0, // Você pode definir um ID adequado ou gerá-lo na lógica de backend
-                      company: (e.target as any).company.value,
-                      position: (e.target as any).position.value,
-                      start_date: (e.target as any).start_date.value,
-                      end_date: (e.target as any).end_date.value,
-                    };
-
-                    handleAddExp(newExp); // Passa o novo objeto de experiência para a função
-                    setIsModalOpenExperience(false); // Fecha o modal
-                  }}
-                >
-                  <Input
-                    type="text"
-                    name="position"
-                    placeholder="Cargo"
-                    required
-                  />
-                  <Input
-                    type="text"
-                    name="company"
-                    placeholder="Empresa"
-                    required
-                  />
-                  <Input
-                    type="date"
-                    name="start_date"
-                    placeholder="Data de Início"
-                    required
-                  />
-                  <Input
-                    type="date"
-                    name="end_date"
-                    placeholder="Data de Conclusão"
-                    required
-                  />
-                  <div className="flex align-center justify-center">
-                    <CloseButton onClick={() => setIsModalOpenExperience(false)}>Fechar</CloseButton>
-                    <AddExpButton type="submit">Adicionar</AddExpButton>
-                  </div>
-                </form>
-              </ModalContent>
-            </ModalOverlay>
-          )}
-        </Container>
+        </style.Container>
 
 
 
-        <SkillsContainer>
-          <Title>
+        <style.SkillsContainer>
+          <style.Title>
             Habilidades
             <div className="flex gap-4">
               <button style={{ cursor: 'pointer' }} onClick={() => setIsModalOpenSkills(true)}>
                 <Tooltip title="Adicionar nova habilidade">
-                  <Add />
+                  <style.Add />
                 </Tooltip>
               </button>
               {isSkillsExpanded ? (
                 <Tooltip title="Esconder habilidades adicionadas">
-                  <ArrowUp onClick={() => setIsSkillsExpanded(false)} style={{ cursor: 'pointer' }} />
+                  <style.ArrowUp onClick={() => setIsSkillsExpanded(false)} style={{ cursor: 'pointer' }} />
                 </Tooltip>
               ) : (
                 <Tooltip title="Mostrar todas as habilidades adicionadas">
-                  <ArrowDown onClick={() => setIsSkillsExpanded(true)} style={{ cursor: 'pointer' }} />
+                  <style.ArrowDown onClick={() => setIsSkillsExpanded(true)} style={{ cursor: 'pointer' }} />
                 </Tooltip>
               )}
             </div>
-          </Title>
+          </style.Title>
 
           {/* Renderização das habilidades */}
           {skills.slice(0, isSkillsExpanded ? skills.length : 2).map((skillItem, index) => (
-            <ListItem key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <style.ListItem key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {editIndexSkills === index ? (
                   <>
-                    <Profile
+                    <style.Profile
                       type="text"
                       style={{ width: "350px" }}
                       value={editedSkills?.skill || ''}
@@ -1150,7 +1027,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                       placeholder="Habilidade"
                     />
                     <div className="flex">
-                      <Profile
+                      <style.Profile
                         type="number"
                         style={{ width: "200px", marginTop: '4px' }}
                         value={editedSkills?.number || ''}
@@ -1162,17 +1039,17 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                 ) : (
                   <>
                     <Tooltip title="Dê duplo click para editar">
-                      <SkillTitle onDoubleClick={() => handleEditSkills(skillItem)}>
+                      <style.SkillTitle onDoubleClick={() => handleEditSkills(skillItem)}>
                         {skillItem.skill}
-                      </SkillTitle>
+                      </style.SkillTitle>
                     </Tooltip>
                     <div className="flex">
                       <div>
-                        <ProgressBarContainer>
-                          <ProgressBar percentage={skillItem.number} />
-                        </ProgressBarContainer>
+                        <style.ProgressBarContainer>
+                          <style.ProgressBar percentage={skillItem.number} />
+                        </style.ProgressBarContainer>
                       </div>
-                      <SkillPercentage>{skillItem.number}%</SkillPercentage>
+                      <style.SkillPercentage>{skillItem.number}%</style.SkillPercentage>
                     </div>
                   </>
                 )}
@@ -1181,28 +1058,28 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                 {editIndexSkills === index && (
                   <>
                     <button style={{ cursor: 'pointer' }} onClick={() => { setEditIndexSkills(null); setEditedSkills(null); }}>
-                      <GoBack />
+                      <style.GoBack />
                     </button>
                     <Tooltip title="Salvar alterações">
                       <button style={{ cursor: 'pointer' }} onClick={handleSaveEditSkills}>
-                        <Save />
+                        <style.Save />
                       </button>
                     </Tooltip>
                   </>
                 )}
                 <Tooltip title="Excluir habilidade">
                   <button style={{ cursor: 'pointer' }} onClick={() => handleDeleteSkills(skillItem.id_skill)}>
-                    <Delete />
+                    <style.Delete />
                   </button>
                 </Tooltip>
               </div>
-            </ListItem>
+            </style.ListItem>
           ))}
 
           {isModalOpenSkills && (
-            <ModalOverlay>
-              <ModalContent>
-                <H2Exp>Adicionar nova habilidade</H2Exp>
+            <style.ModalOverlay>
+              <style.ModalContent>
+                <style.H2Exp>Adicionar nova habilidade</style.H2Exp>
                 <form
                   onSubmit={(e) => {
                     e.preventDefault(); // Previne o comportamento padrão do formulário
@@ -1215,28 +1092,28 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                     setIsModalOpenSkills(false); // Fecha o modal
                   }}
                 >
-                  <Input
+                  <style.Input
                     type="text"
                     name="skill"
                     placeholder="Habilidade"
                     required
                   />
-                  <Input
+                  <style.Input
                     type="number"
                     name="number"
                     placeholder="Nível de conhecimento"
                     required
                   />
                   <div className="flex align-center justify-center">
-                    <CloseButton onClick={() => setIsModalOpenSkills(false)}>Fechar</CloseButton>
-                    <AddExpButton type="submit">Adicionar</AddExpButton>
+                    <style.CloseButton onClick={() => setIsModalOpenSkills(false)}>Fechar</style.CloseButton>
+                    <style.AddExpButton type="submit">Adicionar</style.AddExpButton>
                   </div>
                 </form>
-              </ModalContent>
-            </ModalOverlay>
+              </style.ModalContent>
+            </style.ModalOverlay>
           )}
-        </SkillsContainer>
-      </GeneralItens>
+        </style.SkillsContainer>
+      </style.GeneralItens>
     </>
   );
 };
