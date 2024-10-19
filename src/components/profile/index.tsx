@@ -21,7 +21,11 @@ export type UserData = {
   course: string;
 };
 
+interface Biography {
+  id_user: number;
+  biography: string;
 
+}
 export interface Experience {
   id_experience: number;
   id_user?: number;
@@ -74,19 +78,6 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
       setIdUser(parsedData.id_user);
     }
   }, []);
-  
-  
-  {/*EDITA BIO*/ }
-  const handleEditBio = () => {
-    setIsEditingBio(true);
-  };
-
-  {/*SALVA A BIO*/ }
-  const handleSaveBio = () => {
-    setIsEditingBio(false);
-  };
-
-
 
 
   const profileLink = `${window.location.origin}/profile/${id_user}`;
@@ -173,7 +164,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
 
       const educationsData = await response.json();
       setEducations(educationsData);
-      
+
     } catch (error) {
       console.error('Erro ao buscar educações:', error);
     }
@@ -296,15 +287,15 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
       }
 
       const expData = await response.json();
-      setExperiences(expData); 
+      setExperiences(expData);
     } catch (error) {
       console.error('Erro ao buscar experiências:', error);
     }
   };
 
-useEffect(() => {
-  idExperiences();
-}, [refresh]);
+  useEffect(() => {
+    idExperiences();
+  }, [refresh]);
 
 
   const handleEditExp = (exp: Experience) => {
@@ -415,7 +406,7 @@ useEffect(() => {
       // Adiciona a nova habilidade ao estado local
       const addedExp = await response.json(); // Supondo que a resposta seja o objeto adicionado
       setSkills([...experiences, addedExp]);
-      setIsModalOpenExperience(false); 
+      setIsModalOpenExperience(false);
     } catch (error) {
       console.error('Erro:', error);
       // Adicionar uma notificação ou alerta para o usuário, se necessário
@@ -619,90 +610,91 @@ useEffect(() => {
 
 
 
+
   const handleCoverImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (e.target.files && e.target.files.length > 0) {
-          const file = e.target.files[0];
-          const reader = new FileReader();
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
 
-          reader.onloadend = async () => {
-              setCoverImage(reader.result as string);
+      reader.onloadend = async () => {
+        setCoverImage(reader.result as string);
 
-              const data = sessionStorage.getItem("userData");
-              if (!data) {
-                console.error('Usuário não encontrado.');
-                return;
-              }
-              const userData = JSON.parse(data);
-              const id_user = userData.id_user;
-              const formData = new FormData();
-              formData.append('cover_photo', file);
+        const data = sessionStorage.getItem("userData");
+        if (!data) {
+          console.error('Usuário não encontrado.');
+          return;
+        }
+        const userData = JSON.parse(data);
+        const id_user = userData.id_user;
+        const formData = new FormData();
+        formData.append('cover_photo', file);
 
-              try {
-                  const response = await fetch(`http://localhost:3002/api/updatePhoto/${id_user}`, {
-                      method: 'PUT',
-                      body: formData,
-                  });
+        try {
+          const response = await fetch(`http://localhost:3002/api/updatePhoto/${id_user}`, {
+            method: 'PUT',
+            body: formData,
+          });
 
-                  if (response.ok) {
-                      const data = await response.json();
-                      await fetchUserData();
-                  } else {
-                      setMessage('Erro ao atualizar a foto de capa.');
-                  }
-              } catch (error) {
-                  console.error('Erro ao enviar a foto de capa:', error);
-                  setMessage('Erro ao enviar a foto de capa.');
-              }
-          };
+          if (response.ok) {
+            const data = await response.json();
+            await fetchUserData();
+          } else {
+            setMessage('Erro ao atualizar a foto de capa.');
+          }
+        } catch (error) {
+          console.error('Erro ao enviar a foto de capa:', error);
+          setMessage('Erro ao enviar a foto de capa.');
+        }
+      };
 
-          reader.readAsDataURL(file); 
-      }
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleProfileImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (e.target.files && e.target.files.length > 0) {
-          const file = e.target.files[0];
-          const reader = new FileReader();
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
 
-          reader.onloadend = async () => {
-              setProfileImage(reader.result as string);
+      reader.onloadend = async () => {
+        setProfileImage(reader.result as string);
 
-              const data = sessionStorage.getItem("userData");
-              if (!data) {
-                console.error('Usuário não encontrado.');
-                return;
-              }
-              const userData = JSON.parse(data);
-              const id_user = userData.id_user;
-              console.log(idUser)
-              const formData = new FormData();
-              formData.append('profile_picture', file);
+        const data = sessionStorage.getItem("userData");
+        if (!data) {
+          console.error('Usuário não encontrado.');
+          return;
+        }
+        const userData = JSON.parse(data);
+        const id_user = userData.id_user;
+        console.log(idUser)
+        const formData = new FormData();
+        formData.append('profile_picture', file);
 
-              try {
-                  const response = await fetch(`http://localhost:3002/api/updatePhoto/${id_user}`, {
-                      method: 'PUT',
-                      body: formData,
-                  });
+        try {
+          const response = await fetch(`http://localhost:3002/api/updatePhoto/${id_user}`, {
+            method: 'PUT',
+            body: formData,
+          });
 
-                  if (response.ok) {
-                      const data = await response.json();
-                      setMessage('Foto de capa atualizada com sucesso!');
-                      console.log('Resposta do servidor:', data);
-                      await fetchUserData();
-                  } else {
-                      setMessage('Erro ao atualizar a foto de capa.');
-                  }
-              } catch (error) {
-                  console.error('Erro ao enviar a foto de capa:', error);
-                  setMessage('Erro ao enviar a foto de capa.');
-              }
-          };
+          if (response.ok) {
+            const data = await response.json();
+            setMessage('Foto de capa atualizada com sucesso!');
+            console.log('Resposta do servidor:', data);
+            await fetchUserData();
+          } else {
+            setMessage('Erro ao atualizar a foto de capa.');
+          }
+        } catch (error) {
+          console.error('Erro ao enviar a foto de capa:', error);
+          setMessage('Erro ao enviar a foto de capa.');
+        }
+      };
 
-          reader.readAsDataURL(file); 
-      }
+      reader.readAsDataURL(file);
+    }
   };
 
- 
+
   const fetchUserData = async () => {
     const data = sessionStorage.getItem("userData");
     if (data) {
@@ -717,7 +709,7 @@ useEffect(() => {
 
       const userPhotos = await response.json();
       const imageUrl = userPhotos.profile_picture || "/profile.png" || profileImage;
-      const imageCoverUrl = userPhotos.cover_photo || "/default_cover.png" || coverImage; 
+      const imageCoverUrl = userPhotos.cover_photo || "/default_cover.png" || coverImage;
 
       setUserData(parsedData);
       setProfileImage(imageUrl);
@@ -730,33 +722,146 @@ useEffect(() => {
     fetchUserData();
   }, [refresh]);
 
+
+
+
+
+  const [newBiography, setNewBiography] = useState('');
+  // Função para buscar a biografia do usuário
+  const getBiography = async () => {
+    const data = sessionStorage.getItem("userData");
+    if (!data) {
+      console.error('Usuário não encontrado.');
+      return;
+    }
+
+    try {
+      const userData = JSON.parse(data);
+      const idUser = userData.id_user;
+
+      const response = await fetch(`http://localhost:3002/api/biography/${idUser}/biography`);
+
+      if (!response.ok) {
+        throw new Error('Erro ao buscar biografia: ' + response.statusText);
+      }
+
+      const { biography } = await response.json();
+      console.log('Biografia:', biography);
+      setBioText(biography); // Atualiza o estado com a biografia
+    } catch (error) {
+      console.error('Erro ao buscar biografia:', error);
+    }
+  };
+
+  useEffect(() => {
+    getBiography(); // Chama a função para buscar a biografia ao montar o componente
+  }, []);
+
+  const handleEditBio = () => {
+    setIsEditingBio(true);
+  };
+
+  {/* Função para salvar a biografia e alternar de volta */ }
+  const handleSaveBio = async () => {
+    try {
+      // Verifica se bioText é uma string e se está vazio
+      if (!bioText || !bioText.trim()) {
+        // Se o texto da biografia estiver vazio ou undefined, chamar a função de deletar
+        await deleteBiography();
+      } else {
+        // Caso contrário, salvar a biografia
+        await editBiography();
+      }
+      setIsEditingBio(false); // Alterna de volta para o modo de visualização
+    } catch (error) {
+      console.error('Erro ao salvar ou deletar biografia:', error);
+    }
+  };
+  
+  {/* Função para enviar a biografia editada ao backend */ }
+  const editBiography = async () => {
+    const data = sessionStorage.getItem("userData");
+    if (!data) {
+      console.error('Usuário não encontrado.');
+      return;
+    }
+
+    try {
+      const userData = JSON.parse(data);
+      const idUser = userData.id_user;
+
+      const response = await fetch(`http://localhost:3002/api/biography/${idUser}/biography`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ biography: bioText }), // Envia a biografia atualizada
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao atualizar biografia: ' + response.statusText);
+      }
+
+      // Sucesso - A biografia foi salva
+      console.log('Biografia atualizada com sucesso');
+    } catch (error) {
+      console.error('Erro ao atualizar biografia:', error);
+    }
+  };
+
+
+  // Função para deletar a biografia do usuário
+  const deleteBiography = async () => {
+    const data = sessionStorage.getItem("userData");
+    if (!data) {
+      console.error('Usuário não encontrado.');
+      return;
+    }
+
+    try {
+      const userData = JSON.parse(data);
+      const idUser = userData.id_user;
+
+      const response = await fetch(`http://localhost:3002/api/biography/${idUser}/biography`, {
+        method: 'DELETE', // Método DELETE para remover
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao deletar biografia: ' + response.statusText);
+      }
+
+      console.log('Biografia deletada com sucesso.');
+    } catch (error) {
+      console.error('Erro ao deletar biografia:', error);
+    }
+  };
   return (
     <>
       <style.GeneralItens>
         <style.DivTop>
           <form name="cover_photo">
-          <style.ImageCover className="relative">
-            <img
-                src={`http://localhost:3002/uploads/${coverImage}` || "/default_cover.png" }
+            <style.ImageCover className="relative">
+              <img
+                src={`http://localhost:3002/uploads/${coverImage}` || "/default_cover.png"}
                 alt="Cover"
                 className="w-full h-[100px] object-cover"
-            />
-            <style.UploadButton
+              />
+              <style.UploadButton
                 type="file"
                 accept="image/*"
                 id="coverImageUpload"
                 onChange={handleCoverImageChange}
-            />
-            <style.ButtonCoverLabel htmlFor="coverImageUpload">
+              />
+              <style.ButtonCoverLabel htmlFor="coverImageUpload">
                 <FaCamera />
                 <span className="ml-2">Adicionar foto de capa</span>
-            </style.ButtonCoverLabel>
-        </style.ImageCover>
-            </form>
-            <form name="profile_picture">
+              </style.ButtonCoverLabel>
+            </style.ImageCover>
+          </form>
+          <form name="profile_picture">
             <style.ImageWrapper className="relative">
               <img
-                src={`http://localhost:3002/uploads/${profileImage}` || "/profile.png" }
+                src={`http://localhost:3002/uploads/${profileImage}` || "/profile.png"}
                 alt="Profile"
                 className="w-full h-[150px] object-cover"
               />
@@ -770,13 +875,13 @@ useEffect(() => {
                 <FaCamera />
               </style.ButtonLabel>
             </style.ImageWrapper>
-            </form>
+          </form>
 
           <style.DivParagraph>
             <p>{userData?.full_name}</p>
             <style.DivIconShare>
               <Tooltip title="Compartilhar o perfil" placement="left">
-                <FaShareAltSquare onClick={handleShare}/>
+                <FaShareAltSquare onClick={handleShare} />
               </Tooltip>
             </style.DivIconShare>
           </style.DivParagraph>
@@ -800,13 +905,12 @@ useEffect(() => {
                   <p>
                     <span className="font-bold">Biografia:</span>
                     <style.Textarea
-                      placeholder="Experimente escrever uma curta biografia sobre você, incluindo suas principais conquistas, habilidades e objetivos de carreira."
                       value={bioText}
-                      onChange={(e) => setBioText(e.target.value)}
+                      onChange={(e) => setBioText(e.target.value)} // Atualiza o estado da biografia conforme o usuário digita
                     />
                   </p>
                   <Tooltip title="Salvar biografia" placement="left">
-                    <style.DivSave onClick={handleSaveBio}>
+                    <style.DivSave onClick={handleSaveBio}> {/* Chama handleSaveBio */}
                       <AiOutlineSave />
                     </style.DivSave>
                   </Tooltip>
@@ -814,19 +918,18 @@ useEffect(() => {
               ) : (
                 <div>
                   <p className="font-bold">Biografia:</p>
-                  <p
-                    style={{ color: "#272727", opacity: "0.8", padding: "10px" }}
-                  >
+                  <p style={{ color: "#272727", opacity: "0.8", padding: "10px" }}>
                     {bioText ||
                       "Experimente escrever uma curta biografia sobre você, incluindo suas principais conquistas, habilidades e objetivos de carreira."}
                   </p>
                   <Tooltip title="Editar biografia" placement="left">
-                    <style.DivEdit onClick={handleEditBio}>
+                    <style.DivEdit onClick={handleEditBio}> {/* Alterna para o modo de edição */}
                       <MdEditNote />
                     </style.DivEdit>
                   </Tooltip>
                 </div>
               )}
+
             </style.DivP>
           </style.DivBio>
         </style.DivTop>
@@ -1064,7 +1167,7 @@ useEffect(() => {
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
-                    const newExp= {
+                    const newExp = {
                       id_experience: 0,
                       position: (e.target as any).position.value,
                       company: (e.target as any).company.value,
