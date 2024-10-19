@@ -113,6 +113,35 @@ const HomePageContainer = () => {
     }
 };
 
+const [idUser, setIdUser] = useState(null);
+const [refresh, setRefresh] = useState<boolean>(false);
+const fetchUserData = async () => {
+  const data = sessionStorage.getItem("userData");
+  if (data) {
+    const parsedData = JSON.parse(data);
+    console.log('Dados do usuário:', parsedData);
+
+    const response = await fetch(`http://localhost:3002/api/getPhoto/${parsedData.id_user}/photos`);
+    if (!response.ok) {
+      console.error('Erro ao buscar fotos do usuário.');
+      return;
+    }
+
+    const userPhotos = await response.json();
+    const imageUrl = userPhotos.profile_picture || "/profile.png" || profileImage;
+    const imageCoverUrl = userPhotos.cover_photo || "/default_cover.png" || coverImage;
+
+    setUserData(parsedData);
+    setProfileImage(imageUrl);
+    setCoverImage(imageCoverUrl);
+    setIdUser(parsedData.id_user);
+  }
+};
+
+useEffect(() => {
+  fetchUserData();
+}, [refresh]);
+
 
   return (
     <>
@@ -135,7 +164,7 @@ const HomePageContainer = () => {
             <ImageCover className="relative">
               <img
                 style={{ borderRadius: "10px 10px 0 0" }}
-                src={coverImage || "/cover.png"}
+                src={`http://localhost:3002/uploads/${coverImage}` || "/default_cover.png"}
                 alt="Cover"
                 className="w-full h-[50px] object-cover"
               />
@@ -143,9 +172,9 @@ const HomePageContainer = () => {
 
             <ImageWrapper className="relative">
               <img
-                src={profileImage || "/profile.png"}
+                src={`http://localhost:3002/uploads/${profileImage}` || "/default_cover.png"}
                 alt="Profile"
-                className="w-full h-[40px] object-cover"
+                className="w-full h-[50px] object-cover"
               />
             </ImageWrapper>
             <StyledParagraph>{userData?.full_name}</StyledParagraph>

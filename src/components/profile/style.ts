@@ -18,10 +18,10 @@ export const GeneralItens = styled.div`
 `;
 export const DivTop = styled.div`
     background-color: white;
-    height: 300px;
+    min-height: 100px; 
     border-radius: 10px;
     position: relative;
-
+    height: auto;
 `;
 
 export const ImageWrapper = styled.div`
@@ -141,13 +141,14 @@ export const DivIcon = styled.div`
   margin-left: 60px;
 `;
 export const DivBio = styled.div`
-  position: relative;
-  padding: 20px;
-  background-color: #ffff;
+  background-color: white;
+  height: auto; /* Permite que a altura cresça */
   border-radius: 10px;
-  color: #272727;
-  display: flex;
+  position: relative;
+  padding: 10px;
+  overflow: hidden; /* Remove barras de rolagem */
 `;
+
 export const DivP = styled.div`
     width: 95%;
     height: 100px;
@@ -185,10 +186,11 @@ export const Textarea = styled.textarea`
   padding: 10px;
   width: 100%;
   border: 1px solid #006b3f;
+  resize: none; /* Impede que o usuário redimensione manualmente */
+  overflow-y: hidden; /* Remove a barra de rolagem */
   &:focus {
     border: 1px solid #006b3f; 
-    outline: none; 
-    
+    outline: none;
   }
 `;
 
@@ -234,7 +236,7 @@ export const Period = styled.span`
 
 export const Wrapper = styled.div`
   margin: 15px auto;
-  margin-top: 50px;
+  margin-top: 15px;
   padding: 20px;
   background-color: #f7f7f7;
   border-radius: 10px;

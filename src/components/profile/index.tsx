@@ -80,7 +80,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
   }, []);
 
 
-  const profileLink = `${window.location.origin}/profile/${id_user}`;
+  const profileLink = `${window.location.origin}/profile/${idUser}`;
 
   {/*COMPARTILHA O PERFIL*/ }
   const handleShare = async () => {
@@ -146,7 +146,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
 
 
   const idEducations = async () => {
-    const data = sessionStorage.getItem("userData");
+    const data = sessionStorage.getItem("authToken");
     if (!data) {
       console.error('Usuário não encontrado.');
       return;
@@ -268,7 +268,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
   const [editIndexExp, setEditIndexExp] = useState<number | null>(null);
   const [editedExp, setEditedExp] = useState<Experience | null>(null);
   const [isModalOpenExperience, setIsModalOpenExperience] = useState(false);
-
+  const [refreshExp, setRefreshExp] = useState<boolean>(false);
   const idExperiences = async () => {
     const data = sessionStorage.getItem("userData");
     if (!data) {
@@ -295,7 +295,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
 
   useEffect(() => {
     idExperiences();
-  }, [refresh]);
+  }, [refreshExp]);
 
 
   const handleEditExp = (exp: Experience) => {
@@ -405,8 +405,9 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
 
       // Adiciona a nova habilidade ao estado local
       const addedExp = await response.json(); // Supondo que a resposta seja o objeto adicionado
-      setSkills([...experiences, addedExp]);
+      setExperiences([...experiences, addedExp]);
       setIsModalOpenExperience(false);
+      await idExperiences();
     } catch (error) {
       console.error('Erro:', error);
       // Adicionar uma notificação ou alerta para o usuário, se necessário
@@ -414,7 +415,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
   };
   useEffect(() => {
     idExperiences();
-  }, []);
+  }, [refresh]);
 
   const toggleExpandExperience = () => {
     setIsExperienceExpanded(!isExperienceExpanded);
@@ -608,9 +609,6 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
   const [coverImage, setCoverImage] = useState<string | null>(null);
   const [message, setMessage] = useState<string>('');
 
-
-
-
   const handleCoverImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
@@ -725,8 +723,6 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
 
 
 
-
-  const [newBiography, setNewBiography] = useState('');
   // Função para buscar a biografia do usuário
   const getBiography = async () => {
     const data = sessionStorage.getItem("userData");
@@ -918,7 +914,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
               ) : (
                 <div>
                   <p className="font-bold">Biografia:</p>
-                  <p style={{ color: "#272727", opacity: "0.8", padding: "10px" }}>
+                  <p style={{ color: "#272727", opacity: "0.8", padding: "10px", height: 'auto' }}>
                     {bioText ||
                       "Experimente escrever uma curta biografia sobre você, incluindo suas principais conquistas, habilidades e objetivos de carreira."}
                   </p>

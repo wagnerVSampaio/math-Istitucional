@@ -15,6 +15,7 @@ import "../app/globals.css";
 import { useRouter } from 'next/navigation';
 import HeaderOverall from "../components/header-overall";
 
+
 const App: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -117,7 +118,9 @@ const App: React.FC = () => {
             </Form.Item>
 
             <Form.Item className="mb-0">
-              <ButtonLogin type="submit">ENTRAR</ButtonLogin>
+            <ButtonLogin type="submit" >
+              ENTRAR
+            </ButtonLogin>
             </Form.Item>
 
             {error && <p className="text-red-500">{error}</p>}
@@ -142,13 +145,13 @@ const App: React.FC = () => {
           </Form>
           <div className="mt-6 md:mt-0">
             <Image
-              src={"/page-login-img.png"}
+              src={"/atual-login.png"}
               alt={"Login"}
               width={450}
               height={400}
-              style={{ width: "400px", height: "400px", marginLeft: "auto" }}
+              style={{ width: "500px", height: "450px", marginLeft: "auto" }}
             />
-          </div>
+          </div> 
         </section>
       </ConfigProvider>
     </>

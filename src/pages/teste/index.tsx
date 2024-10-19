@@ -1,86 +1,27 @@
-import React, { useState } from 'react';
-import { FaCamera } from 'react-icons/fa';
+import React from 'react';
 import styled from 'styled-components';
 
-const ImageCover = styled.div`
+export const DivTop = styled.div`
+    background-color: white;
+    min-height: 100px; /* Altura mínima */
+    height: auto; /* Altura adaptável ao conteúdo */
+    border-radius: 10px;
     position: relative;
-    // Adicione outros estilos que desejar
+    padding: 16px; /* Espaçamento interno */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra para efeito visual */
 `;
 
-const UploadButton = styled.input`
-    display: none; // Esconde o input file
-`;
-
-const ButtonCoverLabel = styled.label`
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    background-color: rgba(255, 255, 255, 0.7);
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    // Adicione outros estilos que desejar
-`;
-
-const UploadForm: React.FC = () => {
-    const [coverImage, setCoverImage] = useState<string | null>(null);
-    const [message, setMessage] = useState<string>('');
-
-    const handleCoverImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-
-            reader.onloadend = async () => {
-                setCoverImage(reader.result as string);
-
-                // Enviar a imagem para a API
-                const formData = new FormData();
-                formData.append('cover_photo', file);
-
-                try {
-                    const response = await fetch('http://localhost:3002/api/updatePhoto/2', {
-                        method: 'PUT',
-                        body: formData,
-                    });
-
-                    if (response.ok) {
-                        const data = await response.json();
-                        setMessage('Foto de capa atualizada com sucesso!');
-                        console.log('Resposta do servidor:', data);
-                    } else {
-                        setMessage('Erro ao atualizar a foto de capa.');
-                    }
-                } catch (error) {
-                    console.error('Erro ao enviar a foto de capa:', error);
-                    setMessage('Erro ao enviar a foto de capa.');
-                }
-            };
-
-            reader.readAsDataURL(file); // Lê o arquivo como uma URL
-        }
-    };
-
-    return (
-        <ImageCover className="relative">
-            <img
-                src={coverImage || "/cover.png"}
-                alt="Cover"
-                className="w-full h-[100px] object-cover"
-            />
-            <UploadButton
-                type="file"
-                accept="image/*"
-                id="coverImageUpload"
-                onChange={handleCoverImageChange}
-            />
-            <ButtonCoverLabel htmlFor="coverImageUpload">
-                <FaCamera />
-                <span className="ml-2">Adicionar foto de capa</span>
-            </ButtonCoverLabel>
-            {message && <p>{message}</p>} {/* Exibir mensagem ao usuário */}
-        </ImageCover>
-    );
+const App: React.FC = () => {
+  return (
+    <div>
+      <h1>Exemplo de Div Adaptável</h1>
+      <DivTop>
+        <h2>Título do Componente</h2>
+        <p>Este é um parágrafo dentro da DivTop. A altura da div se ajusta ao conteúdo. Este é um parágrafo dentro da DivTop. A altura da div se ajusta ao conteúdo. Este é um parágrafo dentro da DivTop. A altura da div se ajusta ao conteúdo. Este é um parágrafo dentro da DivTop. A altura da div se ajusta ao conteúdo.</p>
+        <button style={{ padding: '10px 15px', marginTop: '10px' }}>Clique Aqui</button>
+      </DivTop>
+    </div>
+  );
 };
 
-export default UploadForm;
+export default App;

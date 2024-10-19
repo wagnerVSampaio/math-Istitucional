@@ -48,4 +48,4 @@ export const ParagraphPassword = styled.p`
     &:hover{
         color: green;
     }
-`
+`;

@@ -5,7 +5,7 @@ import {
   EnvironmentOutlined,
   UserOutlined,
 } from "@ant-design/icons/lib";
-
+import { IoCheckmarkCircleSharp } from "react-icons/io5";
 export const DivFooter = styled.div`
   position: fixed;
   bottom: 0;
@@ -86,6 +86,10 @@ export const CalendarIcon = styled(CalendarOutlined)`
 
 export const UserIcon = styled(UserOutlined)`
   margin-right: 5px;
+`;
+export const Checked = styled(IoCheckmarkCircleSharp)`
+  margin-right: 5px;
+  font-size: 20px;
 `;
 
 export const DescriptionWrapper = styled.p`
