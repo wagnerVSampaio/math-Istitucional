@@ -173,6 +173,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
 
       const educationsData = await response.json();
       setEducations(educationsData);
+      
     } catch (error) {
       console.error('Erro ao buscar educações:', error);
     }
@@ -291,19 +292,19 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
       const response = await fetch(`http://localhost:3002/api/idExp/${idUser}`);
 
       if (!response.ok) {
-        throw new Error('Erro ao buscar experiências: ' + response.statusText);
+        throw new Error('Erro ' + response.statusText);
       }
 
       const expData = await response.json();
-      setExperiences(expData);
+      setExperiences(expData); 
     } catch (error) {
       console.error('Erro ao buscar experiências:', error);
     }
   };
 
-  useEffect(() => {
-    idExperiences();
-  }, [])
+useEffect(() => {
+  idExperiences();
+}, [refresh]);
 
 
   const handleEditExp = (exp: Experience) => {
@@ -414,7 +415,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
       // Adiciona a nova habilidade ao estado local
       const addedExp = await response.json(); // Supondo que a resposta seja o objeto adicionado
       setSkills([...experiences, addedExp]);
-      setIsModalOpenExperience(false); // Fecha o modal após adicionar
+      setIsModalOpenExperience(false); 
     } catch (error) {
       console.error('Erro:', error);
       // Adicionar uma notificação ou alerta para o usuário, se necessário
@@ -1056,7 +1057,56 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
               </style.ListItem>
             ))}
           </style.List>
-
+          {isModalOpenExperience && (
+            <style.ModalOverlay>
+              <style.ModalContent>
+                <style.H2Exp>Adicionar nova experiência</style.H2Exp>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const newExp= {
+                      id_experience: 0,
+                      position: (e.target as any).position.value,
+                      company: (e.target as any).company.value,
+                      start_date: (e.target as any).start_date.value,
+                      end_date: (e.target as any).end_date.value,
+                    };
+                    handleAddExp(newExp);
+                    setIsModalOpenExperience(false);
+                  }}
+                >
+                  <style.Input
+                    type="text"
+                    name="position"
+                    placeholder="Cargo"
+                    required
+                  />
+                  <style.Input
+                    type="text"
+                    name="company"
+                    placeholder="Empresa"
+                    required
+                  />
+                  <style.Input
+                    type="date"
+                    name="start_date"
+                    placeholder="Período de início"
+                    required
+                  />
+                  <style.Input
+                    type="date"
+                    name="end_date"
+                    placeholder="Período final"
+                    required
+                  />
+                  <div className="flex align-center justify-center">
+                    <style.CloseButton onClick={() => setIsModalOpenExperience(false)}>Fechar</style.CloseButton>
+                    <style.AddExpButton type="submit">Adicionar</style.AddExpButton>
+                  </div>
+                </form>
+              </style.ModalContent>
+            </style.ModalOverlay>
+          )}
         </style.Container>
 
 
