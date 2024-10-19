@@ -47,87 +47,38 @@ export interface Skills {
   number: number;
 }
 
-const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
+const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
   const [profileImage, setProfileImage] = useState<string | undefined>(
     undefined
-  );
-  const [coverImage, setCoverImage] = useState<string | undefined>(undefined);
+  )
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [bioText, setBioText] = useState<string | undefined>("");
   const [isModalOpenEdu, setIsModalOpenEdu] = useState(false);
-  const [isModalOpenExperience, setIsModalOpenExperience] = useState(false);
   const [isEducationExpanded, setIsEducationExpanded] = useState(false);
   const [isExperienceExpanded, setIsExperienceExpanded] = useState(false);
-
   const [userData, setUserData] = useState<any>(null);
+  const [idUser, setIdUser] = useState(null);
 
   useEffect(() => {
     const data = sessionStorage.getItem("userData");
     if (data) {
       const parsedData = JSON.parse(data);
-      setUserData(parsedData);
+      console.log('Dados do usuário:', parsedData);
+
       const imageUrl = parsedData.profile_picture || "/profile.png";
-      console.log('Imagem de perfil:', imageUrl);
+      const imageCoverUrl = parsedData.cover_photo || "/default_cover.png"; 
+
+      setUserData(parsedData);
       setProfileImage(imageUrl);
+      setCoverImage(imageCoverUrl);
+      setIdUser(parsedData.id_user); // Armazena o id_user no estado
     }
   }, []);
-
-  {/*ALTERA FOTO DE PERFIL */ }
-  const handleCoverImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        setCoverImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  
 
 
 
-  const [updateImage, setUpdateImage] = useState<string | null>(null); // Estado para a imagem de atualização
-
-  const handleUpdateImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setUpdateImage(imageUrl); // Atualiza a imagem de visualização
-    }
-  };
-
-  const handleSubmit = async () => {
-    const formData = new FormData();
-    const idUser = userData.id_user;
-    if (updateImage) {
-      // Converte a URL da imagem de volta em um arquivo se você precisar enviar a imagem para a API
-      const response = await fetch(updateImage);
-      const blob = await response.blob();
-      const file = new File([blob], 'profile_picture.jpg', { type: blob.type });
-      formData.append('profile_picture', file);
-    }
-
-    // Envie os dados do formulário para a sua API
-    try {
-      const response = await fetch(`http://localhost:3002/api/updatePhoto/${idUser}`, {
-        method: 'PUT',
-        body: formData,
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log('Imagem atualizada com sucesso:', result);
-        // Aqui você pode atualizar o estado global ou local conforme necessário
-      } else {
-        const errorData = await response.json();
-        console.error('Erro ao atualizar a imagem do perfil:', errorData.message);
-        // Manipule erros como necessário
-      }
-    } catch (error) {
-      console.error('Erro na requisição:', error);
-    }
-  };
-
+  
   {/*EDITA BIO*/ }
   const handleEditBio = () => {
     setIsEditingBio(true);
@@ -138,7 +89,10 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
     setIsEditingBio(false);
   };
 
-  const profileLink = `${window.location.origin}/profile/${id}`;
+
+
+
+  const profileLink = `${window.location.origin}/profile/${id_user}`;
 
   {/*COMPARTILHA O PERFIL*/ }
   const handleShare = async () => {
@@ -324,6 +278,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [editIndexExp, setEditIndexExp] = useState<number | null>(null);
   const [editedExp, setEditedExp] = useState<Experience | null>(null);
+  const [isModalOpenExperience, setIsModalOpenExperience] = useState(false);
 
   const idExperiences = async () => {
     const data = sessionStorage.getItem("userData");
@@ -475,6 +430,7 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   const toggleExpandExperience = () => {
     setIsExperienceExpanded(!isExperienceExpanded);
   };
+
 
 
 
@@ -636,11 +592,6 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
 
 
 
-
-
-
-
-
   const formatDate = (dateString: string | undefined): string => {
     if (!dateString) return ''; // Retorna string vazia se não houver data
     const date = new Date(dateString);
@@ -662,29 +613,122 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
   };
 
 
+
+
+
+  const [coverImage, setCoverImage] = useState<string | null>(null);
+  const [message, setMessage] = useState<string>('');
+
+
+
+  const handleCoverImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files && e.target.files.length > 0) {
+          const file = e.target.files[0];
+          const reader = new FileReader();
+
+          reader.onloadend = async () => {
+              setCoverImage(reader.result as string);
+
+              const data = sessionStorage.getItem("userData");
+              if (!data) {
+                console.error('Usuário não encontrado.');
+                return;
+              }
+              const userData = JSON.parse(data);
+              const id_user = userData.id_user;
+              const formData = new FormData();
+              formData.append('cover_photo', file);
+
+              try {
+                  const response = await fetch(`http://localhost:3002/api/updatePhoto/${id_user}`, {
+                      method: 'PUT',
+                      body: formData,
+                  });
+
+                  if (response.ok) {
+                      const data = await response.json();
+                  } else {
+                      setMessage('Erro ao atualizar a foto de capa.');
+                  }
+              } catch (error) {
+                  console.error('Erro ao enviar a foto de capa:', error);
+                  setMessage('Erro ao enviar a foto de capa.');
+              }
+          };
+
+          reader.readAsDataURL(file); 
+      }
+  };
+
+  const handleProfileImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files && e.target.files.length > 0) {
+          const file = e.target.files[0];
+          const reader = new FileReader();
+
+          reader.onloadend = async () => {
+              setProfileImage(reader.result as string);
+
+              const data = sessionStorage.getItem("userData");
+              if (!data) {
+                console.error('Usuário não encontrado.');
+                return;
+              }
+              const userData = JSON.parse(data);
+              const id_user = userData.id_user;
+              console.log(idUser)
+              const formData = new FormData();
+              formData.append('profile_picture', file);
+
+              try {
+                  const response = await fetch(`http://localhost:3002/api/updatePhoto/${id_user}`, {
+                      method: 'PUT',
+                      body: formData,
+                  });
+
+                  if (response.ok) {
+                      const data = await response.json();
+                      setMessage('Foto de capa atualizada com sucesso!');
+                      console.log('Resposta do servidor:', data);
+                  } else {
+                      setMessage('Erro ao atualizar a foto de capa.');
+                  }
+              } catch (error) {
+                  console.error('Erro ao enviar a foto de capa:', error);
+                  setMessage('Erro ao enviar a foto de capa.');
+              }
+          };
+
+          reader.readAsDataURL(file); // Lê o arquivo como uma URL
+      }
+  };
+
+
+
+
   return (
     <>
       <style.GeneralItens>
         <style.DivTop>
-          <form onSubmit={handleSubmit}>
-            <style.ImageCover className="relative">
-              <img
-                src={coverImage || "/cover.png"}
+          <form name="cover_photo">
+          <style.ImageCover className="relative">
+            <img
+                src={`http://localhost:3002/uploads/${coverImage}`}
                 alt="Cover"
                 className="w-full h-[100px] object-cover"
-              />
-              <style.UploadButton
+            />
+            <style.UploadButton
                 type="file"
                 accept="image/*"
                 id="coverImageUpload"
                 onChange={handleCoverImageChange}
-              />
-              <style.ButtonCoverLabel htmlFor="coverImageUpload">
+            />
+            <style.ButtonCoverLabel htmlFor="coverImageUpload">
                 <FaCamera />
                 <span className="ml-2">Adicionar foto de capa</span>
-              </style.ButtonCoverLabel>
-            </style.ImageCover>
-
+            </style.ButtonCoverLabel>
+        </style.ImageCover>
+            </form>
+            <form name="profile_picture">
             <style.ImageWrapper className="relative">
               <img
                 src={`http://localhost:3002/uploads/${profileImage}`}
@@ -695,13 +739,14 @@ const ProfileContainer: React.FC<{ id: number }> = ({ id }) => {
                 type="file"
                 accept="image/*"
                 id="profileImageUpload"
-                onChange={handleUpdateImageChange}
+                onChange={handleProfileImageChange}
               />
               <style.ButtonLabel htmlFor="profileImageUpload">
                 <FaCamera />
               </style.ButtonLabel>
             </style.ImageWrapper>
-          </form>
+            </form>
+
           <style.DivParagraph>
             <p>{userData?.full_name}</p>
             <style.DivIconShare>
