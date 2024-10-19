@@ -47,6 +47,11 @@ export interface Skills {
   number: number;
 }
 
+interface UserPhotos {
+  profile_picture: string;
+  cover_photo: string;
+}
+
 const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
   const [profileImage, setProfileImage] = useState<string | undefined>(
     undefined
@@ -58,26 +63,18 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
   const [isExperienceExpanded, setIsExperienceExpanded] = useState(false);
   const [userData, setUserData] = useState<any>(null);
   const [idUser, setIdUser] = useState(null);
+  const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(() => {
     const data = sessionStorage.getItem("userData");
     if (data) {
       const parsedData = JSON.parse(data);
       console.log('Dados do usuário:', parsedData);
-
-      const imageUrl = parsedData.profile_picture || "/profile.png";
-      const imageCoverUrl = parsedData.cover_photo || "/default_cover.png"; 
-
       setUserData(parsedData);
-      setProfileImage(imageUrl);
-      setCoverImage(imageCoverUrl);
-      setIdUser(parsedData.id_user); // Armazena o id_user no estado
+      setIdUser(parsedData.id_user);
     }
   }, []);
   
-
-
-
   
   {/*EDITA BIO*/ }
   const handleEditBio = () => {
@@ -609,7 +606,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
   const formatDateForInput = (dateString: string | undefined): string => {
     if (!dateString) return '';
     const date = new Date(dateString);
-    return date.toISOString().split('T')[0]; // Retorna apenas a parte da data no formato yyyy-mm-dd
+    return date.toISOString().split('T')[0];
   };
 
 
@@ -647,6 +644,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
 
                   if (response.ok) {
                       const data = await response.json();
+                      await fetchUserData();
                   } else {
                       setMessage('Erro ao atualizar a foto de capa.');
                   }
@@ -689,6 +687,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
                       const data = await response.json();
                       setMessage('Foto de capa atualizada com sucesso!');
                       console.log('Resposta do servidor:', data);
+                      await fetchUserData();
                   } else {
                       setMessage('Erro ao atualizar a foto de capa.');
                   }
@@ -698,12 +697,37 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
               }
           };
 
-          reader.readAsDataURL(file); // Lê o arquivo como uma URL
+          reader.readAsDataURL(file); 
       }
   };
 
+ 
+  const fetchUserData = async () => {
+    const data = sessionStorage.getItem("userData");
+    if (data) {
+      const parsedData = JSON.parse(data);
+      console.log('Dados do usuário:', parsedData);
 
+      const response = await fetch(`http://localhost:3002/api/getPhoto/${parsedData.id_user}/photos`);
+      if (!response.ok) {
+        console.error('Erro ao buscar fotos do usuário.');
+        return;
+      }
 
+      const userPhotos = await response.json();
+      const imageUrl = userPhotos.profile_picture || "/profile.png" || profileImage;
+      const imageCoverUrl = userPhotos.cover_photo || "/default_cover.png" || coverImage; 
+
+      setUserData(parsedData);
+      setProfileImage(imageUrl);
+      setCoverImage(imageCoverUrl);
+      setIdUser(parsedData.id_user);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, [refresh]);
 
   return (
     <>
@@ -712,7 +736,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
           <form name="cover_photo">
           <style.ImageCover className="relative">
             <img
-                src={`http://localhost:3002/uploads/${coverImage}`}
+                src={`http://localhost:3002/uploads/${coverImage}` || "/default_cover.png" }
                 alt="Cover"
                 className="w-full h-[100px] object-cover"
             />
@@ -731,7 +755,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
             <form name="profile_picture">
             <style.ImageWrapper className="relative">
               <img
-                src={`http://localhost:3002/uploads/${profileImage}`}
+                src={`http://localhost:3002/uploads/${profileImage}` || "/profile.png" }
                 alt="Profile"
                 className="w-full h-[150px] object-cover"
               />
