@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Typography, Descriptions, Button } from 'antd/lib';
-import dayjs from "dayjs"; 
-import { Checked } from '../style';
+import { Checked, StyledButton } from '../style';
 const { Title, Paragraph } = Typography;
 
 export type JobDetailsProps = {
@@ -106,8 +105,8 @@ const JobDetails: React.FC<JobDetailsProps> = ({
   return (
     <Card style={{ margin: '20px' }}>
       <Title level={3}>{title}</Title>
-      <Paragraph type="secondary">{location} - {dayjs(posted_at).format('DD/MM/YYYY')}</Paragraph>
-
+      <Paragraph type="secondary">{location} - {posted_at} </Paragraph>
+      
       <Descriptions column={1} bordered>
         <Descriptions.Item label="Descrição">{description}</Descriptions.Item>
         <Descriptions.Item label="Requisitos">{requirements}</Descriptions.Item>
@@ -117,15 +116,15 @@ const JobDetails: React.FC<JobDetailsProps> = ({
 
       {/* Botão de Interesse */}
       {inscrito ? (
-        <Paragraph type="success" style={{ marginTop: '20px', display: 'flex', color: "#005b3f", fontWeight: 500 }}> <Checked/> Candidatura enviada</Paragraph>
+        <Paragraph type="success" style={{ marginTop: '25px', display: 'flex', color: "#005b3f", fontWeight: 500, fontSize: '16px' }}> <Checked/> Candidatura enviada</Paragraph>
       ) : (
-        <Button 
-          type="default" 
+        <StyledButton
+          type='submit'
           style={{ marginTop: '20px' }} 
           onClick={handleInterest}
         >
           Tenho interesse
-        </Button>
+        </StyledButton>
       )}
     </Card>
   );

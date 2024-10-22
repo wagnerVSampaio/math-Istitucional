@@ -131,7 +131,7 @@ const Jobs: React.FC = () => {
               title={job.title}
               description={job.description}
               location={job.location}
-              posted_at={dayjs(job.posted_at).format('DD/MM/YYYY HH:mm')} // Formatar a data aqui
+              posted_at={dayjs(job.posted_at).format('DD/MM/YYYY')} // Formatar a data aqui
               onClick={() => handleJobClick(job)}
             />
           ))

@@ -89,7 +89,7 @@ export const UserIcon = styled(UserOutlined)`
 `;
 export const Checked = styled(IoCheckmarkCircleSharp)`
   margin-right: 5px;
-  font-size: 20px;
+  font-size: 22px;
 `;
 
 export const DescriptionWrapper = styled.p`
@@ -102,4 +102,28 @@ text-align: justify;
   -webkit-box-orient: vertical;
   height: 7.6;
   line-height: 1.5em;
+`;
+
+export const StyledButton = styled.button`
+  background-color: #008C4A; /* Cor padrão do botão */
+  color: white;
+  font-weight: 400;
+  padding: 6px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #006b3f; /* Cor do botão ao passar o mouse */
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:active {
+    background-color: #005a36; /* Cor do botão ao clicar */
+  }
 `;

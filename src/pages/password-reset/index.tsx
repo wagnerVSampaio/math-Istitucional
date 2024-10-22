@@ -16,6 +16,22 @@ type FieldType = {
 const PasswordReset: React.FC = () => {
   const [email, setEmail] = useState("");
 
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const response = await fetch('http://localhost:3002/api/reset', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        });
+        if (response.ok) {
+             window.location.href = './code-password-reset';
+             sessionStorage.setItem('resetPassword', email);
+        } else {
+            alert('Error sending password reset email');
+        }
+    };
+
   return (
     <>
       <HeaderOverall />
@@ -27,7 +43,7 @@ const PasswordReset: React.FC = () => {
             para você redefinir sua senha.
           </p>
           <div>
-            <StyledInput type="text" placeholder="E-mail" />
+            <StyledInput type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="E-mail" required />
             <div>
             <p className='mb-[20px]'>Esqueceu o e-mail? <StyledSpan>Recuperar</StyledSpan></p>
               <Link href={'./'}>
@@ -35,7 +51,7 @@ const PasswordReset: React.FC = () => {
                     VOLTAR
                   </StyledButtonGoBack>
               </Link>
-              <Link href={'../code-password-reset'}><StyledButton type="submit">AVANÇAR</StyledButton></Link>
+              <StyledButton type="submit" onClick={handleSubmit}>AVANÇAR</StyledButton>
             </div>
           </div>
         </StyledForm>

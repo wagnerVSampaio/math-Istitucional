@@ -11,7 +11,6 @@ import HeaderOverall from "../../components/header-overall"
 import Link from "next/link";
 
 const CodePasswordReset: React.FC = () => {
-  // Estado para armazenar o código inserido
   const [code, setCode] = useState<string>('');
   
   // Referências para os inputs
@@ -43,11 +42,26 @@ const CodePasswordReset: React.FC = () => {
     }
   };
 
+    const handleSubmitCode = async (e: React.FormEvent) => {
+      e.preventDefault();
+      const response = await fetch('http://localhost:3002/api/reset/verify-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ resetCode: code })  
+      });
+  
+      if (response.ok) {
+          window.location.href = '/new-password';
+      } else {
+          alert('Código inválido ou expirado.');
+      }
+  };
+  
   return (
     <>
     <HeaderOverall />
       <StyledPasswordReset>
-        <StyledForm>
+        <StyledForm onSubmit={handleSubmitCode}>
           <h2 className="text-[35px]">Insira o código abaixo</h2>
           <p>
           Verifique o código enviado para seu e-mail para prosseguir com a redefinição da senha.
@@ -55,20 +69,19 @@ const CodePasswordReset: React.FC = () => {
           <div>
           {[...Array(6)].map((_, index) => (
             <StyledInput
-            key={index}
-            ref={(el) => {
-              if (el) {
-                inputRefs.current[index] = el;
-              }
-            }}
-            type="text"
-            value={code[index] || ''}
-            onChange={(e) => handleChange(e, index)}
-            onKeyDown={(e) => handleKeyDown(e, index)}
-            maxLength={1}
-          />
-          
-          ))}
+              key={index}
+                ref={(el) => {
+                  if (el) inputRefs.current[index] = el; // Salva a referência dos inputs
+                  }}
+                                type="text"
+                                value={code[index] || ''} // Mostra o valor atual do input
+                                onChange={(e) => handleChange(e, index)} // Atualiza o código conforme o usuário digita
+                                onKeyDown={(e) => handleKeyDown(e, index)} // Permite navegação com setas e backspace
+                                maxLength={1}
+                                placeholder="-"
+                                required
+                            />
+                        ))} 
             <div>
                 <p className='mb-[20px]'>Não recebeu o código? <StyledSpan>Reenviar</StyledSpan></p>
               <Link href={'../password-reset'}>
@@ -76,7 +89,7 @@ const CodePasswordReset: React.FC = () => {
                     VOLTAR
                   </StyledButtonGoBack>
               </Link>
-              <Link href={'../new-password'}><StyledButton type="submit">AVANÇAR</StyledButton></Link>
+              <StyledButton type="submit">AVANÇAR</StyledButton>
             </div>
           </div>
         </StyledForm>

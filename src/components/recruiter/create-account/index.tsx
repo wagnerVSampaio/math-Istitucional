@@ -186,7 +186,7 @@ const NavRecrutador = () => {
                   type="text"
                   id="cpf"
                   value={cpf}
-                  maxLength={11}
+                  maxLength={14}
                   className="w-[350px]"
                 />
               </Form.Item>
