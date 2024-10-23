@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { AiTwotoneDelete } from "react-icons/ai";
+import { AiFillDelete } from "react-icons/ai";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import { RiDeleteBinLine } from "react-icons/ri";
@@ -36,28 +36,40 @@ export const StyleInput = styled.div`
 export const ButtonRemoveUser = styled.button`
   border: 1px solid #006b3f;
   border-radius: 8px;
-  background-color: #fff;
+  background-color: #ffffff;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
   display: flex;
-  padding: 4px;
+  align-items: center;
+  padding: 5px 16px;
   color: #006b3f;
   margin-left: 20px;
-
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  
   &:hover {
+    background-color: #e6f7f1;
     border-color: #004c2b;
-    box-shadow: 0 4px 8px rgba(0, 107, 63, 0.3);
+    box-shadow: 0 6px 12px rgba(0, 107, 63, 0.2);
   }
 
   &:active {
     transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 107, 63, 0.3);
   }
+
+  &:focus {
+    outline: 2px solid #004c2b;
+    outline-offset: 2px;
+  }
+
 `;
 
-export const RemoveUser = styled(AiTwotoneDelete)`
+export const RemoveUser = styled(AiFillDelete)`
   font-size: 22px;
   color: #005b3f;
   cursor: pointer;
+
 `;
 export const ConfirmRemoveUser = styled(RiDeleteBinLine)`
   font-size: 22px;

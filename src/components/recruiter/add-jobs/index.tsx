@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Tooltip, Modal, Checkbox, Button, InputNumber, message } from 'antd/lib';
 import * as style from "./style";
 
+
 type JobDetails = {
   id_job: number;
   id_recruiter: number;
@@ -28,6 +29,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
   const [isSelecting, setIsSelecting] = useState(false);
   const [jobs, setJobs] = useState<JobDetails[]>([]);
   const [editingJob, setEditingJob] = useState<JobDetails | null>(null);
+  const [editIndexJob, setEditIndexJob] = useState<number | null>(null);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -116,29 +118,75 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
   }, [usersId]);
     
   /* EDITAR VAGAS */
-/*   const handleEditJob = (jobs: JobDetails) => {
-    setEditingJob(jobs);
-    setIsModalVisible(true);
-  }; */
-  const handleEditOk = async () => {
-    if (!editingJob) return; 
-    try {
-      await fetch(`http://localhost:3002/api/updateVaga/${editingJob.id_job}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editingJob), 
-      });
-      setJobs((prevJobs) =>
-        prevJobs.map((job) => (job.id_job === editingJob.id_job ? { ...job, ...editingJob } : job))
-      );
-      setIsModalVisible(false);
-      setEditingJob(null);
-    } catch (error) {
-      console.error("Erro ao editar a vaga:", error);
-    }
+  const handleEditJobs = (job: JobDetails) => {
+    setEditingJob({
+      id_job: job.id_job,
+      id_recruiter: job.id_recruiter,
+      title: job.title,
+      description: job.description,
+      requirements: job.requirements,
+      benefits: job.benefits,
+      location: job.location,
+      posted_at: job.posted_at, 
+      salary: job.salary,
+      contact: job.contact,
+    });
+    setEditingJob(job); 
+    form.setFieldsValue(job);
+    setEditIndexJob(jobs.indexOf(job));
+    setIsModalVisibleEdit(true)
   };
+  
+  /* Função para salvar a edição de uma vaga de emprego */
+  const handleSaveEditJob = async () => {
+    const data = sessionStorage.getItem("userData");
+    if (!data) {
+        console.error('Usuário não encontrado.');
+        return;
+    }
+
+    const userData = JSON.parse(data);
+    const idRecruiter = userData.id_recruiter;
+
+    if (editIndexJob !== null && editingJob) {
+        try {
+            const formValues = await form.validateFields();
+
+            const jobWithRecruiter = {
+                ...editingJob,
+                ...formValues,
+                id_recruiter: idRecruiter
+            };
+
+            const response = await fetch(`http://localhost:3002/api/updateJob/${editingJob.id_job}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jobWithRecruiter),
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao atualizar a vaga');
+            }
+
+            const updatedJob = await response.json();
+            const updatedJobs = jobs.map((job, index) =>
+                index === editIndexJob ? updatedJob : job
+            );
+
+            setJobs(updatedJobs);
+            form.resetFields(); 
+            setEditIndexJob(null);
+            setEditingJob(null);
+            setIsModalVisibleEdit(false); 
+
+        } catch (error) {
+            console.error('Erro:', error);
+        }
+    }
+};
+
 
 
   /* Alterna entre a seleção e a remoção */
@@ -195,12 +243,6 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
   );
 
 
-
-
-  const handleEditJob= () => {
-    setIsModalVisibleEdit(true);
-  };
-
   const handleCancelEdit = () => {
     setIsModalVisibleEdit(false);
   };
@@ -226,7 +268,6 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
                 {isSelecting ? <style.ConfirmRemoveUser /> : <style.RemoveUser />}
               </style.ButtonRemoveUser>
             </Tooltip>
-            {/* <style.ButtonEdit><style.EditJob/></style.ButtonEdit> */}
           </style.DivTopSearch>
 
           {filteredUsers.length === 0 ? (
@@ -245,7 +286,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
                       }}
                     >
                       <div className="flex flex-col m-[20px]">
-                        <style.StyledParagraph>{user.title} <Tooltip title="Editar vaga"><style.EditJob onClick={() => handleEditJob()} /></Tooltip></style.StyledParagraph>
+                        <style.StyledParagraph>{user.title} <Tooltip title="Editar vaga"><style.EditJob onClick={() => handleEditJobs(user)} /></Tooltip></style.StyledParagraph>
                         <style.StyledP>
                           <style.Address /> {user.location}
                         </style.StyledP>
@@ -373,17 +414,18 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
           </Form>
         </style.Container>
       </Modal>
-      {jobDetails && (
+      {editingJob && (
         <Modal
           title="Editar Vaga"
           open={isModalVisibleEdit}
           onCancel={handleCancelEdit}
           footer={null}
-          onOk={handleEditOk}
+
         >
           <Form
-            layout="vertical"
-            initialValues={jobDetails}
+             form={form}
+             layout="vertical"
+             onFinish={handleSaveEditJob} 
           >
             <Form.Item label="Título" name="title">
               <Input />
@@ -400,10 +442,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
             <Form.Item label="Localização" name="location">
               <Input />
             </Form.Item>
-            <Form.Item label="Data de Publicação" name="posted_at">
-              <Input />
-            </Form.Item>
-            <Form.Item label="Salário">
+            <Form.Item label="Salário" name="salary">
               <Input />
             </Form.Item>
             <Form.Item label="Contato" name="contact" >
