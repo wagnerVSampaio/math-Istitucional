@@ -36,3 +36,14 @@ export const ButtonExit = styled(Button)`
   margin-right: 40px;
   border: 1px solid #006b3f;
 `;
+
+export const InputEdit = styled.input`
+  width: 350px;
+  height: 32px;
+  border: 1px solid #006b3f;
+  padding: 6px;
+  border-radius: 5px;
+  &:focus{
+    outline: none;
+  }
+`;

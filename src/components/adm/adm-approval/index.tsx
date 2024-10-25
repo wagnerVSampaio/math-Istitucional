@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import * as style from "./style"; // Ajuste o caminho conforme necessário
-import { ButtonApprove, ButtonRefuse } from "./style"; // Ajuste o estilo conforme necessário
+import * as style from "./style"; 
+import { ButtonApprove, ButtonRefuse } from "./style"; 
 import { Modal } from "antd/lib";
 
 interface PendingUser {
@@ -129,16 +129,20 @@ useEffect(() => {
   return (
     
     <style.DivNotification>
-      
-      <div>
-        <style.StyledUl>
+  <div>
+    {pendingUsers.length === 0 ? (
+      <style.divNotUser >
+        <style.Info/>
+        <style.ParagraphNotUser>Não há usuários para aprovar</style.ParagraphNotUser>
+      </style.divNotUser>
+    ) : (
+      <style.StyledUl>
         {pendingUsers.map((user) => (
           <style.StyledLi key={user.id_user} style={{ backgroundColor: '#fff' }}>
             <div className="flex flex-col m-[20px]">
               <style.StyledParagraph>{user.full_name}</style.StyledParagraph>
               <style.StyledP>
-                <style.Email />{" "}
-                <span>{user.email}</span>
+                <style.Email /> <span>{user.email}</span>
               </style.StyledP>
               <style.StyledP>
                 <style.Address /> {user.campus}
@@ -151,29 +155,31 @@ useEffect(() => {
           </style.StyledLi>
         ))}
       </style.StyledUl>
-      <Modal
-        title="Deseja prosseguir com a aprovação?"
-        open={isModalVisible}
-        onOk={handleConfirm}
-        onCancel={handleCancel}
-        okText="Sim"
-        cancelText="Não"
-      >
-        <p>Você está prestes a aprovar o usuário. Deseja continuar?</p>
-      </Modal>
-      <Modal
-        title="Deseja recusar?"
-        open={isModalVisibleDelete}
-        onOk={handleDelete}
-        onCancel={handleCancelDelete}
-        okText="Sim"
-        cancelText="Não"
-      >
-        <p>Você está prestes a reprovar o usuário. Deseja continuar?</p>
-      </Modal>
-      </div>
-          
-    </style.DivNotification>
+    )}
+
+    <Modal
+      title="Deseja prosseguir com a aprovação?"
+      open={isModalVisible}
+      onOk={handleConfirm}
+      onCancel={handleCancel}
+      okText="Sim"
+      cancelText="Não"
+    >
+      <p>Você está prestes a aprovar o usuário. Deseja continuar?</p>
+    </Modal>
+    <Modal
+      title="Deseja recusar?"
+      open={isModalVisibleDelete}
+      onOk={handleDelete}
+      onCancel={handleCancelDelete}
+      okText="Sim"
+      cancelText="Não"
+    >
+      <p>Você está prestes a reprovar o usuário. Deseja continuar?</p>
+    </Modal>
+  </div>
+</style.DivNotification>
+
   );
 };
 

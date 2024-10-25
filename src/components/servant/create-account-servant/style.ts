@@ -19,5 +19,24 @@ export const ButtonLabelDate = styled.label`
   display: inline-block;
   cursor: pointer;
 `;
-
+export const InputEdit = styled.input`
+  width: 350px;
+  height: 32px;
+  border: 1px solid #006b3f;
+  padding: 6px;
+  border-radius: 5px;
+  &:focus{
+    outline: none;
+  }
+`;
+export const InputEditPhone = styled.input`
+  width: 250px;
+  height: 32px;
+  border: 1px solid #006b3f;
+  padding: 6px;
+  border-radius: 5px;
+  &:focus{
+    outline: none;
+  }
+`;
 

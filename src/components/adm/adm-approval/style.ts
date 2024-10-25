@@ -2,6 +2,7 @@ import styled, {css} from "styled-components";
 import { IoMdMail } from "react-icons/io";
 import { PiStudentFill } from "react-icons/pi";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import { FaCircleInfo } from "react-icons/fa6";
 
 export const DivNotification = styled.div`
     margin: 5px auto;
@@ -100,5 +101,20 @@ export const Degree = styled( PiStudentFill )`
 `;
 
 export const Address = styled(FaMapMarkerAlt)`
+  ${iconsStyle}
+`;
+
+export const divNotUser = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: #272727;
+`;
+export const ParagraphNotUser = styled.p`
+  font-weight: 500;
+`;
+export const Info = styled(FaCircleInfo)`
   ${iconsStyle}
 `;

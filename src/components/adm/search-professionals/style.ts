@@ -16,11 +16,11 @@ export const DivSearch = styled.div`
 
 export const DivTopSearch = styled.div`
     margin: 5px auto;
-    width: 70%;
-    border-radius: 10px;
+    width: 84%;
+    //border-radius: 10px;
     border: 1px solid #ddd;
     background-color: #ffff;
-    box-shadow: 0 4px 8px rgba(0, 107, 63, 0.4);
+    box-shadow: 0 4px 8px rgba(0, 107, 63, 0.2);
     margin-top: 60px;
     height: 60px;
     display: flex;
@@ -67,7 +67,7 @@ export const ConfirmRemoveUser = styled(RiDeleteBinLine)`
 
 export const DivNotification = styled.div`
     margin: 5px auto;
-    width: 70%;
+    width: 85%;
     border-radius: 10px;
     color: #272727;
     margin-top: 10px;
@@ -81,7 +81,7 @@ export const StyledUl = styled.ul`
   padding: 0;
   border: 1px solid #ddd;
   background-color: #f4f4f4;
-  box-shadow: 0 4px 8px rgba(0, 107, 63, 0.4);
+  box-shadow: 0 4px 8px rgba(0, 107, 63, 0.2);
 `;
 
 export const StyledLi = styled.li`

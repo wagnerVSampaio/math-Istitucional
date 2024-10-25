@@ -3,11 +3,12 @@ import React, { useState } from "react";
 import { Checkbox, DatePicker, Form, Input, Button, Flex, Space, message } from "antd/lib";
 import Link from "next/link";
 import type { CheckboxProps } from "antd/lib";
-import { ButtonLabelDate, DateBirthUpload, UploadButtonDate } from "./style";
+import { ButtonLabelDate, DateBirthUpload, InputEdit, InputEditPhone, UploadButtonDate } from "./style";
 import "./formEdited.css";
 import dayjs, { Dayjs } from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { useRouter } from 'next/navigation';
+import InputMask from "react-input-mask";
 
 
 type FieldType = {
@@ -40,6 +41,7 @@ const dateFormat = "DD/MM/YYYY";
 
 const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
   const [cpf, setCpf] = useState("");
+  const [phone, setPhone] = useState("");
   const [checked, setChecked] = useState(true);
   const [disabled, setDisabled] = useState(false);
   const [registerImage, setRegisterImage] = useState<string | undefined>(undefined);
@@ -115,20 +117,6 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
     }
   };
 
-  const formateCPF = (value: string) => {
-    const apenasNumeros = value.replace(/\D/g, '');
-    const formatado = apenasNumeros
-        .replace(/(\d{3})(\d)/, '$1.$2')
-        .replace(/(\d{3})(\d)/, '$1.$2')
-        .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-    return formatado;
-};
-
-const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    const cpfFormatado = formateCPF(value);
-    setCpf(cpfFormatado);
-};
 
   return (
     <Form
@@ -161,13 +149,21 @@ const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             name="cpf"
             rules={[{ required: true, message: "Por favor, insira o CPF!" }]}
           >
-            <Input
-              type="text"
-              id="cpf"
-              value={cpf}
-              maxLength={11}
-              className="w-[350px]"
-            />
+            <InputMask
+                mask="999.999.999-99" // Máscara de CPF
+                value={cpf}
+                onChange={(e) => setCpf(e.target.value)}
+              >
+                {({ onChange, value, ...rest }) => (
+                  <InputEdit
+                    {...rest}
+                    value={value}
+                    onChange={onChange}
+                    type="text"
+                    id="cpf"
+                  />
+                )}
+              </InputMask>
           </Form.Item>
 
           <p className="mt-[3px] mb-[3px]">
@@ -215,7 +211,20 @@ const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             name="phone"
             rules={[{ required: true, message: "Por favor, insira o telefone!" }]}
           >
-            <Input className="w-[250px]" />
+            <InputMask
+                mask="(99) 99999-9999" 
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              >
+                {({ onChange, value, ...rest }) => (
+                  <InputEditPhone
+                    {...rest}
+                    value={value}
+                    onChange={onChange}
+                    id="phone"
+                  />
+                )}
+              </InputMask>
           </Form.Item>
         </div>
 

@@ -58,7 +58,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
     const idRecruiter = userData.id_user;
 
     try {
-      const response = await fetch("http://localhost:3002/api/createvagas", {
+      const response = await fetch("http://localhost:3002/api/createJobs", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -102,7 +102,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
       const userData = JSON.parse(data);
       const idRecruiter = userData.id_user;
       try {
-        const response = await fetch(`http://localhost:3002/api/getVagaIDRecruiter/${idRecruiter}`);
+        const response = await fetch(`http://localhost:3002/api/getJobIDRecruiter/${idRecruiter}`);
         const data = await response.json();
         console.log(data); 
         if (Array.isArray(data)) {
@@ -203,7 +203,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
     try {
       const updatedUsers = jobs.filter(user => !selectedAdms.includes(user.id_job));
       for (let userId of selectedAdms) {
-        const response = await fetch(`http://localhost:3002/api/deleteVaga/${userId}`, {
+        const response = await fetch(`http://localhost:3002/api/deleteJob/${userId}`, {
           method: 'DELETE',
         });
         if (!response.ok) {
@@ -291,7 +291,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
                           <style.Address /> {user.location}
                         </style.StyledP>
                         <Tooltip title="Entrar em contato" placement='right'>
-                          <style.StyledP>
+                          <style.StyledP style={{cursor: 'pointer'}}>
                             <style.Email />{" "}
                             <span
                               style={{ textDecoration: "none" }}
@@ -328,15 +328,18 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
         onCancel={() => setIsModalVisibleRemove(false)}
         okText="Sim, remover"
         cancelText="Cancelar"
+        style={{top: 5}}
       >
         <p>Tem certeza de que deseja remover os usuários selecionados?</p>
       </Modal>
+
+      {/* Modal de adicionar vaga */}
       <Modal
         open={isModalVisibleAdd}
         onCancel={handleCancelAdd}
         footer={null}
         width={700}
-        style={{ top: 10 }}
+        style={{ top: 5 }}
       >
         <style.Container>
           <style.Title>Adicionar Vaga</style.Title>
@@ -414,13 +417,16 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
           </Form>
         </style.Container>
       </Modal>
+
+      {/* Modal para editar vaga */}
       {editingJob && (
         <Modal
           title="Editar Vaga"
           open={isModalVisibleEdit}
           onCancel={handleCancelEdit}
           footer={null}
-
+          width={700}
+          style={{top: 5}}
         >
           <Form
              form={form}

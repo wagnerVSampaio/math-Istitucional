@@ -3,6 +3,7 @@ import { SlArrowDown, SlArrowUp } from "react-icons/sl";
 import { Form, Input } from "antd/lib";
 import FooterExpandable from "@/components/footer-expandable";
 import HeaderOverall from "@/components/header-overall";
+import * as style from "./style"; 
 
 type FieldType = {
   nome?: string;
@@ -15,19 +16,6 @@ const CadastroExpansivel: React.FC = () => {
 
   const alternarExpansaoDados = (): void => {
     setExpandido(!expandidoDados);
-  };
-
-  const [expandidoHabilidades, setExpandidoHabilidades] =
-    useState<boolean>(false);
-
-  const alternarExpansaoHabilidades = (): void => {
-    setExpandidoHabilidades(!expandidoHabilidades);
-  };
-
-  const [expandidoFormacao, setExpandidoFormacao] = useState<boolean>(false);
-
-  const alternarExpansaoFormacao = (): void => {
-    setExpandidoFormacao(!expandidoFormacao);
   };
 
   return (
@@ -47,19 +35,9 @@ const CadastroExpansivel: React.FC = () => {
         <div className="mt-[20px] ">
           <form>
             <div style={{ color: "black" }}>
-              <div
+              <style.DivPersonalData
                 onClick={alternarExpansaoDados}
-                style={{
-                  cursor: "pointer",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  width: "800px",
-                  height: "80px",
-                  borderRadius: "10px",
-                  backgroundColor: "white",
-                  padding: "30px",
-                }}
+
               >
                 <span
                   style={{
@@ -74,7 +52,7 @@ const CadastroExpansivel: React.FC = () => {
                 <span style={{ padding: "30px" }}>
                   {expandidoDados ? <SlArrowUp /> : <SlArrowDown />}
                 </span>
-              </div>
+              </style.DivPersonalData>
               {expandidoDados && (
                 <div
                   style={{

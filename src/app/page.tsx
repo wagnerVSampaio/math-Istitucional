@@ -88,6 +88,7 @@ const App: React.FC = () => {
             >
               <StyledInput
                 value={email}
+                placeholder="Insira seu e-mail"
                 onChange={(e) => setEmail(e.target.value)}
               />
             </Form.Item>
