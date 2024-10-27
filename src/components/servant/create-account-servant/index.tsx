@@ -16,6 +16,7 @@ type FieldType = {
   cpf: string;
   email: string;
   profile_picture: string;
+  cover_photo: string;
   birth_date: string;
   password: string;
   passwordconfirmation: string;
@@ -79,43 +80,50 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
   };
 
   const RegisterServidor = async (values: FieldType) => {
-    console.log("Formulário enviado!", values);
-    try {
-      const formData = new FormData(); // Crie uma instância de FormData
+  console.log("Formulário enviado!", values);
+  try {
+    const formData = new FormData(); // Crie uma instância de FormData
 
-      // Adicione todos os campos ao FormData
-      formData.append("full_name", values.full_name);
-      formData.append("email", values.email);
-      formData.append("password", values.password);
-      formData.append("cpf", values.cpf);
-      formData.append("birth_date", formatDate(selectedDate!)); // Formata a data no padrão do PostgreSQL
-      formData.append("phone", values.phone);
-      formData.append("user_type", 'server');
+    // Adicione todos os campos ao FormData
+    formData.append("full_name", values.full_name);
+    formData.append("email", values.email);
+    formData.append("password", values.password);
+    formData.append("cpf", values.cpf);
+    formData.append("birth_date", formatDate(selectedDate!)); // Formata a data no padrão do PostgreSQL
+    formData.append("phone", values.phone);
+    formData.append("user_type", "server");
 
-      // Adicione o arquivo da imagem
-      if (registerImage) {
-        const file = await fetch(registerImage).then((r) => r.blob()); // Obtenha o arquivo Blob da URL
-        formData.append("profile_picture", file, "photo.jpg"); // Nomeie o arquivo como você quiser
-      }
+    // URLs das imagens padrão para perfil e capa
+    const defaultProfileImageUrl = "profile.png";
+    const defaultCoverImageUrl = "/cover.png";
 
-      const response = await fetch("http://localhost:3002/api/createusers", {
-        method: "POST",
-        body: formData,
-      });
+    // Verifique se registerImage está presente; caso contrário, use a imagem padrão de perfil
+    const profileImageUrl = registerImage || defaultProfileImageUrl;
+    const profileFile = await fetch(profileImageUrl).then((r) => r.blob()); // Obtenha o Blob da URL
+    formData.append("profile_picture", profileFile, "profile_photo.png");
 
-      const data = await response.json();
-      if (response.ok) {
-        router.push("/");
-        message.success('Cadastro realizado com sucesso! Realize o login.',5); 
-      } else {
-        console.error("Erro do servidor:", data);
-        setErrorMessage(data.error || "Erro ao registrar");
-      }
-    } catch (error) {
-      console.error("Erro ao enviar dados:", error);
-      setErrorMessage("Erro ao registrar");
+    const coverImageUrl = defaultCoverImageUrl;
+    const coverFile = await fetch(coverImageUrl).then((r) => r.blob()); // Obtenha o Blob da URL
+    formData.append("cover_photo", coverFile, "cover_photo.png");
+
+    const response = await fetch("http://localhost:3002/api/createusers", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      router.push("/");
+      message.success("Cadastro realizado com sucesso! Realize o login.", 5);
+    } else {
+      console.error("Erro do servidor:", data);
+      setErrorMessage(data.error || "Erro ao registrar");
     }
-  };
+  } catch (error) {
+    console.error("Erro ao enviar dados:", error);
+    setErrorMessage("Erro ao registrar");
+  }
+};
 
 
   return (

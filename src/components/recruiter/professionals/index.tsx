@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as style from "./style";
-
+import { Spin } from 'antd/lib';
 interface Education {
   id_education: number;
   course: string;
@@ -68,8 +68,8 @@ const Professionals: React.FC<ProfessionalsProps> = ({ highlightedId }) => {
 
   return (
     <style.DivNotification>
-      {loading ? ( // Exibe mensagem de loading enquanto os dados estão sendo carregados
-        <p>Carregando...</p>
+      {loading ? ( 
+        <style.divLoading><Spin size="large"/></style.divLoading>
       ) : (
         <style.StyledUl>
           {otherProfessionals.map((professional) => (
@@ -79,7 +79,9 @@ const Professionals: React.FC<ProfessionalsProps> = ({ highlightedId }) => {
                 <style.StyledP>
                   {professional.education.map((edu) => (
                     <div key={edu.id_education} style={{display: 'flex'}}>
+                      <div style={{display: 'flex'}}>
                       <style.Degree /> {edu.course} - {edu.institution}
+                      </div>
                     </div>
                   ))}
                 </style.StyledP>
@@ -91,6 +93,7 @@ const Professionals: React.FC<ProfessionalsProps> = ({ highlightedId }) => {
                   ))}
                 </style.StyledP>
                 <style.StyledP>
+                  <div style={{display: 'flex'}}>
                   <style.Email />{" "}
                   <span
                     style={{ textDecoration: "none" }}
@@ -100,6 +103,7 @@ const Professionals: React.FC<ProfessionalsProps> = ({ highlightedId }) => {
                   >
                     {professional.email}
                   </span>
+                  </div>
                 </style.StyledP>
 
 

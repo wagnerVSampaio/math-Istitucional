@@ -1,35 +1,20 @@
-// src/components/CPFInput.tsx
-import React from "react";
-import InputMask from "react-input-mask";
+import React from 'react';
 import styled from "styled-components";
+import { Spin } from 'antd/lib';
 
-const InputEdit = styled.input`
-    width: 270px;
-    height: 30px;
-    border: 1px solid #228B22;
-    padding: 6px;
-    border-radius: 5px;
+export const Loading = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Ocupa a altura total da tela */
 `;
-    
 
-const CPFInput: React.FC = () => {
-  const [cpf, setCpf] = React.useState("");
-
+function Index() {
   return (
-    <InputMask
-      mask="999.999.999-99" // Máscara de CPF
-      value={cpf}
-      onChange={(e) => setCpf(e.target.value)}
-    >
-      {({ onChange, value, ...rest }) => (
-        <InputEdit
-          {...rest}
-          value={value}
-          onChange={onChange}
-        />
-      )}
-    </InputMask>
+    <Loading>
+      <Spin size="large" /> {/* Tamanho grande para melhor visibilidade */}
+    </Loading>
   );
-};
+}
 
-export default CPFInput;
+export default Index;

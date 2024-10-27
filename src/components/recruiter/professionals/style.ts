@@ -4,13 +4,14 @@ import { FaRegStar } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import { GrCertificate } from "react-icons/gr";
 import { AiOutlineSafetyCertificate } from "react-icons/ai";
+
 export const DivNotification = styled.div`
     margin: 5px auto;
     width: 90%;
     border-radius: 10px;
     color: #272727;
     margin-top: 20px;
-    height: 500px;
+    height: 600px;
     overflow-x: auto;
 `;
 
@@ -42,6 +43,7 @@ export const StyledParagraph = styled.ul`
 export const StyledP = styled.ul`
   display: flex;
   font-size: 15px;
+  flex-direction: column;
 `;
 export const ButtonFavorite = styled.button`
   padding: 8px 30px;
@@ -84,4 +86,10 @@ export const FavoriteSelect = styled(FaStar)`
   font-size: 15px;
   color: #006B3F;
   cursor: pointer;
+`;
+export const divLoading = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 `;

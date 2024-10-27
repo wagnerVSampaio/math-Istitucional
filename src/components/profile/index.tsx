@@ -707,7 +707,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
 
       const userPhotos = await response.json();
       const imageUrl = userPhotos.profile_picture || "/profile.png" || profileImage;
-      const imageCoverUrl = userPhotos.cover_photo || "/default_cover.png" || coverImage;
+      const imageCoverUrl = userPhotos.cover_photo || "/cover.png" || coverImage;
 
       setUserData(parsedData);
       setProfileImage(imageUrl);
@@ -838,7 +838,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
           <form name="cover_photo">
             <style.ImageCover className="relative">
               <img
-                src={`http://localhost:3002/uploads/${coverImage}` || "/default_cover.png"}
+                src={`http://localhost:3002/uploads/${coverImage}` || "/cover.png"}
                 alt="Cover"
                 className="w-full h-[100px] object-cover"
               />

@@ -25,7 +25,7 @@ const Jobs: React.FC = () => {
     const fetchJobs = async () => {
       setLoading(true);
       try {
-        const response = await fetch("http://localhost:3002/api/getJobs");
+        const response = await fetch("http://localhost:3002/api/getJob");
         const data = await response.json();
         
         if (Array.isArray(data)) {

@@ -87,18 +87,26 @@ export const FavoriteSelect = styled(FaStar)`
   cursor: pointer;
 `;
 export const StyledImageContainer = styled.div`
-width: 100px;           /* Largura do círculo */
-height: 100px;          /* Altura do círculo */
-border-radius: 50%;     /* Forma circular */
-overflow: hidden;       /* Esconde a parte da imagem que sai do círculo */
-display: flex;          /* Para centralizar a imagem */
-align-items: center;    /* Centraliza verticalmente */
-justify-content: center; /* Centraliza horizontalmente */
+width: 100px;   
+height: 100px;    
+border-radius: 50%;  
+overflow: hidden;     
+display: flex;        
+align-items: center;   
+justify-content: center;
 margin-left: 30px;
 margin-right: 20px;
 `;
 export const StyledImage = styled.img`
-width: 100%;            /* Ajusta a largura da imagem ao contêiner */
-height: auto;           /* Mantém a proporção da imagem */
-object-fit: cover;      /* Cobre o contêiner, cortando as partes que sobram */
+width: 100%;    
+height: auto;       
+object-fit: cover;     
+`;
+export const ButtonRemove = styled.button`
+  padding: 5px 20px;
+  background-color: red;
+  color: #ffff;
+  border-radius: 5px;
+  margin-right: 15px;
+  font-weight: 500;
 `;

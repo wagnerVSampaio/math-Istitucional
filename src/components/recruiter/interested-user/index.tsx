@@ -199,6 +199,7 @@ const UserInterests: React.FC = () => {
                             </Descriptions.Item> 
 
                         </Descriptions>
+                        <style.ButtonRemove>Não tenho interesse</style.ButtonRemove>
                         <Button onClick={() => handleContactClick(selectedUser.email)} style={{ marginTop: '20px', backgroundColor: "#006b3f", color: '#ffff', fontWeight: '500' }}>
                             Entrar em Contato
                         </Button>
