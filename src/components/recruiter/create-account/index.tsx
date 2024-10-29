@@ -1,16 +1,9 @@
 import React, { useState } from "react";
-import { Checkbox, Form, Input, Button, Flex, Select, Modal } from "antd/lib";
+import { Checkbox, Form, Flex, Select, Modal } from "antd/lib";
 import Link from "next/link";
 import type { CheckboxProps } from "antd/lib";
 import { useRouter } from 'next/navigation';
-import {
-  ButtonCreate,
-  ButtonExit,
-  ButtonLabelDate,
-  DateBirthUpload,
-  InputEdit,
-  UploadButtonDate,
-} from "./style";
+import * as style from './style';
 import "./formEdited.css"
 import InputMask from "react-input-mask";
 type FieldType = {
@@ -132,11 +125,11 @@ const NavRecrutador = () => {
         const file = await fetch(registerImage).then(r => r.blob()); // Obtenha o arquivo Blob da URL
         formData.append('profile_picture', file, 'photo.jpg'); // Nomeie o arquivo como você quiser
       }
-  
+
       const coverImageUrl = defaultCoverImageUrl;
       const coverFile = await fetch(coverImageUrl).then((r) => r.blob()); // Obtenha o Blob da URL
       formData.append("cover_photo", coverFile, "cover_photo.png");
-      
+
       // Envia os dados para criar o usuário pendente
       const response = await fetch('http://localhost:3002/api/createusers', {
         method: 'POST',
@@ -160,6 +153,7 @@ const NavRecrutador = () => {
 
   return (
     <>
+
       <Form<FieldType>
         labelCol={{ span: 1 }}
         wrapperCol={{ span: 14 }}
@@ -173,30 +167,30 @@ const NavRecrutador = () => {
       >
         <div className="flex">
           <div className="mr-[75px]">
-            <p className="mb-[3px]">
+            <style.ParagraphStyled className="mb-[3px]">
               Nome completo <strong className="text-red-500"> *</strong>
-            </p>
+            </style.ParagraphStyled>
             <Form.Item<FieldType>
               name="full_name"
               rules={[{ required: true, message: "Por favor, insira o nome!" }]}
             >
-              <Input className="w-[350px]" />
+              <style.InputEditForm />
             </Form.Item>
 
-            <p className="mt-[3px] mb-[3px]">
+            <style.ParagraphStyled className="mt-[3px] mb-[3px]">
               CPF <strong className="text-red-500"> *</strong>
-            </p>
+            </style.ParagraphStyled>
             <Form.Item<FieldType>
               name="cpf"
               rules={[{ required: true, message: "Por favor, insira o CPF!" }]}
             >
               <InputMask
-                mask="999.999.999-99" 
+                mask="999.999.999-99"
                 value={cpf}
                 onChange={(e) => setCpf(e.target.value)}
               >
                 {({ onChange, value, ...rest }) => (
-                  <InputEdit
+                  <style.InputEdit
                     {...rest}
                     value={value}
                     onChange={onChange}
@@ -207,48 +201,48 @@ const NavRecrutador = () => {
               </InputMask>
             </Form.Item>
 
-            <p className="mt-[3px] mb-[3px]">
+            <style.ParagraphStyled className="mt-[3px] mb-[3px]">
               E-mail <strong className="text-red-500"> *</strong>
-            </p>
+            </style.ParagraphStyled>
             <Form.Item<FieldType>
               name="email"
               rules={[{ required: true, message: "Por favor, insira o e-mail!" }]}
             >
-              <Input className="w-[350px]" />
+              <style.InputEditForm />
             </Form.Item>
           </div>
 
           <div>
-            <p className="mb-[3px]">
+            <style.ParagraphStyled className="mb-[3px]">
               Foto <strong className="text-red-500"> *</strong>{" "}
-            </p>
+            </style.ParagraphStyled>
             <Form.Item<FieldType> name="profile_picture">
-              <ButtonLabelDate htmlFor="registerImageUpload">
-                <DateBirthUpload className="relative">
+              <style.ButtonLabelDate htmlFor="registerImageUpload">
+                <style.DateBirthUpload className="relative">
                   <img
                     src={registerImage || "background-upload.png"}
                     alt="Register"
-                    className="w-full h-full object-cover" 
+                    className="w-full h-full object-cover"
                   />
-                  <UploadButtonDate
+                  <style.UploadButtonDate
                     type="file"
                     accept="image/*"
                     id="registerImageUpload"
                     onChange={handleRegisterImageChange}
                     style={{ display: "none" }}
                   />
-                </DateBirthUpload>
-              </ButtonLabelDate>
+                </style.DateBirthUpload>
+              </style.ButtonLabelDate>
             </Form.Item>
           </div>
         </div>
         <div className="flex mb-1">
           <div className="mr-[50px]">
-            <p className="mb-[3px]">
+            <style.ParagraphStyled className="mb-[3px]">
               Lotação <strong className="text-red-500"> *</strong>
-            </p>
+            </style.ParagraphStyled>
             <Form.Item<FieldType> name="allocation">
-              <Select placeholder="" style={{ width: '250px' }}>
+              <Select placeholder="" className="select-form-item">
                 <Option value="PROAD">PROAD - Pró-Reitoria de Administração</Option>
                 <Option value="PROCCE">PROCCE -  Pró-Reitoria da Cultura,Comunidade e Extensão</Option>
                 <Option value="PROPLAN">PROPLAN - Pró-Reitoria de Planejamento e Desenvolvimento Institucional</Option>
@@ -261,14 +255,14 @@ const NavRecrutador = () => {
           </div>
 
           <div>
-            <p className="mb-[3px]">
+            <style.ParagraphStyled className="mb-[3px]">
               Campus <strong className="text-red-500"> * </strong>
-            </p>
+            </style.ParagraphStyled>
             <Form.Item<FieldType> name="campus">
               <Select
-                placeholder="Selecione o Campus"
+                placeholder=""
                 showSearch
-                style={{ width: '250px' }}>
+                className="select-form-item">
                 <Option value="Santarém (Campus sede)">Santarém (Campus sede)</Option>
                 <Option value="Campus Alenquer">Campus Alenquer</Option>
                 <Option value="Campus Itaituba">Campus Itaituba</Option>
@@ -282,9 +276,9 @@ const NavRecrutador = () => {
         </div>
         <div className="flex">
           <div className="mr-[50px]">
-            <p className="mb-[3px]">
+            <style.ParagraphStyled className="mb-[3px]">
               Senha <strong className="text-red-500"> *</strong>
-            </p>
+            </style.ParagraphStyled>
             <Form.Item<FieldType>
               name="password"
               rules={[
@@ -294,13 +288,13 @@ const NavRecrutador = () => {
                 },
               ]}
             >
-              <Input.Password className="w-[250px]" />
+              <style.InputEditFormPass />
             </Form.Item>
           </div>
           <div>
-            <p className="mb-[3px]">
+            <style.ParagraphStyled className="mb-[3px]">
               Confirmação de senha <strong className="text-red-500"> *</strong>
-            </p>
+            </style.ParagraphStyled>
             <Form.Item<FieldType>
               name="passwordconfirmacao"
               rules={[
@@ -310,7 +304,7 @@ const NavRecrutador = () => {
                 },
               ]}
             >
-              <Input.Password className="w-[250px] bg-white" />
+              <style.InputEditFormPass />
             </Form.Item>
           </div>
         </div>
@@ -322,23 +316,23 @@ const NavRecrutador = () => {
             onChange={onChangeCheck}
             className="mr-[20px]"
           />
-          <p>
+          <style.ParagraphStyled>
             Para prosseguir, por favor, clique no botão{" "}
             <strong className="text-customGreen">Aceitar Termos</strong> abaixo
             e confirme sua concordância com nossos termos de serviço e política
             de privacidade.
-          </p>
+          </style.ParagraphStyled>
         </div>
         <div className="mt-[40px]">
           <Flex gap="small" wrap>
             <Link href={"/"}>
-              <ButtonExit>
-                Voltar
-              </ButtonExit>
-            </Link>
-            <ButtonCreate type="primary" htmlType="submit">
-              Criar conta
-            </ButtonCreate>
+            <style.ButtonExit className="button-item">
+              Voltar
+            </style.ButtonExit>
+          </Link>
+          <style.ButtonRegister type="primary" htmlType="submit" className="button-item">
+            Criar conta
+          </style.ButtonRegister>
           </Flex>
         </div>
       </Form>

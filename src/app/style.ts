@@ -47,7 +47,7 @@ export const StyledInputSenha = styled(Input.Password)`
     margin-bottom: 16px; /* Espaçamento inferior entre os inputs */
 
     @media (min-width: 768px) {
-        margin-bottom: 0; /* Remove margem inferior em telas maiores */
+        margin-bottom: 0; 
     }
 `;
 

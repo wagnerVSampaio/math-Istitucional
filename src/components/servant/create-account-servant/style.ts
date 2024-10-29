@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import { Form } from "antd/lib";
-import { DatePicker } from "antd";
+import { Button, DatePicker, Input } from "antd/lib";
 
 export const DateBirthUpload = styled.div`
   width: 100px;
@@ -9,6 +8,11 @@ export const DateBirthUpload = styled.div`
   overflow: hidden;
   border: 2px dotted #006b3f;
   position: relative;
+  @media (min-width: 1024px) {
+      width: 135px;
+      height: 135px;
+            
+  }
 `;
 
 export const UploadButtonDate = styled.input`
@@ -28,6 +32,10 @@ export const InputEdit = styled.input`
   &:focus{
     outline: none;
   }
+  @media (min-width: 1024px) {
+    width: 400px;
+    height: 35px;
+  }
 `;
 export const InputEditPhone = styled.input`
   width: 250px;
@@ -38,5 +46,46 @@ export const InputEditPhone = styled.input`
   &:focus{
     outline: none;
   }
+  @media (min-width: 1024px) {
+      width: 280px;
+      height: 35px;
+            
+  }
 `;
+export const InputEditForm = styled(Input)`
+  width: 350px;
+  @media (min-width: 1024px) {
+      width: 400px;
+      height: 35px;
+            
+    }
+`;
+export const InputEditFormPass = styled(Input.Password)`
+  width: 250px;
+  @media (min-width: 1024px) {
+      width: 280px;
+      height: 35px;
+            
+    }
+`;
+export const ParagraphStyled = styled.p`
+  margin-bottom: 3px;
+  @media (min-width: 1024px) {
+      font-size: 16px;
+            
+    }
+`;
+export const ButtonExit = styled(Button)`
+  margin-right: 10px;
+  color: #006B3F;
+  font-weight: bold;
+  border: 1px solid #006B3F;
+
+`;
+export const ButtonRegister = styled(Button)`
+  color: #fff;
+  font-weight: bold;
+  border: 1px solid #006B3F;
+`;
+
 

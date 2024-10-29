@@ -1,3 +1,31 @@
 .ant-form-item {
     margin-bottom: 7px !important;
   }
+@media (min-width: 600px) {
+  .date-picker {
+    width: 250px;
+  }
+}
+@media (min-width: 1024px) {
+    .date-picker {
+      width: 280px;
+      height: 35px;
+}
+          
+  }
+@media (max-width: 600px) {
+    .button-item {
+      width: 250px;
+    }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+    .button-item {
+      width: 250px;
+    }
+}
+@media (min-width: 1025px) {
+    .button-item {
+      width: 290px;
+      height: 35px;
+    }
+}

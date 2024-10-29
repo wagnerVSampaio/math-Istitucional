@@ -1,15 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from "react";
-import { Checkbox, DatePicker, Form, Input, Button, Flex, Space, message } from "antd/lib";
+import { Checkbox, Form, Flex, Space, message, DatePicker} from "antd/lib";
 import Link from "next/link";
 import type { CheckboxProps } from "antd/lib";
-import { ButtonLabelDate, DateBirthUpload, InputEdit, InputEditPhone, UploadButtonDate } from "./style";
 import "./formEdited.css";
 import dayjs, { Dayjs } from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { useRouter } from 'next/navigation';
 import InputMask from "react-input-mask";
-
+import * as style from './style';
 
 type FieldType = {
   full_name: string;
@@ -40,7 +39,7 @@ dayjs.extend(customParseFormat);
 
 const dateFormat = "DD/MM/YYYY";
 
-const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
+const NavServidor = () => {
   const [cpf, setCpf] = useState("");
   const [phone, setPhone] = useState("");
   const [checked, setChecked] = useState(true);
@@ -66,6 +65,7 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
       setSelectedDate(undefined);
     }
   };
+
 
   const handleRegisterImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -138,19 +138,19 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
     >
       <div className="flex">
         <div className="mr-[75px]">
-          <p className="mb-[3px]">
+          <style.ParagraphStyled>
             Nome completo <strong className="text-red-500"> *</strong>
-          </p>
+          </style.ParagraphStyled>
           <Form.Item<FieldType>
             name="full_name"
             rules={[{ required: true, message: "Por favor, insira o nome!" }]}
           >
-            <Input className="w-[350px]" />
+            <style.InputEditForm className="w-[350px]" />
           </Form.Item>
 
-          <p className="mt-[3px] mb-[3px]">
+          <style.ParagraphStyled className="mt-[3px] mb-[3px]">
             CPF <strong className="text-red-500"> *</strong>
-          </p>
+          </style.ParagraphStyled>
           <Form.Item<FieldType>
             name="cpf"
             rules={[{ required: true, message: "Por favor, insira o CPF!" }]}
@@ -161,7 +161,7 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
                 onChange={(e) => setCpf(e.target.value)}
               >
                 {({ onChange, value, ...rest }) => (
-                  <InputEdit
+                  <style.InputEdit
                     {...rest}
                     value={value}
                     onChange={onChange}
@@ -172,47 +172,49 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
               </InputMask>
           </Form.Item>
 
-          <p className="mt-[3px] mb-[3px]">
+          <style.ParagraphStyled className="mt-[3px] mb-[3px]">
             E-mail <strong className="text-red-500"> *</strong>
-          </p>
+          </style.ParagraphStyled>
           <Form.Item<FieldType>
             name="email"
             rules={[{ required: true, message: "Por favor, insira o e-mail!" }]}
           >
-            <Input className="w-[350px]" />
+            <style.InputEditForm />
           </Form.Item>
         </div>
 
         <div>
-          <p className="mb-[3px]">
+          <style.ParagraphStyled className="mb-[3px]">
             Foto <strong className="text-red-500"> *</strong>
-          </p>
+          </style.ParagraphStyled>
           <Form.Item<FieldType> name="profile_picture">
-              <ButtonLabelDate htmlFor="registerImageUpload">
-                <DateBirthUpload className="relative">
+              <style.ButtonLabelDate htmlFor="registerImageUpload">
+                
+                <style.DateBirthUpload className="relative">
                   <img
                     src={registerImage || "background-upload.png"}
                     alt="Register"
                     className="w-full h-full object-cover" 
                   />
-                  <UploadButtonDate
+                  <style.UploadButtonDate
                     type="file"
                     accept="image/*"
                     id="registerImageUpload"
                     onChange={handleRegisterImageChange}
                     style={{ display: "none" }}
                   />
-                </DateBirthUpload>
-              </ButtonLabelDate>
+                </style.DateBirthUpload>
+
+              </style.ButtonLabelDate>
             </Form.Item>
         </div>
       </div>
 
       <div className="flex">
         <div className="mr-[50px]">
-          <p className="mb-[3px]">
+          <style.ParagraphStyled className="mb-[3px]">
             Telefone <strong className="text-red-500"> *</strong>
-          </p>
+          </style.ParagraphStyled>
           <Form.Item<FieldType>
             name="phone"
             rules={[{ required: true, message: "Por favor, insira o telefone!" }]}
@@ -223,7 +225,7 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
                 onChange={(e) => setPhone(e.target.value)}
               >
                 {({ onChange, value, ...rest }) => (
-                  <InputEditPhone
+                  <style.InputEditPhone
                     {...rest}
                     value={value}
                     onChange={onChange}
@@ -235,17 +237,17 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
         </div>
 
         <div>
-          <p className="mb-[3px]">
+          <style.ParagraphStyled className="mb-[3px]">
             Data de nascimento <strong className="text-red-500"> * </strong>
-          </p>
+          </style.ParagraphStyled>
           <Form.Item<FieldType> name="birth_date" style={{ marginRight: "8px" }}>
             <Space direction="vertical" size={12}>
               <DatePicker
                 value={selectedDate}
-                format={dateFormat}
                 onChange={handleDateChange}
-                placeholder="Selecione a data"
-                className="w-[250px]"
+                format={dateFormat}
+                placeholder=""
+                className="date-picker"
               />
             </Space>
           </Form.Item>
@@ -254,50 +256,50 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
 
       <div className="flex">
         <div className="mr-[50px]">
-          <p className="mb-[3px]">
+          <style.ParagraphStyled className="mb-[3px]">
             Senha <strong className="text-red-500"> *</strong>
-          </p>
+          </style.ParagraphStyled>
           <Form.Item<FieldType>
             name="password"
             rules={[{ required: true, message: "Por favor, insira a senha!" }]}
           >
-            <Input.Password className="w-[250px]" />
+            <style.InputEditFormPass  />
           </Form.Item>
         </div>
 
         <div>
-          <p className="mb-[3px]">
+          <style.ParagraphStyled className="mb-[3px]">
             Confirmação de senha <strong className="text-red-500"> *</strong>
-          </p>
+          </style.ParagraphStyled>
           <Form.Item<FieldType>
             name="passwordconfirmation"
             rules={[{ required: true, message: "Por favor, insira a confirmação da senha!" }]}
           >
-            <Input.Password className="w-[250px] bg-white" />
+            <style.InputEditFormPass className="w-[250px] bg-white" />
           </Form.Item>
         </div>
       </div>
 
       <div className="mb-[20px] flex">
         <Checkbox checked={checked} disabled={disabled} onChange={onChangeCheck} className="mr-[20px]" />
-        <p>
+        <style.ParagraphStyled>
           Para prosseguir, por favor, clique no botão{" "}
           <strong className="text-customGreen">Aceitar Termos</strong> abaixo e
           confirme sua concordância com nossos termos de serviço e política de
           privacidade.
-        </p>
+        </style.ParagraphStyled>
       </div>
 
       <div className="mt-[40px]">
         <Flex gap="small" wrap>
           <Link href={"/"}>
-            <Button className="w-[250px] mr-[40px] text-customGreen font-bold border-[1px] border-[#006b3f]">
+            <style.ButtonExit className="button-item">
               Voltar
-            </Button>
+            </style.ButtonExit>
           </Link>
-          <Button type="primary" htmlType="submit" className="w-[250px] font-extrabold">
+          <style.ButtonRegister type="primary" htmlType="submit" className="button-item">
             Criar conta
-          </Button>
+          </style.ButtonRegister>
         </Flex>
       </div>
     </Form>
