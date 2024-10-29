@@ -10,6 +10,13 @@ export const DivTopHomePage = styled.div`
     position: relative;
     overflow: hidden;
     margin-top: 65px;
+    @media (min-width: 768px) { /* Ajuste a largura mínima conforme necessário */
+        height: 600px; /* altura para telas maiores */
+    }
+
+    @media (min-width: 1024px) { /* Ajuste para ainda maiores se necessário */
+        height: 700px; /* altura para telas ainda maiores */
+    }
 `;
 export const DivMenu = styled.div`
   position: fixed;
@@ -21,6 +28,13 @@ export const DivMenu = styled.div`
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 10px;
+  @media (min-width: 768px) { /* Ajuste a largura mínima conforme necessário */
+        height: 26%; /* altura para telas maiores */
+    }
+
+    @media (min-width: 1024px) { /* Ajuste para ainda maiores se necessário */
+        height: 22%
+    }
 `;
 export const StyledParagraph = styled.div`
     margin-top: 50px;

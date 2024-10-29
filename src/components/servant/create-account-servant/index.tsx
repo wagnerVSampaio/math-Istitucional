@@ -93,14 +93,12 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
     formData.append("phone", values.phone);
     formData.append("user_type", "server");
 
-    // URLs das imagens padrão para perfil e capa
-    const defaultProfileImageUrl = "profile.png";
     const defaultCoverImageUrl = "/cover.png";
 
-    // Verifique se registerImage está presente; caso contrário, use a imagem padrão de perfil
-    const profileImageUrl = registerImage || defaultProfileImageUrl;
-    const profileFile = await fetch(profileImageUrl).then((r) => r.blob()); // Obtenha o Blob da URL
-    formData.append("profile_picture", profileFile, "profile_photo.png");
+    if (registerImage) {
+      const file = await fetch(registerImage).then(r => r.blob()); // Obtenha o arquivo Blob da URL
+      formData.append('profile_picture', file, 'photo.jpg'); // Nomeie o arquivo como você quiser
+    }
 
     const coverImageUrl = defaultCoverImageUrl;
     const coverFile = await fetch(coverImageUrl).then((r) => r.blob()); // Obtenha o Blob da URL
@@ -190,23 +188,23 @@ const NavServidor: React.FC<NavServidorProps> = ({ onRegister }) => {
             Foto <strong className="text-red-500"> *</strong>
           </p>
           <Form.Item<FieldType> name="profile_picture">
-            <ButtonLabelDate htmlFor="registerImageUpload">
-              <DateBirthUpload className="relative">
-                <img
-                  src={registerImage || "background-upload.png"}
-                  alt="Register"
-                  className="w-full object-cover"
-                />
-                <UploadButtonDate
-                  type="file"
-                  accept="image/*"
-                  id="registerImageUpload"
-                  onChange={handleRegisterImageChange}
-                  style={{ display: "none" }}
-                />
-              </DateBirthUpload>
-            </ButtonLabelDate>
-          </Form.Item>
+              <ButtonLabelDate htmlFor="registerImageUpload">
+                <DateBirthUpload className="relative">
+                  <img
+                    src={registerImage || "background-upload.png"}
+                    alt="Register"
+                    className="w-full h-full object-cover" 
+                  />
+                  <UploadButtonDate
+                    type="file"
+                    accept="image/*"
+                    id="registerImageUpload"
+                    onChange={handleRegisterImageChange}
+                    style={{ display: "none" }}
+                  />
+                </DateBirthUpload>
+              </ButtonLabelDate>
+            </Form.Item>
         </div>
       </div>
 

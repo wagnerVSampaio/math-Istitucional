@@ -104,7 +104,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
       try {
         const response = await fetch(`http://localhost:3002/api/getJobIDRecruiter/${idRecruiter}`);
         const data = await response.json();
-        console.log(data); 
+
         if (Array.isArray(data)) {
           setJobs(data);
         } else {

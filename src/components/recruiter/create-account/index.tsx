@@ -125,12 +125,18 @@ const NavRecrutador = () => {
       formData.append('campus', values.campus);  // Campus do recrutador
       formData.append('status', 'pending');  // Status do recrutador
 
-      // Adicione o arquivo da imagem se existir
+
+      const defaultCoverImageUrl = "/cover.png";
+
       if (registerImage) {
         const file = await fetch(registerImage).then(r => r.blob()); // Obtenha o arquivo Blob da URL
         formData.append('profile_picture', file, 'photo.jpg'); // Nomeie o arquivo como você quiser
       }
-
+  
+      const coverImageUrl = defaultCoverImageUrl;
+      const coverFile = await fetch(coverImageUrl).then((r) => r.blob()); // Obtenha o Blob da URL
+      formData.append("cover_photo", coverFile, "cover_photo.png");
+      
       // Envia os dados para criar o usuário pendente
       const response = await fetch('http://localhost:3002/api/createusers', {
         method: 'POST',
@@ -222,7 +228,7 @@ const NavRecrutador = () => {
                   <img
                     src={registerImage || "background-upload.png"}
                     alt="Register"
-                    className="w-full object-cover"
+                    className="w-full h-full object-cover" 
                   />
                   <UploadButtonDate
                     type="file"

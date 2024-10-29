@@ -7,6 +7,7 @@ import {
   ButtonLogin,
   ButtonWithEmail,
   ParagraphPassword,
+  Section,
   StyledInput,
   StyledInputSenha,
 } from "./style";
@@ -22,8 +23,10 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const [userData, setUserData] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
 
   const loginAuthentication = async (values: { email: string; password: string; }) => {
+    setLoading(true);
     try {
       const response = await fetch("http://localhost:3002/api/login", {
         method: "POST",
@@ -57,6 +60,7 @@ const App: React.FC = () => {
     }
     } catch (error: any) {
       message.error(error.message || "Erro ao fazer login");
+      setLoading(false);
     }
   };
   
@@ -67,12 +71,12 @@ const App: React.FC = () => {
     <>
       <HeaderOverall />
       <ConfigProvider theme={{ token: { colorPrimary: "#006b3f" } }}>
-        <section className="flex flex-col md:flex-row justify-center items-center md:mt-10 mx-4 md:mx-auto max-w-7xl">
+        <Section>
           <Form
             name="basic"
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
-            style={{ maxWidth: 600 }}
+            style={{maxWidth: '600px'}}
             initialValues={{ remember: true }}
             autoComplete="off"
             className="md:mr-8"
@@ -153,7 +157,7 @@ const App: React.FC = () => {
               style={{ width: "500px", height: "450px", marginLeft: "auto" }}
             />
           </div> 
-        </section>
+        </Section>
       </ConfigProvider>
     </>
   );

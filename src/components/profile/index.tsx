@@ -840,7 +840,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
               <img
                 src={`http://localhost:3002/uploads/${coverImage}` || "/cover.png"}
                 alt="Cover"
-                className="w-full h-[100px] object-cover"
+                className="w-full h-full object-cover"
               />
               <style.UploadButton
                 type="file"
@@ -859,7 +859,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
               <img
                 src={`http://localhost:3002/uploads/${profileImage}` || "/profile.png"}
                 alt="Profile"
-                className="w-full h-[150px] object-cover"
+                className="w-full h-full object-cover"
               />
               <style.UploadButton
                 type="file"

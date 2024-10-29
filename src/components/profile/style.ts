@@ -15,6 +15,13 @@ export const GeneralItens = styled.div`
     height: 550px;
     overflow-x: auto;
 
+    @media (min-width: 768px) { 
+        height: 700px; 
+    }
+
+    @media (min-width: 1024px) { 
+        height: 800px;
+    }
 `;
 export const DivTop = styled.div`
     background-color: white;
@@ -63,7 +70,6 @@ export const ImageCover = styled.div`
   position: relative;
   width: 100%;
   height: 100px; 
-
 `;
 export const ButtonCoverLabel = styled.label`
     position: absolute;
@@ -134,11 +140,26 @@ export const ProfileButton = styled.button`
   font-weight: bold;
   display: flex;
   cursor: not-allowed;
+  @media (min-width: 768px) { /* Ajuste a largura mínima conforme necessário */
+    margin-left: 300px;
+    }
+
+    @media (min-width: 1024px) { /* Ajuste para ainda maiores se necessário */
+      margin-left: 400px;
+      margin-right: 100px;
+    }
 `;
 export const DivIcon = styled.div`
   font-size: 40px;
   color: #006b3f;
   margin-left: 60px;
+  @media (min-width: 768px) { /* Ajuste a largura mínima conforme necessário */
+    margin-left: 120px;
+    }
+
+    @media (min-width: 1024px) { /* Ajuste para ainda maiores se necessário */
+      margin-left: 250px;
+    }
 `;
 export const DivBio = styled.div`
   background-color: white;

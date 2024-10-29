@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import * as style from './style'; // Importa os styled-components
+import * as style from './style';
 import { FaUser, FaEnvelope, FaInfoCircle } from 'react-icons/fa';
 import { Card, Typography, Descriptions, Modal, Button } from 'antd/lib';
 
@@ -39,7 +39,7 @@ interface Interested {
     posted_at: string;
     education: Education[];
     experience: Experience[];
-    skills: Skills[]
+    skills: Skills[];
 }
 
 const UserInterests: React.FC = () => {
@@ -110,7 +110,38 @@ const UserInterests: React.FC = () => {
         const body = `Olá, ${email},\n\nGostaria de discutir uma oportunidade de trabalho com você. Por favor, entre em contato.\n\nAtenciosamente,\nUniversidade Federal do Oeste do Pará`;
         window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     };
-    
+
+    const handleRemoveInterest = async (id_interested: number) => {
+
+        const id_user = sessionStorage.getItem('userData') ? JSON.parse(sessionStorage.getItem('userData')!).id_user : null;
+
+            if (!id_user) {
+                setError('ID do recrutador não encontrado.');
+                setLoading(false);
+                return;
+            }
+
+        try {
+            const response = await fetch(`http://localhost:3002/api/deleteInterested${id_user}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id_interested }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao remover interesse.');
+            }
+
+            // Atualiza a lista de interessados
+            setInterestedList((prevList) => prevList.filter(item => item.id_interested !== id_interested));
+        } catch (error) {
+            console.error('Erro ao remover interesse:', error);
+            setError('Erro ao remover interesse.');
+        }
+    };
+
     return (
         <style.DivNotification>
             <style.StyledUl>
@@ -187,19 +218,21 @@ const UserInterests: React.FC = () => {
                                 )}
                             </Descriptions.Item>
                             <Descriptions.Item label="Habilidades">
-                            {selectedUser.skills.length > 0 ? (
-                                <ul style={{ listStyleType: 'disc' }}>
-                                    {selectedUser.skills.map(skill => (
-                                        <li key={skill.id_skill}>{skill.skill} </li>
-                                    ))}
-                                </ul>
+                                {selectedUser.skills.length > 0 ? (
+                                    <ul style={{ listStyleType: 'disc' }}>
+                                        {selectedUser.skills.map(skill => (
+                                            <li key={skill.id_skill}>{skill.skill} </li>
+                                        ))}
+                                    </ul>
                                 ) : (
-                                    'Nenhuma educação encontrada.'
+                                    'Nenhuma habilidade encontrada.'
                                 )}
-                            </Descriptions.Item> 
-
+                            </Descriptions.Item>
                         </Descriptions>
-                        <style.ButtonRemove>Não tenho interesse</style.ButtonRemove>
+                        <style.ButtonRemove onClick={() => handleRemoveInterest(selectedUser.id_interested)}>
+                            Não tenho interesse
+                        </style.ButtonRemove>
+
                         <Button onClick={() => handleContactClick(selectedUser.email)} style={{ marginTop: '20px', backgroundColor: "#006b3f", color: '#ffff', fontWeight: '500' }}>
                             Entrar em Contato
                         </Button>
