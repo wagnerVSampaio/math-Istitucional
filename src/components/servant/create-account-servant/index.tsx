@@ -76,32 +76,32 @@ const NavServidor = () => {
   };
 
   const formatDate = (date: Dayjs): string => {
-    return date.format("YYYY-MM-DD"); // Formato PostgreSQL
+    return date.format("YYYY-MM-DD");
   };
 
   const RegisterServidor = async (values: FieldType) => {
   console.log("Formulário enviado!", values);
   try {
-    const formData = new FormData(); // Crie uma instância de FormData
+    const formData = new FormData(); 
 
-    // Adicione todos os campos ao FormData
+
     formData.append("full_name", values.full_name);
     formData.append("email", values.email);
     formData.append("password", values.password);
     formData.append("cpf", values.cpf);
-    formData.append("birth_date", formatDate(selectedDate!)); // Formata a data no padrão do PostgreSQL
+    formData.append("birth_date", formatDate(selectedDate!)); 
     formData.append("phone", values.phone);
     formData.append("user_type", "server");
 
     const defaultCoverImageUrl = "/cover.png";
 
     if (registerImage) {
-      const file = await fetch(registerImage).then(r => r.blob()); // Obtenha o arquivo Blob da URL
-      formData.append('profile_picture', file, 'photo.jpg'); // Nomeie o arquivo como você quiser
+      const file = await fetch(registerImage).then(r => r.blob()); 
+      formData.append('profile_picture', file, 'photo.jpg'); 
     }
 
     const coverImageUrl = defaultCoverImageUrl;
-    const coverFile = await fetch(coverImageUrl).then((r) => r.blob()); // Obtenha o Blob da URL
+    const coverFile = await fetch(coverImageUrl).then((r) => r.blob()); 
     formData.append("cover_photo", coverFile, "cover_photo.png");
 
     const response = await fetch("http://localhost:3002/api/createusers", {
@@ -283,7 +283,7 @@ const NavServidor = () => {
       <div className="mb-[20px] flex">
         <Checkbox checked={checked} disabled={disabled} onChange={onChangeCheck} className="mr-[20px]" />
         <style.ParagraphStyled>
-          Para prosseguir, por favor, clique no botão{" "}
+          Para prosseguir, clique no botão{" "}
           <strong className="text-customGreen">Aceitar Termos</strong> abaixo e
           confirme sua concordância com nossos termos de serviço e política de
           privacidade.

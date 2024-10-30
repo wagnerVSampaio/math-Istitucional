@@ -77,6 +77,32 @@ const UserInterests: React.FC = () => {
         fetchInterested();
     }, []);
 
+    const handleRemoveInterest = async (id_job: Number, id_user: Number) => {
+
+
+
+        try {
+            const response = await fetch('http://localhost:3002/api/deleteInterested', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id_job, id_user }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao remover interesse.');
+            }
+
+            const data = await response.json();
+            setIsModalVisible(false)
+            setInterestedList(prevList => prevList.filter(item => item.id_job !== id_job));
+        } catch (error) {
+            console.error('Erro ao remover interesse:', error);
+        }
+    };
+
+    
     if (loading) {
         return <div>Carregando...</div>;
     }
@@ -111,37 +137,8 @@ const UserInterests: React.FC = () => {
         window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     };
 
-    const handleRemoveInterest = async (id_interested: number) => {
 
-        const id_user = sessionStorage.getItem('userData') ? JSON.parse(sessionStorage.getItem('userData')!).id_user : null;
-
-            if (!id_user) {
-                setError('ID do recrutador não encontrado.');
-                setLoading(false);
-                return;
-            }
-
-        try {
-            const response = await fetch(`http://localhost:3002/api/deleteInterested${id_user}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id_interested }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Erro ao remover interesse.');
-            }
-
-            // Atualiza a lista de interessados
-            setInterestedList((prevList) => prevList.filter(item => item.id_interested !== id_interested));
-        } catch (error) {
-            console.error('Erro ao remover interesse:', error);
-            setError('Erro ao remover interesse.');
-        }
-    };
-
+    
     return (
         <style.DivNotification>
             <style.StyledUl>
@@ -229,7 +226,7 @@ const UserInterests: React.FC = () => {
                                 )}
                             </Descriptions.Item>
                         </Descriptions>
-                        <style.ButtonRemove onClick={() => handleRemoveInterest(selectedUser.id_interested)}>
+                        <style.ButtonRemove  onClick={() => handleRemoveInterest(selectedUser.id_job, selectedUser.id_user)}>
                             Não tenho interesse
                         </style.ButtonRemove>
 

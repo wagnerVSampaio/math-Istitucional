@@ -16,31 +16,42 @@ const PendingUserApproval: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalVisibleDelete, setIsModalVisibleDelete] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+  const [userData, setUserData] = useState<any>(null);
 
-  // Busca usuários pendentes ao montar o componente
+
   useEffect(() => {
-    const fetchPendingUsers = async () => {
-        try {
-            const response = await fetch("http://localhost:3002/api/pendingUsers"); // Rota para buscar usuários pendentes
-            const data = await response.json();
-            setPendingUsers(data); // Armazena os usuários pendentes no estado
-        } catch (error) {
-            console.error("Erro ao buscar usuários pendentes:", error);
-        }
-    };
+    const data = sessionStorage.getItem("userData");
+    if (data) {
+      const parsedData = JSON.parse(data);
+      setUserData(parsedData);
+      console.log(parsedData);
+      
+      fetchPendingUsers(parsedData.id_user);
+    }
+  }, [pendingUsers]);
 
-    fetchPendingUsers();
-}, []);
+  const fetchPendingUsers = async (idAdm: Number) => {
 
-// Função para aprovar um usuário
+    try {
+      const response = await fetch(`http://localhost:3002/api/pendingUsers/${idAdm}`); 
+      if (!response.ok) {
+        throw new Error('Erro ao buscar usuários pendentes');
+      }
+      const data = await response.json();
+      setPendingUsers(data); 
+    } catch (error) {
+      console.error("Erro ao buscar usuários pendentes:", error);
+    } 
+  };
+
+
 const approveUser = async (userId: number) => {
     try {
         const response = await fetch(`http://localhost:3002/api/approvedUser/${userId}`, {
-            method: 'POST', // Método para aprovação
+            method: 'POST', 
         });
         
         if (response.ok) {
-            // Atualiza o status do usuário no frontend
             setPendingUsers(pendingUsers.map(user => 
                 user.id_user === userId ? { ...user, status: 'approved' } : user
             ));
@@ -52,22 +63,15 @@ const approveUser = async (userId: number) => {
         console.error('Erro ao aprovar usuário:', error);
     }
 };
-useEffect(() => {
-  pendingUsers.forEach(user => {
-      if (user.status === 'pending') {
-          approveUser(user.id_user);
-      }
-  });
-}, [pendingUsers]); 
+
 
   const rejectUser = async (userId: number) => {
     try {
-        const response = await fetch(`http://localhost:3002/api/deleteUser/${userId}`, {
-            method: 'DELETE', // Método para recusar (deletar)
+        const response = await fetch(`http://localhost:3002/api/deleteRecruiter/${userId}`, {
+            method: 'DELETE',
         });
 
         if (response.ok) {
-            // Atualiza a lista de usuários pendentes após a recusa
             setPendingUsers(pendingUsers.filter(user => user.id_user !== userId));
             console.log('Usuário recusado com sucesso!');
         } else {
@@ -77,27 +81,18 @@ useEffect(() => {
         console.error('Erro ao recusar usuário:', error);
     }
   };
-  useEffect(() => {
-    pendingUsers.forEach(user => {
-        if (user.status === 'pending') {
-            rejectUser(user.id_user);
-        }
-    });
-  }, [pendingUsers]); 
 
-  // Função para exibir o modal de confirmação
+
   const showModal = (userId: number) => {
     setSelectedUserId(userId);
     setIsModalVisible(true);
   };
 
-  // Função para fechar o modal
   const handleCancel = () => {
     setIsModalVisible(false);
     setSelectedUserId(null);
   };
 
-  // Função para confirmar a aprovação
   const handleConfirm = () => {
     if (selectedUserId) {
       approveUser(selectedUserId);
@@ -106,7 +101,6 @@ useEffect(() => {
     setSelectedUserId(null);
   };
 
-  // Função para confirmar a reprovação
   const handleDelete = () => {
     if (selectedUserId) {
       rejectUser(selectedUserId);
@@ -119,7 +113,6 @@ useEffect(() => {
     setIsModalVisibleDelete(true);
   };
 
-  // Função para fechar o modal de delete
   const handleCancelDelete = () => {
     setIsModalVisibleDelete(false);
     setSelectedUserId(null);

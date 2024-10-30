@@ -116,10 +116,9 @@ const HomePageContainer = () => {
 const [idUser, setIdUser] = useState(null);
 const [refresh, setRefresh] = useState<boolean>(false);
 const fetchUserData = async () => {
-  const data = sessionStorage.getItem("userData");
+const data = sessionStorage.getItem("userData");
   if (data) {
     const parsedData = JSON.parse(data);
-    console.log('Dados do usuário:', parsedData);
 
     const response = await fetch(`http://localhost:3002/api/getPhoto/${parsedData.id_user}/photos`);
     if (!response.ok) {
@@ -150,7 +149,7 @@ useEffect(() => {
           <img
             src={imageUrl}
             alt="Profile"
-            style={{ width: "100%", height: "auto" }}
+            style={{ width: "100%", height: "100%" }}
           />
         </ImageHome>
         <DivRadio>

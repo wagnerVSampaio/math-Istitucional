@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import * as style from './style';
 import "./formEdited.css"
 import InputMask from "react-input-mask";
+
 type FieldType = {
   full_name: string;
   cpf: string;
@@ -23,13 +24,6 @@ const { Option } = Select;
 
 type SizeType = Parameters<typeof Form>[0]["size"];
 
-const normFile = (e: any) => {
-  if (Array.isArray(e)) {
-    return e;
-  }
-  return e?.fileList;
-};
-
 
 const NavRecrutador = () => {
   const [value, setValue] = useState(1);
@@ -41,23 +35,17 @@ const NavRecrutador = () => {
   const [checked, setChecked] = useState(true);
   const [disabled, setDisabled] = useState(false);
   const router = useRouter();
-  const [isModalVisible, setIsModalVisible] = useState(false); // Estado do modal
-  const [modalContent, setModalContent] = useState<string>("");
+  const [isModalVisible, setIsModalVisible] = useState(false); 
+  const [error, setError] = useState(false);
+  const [cpf, setCpf] = useState("");
+
   const onFormLayoutChange = ({ size }: { size: SizeType }) => {
     setComponentSize(size);
   };
 
-  const toggleChecked = () => {
-    setChecked(!checked);
-  };
-
-  const toggleDisable = () => {
-    setDisabled(!disabled);
-  };
-
   const onChangeCheck: CheckboxProps["onChange"] = (e) => {
-    console.log("checked = ", e.target.checked);
     setChecked(e.target.checked);
+    if (error) setError(false); 
   };
 
   const handleRegisterImageChange = (
@@ -70,90 +58,53 @@ const NavRecrutador = () => {
     }
   };
 
-  const [cpf, setCpf] = useState("");
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCpf(e.target.value);
-  };
-
-
-  {/*   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { full_name, value } = e.target;
-    setFormData({
-      ...formData,
-      [full_name]: value,
-    });
-  };
-
-  // Função para lidar com o upload da imagem
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setRegisterImage(imageUrl);
-      setFormData({
-        ...formData,
-        photo: file.full_name, // Apenas salva o full_name do arquivo; ajuste conforme necessidade
-      });
-    }
-  }; */}
-
   const handleOk = () => {
     setIsModalVisible(false);
     router.push("/");
-    // Limpar o formulário ou redirecionar o usuário se necessário
   };
 
   const RegisterRecrutador = async (values: FieldType) => {
     try {
-      const formData = new FormData(); // Crie uma instância de FormData
+      const formData = new FormData();
 
-      // Adicione todos os campos ao FormData
-      formData.append('full_name', values.full_name);  // full_name completo do recrutador
-      formData.append('email', values.email);  // Email do recrutador
-      formData.append('password', values.password);  // Senha do recrutador
-      formData.append('user_type', 'recruiter');  // Tipo de usuário
-      formData.append('cpf', values.cpf);  // CPF do recrutador
-      formData.append('allocation', values.allocation);  // Lotação do recrutador
-      formData.append('campus', values.campus);  // Campus do recrutador
-      formData.append('status', 'pending');  // Status do recrutador
-
+      formData.append('full_name', values.full_name);  
+      formData.append('email', values.email); 
+      formData.append('password', values.password);
+      formData.append('user_type', 'recruiter'); 
+      formData.append('cpf', values.cpf);
+      formData.append('allocation', values.allocation); 
+      formData.append('campus', values.campus); 
+      formData.append('status', 'pending');
 
       const defaultCoverImageUrl = "/cover.png";
 
       if (registerImage) {
-        const file = await fetch(registerImage).then(r => r.blob()); // Obtenha o arquivo Blob da URL
-        formData.append('profile_picture', file, 'photo.jpg'); // Nomeie o arquivo como você quiser
+        const file = await fetch(registerImage).then(r => r.blob()); 
+        formData.append('profile_picture', file, 'photo.jpg');
       }
 
       const coverImageUrl = defaultCoverImageUrl;
-      const coverFile = await fetch(coverImageUrl).then((r) => r.blob()); // Obtenha o Blob da URL
+      const coverFile = await fetch(coverImageUrl).then((r) => r.blob()); 
       formData.append("cover_photo", coverFile, "cover_photo.png");
 
-      // Envia os dados para criar o usuário pendente
       const response = await fetch('http://localhost:3002/api/createusers', {
         method: 'POST',
-        body: formData, // Envie o FormData
+        body: formData, 
       });
 
       const data = await response.json();
       if (response.ok) {
-        console.log('Usuário pendente criado com sucesso:', data);
-        setIsModalVisible(true); // Exibir modal de sucesso ou redirecionar
+        setIsModalVisible(true);
       } else {
-        console.error('Erro do servidor:', data);
         setErrorMessage(data.message || 'Erro ao registrar');
       }
     } catch (error) {
-      console.error('Erro ao enviar dados:', error);
       setErrorMessage('Erro ao registrar');
     }
   };
 
-
   return (
     <>
-
       <Form<FieldType>
         labelCol={{ span: 1 }}
         wrapperCol={{ span: 14 }}
@@ -236,9 +187,9 @@ const NavRecrutador = () => {
             </Form.Item>
           </div>
         </div>
-        <div className="flex mb-1">
+        <div className="flex">
           <div className="mr-[50px]">
-            <style.ParagraphStyled className="mb-[3px]">
+            <style.ParagraphStyled>
               Lotação <strong className="text-red-500"> *</strong>
             </style.ParagraphStyled>
             <Form.Item<FieldType> name="allocation">
@@ -255,7 +206,7 @@ const NavRecrutador = () => {
           </div>
 
           <div>
-            <style.ParagraphStyled className="mb-[3px]">
+            <style.ParagraphStyled>
               Campus <strong className="text-red-500"> * </strong>
             </style.ParagraphStyled>
             <Form.Item<FieldType> name="campus">
@@ -317,7 +268,7 @@ const NavRecrutador = () => {
             className="mr-[20px]"
           />
           <style.ParagraphStyled>
-            Para prosseguir, por favor, clique no botão{" "}
+            Para prosseguir, clique no botão{" "}
             <strong className="text-customGreen">Aceitar Termos</strong> abaixo
             e confirme sua concordância com nossos termos de serviço e política
             de privacidade.

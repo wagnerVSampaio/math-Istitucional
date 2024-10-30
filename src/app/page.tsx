@@ -56,6 +56,8 @@ const App: React.FC = () => {
           router.push("/inside");
         } else if (user.user_type === 'recruiter' && user.status === 'pending') {
           message.info('Aguarde a aprovação', 5);
+        }else if (user.user_type === 'adm') {
+          router.push("/adm-inside");
         }
     }
     } catch (error: any) {

@@ -5,6 +5,7 @@ import * as style from "./style";
 
 interface Adm {
   id_user: number;
+  id_adm: number;
   full_name: string;
   campus: string;
   email: string;
@@ -23,27 +24,32 @@ const Search: React.FC<AdmProps> = ({ usersId }) => {
   const [isSelecting, setIsSelecting] = useState(false); 
   const [users, setUsers] = useState<Adm[]>([]); // Dados da API
   const [loading, setLoading] = useState(true); // Indicador de carregamento
+  const [pendingUsers, setPendingUsers] = useState<Adm[]>([]);
+  const [userData, setUserData] = useState<any>(null);
 
-
-  // Função para carregar os usuários da API e filtrar os recrutadores
   useEffect(() => {
-    const fetchPendingUsers = async () => {
-        try {
-            const response = await fetch("http://localhost:3002/api/recruiterOk"); // Rota para buscar usuários pendentes
-            const data = await response.json();
-            setUsers(data); // Armazena os usuários pendentes no estado
-        } catch (error) {
-            console.error("Erro ao buscar usuários pendentes:", error);
+    const data = sessionStorage.getItem("userData");
+    if (data) {
+        const parsedData = JSON.parse(data);
+        setUserData(parsedData);
+        fetchApprovedUsers(parsedData.id_user);
+    }
+}, []); 
+
+const fetchApprovedUsers = async (idAdm: number) => {
+    try {
+        const response = await fetch(`http://localhost:3002/api/recruiterOk/${idAdm}`); 
+        if (!response.ok) {
+            throw new Error('Erro ao buscar usuários aprovados');
         }
-    };
+        const data = await response.json();
+        setUsers(data);
+    } catch (error) {
+        console.error("Erro ao buscar usuários:", error);
+    }
+};
 
-    fetchPendingUsers();
-}, []);
-  
-  
 
-
-  // Função para alternar entre a seleção e a remoção
   const showModal = () => {
     if (isSelecting) {
       setIsModalVisible(true);
@@ -52,24 +58,21 @@ const Search: React.FC<AdmProps> = ({ usersId }) => {
     }
   };
 
-  // Função para remover os usuários selecionados
   const handleRemoveUsers = async () => {
     try {
-        // Faz a requisição para deletar cada usuário selecionado
+
         for (let userId of selectedAdms) {
-            const response = await fetch(`http://localhost:3002/api/deleteUser/${userId}`, {
+            const response = await fetch(`http://localhost:3002/api/deleteRecruiter/${userId}`, {
                 method: 'DELETE', 
             });
 
             if (response.ok) {
-                // Remove o usuário do estado após deleção bem-sucedida
                 setUsers(prevUsers => prevUsers.filter(user => user.id_user !== userId));
             } else {
                 console.error('Erro ao recusar usuário:', response.statusText);
             }
         }
 
-        // Fecha o modal e reseta os estados
         setIsModalVisible(false);
         setSelectedAdms([]);
         setIsSelecting(false);
@@ -81,7 +84,6 @@ const Search: React.FC<AdmProps> = ({ usersId }) => {
 };
 
 
-  // Função para alternar a seleção de um usuário
   const toggleUserSelection = (id: number) => {
     if (selectedAdms.includes(id)) {
       setSelectedAdms(selectedAdms.filter(userId => userId !== id));
@@ -90,17 +92,14 @@ const Search: React.FC<AdmProps> = ({ usersId }) => {
     }
   };
 
-  // Função chamada ao clicar no email
   const handleContactClick = (email: string) => {
     window.location.href = `mailto:${email}`;
   };
 
-  // Filtra os usuários com base no termo de pesquisa
   const filteredUsers = users.filter(user =>
     user.full_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Usuário destacado
   const Users = users.find(user => user.id_user === usersId) || null;
   const otherUsers = filteredUsers.filter(user => user.id_user !== usersId);
 
