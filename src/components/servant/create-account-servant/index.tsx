@@ -112,7 +112,7 @@ const NavServidor = () => {
     const data = await response.json();
     if (response.ok) {
       router.push("/");
-      message.success("Cadastro realizado com sucesso! Realize o login.", 5);
+      message.success("Cadastro realizado com sucesso! Realize o login.", 8);
     } else {
       console.error("Erro do servidor:", data);
       setErrorMessage(data.error || "Erro ao registrar");

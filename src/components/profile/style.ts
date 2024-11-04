@@ -158,7 +158,7 @@ export const DivIcon = styled.div`
     }
 
     @media (min-width: 1024px) { /* Ajuste para ainda maiores se necessário */
-      margin-left: 250px;
+      margin-left: 235px;
     }
 `;
 export const DivBio = styled.div`

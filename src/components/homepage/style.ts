@@ -22,7 +22,7 @@ export const DivMenu = styled.div`
   position: fixed;
   left: 20px;
   width: 150px;
-  height: 33%; 
+  height: auto; 
   z-index: 3; 
   color: #272727;
   background-color: white;
@@ -33,7 +33,7 @@ export const DivMenu = styled.div`
     }
 
     @media (min-width: 1024px) { /* Ajuste para ainda maiores se necessário */
-        height: 22%
+        height: auto;
     }
 `;
 export const StyledParagraph = styled.div`

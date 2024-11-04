@@ -9,10 +9,9 @@ import {
 } from "./style";
 import HeaderOverall from "@/components/header-overall";
 import Link from "next/link";
+import { message } from "antd/lib";
 
-type FieldType = {
-  email: string;
-};
+
 const PasswordReset: React.FC = () => {
   const [email, setEmail] = useState("");
 
@@ -28,7 +27,7 @@ const PasswordReset: React.FC = () => {
              window.location.href = './code-password-reset';
              sessionStorage.setItem('resetPassword', email);
         } else {
-            alert('Error sending password reset email');
+          message.info('E-mail inválido', 5);
         }
     };
 

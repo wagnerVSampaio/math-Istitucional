@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Form, message } from "antd/lib";
+import { Form, message, Spin } from "antd/lib";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -9,13 +9,12 @@ import {
   ParagraphPassword,
   Section,
   StyledInput,
-  StyledInputSenha,
+  StyledInputSenha
 } from "./style";
 import { ConfigProvider } from "antd/lib";
 import "../app/globals.css";
 import { useRouter } from 'next/navigation';
 import HeaderOverall from "../components/header-overall";
-
 
 const App: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -35,37 +34,37 @@ const App: React.FC = () => {
         },
         body: JSON.stringify({ email: values.email, password: values.password }),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Erro na autenticação");
       }
-  
+
       // Recebe o JWT e os dados do usuário
       const { token, user } = await response.json();
 
-      if (response.ok){
+      if (response.ok) {
         sessionStorage.setItem("authToken", token);
         sessionStorage.setItem("userData", JSON.stringify(user));
-    
+
         setUserData(user); // Atualiza o estado com os dados do usuário
-      
+
         if (user.user_type === 'recruiter' && user.status === 'approved') {
           router.push("/inside-recruiter");
         } else if (user.user_type === 'server') {
           router.push("/inside");
         } else if (user.user_type === 'recruiter' && user.status === 'pending') {
           message.info('Aguarde a aprovação', 5);
-        }else if (user.user_type === 'adm') {
+        } else if (user.user_type === 'adm') {
           router.push("/adm-inside");
         }
-    }
+      }
     } catch (error: any) {
       message.error(error.message || "Erro ao fazer login");
       setLoading(false);
     }
   };
-  
+
   const onFinish = (values: { email: string; password: string; }) => {
     loginAuthentication(values);
   };
@@ -78,7 +77,7 @@ const App: React.FC = () => {
             name="basic"
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
-            style={{maxWidth: '600px'}}
+            style={{ maxWidth: '600px' }}
             initialValues={{ remember: true }}
             autoComplete="off"
             className="md:mr-8"
@@ -124,11 +123,17 @@ const App: React.FC = () => {
               </Link>
             </Form.Item>
 
-            <Form.Item className="mb-0">
-            <ButtonLogin type="submit" >
-              ENTRAR
-            </ButtonLogin>
-            </Form.Item>
+            <ConfigProvider theme={{
+              token: {
+                colorPrimary: "#ffff",
+              },
+            }}>
+              <Form.Item className="mb-0">
+                <ButtonLogin type="submit" disabled={loading}>
+                  {loading ? <Spin size="small"/> : "ENTRAR"}
+                </ButtonLogin>
+              </Form.Item>
+            </ConfigProvider>
 
             {error && <p className="text-red-500">{error}</p>}
 
@@ -158,7 +163,7 @@ const App: React.FC = () => {
               height={400}
               style={{ width: "500px", height: "450px", marginLeft: "auto" }}
             />
-          </div> 
+          </div>
         </Section>
       </ConfigProvider>
     </>
