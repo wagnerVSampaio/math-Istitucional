@@ -178,7 +178,7 @@ export const DivBio = styled.div`
 
 export const DivP = styled.div`
     width: 95%;
-    height: 100px;
+    height: auto;
 `;
 
 export const DivEdit = styled.button`
@@ -213,8 +213,8 @@ export const Textarea = styled.textarea`
   padding: 10px;
   width: 100%;
   border: 1px solid #006b3f;
-  resize: none; /* Impede que o usuário redimensione manualmente */
-  overflow-y: hidden; /* Remove a barra de rolagem */
+  //resize: none;
+  overflow-y: hidden; 
   &:focus {
     border: 1px solid #006b3f; 
     outline: none;

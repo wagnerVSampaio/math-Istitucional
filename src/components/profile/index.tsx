@@ -374,43 +374,36 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
   };
 
 
-  // Função para adicionar uma nova habilidade
   const handleAddExp = async (newExp: Experience) => {
     try {
-      // Recupera os dados do usuário logado do sessionStorage
       const data = sessionStorage.getItem("userData");
       if (!data) {
         throw new Error("Usuário não está logado");
       }
 
-      // Converte os dados do usuário armazenados em JSON para um objeto
       const userData = JSON.parse(data);
-      const idUser = userData.id_user; // Obtém o id_user do usuário logado
+      const idUser = userData.id_user; 
 
-      // Inclui o id_user no objeto newSkill
       const expWithUser = { ...newExp, id_user: idUser };
 
-      // Fazendo a requisição para adicionar a habilidade ao banco de dados
       const response = await fetch('http://localhost:3002/api/createExp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(expWithUser), // Enviando o objeto skill com id_user como JSON
+        body: JSON.stringify(expWithUser), 
       });
 
       if (!response.ok) {
         throw new Error('Erro ao adicionar habilidade');
       }
 
-      // Adiciona a nova habilidade ao estado local
-      const addedExp = await response.json(); // Supondo que a resposta seja o objeto adicionado
+      const addedExp = await response.json(); 
       setExperiences([...experiences, addedExp]);
       setIsModalOpenExperience(false);
       await idExperiences();
     } catch (error) {
       console.error('Erro:', error);
-      // Adicionar uma notificação ou alerta para o usuário, se necessário
     }
   };
   useEffect(() => {
@@ -583,7 +576,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
 
 
   const formatDate = (dateString: string | undefined): string => {
-    if (!dateString) return ''; // Retorna string vazia se não houver data
+    if (!dateString) return ''; 
     const date = new Date(dateString);
 
     // Definindo opções de formatação para exibir como "25 de janeiro de 2024"
@@ -743,38 +736,33 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
 
       const { biography } = await response.json();
       console.log('Biografia:', biography);
-      setBioText(biography); // Atualiza o estado com a biografia
+      setBioText(biography); 
     } catch (error) {
       console.error('Erro ao buscar biografia:', error);
     }
   };
 
   useEffect(() => {
-    getBiography(); // Chama a função para buscar a biografia ao montar o componente
+    getBiography(); 
   }, []);
 
   const handleEditBio = () => {
     setIsEditingBio(true);
   };
 
-  {/* Função para salvar a biografia e alternar de volta */ }
   const handleSaveBio = async () => {
     try {
-      // Verifica se bioText é uma string e se está vazio
       if (!bioText || !bioText.trim()) {
-        // Se o texto da biografia estiver vazio ou undefined, chamar a função de deletar
         await deleteBiography();
       } else {
-        // Caso contrário, salvar a biografia
         await editBiography();
       }
-      setIsEditingBio(false); // Alterna de volta para o modo de visualização
+      setIsEditingBio(false); 
     } catch (error) {
       console.error('Erro ao salvar ou deletar biografia:', error);
     }
   };
   
-  {/* Função para enviar a biografia editada ao backend */ }
   const editBiography = async () => {
     const data = sessionStorage.getItem("userData");
     if (!data) {
@@ -906,7 +894,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
                     />
                   </p>
                   <Tooltip title="Salvar biografia" placement="left">
-                    <style.DivSave onClick={handleSaveBio}> {/* Chama handleSaveBio */}
+                    <style.DivSave onClick={handleSaveBio}> 
                       <AiOutlineSave />
                     </style.DivSave>
                   </Tooltip>
