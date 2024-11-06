@@ -9,19 +9,14 @@ export const Itens = styled.div`
 export const DivGeneral = styled.div`
   margin-top: 2rem;
 
-@media (min-width: 768px) {
-  margin-top: 4rem;
-}
+  @media (min-width: 1024px) {
+    margin-top: 2rem;
+  }
 
-@media (min-width: 1024px) {
-  margin-top: 5rem;
-}
-
-/* Ajuste para telas grandes */
-@media (min-width: 1440px) {
-  margin-top: 6rem;
-}
-`;
+  @media (min-width: 1440px) {
+    margin-top: 6rem;
+  }
+  `; 
 
 export const H1Styled = styled.h1`
     color: #006b3f;
@@ -30,7 +25,12 @@ export const H1Styled = styled.h1`
     margin-bottom: 0.125rem;
     margin-top: 0.3125rem;
 
-    @media (min-width: 1024px) {
+  @media (min-width: 1024px) {
+    font-size: 1.875rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0.3125rem;
+  }
+  @media (min-width: 1440px) {
         font-size: 2.1875rem;
         margin-bottom: 0.625rem;
         margin-top: 0.625rem;
@@ -43,10 +43,15 @@ export const PStyled = styled.p`
     width: 35.625rem;
 
     @media (min-width: 1024px) {
+      font-size: 18px;
+      margin-bottom: 0.125rem;
+      width: 40.625rem;
+    }
+    @media (min-width: 1440px) {
         font-size: 1.25rem;
         margin-bottom: 0.625rem;
         width: 43.75rem;
-  }
+    }
 `;
 
 export const StyledNav = styled.nav`
@@ -62,7 +67,11 @@ export const ResponsiveRadioGroup = styled(Radio.Group)`
     gap: 1.25rem; 
 
     @media (min-width: 1024px) {
-            font-size: 3.125rem;
+      font-size: 3.125rem;
+            
+    }
+    @media (min-width: 1440px) {
+      font-size: 3.125rem;
             
     }
 `;
@@ -70,6 +79,15 @@ export const LargeRadio = styled(Radio)`
     margin-right: 3.75rem;
 
     @media (min-width: 1024px) {
+        font-size: 50px;
+        width: 50px;
+        height: 50px;
+        font-size: 18px;
+        padding: 10px;
+        margin-right: 140px;
+
+    }
+    @media (min-width: 1440px) {
         font-size: 3.125rem;
         width: 3.125rem;
         height: 3.125rem;

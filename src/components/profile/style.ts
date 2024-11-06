@@ -15,11 +15,11 @@ export const GeneralItens = styled.div`
     height: 550px;
     overflow-x: auto;
 
-    @media (min-width: 768px) { 
-        height: 700px; 
+    @media (min-width: 1024px) { 
+        height: 550px; 
     }
 
-    @media (min-width: 1024px) { 
+    @media (min-width: 1440px) { 
         height: 800px;
     }
 `;
@@ -114,7 +114,7 @@ export const HoverText = styled.div<{ isVisible: boolean }>`
   white-space: nowrap;
   display: inline-block;
   height: auto; 
-  z-index: 1000; /* Garante que esteja acima de outros elementos */
+  z-index: 1000; 
 `;
 
 export const DivButton = styled.div`
@@ -122,15 +122,18 @@ export const DivButton = styled.div`
   margin-top: 10px;
 `;
 export const EditProfileButton = styled.button`
-  padding: 8px 150px;
+  padding: 6px 100px;
   background-color: #006b3f;
   color: white;
   border-radius: 10px;
   font-weight: bold;
   position: relative;
+  @media (min-width: 1440px) { 
+    padding: 8px 150px;
+    }
 `;
 export const ProfileButton = styled.button`
-  padding: 8px 120px;
+  padding: 6px 100px;
   background-color: white;
   color: #ddd;
   border: 1px solid #ddd;
@@ -140,34 +143,37 @@ export const ProfileButton = styled.button`
   font-weight: bold;
   display: flex;
   cursor: not-allowed;
-  @media (min-width: 768px) { /* Ajuste a largura mínima conforme necessário */
-    margin-left: 300px;
+  @media (min-width: 1024px) {
+    margin-left: 200px;
     }
 
-    @media (min-width: 1024px) { /* Ajuste para ainda maiores se necessário */
+    @media (min-width: 1440px) { 
       margin-left: 400px;
       margin-right: 100px;
+      padding: 8px 120px;
     }
 `;
 export const DivIcon = styled.div`
   font-size: 40px;
   color: #006b3f;
-  margin-left: 60px;
-  @media (min-width: 768px) { /* Ajuste a largura mínima conforme necessário */
-    margin-left: 120px;
+  margin-left: auto;
+  @media (min-width: 1024px) {
+    margin-left: auto;
+      margin-right: 18px;
     }
 
-    @media (min-width: 1024px) { /* Ajuste para ainda maiores se necessário */
-      margin-left: 235px;
+    @media (min-width: 1440px) { 
+      margin-left: auto;
+      margin-right: 20px
     }
 `;
 export const DivBio = styled.div`
   background-color: white;
-  height: auto; /* Permite que a altura cresça */
+  height: auto; 
   border-radius: 10px;
   position: relative;
   padding: 10px;
-  overflow: hidden; /* Remove barras de rolagem */
+  overflow: hidden; 
 `;
 
 export const DivP = styled.div`

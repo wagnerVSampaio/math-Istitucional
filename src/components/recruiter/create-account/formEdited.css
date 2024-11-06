@@ -1,37 +1,34 @@
-.ant-form-item {
-  margin-bottom: 7px !important;
-}
-
-
-@media (max-width: 600px) {
-  .button-item {
-    width: 250px;
+@media (min-width: 1024px) {
+  .ant-form-item {
+    margin-bottom: 5px !important;
   }
 }
-@media (min-width: 601px) and (max-width: 1024px) {
-  .button-item {
-    width: 250px;
+@media (min-width: 1440px) {
+  .ant-form-item {
+    margin-bottom: 7px !important;
   }
 }
-@media (min-width: 1025px) {
-  .button-item {
-    width: 290px;
-    height: 35px;
-  }
+@media (min-width: 1024px) {
+  .select-form-item {
+  width: 250px !important;
+  height: 32px !important;
 }
-@media (max-width: 600px) {
-  .select-form-item{
-    width: 250px !important;
-  }
 }
-@media (min-width: 601px) and (max-width: 1024px) {
-  .select-form-item{
-    width: 250px !important;
-  }
-}
-@media (min-width: 1025px) {
-  .select-form-item{
+@media (min-width: 1440px) {
+  .select-form-item {
     width: 280px !important;
-    height: 35px;
+    height: 35px !important;
+}
+}
+@media (min-width: 1024px) {
+  .button-item {
+    width: 270px !important;
+    height: 32px !important;
+  }
+}
+@media (min-width: 1440px) {
+  .button-item {
+    width: 290px !important;
+    height: 35px !important;
   }
 }

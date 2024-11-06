@@ -6,10 +6,14 @@ import Image from "next/image";
 import {
   ButtonLogin,
   ButtonWithEmail,
+  ParagraphInfos,
   ParagraphPassword,
+  PararaphBottom,
+  PararaphBottom2,
   Section,
   StyledInput,
-  StyledInputSenha
+  StyledInputSenha,
+  TopParagraph
 } from "./style";
 import { ConfigProvider } from "antd/lib";
 import "../app/globals.css";
@@ -77,16 +81,15 @@ const App: React.FC = () => {
             name="basic"
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
-            style={{ maxWidth: '600px' }}
             initialValues={{ remember: true }}
             autoComplete="off"
-            className="md:mr-8"
+            className="style-form-item"
             onFinish={onFinish}
           >
-            <p className="text-green-900 font-bold text-[20px] mb-4">
+            <TopParagraph>
               FAÇA LOGIN AGORA MESMO!
-            </p>
-            <p>E-mail</p>
+            </TopParagraph>
+            <ParagraphInfos>E-mail</ParagraphInfos>
             <Form.Item
               name="email"
               rules={[{ required: true, message: "Insira seu e-mail!" }]}
@@ -98,7 +101,7 @@ const App: React.FC = () => {
               />
             </Form.Item>
 
-            <p>Senha</p>
+            <ParagraphInfos>Senha</ParagraphInfos>
             <Form.Item
               name="password"
               rules={[{ required: true, message: "Insira sua senha!" }]}
@@ -117,7 +120,7 @@ const App: React.FC = () => {
               className="text-customDark"
             >
               <Link href={"../password-reset"}>
-                <ParagraphPassword className="text-xs">
+                <ParagraphPassword>
                   Esqueceu a senha?
                 </ParagraphPassword>
               </Link>
@@ -136,17 +139,16 @@ const App: React.FC = () => {
             </ConfigProvider>
 
             {error && <p className="text-red-500">{error}</p>}
-
             <Form.Item wrapperCol={{ span: 11 }}>
-              <p className="text-customDark text-xs mt-6">
+              <PararaphBottom className="text-customDark text-xs mt-6">
                 Ao clicar em Continuar para se cadastrar ou entrar, você aceita
                 os <strong>Termos de Uso</strong> e{" "}
                 <strong>Política de Privacidade</strong> da Match Institucional.
-              </p>
+              </PararaphBottom>
             </Form.Item>
 
             <Form.Item wrapperCol={{ span: 16 }}>
-              <p className="text-customDark">———————— ou —————————</p>
+              <PararaphBottom2 className="text-customDark">———————— ou —————————</PararaphBottom2>
             </Form.Item>
 
             <Form.Item>
@@ -161,7 +163,7 @@ const App: React.FC = () => {
               alt={"Login"}
               width={450}
               height={400}
-              style={{ width: "500px", height: "450px", marginLeft: "auto" }}
+              style={{ width: "500px", height: "400px", marginLeft: "auto" }}
             />
           </div>
         </Section>

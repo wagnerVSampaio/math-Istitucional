@@ -10,12 +10,11 @@ export const DivTopHomePage = styled.div`
     position: relative;
     overflow: hidden;
     margin-top: 65px;
-    @media (min-width: 768px) { /* Ajuste a largura mínima conforme necessário */
-        height: 600px; /* altura para telas maiores */
+    @media (min-width: 1024px) { 
+        height: 500px; 
     }
-
-    @media (min-width: 1024px) { /* Ajuste para ainda maiores se necessário */
-        height: 700px; /* altura para telas ainda maiores */
+    @media (min-width: 1440px) {
+        height: 700px; 
     }
 `;
 export const DivMenu = styled.div`
@@ -28,13 +27,6 @@ export const DivMenu = styled.div`
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 10px;
-  @media (min-width: 768px) { /* Ajuste a largura mínima conforme necessário */
-        height: 26%; /* altura para telas maiores */
-    }
-
-    @media (min-width: 1024px) { /* Ajuste para ainda maiores se necessário */
-        height: auto;
-    }
 `;
 export const StyledParagraph = styled.div`
     margin-top: 50px;
@@ -53,6 +45,9 @@ export const ImageHome = styled.div`
   height: 100%; 
   object-fit: cover;
   z-index: 1;
+  @media (min-width: 1280px) { 
+    height: auto;
+    }
 `;
 export const DivRadio = styled.div`
     position: absolute;

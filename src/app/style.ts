@@ -13,41 +13,51 @@ export const Section = styled.section`
     max-width: 1280px;
 
     @media (min-width: 768px) {
-        flex-direction: row; /* Altera para linha em telas maiores */
-        margin-top: 10px; /* Margem superior para md */
-        margin-left: auto; /* Centraliza horizontalmente */
-        margin-right: auto; /* Centraliza horizontalmente */
-        margin: 55px 120px; /* Margem maior para telas grandes */
-    }
+        flex-direction: row; 
+        margin-top: 10px; 
+        margin-left: auto;
+        margin-right: auto; 
+        margin: 55px 120px; 
+    } 
     
-    @media (min-width: 1024px) {
+    @media (min-width: 1440px) {
        margin-top: 70px;
-       margin-left: 250px;
+       margin-left: 300px;
     }
 `;
 
 
 export const StyledInput = styled(Input)`
-    width: 100%; /* Largura responsiva */
-    max-width: 270px; /* Largura máxima */
+    width: 100%; 
+    max-width: 270px;
     border: 1px solid #228B22;
     padding: 6px;
-    margin-bottom: 16px; /* Espaçamento inferior entre os inputs */
 
     @media (min-width: 768px) {
-        margin-bottom: 0; /* Remove margem inferior em telas maiores */
+        margin-bottom: 0;
+    }
+    @media (min-width: 1440px) {
+        width: 100%; 
+        max-width: 350px;
+        border: 1px solid #228B22;
+        padding: 6px;
+        margin-bottom: 0;
     }
 `;
 
 export const StyledInputSenha = styled(Input.Password)`
-    width: 100%; /* Largura responsiva */
-    max-width: 270px; /* Largura máxima */
+    width: 100%;
+    max-width: 270px; 
     border: 1px solid #228B22;
     padding: 6px;
-    margin-bottom: 16px; /* Espaçamento inferior entre os inputs */
 
     @media (min-width: 768px) {
         margin-bottom: 0; 
+    }
+    @media (min-width: 1440px) {
+        margin-bottom: 0;
+        width: 100%;
+        max-width: 350px;
     }
 `;
 
@@ -58,11 +68,16 @@ export const ButtonLogin = styled.button`
     max-width: 270px;
     padding: 6px;
     background-color: #006b3f;
-    border-radius: 5px;
-    margin-bottom: 16px; 
+    border-radius: 5px; 
 
     @media (min-width: 768px) {
         margin-bottom: 0; 
+    }
+    @media (min-width: 1440px) {
+        margin-bottom: 0; 
+        width: 100%; 
+        max-width: 350px;
+        font-size: 16px;
     }
 `;
 
@@ -83,13 +98,57 @@ export const ButtonWithEmail = styled.button`
         color: white;
         background-color: #006b3f;
     }
+    @media (min-width: 1440px) { 
+        width: 100%; 
+        max-width: 350px;
+        font-size: 16px;
+    }
 `;
 
 export const ParagraphPassword = styled.p`
     color: #272727;
-
+    font-size: 12px;
     &:hover {
         color: green;
+    }
+
+    @media (min-width: 1440px) { 
+        font-size: 15px;
+    }
+`;
+export const TopParagraph = styled.p`
+    color: #006b3f;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 16px;
+
+    @media (min-width: 1440px) { 
+        font-size: 25px;
+    }
+`;
+export const ParagraphInfos = styled.p`
+    font-size: 14px;
+
+    @media (min-width: 1440px) { 
+        font-size: 18px;
+    }
+`;
+export const PararaphBottom = styled.p`
+    font-size: 12px;
+
+    @media (min-width: 1440px) { 
+        font-size: 14px;
+    }
+`;
+export const PararaphBottom2 = styled.p`
+    font-size: 12px;
+
+    @media (min-width: 1280px) { 
+        margin-left: 23px
+    }
+    @media (min-width: 1440px) { 
+        font-size: 14px;
+        margin-left: 35px
     }
 `;
 

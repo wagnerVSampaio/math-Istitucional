@@ -27,8 +27,18 @@ body {
   }
 }
 
-.customFormItem {
-  margin-bottom: 7px !important; 
+
+@media (min-width: 1024px) {
+  .style-form-item {
+    margin-bottom: 5px !important;
+    max-width: 600px !important;
+    margin-right: 32px !important;
+  }
 }
-
-
+@media (min-width: 1440px) {
+  .style-form-item {
+    margin-bottom: 7px !important;
+    max-width: 800px !important;
+    margin-right: 40px !important;
+  }
+}

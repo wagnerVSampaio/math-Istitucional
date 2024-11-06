@@ -9,6 +9,10 @@ export const DateBirthUpload = styled.div`
   border: 2px dotted #006b3f;
   position: relative;
   @media (min-width: 1024px) {
+      width: 125px;
+      height: 125px;   
+  }
+  @media (min-width: 1440px) {
       width: 135px;
       height: 135px;
             
@@ -33,6 +37,10 @@ export const InputEdit = styled.input`
     outline: none;
   }
   @media (min-width: 1024px) {
+    width: 350px;
+    height: 32px;
+  }
+  @media (min-width: 1440px) {
     width: 400px;
     height: 35px;
   }
@@ -47,6 +55,11 @@ export const InputEditPhone = styled.input`
     outline: none;
   }
   @media (min-width: 1024px) {
+      width: 250px;
+      height: 32px;
+            
+  }
+  @media (min-width: 1440px) {
       width: 280px;
       height: 35px;
             
@@ -55,6 +68,11 @@ export const InputEditPhone = styled.input`
 export const InputEditForm = styled(Input)`
   width: 350px;
   @media (min-width: 1024px) {
+      width: 350px;
+      height: 32px;
+            
+    }
+  @media (min-width: 1440px) {
       width: 400px;
       height: 35px;
             
@@ -63,6 +81,11 @@ export const InputEditForm = styled(Input)`
 export const InputEditFormPass = styled(Input.Password)`
   width: 250px;
   @media (min-width: 1024px) {
+      width: 250px;
+      height: 32px;
+            
+    }
+  @media (min-width: 1440px) {
       width: 280px;
       height: 35px;
             
@@ -71,8 +94,7 @@ export const InputEditFormPass = styled(Input.Password)`
 export const ParagraphStyled = styled.p`
   margin-bottom: 3px;
   @media (min-width: 1024px) {
-      font-size: 16px;
-            
+      font-size: 16px;       
     }
 `;
 export const ButtonExit = styled(Button)`
