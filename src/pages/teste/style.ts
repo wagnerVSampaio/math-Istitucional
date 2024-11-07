@@ -1,13 +1,21 @@
-import styled from "styled-components";
-import { TbSpeakerphone } from "react-icons/tb";
+// style.ts
+import styled from 'styled-components';
+
 export const DivNotification = styled.div`
-    margin: 25px auto;
-    width: 80%;
-    border-radius: 10px;
-    color: #272727;
-    margin-top: 80px;
-    height: 500px;
-    overflow-x: auto;
+  display: flex;
+`;
+
+export const SideMenu = styled.div`
+  width: 200px;
+  background-color: #006b3f;
+  padding: 5px;
+  margin-right: 20px;
+  border-radius: 5px;
+`;
+
+import { TbSpeakerphone } from "react-icons/tb";
+export const DivNotification2 = styled.div`
+
 `;
 export const ButtonDelete = styled.button`
     background-color: transparent;
@@ -33,7 +41,7 @@ export const StyledUl = styled.ul`
   padding: 0;
   border: 1px solid #ddd;
   background-color: #f4f4f4;
-  list-style-type: none;
+  color: #272727;
 `;
 
 export const StyledLi = styled.li`

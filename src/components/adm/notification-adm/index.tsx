@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Input, message } from 'antd/lib';
 import { MdDelete } from 'react-icons/md';
-import { ButtonDelete, DivNotification, StyledLi, StyledUl } from './style';
+import * as style from "./style"; 
 
 interface Notification {
   id: number;
   title: string;
   message: string;
   createdAt: string;
+  read: boolean;
 }
 
 const NotificationAdm: React.FC = () => {
@@ -19,8 +20,8 @@ const NotificationAdm: React.FC = () => {
     title: '',
     message: '',
     createdAt: '',
+    read: false,
   });
-
   const [selectedNotification, setSelectedNotification] = useState<Notification | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
@@ -32,17 +33,17 @@ const NotificationAdm: React.FC = () => {
 
   const handleAddNotification = async () => {
     if (!newNotification.title || !newNotification.message) {
-      message.error('Título, mensagem e tipo são obrigatórios!');
+      message.error('Título e mensagem são obrigatórios!');
       return;
     }
     const data = sessionStorage.getItem("userData");
-      if (!data) {
-        console.error('Usuário não encontrado.');
-        return;
-      }
-      const userData = JSON.parse(data);
-      const idUser = userData.id_user;
-      console.log(idUser)
+    if (!data) {
+      console.error('Usuário não encontrado.');
+      return;
+    }
+    const userData = JSON.parse(data);
+    const idUser = userData.id_user;
+
     try {
       const response = await fetch(`http://localhost:3002/api/createNotification/${idUser}`, {
         method: 'POST',
@@ -55,7 +56,7 @@ const NotificationAdm: React.FC = () => {
       if (response.ok) {
         const addedNotification = await response.json();
         setNotifications((prevNotifications) => [...prevNotifications, addedNotification]);
-        setNewNotification({ id: 0, title: '', message: '', createdAt: '' });
+        setNewNotification({ id: 0, title: '', message: '', createdAt: '', read: false });
         setIsModalVisible(false);
         message.success('Notificação adicionada com sucesso!');
       } else {
@@ -66,7 +67,6 @@ const NotificationAdm: React.FC = () => {
     }
   };
 
-  // Função para deletar uma notificação via API
   const handleDeleteNotification = async (id: number) => {
     try {
       const response = await fetch(`http://localhost:3002/api/deleteNotification/${id}`, {
@@ -86,21 +86,16 @@ const NotificationAdm: React.FC = () => {
     }
   };
 
-  const showMoreInfoModal = (notification: Notification) => {
-    setSelectedNotification(notification);
-    setIsModalVisible(true);
-  };
   const showMoreInfoModalDetails = (notification: Notification) => {
     setSelectedNotification(notification);
     setIsModalVisibleDetails(true);
   };
 
-
   const handleModalClose = () => {
     setIsModalVisible(false);
+    setIsModalVisibleDetails(false);
     setSelectedNotification(null);
   };
-
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -116,15 +111,82 @@ const NotificationAdm: React.FC = () => {
     fetchNotifications();
   }, []);
 
-  return (
-    <DivNotification>
-      <Button onClick={() => setIsModalVisible(true)} type="primary">
-        Adicionar Notificação
-      </Button>
+  const markAsRead = (id: number) => {
+    setNotifications(prevNotifications =>
+      prevNotifications.map(notification =>
+        notification.id === id ? { ...notification, read: true } : notification
+      )
+    );
+  };
 
-      {/* Formulário de Adicionar Notificação */}
+  return (
+    <style.DivNotification>
+      <div className='flex'>
+      <style.ButtonAdd onClick={() => setIsModalVisible(true)} className='flex'>
+        Criar aviso <style.SpeakerNotice/>
+      </style.ButtonAdd>
+      <style.MyNoticesButton>Meus avisos</style.MyNoticesButton>
+      </div>
+      
+      <style.StyledUl>
+        {notifications.map((notification) => (
+          <style.StyledLi
+            key={notification.id}
+            onClick={() => {
+              showMoreInfoModalDetails(notification);
+              markAsRead(notification.id);
+            }}
+            style={{ backgroundColor: notification.read ? '#fff' : '#e6f7ff' }}
+          >
+            <div className='flex'>
+              <div className='flex flex-col m-[20px]'>
+              <p className='font-bold text-[16px]'>{notification.title}</p>
+              <p>{notification.message}</p>
+              </div>
+              <style.ButtonDelete onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteNotification(notification.id);
+              }}>
+                <MdDelete />
+              </style.ButtonDelete>
+            </div>
+            {/* <Button type="link" onClick={(e) => {
+              e.stopPropagation();
+              showMoreInfoModalDetails(notification);
+            }}>
+              Ver mais
+            </Button> */}
+          </style.StyledLi>
+        ))}
+      </style.StyledUl>
+
+      {selectedNotification && (
+        <Modal
+          title={selectedNotification.title}
+          open={isModalVisibleDetails}
+          onCancel={handleModalClose}
+          footer={null}
+          width={700}
+        >
+          <div>
+            <p>
+              <strong>Mensagem:</strong> {selectedNotification.message}
+            </p>
+            <p>
+              <strong>Criado em:</strong> {selectedNotification.createdAt}
+            </p>
+            <Button
+              type="primary"
+              onClick={() => handleDeleteNotification(selectedNotification.id)}
+            >
+              Deletar notificação
+            </Button>
+          </div>
+        </Modal>
+      )}
+
       <Modal
-        title="Adicionar Notificação"
+        title="Adicionar aviso geral"
         open={isModalVisible}
         onCancel={handleModalClose}
         footer={null}
@@ -145,52 +207,7 @@ const NotificationAdm: React.FC = () => {
           Adicionar
         </Button>
       </Modal>
-
-      {/* Lista de Notificações */}
-      <StyledUl>
-        {notifications.map((notification) => (
-          <StyledLi key={notification.id}>
-            <div>
-              <strong> {notification.title} </strong>
-              <p>{notification.message}</p>
-              <div>
-                <ButtonDelete onClick={() => handleDeleteNotification(notification.id)}>
-                  <MdDelete />
-                </ButtonDelete>
-              </div>
-            </div>
-            <Button type="link" onClick={() => showMoreInfoModalDetails(notification)}>
-              Ver mais
-            </Button>
-          </StyledLi>
-        ))}
-      </StyledUl>
-
-      {/* Modal de Detalhes da Notificação */}
-      {selectedNotification && (
-        <Modal
-          title={selectedNotification.title}
-          open={isModalVisibleDetails}
-          onCancel={handleModalClose}
-          footer={null}
-        >
-          <div>
-            <p>
-              <strong>Mensagem:</strong> {selectedNotification.message}
-            </p>
-            <p>
-              <strong>Criado em:</strong> {selectedNotification.createdAt}
-            </p>
-            <Button
-              type="primary"
-              onClick={() => handleDeleteNotification(selectedNotification.id)}
-            >
-              Deletar Notificação
-            </Button>
-          </div>
-        </Modal>
-      )}
-    </DivNotification>
+    </style.DivNotification>
   );
 };
 

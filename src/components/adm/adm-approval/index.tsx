@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import * as style from "./style"; 
-import { ButtonApprove, ButtonRefuse } from "./style"; 
 import { Modal } from "antd/lib";
 
 interface PendingUser {
@@ -141,8 +140,8 @@ const approveUser = async (userId: number) => {
                 <style.Address /> {user.campus}
               </style.StyledP>
               <div className="flex mt-[40px]">
-                <ButtonRefuse onClick={() => showModalDelete(user.id_user)}>Recusar</ButtonRefuse>
-                <ButtonApprove onClick={() => showModal(user.id_user)}>Aprovar</ButtonApprove>
+                <style.ButtonRefuse onClick={() => showModalDelete(user.id_user)}>Recusar</style.ButtonRefuse>
+                <style.ButtonApprove onClick={() => showModal(user.id_user)}>Aprovar</style.ButtonApprove>
               </div>
             </div>
           </style.StyledLi>

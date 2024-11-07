@@ -271,7 +271,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
           </style.DivTopSearch>
 
           {filteredUsers.length === 0 ? (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px', color: "#272727"}}>
               <span>Não foi encontrado nenhuma vaga cadastrada.</span>
             </div>
           ) : (
