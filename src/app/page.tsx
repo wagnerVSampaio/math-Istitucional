@@ -28,6 +28,7 @@ const App: React.FC = () => {
   const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
+
   const loginAuthentication = async (values: { email: string; password: string; }) => {
     setLoading(true);
     try {
@@ -44,14 +45,14 @@ const App: React.FC = () => {
         throw new Error(errorData.message || "Erro na autenticação");
       }
 
-      // Recebe o JWT e os dados do usuário
+
       const { token, user } = await response.json();
 
       if (response.ok) {
         sessionStorage.setItem("authToken", token);
         sessionStorage.setItem("userData", JSON.stringify(user));
 
-        setUserData(user); // Atualiza o estado com os dados do usuário
+        setUserData(user);
 
         if (user.user_type === 'recruiter' && user.status === 'approved') {
           router.push("/inside-recruiter");
@@ -72,6 +73,7 @@ const App: React.FC = () => {
   const onFinish = (values: { email: string; password: string; }) => {
     loginAuthentication(values);
   };
+
   return (
     <>
       <HeaderOverall />
@@ -133,7 +135,7 @@ const App: React.FC = () => {
             }}>
               <Form.Item className="mb-0">
                 <ButtonLogin type="submit" disabled={loading}>
-                  {loading ? <Spin size="small"/> : "ENTRAR"}
+                  {loading ? <Spin size="small" /> : "ENTRAR"}
                 </ButtonLogin>
               </Form.Item>
             </ConfigProvider>
@@ -152,9 +154,12 @@ const App: React.FC = () => {
             </Form.Item>
 
             <Form.Item>
-              <Link href={"../register"}>
-                <ButtonWithEmail>CADASTRE-SE</ButtonWithEmail>
+              <Link href="/register" passHref>
+                <ButtonWithEmail>
+                  CADASTRE-SE
+                </ButtonWithEmail>
               </Link>
+
             </Form.Item>
           </Form>
           <div className="mt-6 md:mt-0">

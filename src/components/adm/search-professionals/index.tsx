@@ -126,8 +126,8 @@ const fetchApprovedUsers = async (idAdm: number) => {
           </style.DivTopSearch>
 
           {filteredUsers.length === 0 ? (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
-              <span>Não foi encontrado nenhum usuário.</span>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px', color: '#272727' }}>
+              <style.Info/><span>Não foi encontrado nenhum usuário.</span>
             </div>
           ) : (
             <div>

@@ -290,7 +290,7 @@ const NavRecrutador = () => {
 
       {/* Modal para exibir informações do usuário */}
       <Modal
-        title="Solicitação de cadastro bem-Sucedido"
+        title="Solicitação de cadastro bem-sucedido"
         open={isModalVisible}
         onOk={handleOk}
       >

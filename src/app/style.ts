@@ -42,6 +42,7 @@ export const StyledInput = styled(Input)`
         border: 1px solid #228B22;
         padding: 6px;
         margin-bottom: 0;
+        font-size: 15px;
     }
 `;
 
@@ -58,6 +59,7 @@ export const StyledInputSenha = styled(Input.Password)`
         margin-bottom: 0;
         width: 100%;
         max-width: 350px;
+        font-size: 15px;
     }
 `;
 

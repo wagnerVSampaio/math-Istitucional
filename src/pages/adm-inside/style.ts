@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 import { Radio, Input, Space } from "antd/lib";
 import { AiFillHome } from "react-icons/ai";
 import { FaUserCircle } from "react-icons/fa";
-import { IoBag } from "react-icons/io5";
+import { IoBag, IoNotifications } from "react-icons/io5";
 import { FaListCheck } from "react-icons/fa6";
 import { PiUserListBold } from "react-icons/pi";
 
@@ -120,4 +120,7 @@ export const ListProfessinals = styled(PiUserListBold)`
   @media (min-width: 1200px) {
     width: 100px;
   }
+`;
+export const Notifications = styled(IoNotifications)`
+  ${iconStyle}
 `;

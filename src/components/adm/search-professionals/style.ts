@@ -4,6 +4,7 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { MdRemoveRedEye } from "react-icons/md";
+import { FaCircleInfo } from "react-icons/fa6";
 
 export const Total = styled.div`
   display: flex;
@@ -119,4 +120,7 @@ export const ViewProfile = styled(MdRemoveRedEye)`
   margin-left: 20px;
   margin-top: 8px;
   font-size: 20px;
+`;
+export const Info = styled(FaCircleInfo)`
+  ${iconsStyle}
 `;
