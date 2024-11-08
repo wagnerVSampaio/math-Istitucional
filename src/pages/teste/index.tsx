@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Input, message, Menu } from 'antd/lib';
+import { Button, Input, message, Menu, Tooltip } from 'antd/lib';
 import { MdDelete } from 'react-icons/md';
-import * as style from "./style"; 
+import * as style from "./style";
 
 interface Notification {
   id: number;
@@ -13,8 +13,6 @@ interface Notification {
 
 const NotificationAdm: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isModalVisibleDetails, setIsModalVisibleDetails] = useState(false);
   const [newNotification, setNewNotification] = useState<Notification>({
     id: 0,
     title: '',
@@ -22,8 +20,11 @@ const NotificationAdm: React.FC = () => {
     createdAt: '',
     read: false,
   });
-  const [selectedNotification, setSelectedNotification] = useState<Notification | null>(null);
-  const [selectedMenu, setSelectedMenu] = useState('all'); // Controla a opção selecionada
+  const [selectedMenu, setSelectedMenu] = useState('all'); 
+
+
+
+
 
   useEffect(() => {
     fetchNotifications();
@@ -39,12 +40,43 @@ const NotificationAdm: React.FC = () => {
     }
   };
 
+
+
+
+
+  const idNotifications = async () => {
+    const data = sessionStorage.getItem("userData");
+    if (!data) {
+      console.error('Usuário não encontrado.');
+      return;
+    }
+    const userData = JSON.parse(data); 
+    const idUser = userData.id_user;
+
+    try {
+      const response = await fetch(`http://localhost:3002/api/idNotification/${idUser}`);
+      const data = await response.json();
+      setNotifications(data); 
+    } catch (error) {
+      message.error('Erro ao carregar as notificações.');
+    }
+  };
+  useEffect(() => {
+    idNotifications();
+  }, []);
+
+
+
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
     setNewNotification((prevState) => ({
       ...prevState,
       [field]: e.target.value,
     }));
   };
+
+
+
 
   const handleAddNotification = async () => {
     if (!newNotification.title || !newNotification.message) {
@@ -70,9 +102,8 @@ const NotificationAdm: React.FC = () => {
 
       if (response.ok) {
         const addedNotification = await response.json();
-        setNotifications((prevNotifications) => [...prevNotifications, addedNotification]);
-        setNewNotification({ id: 0, title: '', message: '', createdAt: '', read: false });
-        setIsModalVisible(false);
+      setNotifications((prevNotifications) => [...prevNotifications, addedNotification]);
+      setNewNotification({ id: 0, title: '', message: '', createdAt: '', read: false });
         message.success('Notificação adicionada com sucesso!');
       } else {
         message.error('Erro ao adicionar notificação.');
@@ -81,6 +112,10 @@ const NotificationAdm: React.FC = () => {
       message.error('Erro ao adicionar notificação.');
     }
   };
+
+
+
+
 
   const handleDeleteNotification = async (id: number) => {
     try {
@@ -101,94 +136,77 @@ const NotificationAdm: React.FC = () => {
     }
   };
 
+
+
   const handleMenuClick = (key: string) => {
-    setSelectedMenu(key);
-    if (key === 'create') setIsModalVisible(true);
+    setSelectedMenu(key); 
+  
+    if (key === 'create') {
+    } else if (key === 'my') {
+      idNotifications(); 
+    } else if (key === 'all') {
+      fetchNotifications();
+    }
+  };
+  
+
+
+  const markAsRead = async (id: number) => {
+    try {
+      const response = await fetch(`http://localhost:3002/api/markNotification/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (response.ok) {
+        setNotifications(prevNotifications =>
+          prevNotifications.map(notification =>
+            notification.id === id ? { ...notification, read: true } : notification
+          )
+        );
+      } else {
+        message.error('Erro ao marcar notificação como lida.');
+      }
+    } catch (error) {
+      message.error('Erro ao conectar com o servidor.');
+    }
   };
 
-  const showMoreInfoModalDetails = (notification: Notification) => {
-    setSelectedNotification(notification);
-    setIsModalVisibleDetails(true);
-  };
 
-  const handleModalClose = () => {
-    setIsModalVisible(false);
-    setIsModalVisibleDetails(false);
-    setSelectedNotification(null);
-  };
-
-  const markAsRead = (id: number) => {
-    setNotifications(prevNotifications =>
-      prevNotifications.map(notification =>
-        notification.id === id ? { ...notification, read: true } : notification
-      )
-    );
-  };
   const renderContent = () => {
     if (selectedMenu === 'all') {
       return (
         <style.StyledUl>
-        {notifications.map((notification) => (
-          <style.StyledLi
-            key={notification.id}
-            onClick={() => {
-              showMoreInfoModalDetails(notification);
-              markAsRead(notification.id);
-            }}
-            style={{ backgroundColor: notification.read ? '#fff' : '#e6f7ff' }}
-          >
-            <div className='flex'>
-              <div className='flex flex-col m-[20px]'>
-              <p className='font-bold text-[16px]'>{notification.title}</p>
-              <p>{notification.message}</p>
+          {notifications.map((notification) => (
+            <style.StyledLi
+              key={notification.id}
+              onClick={() => markAsRead(notification.id)}
+              style={{ backgroundColor: notification.read ? '#fff' : '#e6f7ff' }}
+            >
+              <div className='flex'>
+                <div className='flex flex-col m-[20px]'>
+                  <p className='font-bold text-[16px]'>{notification.title}</p>
+                  <p>{notification.message}</p>
+                </div>
+                <Tooltip title="Apagar notificação">
+                <style.ButtonDelete onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteNotification(notification.id);
+                }}>
+                  <MdDelete />
+                </style.ButtonDelete>
+                </Tooltip>
               </div>
-              <style.ButtonDelete onClick={(e) => {
-                e.stopPropagation();
-                handleDeleteNotification(notification.id);
-              }}>
-                <MdDelete />
-              </style.ButtonDelete>
-            </div>
-            {/* <Button type="link" onClick={(e) => {
-              e.stopPropagation();
-              showMoreInfoModalDetails(notification);
-            }}>
-              Ver mais
-            </Button> */}
-          </style.StyledLi>
-        ))}
-      </style.StyledUl>
+            </style.StyledLi>
+          ))}
+        </style.StyledUl>
       );
-    } else if (selectedMenu === 'my') {
-      return <p>Meus avisos (implementação futura)</p>;
-    }
-  };
-
-  return (
-    <style.DivNotification>
-      <style.SideMenu>
-        <Menu
-          mode="vertical"
-          defaultSelectedKeys={['all']}
-          onClick={({ key }) => handleMenuClick(key)}
-        >
-          <Menu.Item key="all">Todas as Notificações</Menu.Item>
-          <Menu.Item key="create">Criar Aviso</Menu.Item>
-          <Menu.Item key="my">Meus Avisos</Menu.Item>
-        </Menu>
-      </style.SideMenu>
-      
-      <div>
-        {renderContent()}
-      </div>
-
-      {isModalVisible && (
-        <Modal
-          title="Adicionar aviso geral"
-          open={isModalVisible}
-          onCancel={handleModalClose}
-          footer={null}
-        >
+    } else if (selectedMenu === 'create') {
+      return (
+        <div style={{ padding: '20px', width: '60%' }}>
+          <h2>Adicionar aviso geral</h2>
           <Input
             placeholder="Título"
             value={newNotification.title}
@@ -204,8 +222,47 @@ const NotificationAdm: React.FC = () => {
           <Button type="primary" onClick={handleAddNotification}>
             Adicionar
           </Button>
-        </Modal>
-      )}
+        </div>
+      );
+    } else if (selectedMenu === 'my') {
+      return (
+        <style.StyledUl>
+          {notifications.map((notification) => (
+            <style.StyledLi key={notification.id}>
+              <div className='flex'>
+                <div className='flex flex-col m-[20px]'>
+                  <p className='font-bold text-[16px]'>{notification.title}</p>
+                  <p>{notification.message}</p>
+                </div>
+                <style.ButtonDelete onClick={() => handleDeleteNotification(notification.id)}>
+                  <MdDelete />
+                </style.ButtonDelete>
+              </div>
+            </style.StyledLi>
+          ))}
+        </style.StyledUl>
+      );
+    }
+  };
+
+  return (
+    <style.DivNotification>
+      <style.SideMenu>
+        <Menu
+          mode="vertical"
+          defaultSelectedKeys={['all']}
+          onClick={({ key }) => handleMenuClick(key)}
+          style={{ boxShadow: '0 4px 8px rgba(0, 107, 63, 0.2)'}}
+        >
+          <Menu.Item key="all">Todas as Notificações</Menu.Item>
+          <Menu.Item key="create">Criar Aviso</Menu.Item>
+          <Menu.Item key="my">Meus Avisos</Menu.Item>
+        </Menu>
+      </style.SideMenu>
+      
+      <div style={{ flex: 1 }}>
+        {renderContent()}
+      </div>
     </style.DivNotification>
   );
 };

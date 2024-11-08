@@ -1,5 +1,5 @@
-// style.ts
 import styled from 'styled-components';
+import { TbSpeakerphone } from "react-icons/tb";
 
 export const DivNotification = styled.div`
   display: flex;
@@ -7,16 +7,12 @@ export const DivNotification = styled.div`
 
 export const SideMenu = styled.div`
   width: 200px;
-  background-color: #006b3f;
+  height: auto;
   padding: 5px;
   margin-right: 20px;
   border-radius: 5px;
 `;
 
-import { TbSpeakerphone } from "react-icons/tb";
-export const DivNotification2 = styled.div`
-
-`;
 export const ButtonDelete = styled.button`
     background-color: transparent;
     border: none;
@@ -59,15 +55,6 @@ export const H2Name = styled.h2`
   font-weight: bold;
   margin-bottom: 8px;
 `;
-/* export const ButtonDeleteEmail = styled.button`
-  padding: 5px 30px;
-  margin-left: 20px;
-  border: 1.5px solid #006B3F;
-  border-radius: 8px;
-  color: #006B3F;
-  font-weight: 500;
-  box-shadow: 0px 4px 6px rgba(0, 107, 63, 0.2);
-`; */
 
 
 export const SpeakerNotice = styled(TbSpeakerphone)`
