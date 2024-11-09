@@ -290,7 +290,7 @@ const NavServidor = () => {
         </style.ParagraphStyled>
       </div>
 
-      <div className="mt-[40px]">
+      <div>
         <Flex gap="small" wrap>
           <Link href={"/"}>
             <style.ButtonExit className="button-item">

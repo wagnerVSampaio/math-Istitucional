@@ -177,7 +177,7 @@ useEffect(() => {
               />
             </ImageWrapper>
             <StyledParagraph>{userData?.full_name}</StyledParagraph>
-            <div>
+            {/* <div>
               <nav>
                 <UlStyled>
                   <LiStyled>Sobre</LiStyled>
@@ -185,7 +185,7 @@ useEffect(() => {
                   <Link href={'/termsAndPrivacy'}><LiStyled>Termos e privacidade</LiStyled></Link>
                 </UlStyled>
               </nav>
-            </div>
+            </div> */}
             <DivBottom>
             <ButtonStyled onClick={showModal}>
               Sair

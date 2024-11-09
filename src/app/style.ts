@@ -10,14 +10,13 @@ export const Section = styled.section`
     margin-left: 1rem;
     margin-right: 1rem; 
     margin: 55px 5%; 
-    max-width: 1280px;
 
     @media (min-width: 768px) {
         flex-direction: row; 
         margin-top: 10px; 
         margin-left: auto;
         margin-right: auto; 
-        margin: 55px 120px; 
+        margin: 45px 120px; 
     } 
     
     @media (min-width: 1440px) {

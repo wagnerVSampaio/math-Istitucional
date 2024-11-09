@@ -807,7 +807,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
       const idUser = userData.id_user;
 
       const response = await fetch(`http://localhost:3002/api/biography/${idUser}/biography`, {
-        method: 'DELETE', // Método DELETE para remover
+        method: 'DELETE',
       });
 
       if (!response.ok) {

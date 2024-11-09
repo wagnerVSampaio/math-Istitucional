@@ -33,7 +33,7 @@ export const StyledParagraph = styled.div`
     padding-bottom: 10px;
     font-size: 11px;
     text-align: center;
-    border-bottom: 1px solid #ddd;
+    //border-bottom: 1px solid #ddd;
     color: #006B3F;
     font-weight: bold;
 `;
