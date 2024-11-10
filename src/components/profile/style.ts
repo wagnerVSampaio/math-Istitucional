@@ -173,7 +173,8 @@ export const DivBio = styled.div`
   border-radius: 10px;
   position: relative;
   padding: 10px;
-  overflow: hidden; 
+  overflow: hidden;
+  margin-top: 5px;
 `;
 
 export const DivP = styled.div`
@@ -183,7 +184,7 @@ export const DivP = styled.div`
 
 export const DivEdit = styled.button`
   position: absolute;
-  top: 12px;
+  top: 2px;
   right: 12px;
   background-color: transparent;
   border: none;
@@ -194,7 +195,7 @@ export const DivEdit = styled.button`
 
 export const DivSave = styled.button`
   position: absolute;
-  top: 12px;
+  top: 2px;
   right: 16px;
   background-color: transparent;
   border: none;

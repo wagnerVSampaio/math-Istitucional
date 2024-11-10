@@ -44,7 +44,7 @@ const PasswordReset: React.FC = () => {
           <div>
             <StyledInput type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="E-mail" required />
             <div>
-            <p className='mb-[20px]'>Esqueceu o e-mail? <StyledSpan>Recuperar</StyledSpan></p>
+            {/* <p className='mb-[20px]'>Esqueceu o e-mail? <StyledSpan>Recuperar</StyledSpan></p> */}
               <Link href={'./'}>
                   <StyledButtonGoBack type="submit">
                     VOLTAR

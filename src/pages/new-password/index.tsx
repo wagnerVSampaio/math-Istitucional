@@ -60,11 +60,12 @@ const NewPassword: React.FC = () => {
           <div>
             <StyledInput type="password"
                         value={newPassword}
+                        placeholder="Digite a nova senha"
                         onChange={(e) => setNewPassword(e.target.value)}/>
             <StyledInput type="confirmationpassword"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        placeholder="Confirme a Nova Senha"
+                        placeholder="Confirme a nova senha"
                         required/>
             <div className="mb-[20px] flex">
               <p className="text-[13px]">

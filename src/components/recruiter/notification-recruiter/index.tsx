@@ -6,9 +6,10 @@ import TextArea from 'antd/lib/input/TextArea';
 
 interface Notification {
   id: number;
+  full_name: string;
   title: string;
   message: string;
-  createdAt: string;
+  created_at: string;
   read: boolean;
 }
 
@@ -17,12 +18,28 @@ const NotificationRecruiter: React.FC = () => {
   const [newNotification, setNewNotification] = useState<Notification>({
     id: 0,
     title: '',
+    full_name: '',
     message: '',
-    createdAt: '',
+    created_at: '',
     read: false,
   });
   const [selectedMenu, setSelectedMenu] = useState('all'); // Controla o menu selecionado
 
+  const formatDate = (dateString: string | undefined): string => {
+    if (!dateString) return ''; 
+    const date = new Date(dateString);
+
+    const options: Intl.DateTimeFormatOptions = {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    };
+
+    return date.toLocaleDateString('pt-BR', options);
+  };
   // Carrega as notificações ao iniciar o componente
   useEffect(() => {
     if (selectedMenu === 'all') {
@@ -87,7 +104,7 @@ const NotificationRecruiter: React.FC = () => {
       if (response.ok) {
         const addedNotification = await response.json();
         setNotifications((prevNotifications) => [...prevNotifications, addedNotification]);
-        setNewNotification({ id: 0, title: '', message: '', createdAt: '', read: false });
+        setNewNotification({ id: 0, title: '',full_name: '', message: '', created_at: '', read: false });
         message.success('Notificação adicionada com sucesso!');
       } else {
         message.error('Erro ao adicionar notificação.');
@@ -146,6 +163,7 @@ const NotificationRecruiter: React.FC = () => {
     setSelectedMenu(key);  // Atualiza o estado de menu selecionado
   };
 
+  
   // Renderiza o conteúdo com base no menu selecionado
   const renderContent = () => {
     if (selectedMenu === 'all') {
@@ -166,6 +184,7 @@ const NotificationRecruiter: React.FC = () => {
                   <div className="flex flex-col m-[20px]">
                     <p className="font-bold text-[16px]">{notification.title}</p>
                     <p>{notification.message}</p>
+                    <p style={{color: "#6c757d", marginTop: "12px"}}>{notification.full_name} - {formatDate(notification.created_at)}</p>
                   </div>
                   <Tooltip title="Apagar notificação">
                     <style.ButtonDelete
@@ -178,6 +197,7 @@ const NotificationRecruiter: React.FC = () => {
                     </style.ButtonDelete>
                   </Tooltip>
                 </div>
+
               </style.StyledLi>
             ))
           )}

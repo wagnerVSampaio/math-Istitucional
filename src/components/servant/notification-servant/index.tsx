@@ -6,8 +6,9 @@ import * as style from "./style";
 interface Notification {
     id: number;
     title: string;
+    full_name: string;
     message: string;
-    createdAt: string;
+    created_at: string;
     read: boolean;
 }
 
@@ -16,12 +17,27 @@ const NotificationServant: React.FC = () => {
     const [newNotification, setNewNotification] = useState<Notification>({
         id: 0,
         title: '',
+        full_name: '',
         message: '',
-        createdAt: '',
+        created_at: '',
         read: false,
-    });
+      });
     const [selectedMenu, setSelectedMenu] = useState('all');
-
+    const formatDate = (dateString: string | undefined): string => {
+        if (!dateString) return ''; 
+        const date = new Date(dateString);
+    
+        const options: Intl.DateTimeFormatOptions = {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true,
+        };
+    
+        return date.toLocaleDateString('pt-BR', options);
+      };
     useEffect(() => {
         loadNotifications();
     }, []);
@@ -121,6 +137,7 @@ const NotificationServant: React.FC = () => {
                                 <div className='flex flex-col m-[20px]'>
                                     <p className='font-bold text-[16px]'>{notification.title}</p>
                                     <p>{notification.message}</p>
+                                    <p style={{color: "#6c757d", marginTop: "12px"}}>{notification.full_name} - {formatDate(notification.created_at)}</p>
                                 </div>
                                 <Tooltip title="Apagar notificação">
                                     <style.ButtonDelete onClick={(e) => {

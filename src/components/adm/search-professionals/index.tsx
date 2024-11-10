@@ -141,7 +141,7 @@ const fetchApprovedUsers = async (idAdm: number) => {
                       }}
                     >
                       <div className="flex flex-col m-[20px]">
-                        <style.StyledParagraph>{user.full_name} <Tooltip title="Visualizar perfil"><style.ViewProfile /></Tooltip></style.StyledParagraph>
+                        <style.StyledParagraph>{user.full_name} {/* <Tooltip title="Visualizar perfil"><style.ViewProfile /></Tooltip> */}</style.StyledParagraph>
                         <style.StyledP>
                           <style.Address /> {user.campus}
                         </style.StyledP>
