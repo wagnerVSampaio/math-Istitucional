@@ -13,8 +13,8 @@ export const DivNotification = styled.div`
     height: 550px;
     overflow-x: auto;
 
-    @media (max-width: 1200px) {
-    width: 80%; /* Ajusta a largura para telas grandes mas não muito grandes */
+    @media (min-width: 1280px) {
+      width: 90%; /* Ajusta a largura para telas grandes mas não muito grandes */
   }
 
   @media (max-width: 768px) {
@@ -46,10 +46,18 @@ export const StyledLi = styled.li`
   gap: 20px;
   align-items: center;
   border-bottom: 1px solid #ddd;
-  padding: 40px 0;
+  
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media (min-width: 1200px) {
+    padding: 20px 0;
+  }
+
+  @media (min-width: 1440px) {
+    padding: 40px 0;
+  }
+
 `;
 export const StyledParagraph = styled.ul`
   font-size: 20px;

@@ -11,7 +11,7 @@ export const Section = styled.section`
     margin-right: 1rem; 
     margin: 55px 5%; 
 
-    @media (min-width: 768px) {
+    @media (min-width: 1280px) {
         flex-direction: row; 
         margin-top: 10px; 
         margin-left: auto;
@@ -21,7 +21,7 @@ export const Section = styled.section`
     
     @media (min-width: 1440px) {
        margin-top: 70px;
-       margin-left: 300px;
+       margin-left: 200px;
     }
 `;
 

@@ -42,6 +42,7 @@ const App: React.FC = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
+        setLoading(false);
         throw new Error(errorData.message || "Erro na autenticação");
       }
 

@@ -1,140 +1,253 @@
-import React, { useState } from 'react';
-import { ButtonDelete, ButtonDeleteEmail, DivNotification, H2Name, StyledLi, StyledUl } from './style';
-import { MdDelete } from "react-icons/md";
-import { ProfessionalsData } from "@/professionals-const";
-import { Modal, Button, message } from 'antd/lib';
+import React, { useState, useEffect } from 'react';
+import { Button, Input, message, Menu, Tooltip } from 'antd/lib';
+import { MdDelete } from 'react-icons/md';
+import * as style from './style';
+import TextArea from 'antd/lib/input/TextArea';
 
-interface Professional {
+interface Notification {
   id: number;
-  name: string;
-  formation: string;
-  address: string;
-  contact: string;
-  experience: string;
+  title: string;
+  message: string;
+  createdAt: string;
   read: boolean;
-  expanded: boolean;
 }
 
-const initialProfessionalsData: Professional[] = ProfessionalsData.map(professional => ({
-  ...professional,
-  read: false,
-  expanded: false
-}));
-
 const NotificationRecruiter: React.FC = () => {
-  const [professionals, setProfessionals] = useState<Professional[]>(initialProfessionalsData);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [newNotification, setNewNotification] = useState<Notification>({
+    id: 0,
+    title: '',
+    message: '',
+    createdAt: '',
+    read: false,
+  });
+  const [selectedMenu, setSelectedMenu] = useState('all'); // Controla o menu selecionado
 
-  {/*DELETA EMAIL*/}
-  const deleteProfessional = (id: number) => {
-    setProfessionals(prevProfessionals =>
-      prevProfessionals.filter(professional => professional.id !== id)
-    );
-    message.success('E-mail deletado com sucesso!');
+  // Carrega as notificações ao iniciar o componente
+  useEffect(() => {
+    if (selectedMenu === 'all') {
+      fetchNotifications();  // Carrega todas as notificações
+    } else if (selectedMenu === 'my') {
+      loadUserNotifications();  // Carrega as notificações específicas do usuário
+    }
+  }, [selectedMenu]); // Recarrega as notificações sempre que o menu mudar
+
+  // Função para carregar todas as notificações
+  const fetchNotifications = async () => {
+    try {
+      const response = await fetch('http://localhost:3002/api/allNotification');
+      const data = await response.json();
+      setNotifications(data);
+    } catch (error) {
+      message.error('Erro ao carregar as notificações.');
+    }
   };
 
-  {/*MARCA O EMAIL COMO LIDO QUANDO CLICADO*/}
-  const markAsRead = (id: number) => {
-    setProfessionals(prevProfessionals =>
-      prevProfessionals.map(professional =>
-        professional.id === id ? { ...professional, read: true } : professional
-      )
-    );
+  // Função para carregar as notificações do usuário logado
+  const loadUserNotifications = async () => {
+    const userData = sessionStorage.getItem('userData');
+    if (!userData) {
+      console.error('Usuário não encontrado.');
+      return;
+    }
+    const { id_user } = JSON.parse(userData);
+
+    try {
+      const response = await fetch(`http://localhost:3002/api/idNotification/${id_user}`);
+      const data = await response.json();
+      setNotifications(data);
+    } catch (error) {
+      message.error('Erro ao carregar as notificações.');
+    }
   };
 
-  {/*MODAL VISÍVEL*/}
-  const showMoreInfoModal = (professional: Professional) => {
-    setSelectedProfessional(professional);
-    setIsModalVisible(true);
-    markAsRead(professional.id);
-  }
+  // Função para criar nova notificação
+  const handleAddNotification = async () => {
+    if (!newNotification.title || !newNotification.message) {
+      message.error('Título e mensagem são obrigatórios!');
+      return;
+    }
 
-  {/*FECHAR MODAL*/}
-  const handleModalClose = () => {
-    setIsModalVisible(false);
-    setSelectedProfessional(null);
+    const userData = sessionStorage.getItem('userData');
+    if (!userData) {
+      console.error('Usuário não encontrado.');
+      return;
+    }
+    const { id_user } = JSON.parse(userData);
+
+    try {
+      const response = await fetch(`http://localhost:3002/api/createNotification/${id_user}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newNotification),
+      });
+
+      if (response.ok) {
+        const addedNotification = await response.json();
+        setNotifications((prevNotifications) => [...prevNotifications, addedNotification]);
+        setNewNotification({ id: 0, title: '', message: '', createdAt: '', read: false });
+        message.success('Notificação adicionada com sucesso!');
+      } else {
+        message.error('Erro ao adicionar notificação.');
+      }
+    } catch (error) {
+      message.error('Erro ao adicionar notificação.');
+    }
   };
 
-  {/*MINI EMAIL PRONTO PARA ENTRAR EM CONTATO COM OS USUÁRIOS*/}
-  const generateMailtoLink = (contact: string, name: string) => {
-    const subject = encodeURIComponent(`Contato sobre oportunidade de trabalho`);
-    const body = encodeURIComponent(`Olá ${name},\n\nGostaria de conversar sobre uma oportunidade de trabalho. Por favor, entre em contato.\n\nAtenciosamente,\nUniversidade Federal do Oeste do Pará`);
-    return `mailto:${contact}?subject=${subject}&body=${body}`;
+  // Função para marcar uma notificação como lida
+  const markAsRead = async (id: number) => {
+    try {
+      const response = await fetch(`http://localhost:3002/api/markNotification/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        setNotifications((prevNotifications) =>
+          prevNotifications.map((notification) =>
+            notification.id === id ? { ...notification, read: true } : notification
+          )
+        );
+      } else {
+        console.error('Erro ao marcar a notificação como lida.');
+      }
+    } catch (error) {
+      message.error('Erro ao conectar com o servidor.');
+    }
   };
 
-  {/*DELETAR EMAIL PELO MODAL*/}
-  const handleDeleteFromModal = () => {
-    if (selectedProfessional) {
-      deleteProfessional(selectedProfessional.id);
-      handleModalClose();
+  // Função para excluir uma notificação
+  const handleDeleteNotification = async (id: number) => {
+    try {
+      const response = await fetch(`http://localhost:3002/api/deleteNotification/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        setNotifications((prevNotifications) =>
+          prevNotifications.filter((notification) => notification.id !== id)
+        );
+        message.success('Notificação deletada com sucesso!');
+      } else {
+        message.error('Erro ao deletar notificação.');
+      }
+    } catch (error) {
+      message.error('Erro ao deletar notificação.');
+    }
+  };
+
+  // Função para manipular o clique no menu
+  const handleMenuClick = (key: string) => {
+    setSelectedMenu(key);  // Atualiza o estado de menu selecionado
+  };
+
+  // Renderiza o conteúdo com base no menu selecionado
+  const renderContent = () => {
+    if (selectedMenu === 'all') {
+      return (
+        <style.StyledUl>
+          {notifications.length === 0 ? (
+            <p style={{ textAlign: 'center', color: '#999', padding: '10px' }}>
+              Não há notificações disponíveis.
+            </p>
+          ) : (
+            notifications.map((notification) => (
+              <style.StyledLi
+                key={notification.id}
+                onClick={() => markAsRead(notification.id)}
+                style={{ backgroundColor: notification.read ? '#fff' : '#e6f7ff' }}
+              >
+                <div className="flex">
+                  <div className="flex flex-col m-[20px]">
+                    <p className="font-bold text-[16px]">{notification.title}</p>
+                    <p>{notification.message}</p>
+                  </div>
+                  <Tooltip title="Apagar notificação">
+                    <style.ButtonDelete
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteNotification(notification.id);
+                      }}
+                    >
+                      <MdDelete />
+                    </style.ButtonDelete>
+                  </Tooltip>
+                </div>
+              </style.StyledLi>
+            ))
+          )}
+        </style.StyledUl>
+      );
+    } else if (selectedMenu === 'create') {
+      return (
+        <div style={{ padding: '20px', width: '60%' }}>
+          <h2>Adicionar aviso geral</h2>
+          <Input
+            placeholder="Título"
+            value={newNotification.title}
+            onChange={(e) => setNewNotification({ ...newNotification, title: e.target.value })}
+            style={{ marginBottom: 10 }}
+          />
+          <TextArea
+            placeholder="Mensagem"
+            value={newNotification.message}
+            onChange={(e) => setNewNotification({ ...newNotification, message: e.target.value })}
+            style={{ marginBottom: 10 }}
+          />
+          <Button type="primary" onClick={handleAddNotification}>
+            Adicionar
+          </Button>
+        </div>
+      );
+    } else if (selectedMenu === 'my') {
+      return (
+        <style.StyledUl>
+        {notifications.length === 0 ? (
+          <p style={{ textAlign: 'center', color: '#999', padding: "10px" }}>Não há notificações disponíveis.</p>
+        ) : (
+          notifications.map((notification) => (
+            <style.StyledLi key={notification.id}>
+              <div className="flex">
+                <div className="flex flex-col m-[20px]">
+                  <p className="font-bold text-[16px]">{notification.title}</p>
+                  <p>{notification.message}</p>
+                </div>
+                <style.ButtonDelete onClick={() => handleDeleteNotification(notification.id)}>
+                  <MdDelete />
+                </style.ButtonDelete>
+              </div>
+            </style.StyledLi>
+          ))
+        )}
+      </style.StyledUl>
+      );
     }
   };
 
   return (
-    <DivNotification>
-      <StyledUl>
-        {professionals.map((professional) => (
-          <StyledLi
-            key={professional.id}
-            onClick={(e) => {
-              e.stopPropagation();
-              showMoreInfoModal(professional);
-            }}
-            style={{ backgroundColor: professional.read ? '#fff' : '#e6f7ff' }}
-          >
-            <div className='flex flex-col m-[20px]'>
-              <p className='font-bold text-[16px]'>{professional.name}, {professional.formation}</p>
-              <p>Local: {professional.address}</p>
-            </div>
-            <div className='delete-button-container'>
-              <ButtonDelete
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deleteProfessional(professional.id);
-                }}
-              >
-                <MdDelete />
-              </ButtonDelete>
-            </div>
-          </StyledLi>
-        ))}
-      </StyledUl>
-      <Modal
-        title="Mais Informações"
-        open={isModalVisible}
-        onCancel={handleModalClose}
-        footer={null}
-        width={800}
-      >
-        {selectedProfessional && (
-          <div>
-            <H2Name>{selectedProfessional.name}</H2Name>
-            <p><strong>Formação:</strong> {selectedProfessional.formation}</p>
-            <p><strong>Endereço:</strong> {selectedProfessional.address}</p>
-            <p><strong>Contato:</strong> {selectedProfessional.contact}</p>
-            <p><strong>Experiência:</strong> {selectedProfessional.experience}</p>
+    <style.DivNotification>
+      <style.SideMenu>
+        <Menu
+          mode="vertical"
+          selectedKeys={[selectedMenu]}  // O menu usa o estado `selectedMenu` para destacar a opção ativa
+          onClick={({ key }) => handleMenuClick(key)}
+          style={{ boxShadow: '0 4px 8px rgba(0, 107, 63, 0.2)' }}
+        >
+          <Menu.Item key="all">Todas as Notificações</Menu.Item>
+          <Menu.Item key="create">Criar Aviso</Menu.Item>
+          <Menu.Item key="my">Meus Avisos</Menu.Item>
+        </Menu>
+      </style.SideMenu>
 
-            <Button
-              type="primary"
-              className='mt-3'
-              href={generateMailtoLink(selectedProfessional.contact, selectedProfessional.name)}
-            >
-              Entrar em contato
-            </Button>
-            <ButtonDeleteEmail
-              className='mt-3'
-              onClick={(e) => {
-                e.stopPropagation();
-                handleDeleteFromModal();
-              }}
-            >
-              Deletar e-mail
-            </ButtonDeleteEmail>
-          </div>
-        )}
-      </Modal>
-    </DivNotification>
+      <div style={{ flex: 1 }}>
+        {renderContent()}
+      </div>
+    </style.DivNotification>
   );
 };
 

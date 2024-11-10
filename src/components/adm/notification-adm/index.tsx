@@ -1,35 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Input, message, Menu, Tooltip } from 'antd/lib';
 import { MdDelete } from 'react-icons/md';
-import * as style from "./style";
+import * as style from './style';
+import TextArea from 'antd/lib/input/TextArea';
 
 interface Notification {
   id: number;
+  full_name: string;
   title: string;
   message: string;
-  createdAt: string;
+  created_at: string;
   read: boolean;
 }
 
-const NotificationAdm: React.FC = () => {
+const NotificationRecruiter: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [newNotification, setNewNotification] = useState<Notification>({
     id: 0,
     title: '',
+    full_name: '',
     message: '',
-    createdAt: '',
+    created_at: '',
     read: false,
   });
-  const [selectedMenu, setSelectedMenu] = useState('all'); 
+  const [selectedMenu, setSelectedMenu] = useState('all'); // Controla o menu selecionado
 
-
-
-
-
+  // Carrega as notificações ao iniciar o componente
   useEffect(() => {
-    fetchNotifications();
-  }, []);
+    if (selectedMenu === 'all') {
+      fetchNotifications();  // Carrega todas as notificações
+    } else if (selectedMenu === 'my') {
+      loadUserNotifications();  // Carrega as notificações específicas do usuário
+    }
+  }, [selectedMenu]); // Recarrega as notificações sempre que o menu mudar
 
+  // Função para carregar todas as notificações
   const fetchNotifications = async () => {
     try {
       const response = await fetch('http://localhost:3002/api/allNotification');
@@ -40,59 +45,40 @@ const NotificationAdm: React.FC = () => {
     }
   };
 
-
-
-
-
-  const idNotifications = async () => {
-    const data = sessionStorage.getItem("userData");
-    if (!data) {
+  // Função para carregar as notificações do usuário logado
+  const loadUserNotifications = async () => {
+    const userData = sessionStorage.getItem('userData');
+    if (!userData) {
       console.error('Usuário não encontrado.');
       return;
     }
-    const userData = JSON.parse(data); 
-    const idUser = userData.id_user;
+    const { id_user } = JSON.parse(userData);
 
     try {
-      const response = await fetch(`http://localhost:3002/api/idNotification/${idUser}`);
+      const response = await fetch(`http://localhost:3002/api/idNotification/${id_user}`);
       const data = await response.json();
-      setNotifications(data); 
+      setNotifications(data);
     } catch (error) {
       message.error('Erro ao carregar as notificações.');
     }
   };
-  useEffect(() => {
-    idNotifications();
-  }, []);
 
-
-
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
-    setNewNotification((prevState) => ({
-      ...prevState,
-      [field]: e.target.value,
-    }));
-  };
-
-
-
-
+  // Função para criar nova notificação
   const handleAddNotification = async () => {
     if (!newNotification.title || !newNotification.message) {
       message.error('Título e mensagem são obrigatórios!');
       return;
     }
-    const data = sessionStorage.getItem("userData");
-    if (!data) {
+
+    const userData = sessionStorage.getItem('userData');
+    if (!userData) {
       console.error('Usuário não encontrado.');
       return;
     }
-    const userData = JSON.parse(data);
-    const idUser = userData.id_user;
+    const { id_user } = JSON.parse(userData);
 
     try {
-      const response = await fetch(`http://localhost:3002/api/createNotification/${idUser}`, {
+      const response = await fetch(`http://localhost:3002/api/createNotification/${id_user}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -102,8 +88,8 @@ const NotificationAdm: React.FC = () => {
 
       if (response.ok) {
         const addedNotification = await response.json();
-      setNotifications((prevNotifications) => [...prevNotifications, addedNotification]);
-      setNewNotification({ id: 0, title: '', message: '', createdAt: '', read: false });
+        setNotifications((prevNotifications) => [...prevNotifications, addedNotification]);
+        setNewNotification({ id: 0, title: '',full_name: '', message: '', created_at: '', read: false });
         message.success('Notificação adicionada com sucesso!');
       } else {
         message.error('Erro ao adicionar notificação.');
@@ -113,10 +99,31 @@ const NotificationAdm: React.FC = () => {
     }
   };
 
+  // Função para marcar uma notificação como lida
+  const markAsRead = async (id: number) => {
+    try {
+      const response = await fetch(`http://localhost:3002/api/markNotification/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
+      if (response.ok) {
+        setNotifications((prevNotifications) =>
+          prevNotifications.map((notification) =>
+            notification.id === id ? { ...notification, read: true } : notification
+          )
+        );
+      } else {
+        console.error('Erro ao marcar a notificação como lida.');
+      }
+    } catch (error) {
+      message.error('Erro ao conectar com o servidor.');
+    }
+  };
 
-
-
+  // Função para excluir uma notificação
   const handleDeleteNotification = async (id: number) => {
     try {
       const response = await fetch(`http://localhost:3002/api/deleteNotification/${id}`, {
@@ -136,71 +143,48 @@ const NotificationAdm: React.FC = () => {
     }
   };
 
-
-
+  // Função para manipular o clique no menu
   const handleMenuClick = (key: string) => {
-    setSelectedMenu(key); 
-  
-    if (key === 'create') {
-    } else if (key === 'my') {
-      idNotifications(); 
-    } else if (key === 'all') {
-      fetchNotifications();
-    }
-  };
-  
-
-
-  const markAsRead = async (id: number) => {
-    try {
-      const response = await fetch(`http://localhost:3002/api/markNotification/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-  
-      if (response.ok) {
-        setNotifications(prevNotifications =>
-          prevNotifications.map(notification =>
-            notification.id === id ? { ...notification, read: true } : notification
-          )
-        );
-      } else {
-        console.error();
-      }
-    } catch (error) {
-      message.error('Erro ao conectar com o servidor.');
-    }
+    setSelectedMenu(key);  // Atualiza o estado de menu selecionado
   };
 
-
+  // Renderiza o conteúdo com base no menu selecionado
   const renderContent = () => {
     if (selectedMenu === 'all') {
       return (
         <style.StyledUl>
-          {notifications.map((notification) => (
-            <style.StyledLi
-              key={notification.id}
-              onClick={() => markAsRead(notification.id)}
-              style={{ backgroundColor: notification.read ? '#fff' : '#e6f7ff' }}
-            >
-              <div className='flex'>
-                <div className='flex flex-col m-[20px]'>
-                  <p className='font-bold text-[16px]'>{notification.title}</p>
-                  <p>{notification.message}</p>
+          {notifications.length === 0 ? (
+            <p style={{ textAlign: 'center', color: '#999', padding: '10px' }}>
+              Não há notificações disponíveis.
+            </p>
+          ) : (
+            notifications.map((notification) => (
+              <style.StyledLi
+                key={notification.id}
+                onClick={() => markAsRead(notification.id)}
+                style={{ backgroundColor: notification.read ? '#fff' : '#e6f7ff' }}
+              >
+                <div className="flex">
+                  <div className="flex flex-col m-[20px]">
+                    <p className="font-bold text-[16px]">{notification.title}</p>
+                    <p>{notification.message}</p>
+                    <p>{notification.full_name} - {notification.created_at}</p>
+                  </div>
+                  <Tooltip title="Apagar notificação">
+                    <style.ButtonDelete
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteNotification(notification.id);
+                      }}
+                    >
+                      <MdDelete />
+                    </style.ButtonDelete>
+                  </Tooltip>
                 </div>
-                <Tooltip title="Apagar notificação">
-                <style.ButtonDelete onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteNotification(notification.id);
-                }}>
-                  <MdDelete />
-                </style.ButtonDelete>
-                </Tooltip>
-              </div>
-            </style.StyledLi>
-          ))}
+
+              </style.StyledLi>
+            ))
+          )}
         </style.StyledUl>
       );
     } else if (selectedMenu === 'create') {
@@ -210,13 +194,13 @@ const NotificationAdm: React.FC = () => {
           <Input
             placeholder="Título"
             value={newNotification.title}
-            onChange={(e) => handleInputChange(e, 'title')}
+            onChange={(e) => setNewNotification({ ...newNotification, title: e.target.value })}
             style={{ marginBottom: 10 }}
           />
-          <Input
+          <TextArea
             placeholder="Mensagem"
             value={newNotification.message}
-            onChange={(e) => handleInputChange(e, 'message')}
+            onChange={(e) => setNewNotification({ ...newNotification, message: e.target.value })}
             style={{ marginBottom: 10 }}
           />
           <Button type="primary" onClick={handleAddNotification}>
@@ -227,11 +211,14 @@ const NotificationAdm: React.FC = () => {
     } else if (selectedMenu === 'my') {
       return (
         <style.StyledUl>
-          {notifications.map((notification) => (
+        {notifications.length === 0 ? (
+          <p style={{ textAlign: 'center', color: '#999', padding: "10px" }}>Não há notificações disponíveis.</p>
+        ) : (
+          notifications.map((notification) => (
             <style.StyledLi key={notification.id}>
-              <div className='flex'>
-                <div className='flex flex-col m-[20px]'>
-                  <p className='font-bold text-[16px]'>{notification.title}</p>
+              <div className="flex">
+                <div className="flex flex-col m-[20px]">
+                  <p className="font-bold text-[16px]">{notification.title}</p>
                   <p>{notification.message}</p>
                 </div>
                 <style.ButtonDelete onClick={() => handleDeleteNotification(notification.id)}>
@@ -239,8 +226,9 @@ const NotificationAdm: React.FC = () => {
                 </style.ButtonDelete>
               </div>
             </style.StyledLi>
-          ))}
-        </style.StyledUl>
+          ))
+        )}
+      </style.StyledUl>
       );
     }
   };
@@ -250,16 +238,16 @@ const NotificationAdm: React.FC = () => {
       <style.SideMenu>
         <Menu
           mode="vertical"
-          defaultSelectedKeys={['all']}
+          selectedKeys={[selectedMenu]}  // O menu usa o estado `selectedMenu` para destacar a opção ativa
           onClick={({ key }) => handleMenuClick(key)}
-          style={{ boxShadow: '0 4px 8px rgba(0, 107, 63, 0.2)'}}
+          style={{ boxShadow: '0 4px 8px rgba(0, 107, 63, 0.2)' }}
         >
           <Menu.Item key="all">Todas as Notificações</Menu.Item>
           <Menu.Item key="create">Criar Aviso</Menu.Item>
           <Menu.Item key="my">Meus Avisos</Menu.Item>
         </Menu>
       </style.SideMenu>
-      
+
       <div style={{ flex: 1 }}>
         {renderContent()}
       </div>
@@ -267,4 +255,4 @@ const NotificationAdm: React.FC = () => {
   );
 };
 
-export default NotificationAdm;
+export default NotificationRecruiter;
