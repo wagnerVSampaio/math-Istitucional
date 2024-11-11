@@ -114,29 +114,49 @@ const NotificationRecruiter: React.FC = () => {
     }
   };
 
-  // Função para marcar uma notificação como lida
-  const markAsRead = async (id: number) => {
-    try {
-      const response = await fetch(`http://localhost:3002/api/markNotification/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        setNotifications((prevNotifications) =>
-          prevNotifications.map((notification) =>
-            notification.id === id ? { ...notification, read: true } : notification
-          )
-        );
-      } else {
-        console.error('Erro ao marcar a notificação como lida.');
-      }
-    } catch (error) {
-      message.error('Erro ao conectar com o servidor.');
+  const markAsRead = async (notification_id: number) => {
+    const data = sessionStorage.getItem("userData");
+    if (!data) {
+        console.error('Usuário não encontrado.');
+        message.error('Usuário não encontrado. Verifique a sessão.');
+        return;
     }
-  };
+
+    const userData = JSON.parse(data);
+    const id_user = userData.id_user;
+
+    // Adicionando um log para conferir os dados antes de enviar a requisição
+    console.log("Enviando requisição para marcar notificação como lida", { notification_id, id_user });
+
+    try {
+        const response = await fetch(`http://localhost:3002/api/maskNotification/${notification_id}/read`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id_user }),  // Certificando-se de que o corpo está correto
+        });
+
+        if (response.ok) {
+            const responseData = await response.json(); // Captura o retorno da API
+            console.log("Resposta da API:", responseData);
+
+            setNotifications((prevNotifications) =>
+                prevNotifications.map((notification) =>
+                    notification.id === notification_id ? { ...notification, read: true } : notification
+                )
+            );
+        } else {
+            const responseBody = await response.text();  // Pega o corpo da resposta de erro
+            message.error(`Erro ao marcar notificação como lida: ${responseBody}`);
+            console.log("Erro ao marcar notificação como lida:", responseBody);
+        }
+    } catch (error) {
+        message.error('Erro ao conectar com o servidor.');
+        console.error("Erro ao enviar a requisição:", error);
+    }
+};
+
 
   // Função para excluir uma notificação
   const handleDeleteNotification = async (id: number) => {

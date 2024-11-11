@@ -26,7 +26,7 @@ const NotificationAdm: React.FC = () => {
   const [selectedMenu, setSelectedMenu] = useState('all'); // Controla o menu selecionado
 
   const formatDate = (dateString: string | undefined): string => {
-    if (!dateString) return ''; 
+    if (!dateString) return '';
     const date = new Date(dateString);
 
     const options: Intl.DateTimeFormatOptions = {
@@ -104,7 +104,7 @@ const NotificationAdm: React.FC = () => {
       if (response.ok) {
         const addedNotification = await response.json();
         setNotifications((prevNotifications) => [...prevNotifications, addedNotification]);
-        setNewNotification({ id: 0, title: '',full_name: '', message: '', created_at: '', read: false });
+        setNewNotification({ id: 0, title: '', full_name: '', message: '', created_at: '', read: false });
         message.success('Notificação adicionada com sucesso!');
       } else {
         message.error('Erro ao adicionar notificação.');
@@ -114,29 +114,50 @@ const NotificationAdm: React.FC = () => {
     }
   };
 
-  // Função para marcar uma notificação como lida
-  const markAsRead = async (id: number) => {
+  const markAsRead = async (notification_id: number) => {
+    const data = sessionStorage.getItem("userData");
+    if (!data) {
+      console.error('Usuário não encontrado.');
+      message.error('Usuário não encontrado. Verifique a sessão.');
+      return;
+    }
+
+    const userData = JSON.parse(data);
+    const id_user = userData.id_user;
+
+    // Adicionando um log para conferir os dados antes de enviar a requisição
+    console.log("Enviando requisição para marcar notificação como lida", { notification_id, id_user });
+
     try {
-      const response = await fetch(`http://localhost:3002/api/markNotification/${id}`, {
-        method: 'PATCH',
+      const response = await fetch(`http://localhost:3002/api/maskNotification/${notification_id}/read`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ id_user }),  // Certificando-se de que o corpo está correto
       });
 
       if (response.ok) {
+        const responseData = await response.json(); // Captura o retorno da API
+        console.log("Resposta da API:", responseData);
+
         setNotifications((prevNotifications) =>
           prevNotifications.map((notification) =>
-            notification.id === id ? { ...notification, read: true } : notification
+            notification.id === notification_id ? { ...notification, read: true } : notification
           )
         );
       } else {
-        console.error('Erro ao marcar a notificação como lida.');
+        const responseBody = await response.text();  // Pega o corpo da resposta de erro
+        message.error(`Erro ao marcar notificação como lida: ${responseBody}`);
+        console.log("Erro ao marcar notificação como lida:", responseBody);
       }
     } catch (error) {
       message.error('Erro ao conectar com o servidor.');
+      console.error("Erro ao enviar a requisição:", error);
     }
   };
+
+
 
   // Função para excluir uma notificação
   const handleDeleteNotification = async (id: number) => {
@@ -163,7 +184,7 @@ const NotificationAdm: React.FC = () => {
     setSelectedMenu(key);  // Atualiza o estado de menu selecionado
   };
 
-  
+
   // Renderiza o conteúdo com base no menu selecionado
   const renderContent = () => {
     if (selectedMenu === 'all') {
@@ -184,7 +205,7 @@ const NotificationAdm: React.FC = () => {
                   <div className="flex flex-col m-[20px]">
                     <p className="font-bold text-[16px]">{notification.title}</p>
                     <p>{notification.message}</p>
-                    <p style={{color: "#6c757d", marginTop: "12px"}}>{notification.full_name} - {formatDate(notification.created_at)}</p>
+                    <p style={{ color: "#6c757d", marginTop: "12px" }}>{notification.full_name} - {formatDate(notification.created_at)}</p>
                   </div>
                   <Tooltip title="Apagar notificação">
                     <style.ButtonDelete
@@ -227,24 +248,24 @@ const NotificationAdm: React.FC = () => {
     } else if (selectedMenu === 'my') {
       return (
         <style.StyledUl>
-        {notifications.length === 0 ? (
-          <p style={{ textAlign: 'center', color: '#999', padding: "10px" }}>Não há notificações disponíveis.</p>
-        ) : (
-          notifications.map((notification) => (
-            <style.StyledLi key={notification.id}>
-              <div className="flex">
-                <div className="flex flex-col m-[20px]">
-                  <p className="font-bold text-[16px]">{notification.title}</p>
-                  <p>{notification.message}</p>
+          {notifications.length === 0 ? (
+            <p style={{ textAlign: 'center', color: '#999', padding: "10px" }}>Não há notificações disponíveis.</p>
+          ) : (
+            notifications.map((notification) => (
+              <style.StyledLi key={notification.id}>
+                <div className="flex">
+                  <div className="flex flex-col m-[20px]">
+                    <p className="font-bold text-[16px]">{notification.title}</p>
+                    <p>{notification.message}</p>
+                  </div>
+                  <style.ButtonDelete onClick={() => handleDeleteNotification(notification.id)}>
+                    <MdDelete />
+                  </style.ButtonDelete>
                 </div>
-                <style.ButtonDelete onClick={() => handleDeleteNotification(notification.id)}>
-                  <MdDelete />
-                </style.ButtonDelete>
-              </div>
-            </style.StyledLi>
-          ))
-        )}
-      </style.StyledUl>
+              </style.StyledLi>
+            ))
+          )}
+        </style.StyledUl>
       );
     }
   };

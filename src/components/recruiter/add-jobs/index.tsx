@@ -237,11 +237,9 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
     window.location.href = `mailto:${email}`;
   };
 
-  /* Filtra os usuários com base no termo de pesquisa */
-  const filteredUsers = jobs.filter(user =>
-    user.title.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredUsers = jobs.filter(job =>
+    job.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
 
   const handleCancelEdit = () => {
     setIsModalVisibleEdit(false);
@@ -278,7 +276,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
             <div>
               <style.DivNotification>
                 <style.StyledUl>
-                  {jobs.map((user) => (
+                  {filteredUsers.map((user) => (
                     <style.StyledLi
                       key={user.id_job}
                       style={{
