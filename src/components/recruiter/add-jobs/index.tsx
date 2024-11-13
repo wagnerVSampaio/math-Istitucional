@@ -55,6 +55,7 @@ export interface InterestedUser {
   education: Education[];
   experience: Experience[];
   skills: Skill[];
+  
 }
 
 export interface Job {
@@ -78,7 +79,7 @@ const Edited: React.FC = () => {
   const [isModalVisibleRemove, setIsModalVisibleRemove] = useState(false);
   const [isSelecting, setIsSelecting] = useState(false);
   const [jobs, setJobs] = useState<JobDetails[]>([]);
-  const [job, setJob] = useState<Job[]>([]);
+  const [job, setJob] = useState<JobDetails[]>([]);
   const [editingJob, setEditingJob] = useState<JobDetails | null>(null);
   const [editIndexJob, setEditIndexJob] = useState<number | null>(null);
   const [form] = Form.useForm();
@@ -349,14 +350,14 @@ const Edited: React.FC = () => {
   
     // Mapeia os dados dos interessados para o formato adequado para exportação
     const worksheetData = interestedUsers.map((user) => ({
-      "Vaga": job.title,
+      "Vaga": job.title || "Não informado", // Garantir que o título da vaga seja preenchido corretamente
       "Nome Interessado": user.full_name || "Não informado",
-      "Email": user.email || "Não informado",
+      "Email": { t: 's', v: user.email, l: { Target: `mailto:${user.email}` } },
       "Telefone": user.phone || "Não informado",
-      "Formação": user.education ? user.education.map(e => e.course).join(", ") : "Não informado",
-      "Instituição": user.education ? user.education.map(e => e.institution).join(", ") : "Não informado",
-      "Experiências": user.experience ? user.experience.map(e => e.position).join(", ") : "Não informado",
-      "Habilidades": user.skills ? user.skills.map(skill => `${skill.skill} (${skill.number}%)`).join(", ") : "Não informado"
+      "Formação": user.education && user.education.length > 0 ? user.education.map(e => e.course).join(", ") : "Não informado",
+      "Instituição": user.education && user.education.length > 0 ? user.education.map(e => e.institution).join(", ") : "Não informado",
+      "Experiências": user.experience && user.experience.length > 0 ? user.experience.map(e => e.position).join(", ") : "Não informado",
+      "Habilidades": user.skills && user.skills.length > 0 ? user.skills.map(skill => `${skill.skill} (${skill.number}%)`).join(", ") : "Não informado"
     }));
   
     // Verificar a estrutura dos dados para garantir que os dados são consistentes
@@ -487,10 +488,10 @@ const Edited: React.FC = () => {
       ) : (
         <p>Não há interessados para esta vaga.</p>
       )}
-    </ul>
-    <style.ExportButton onClick={() => exportJobToExcel(job, interestedUsers)}>
+      <style.ExportButton onClick={() => exportJobToExcel(jobDetails, interestedUsers)}>
             Exportar Vaga para Excel
           </style.ExportButton>
+    </ul>
   </Card>
   
   )}
