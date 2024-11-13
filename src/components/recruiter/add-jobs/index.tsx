@@ -41,7 +41,7 @@ export interface Experience {
 export interface Skill {
   id_skill: number;
   skill: string;
-  number: number;
+  percentage: number;
 }
 
 export interface InterestedUser {
@@ -342,26 +342,23 @@ const Edited: React.FC = () => {
   
   
   const exportJobToExcel = (job: JobDetails, interestedUsers: InterestedUser[]) => {
-    // Verifica se há dados para exportar
+    
     if (!job || !interestedUsers || interestedUsers.length === 0) {
       console.error('Não há dados para exportar.');
       return;
     }
   
-    // Mapeia os dados dos interessados para o formato adequado para exportação
     const worksheetData = interestedUsers.map((user) => ({
-      "Vaga": job.title || "Não informado", // Garantir que o título da vaga seja preenchido corretamente
+      "Vaga": job.title || "Não informado", 
       "Nome Interessado": user.full_name || "Não informado",
       "Email": { t: 's', v: user.email, l: { Target: `mailto:${user.email}` } },
-      "Telefone": user.phone || "Não informado",
+      //"Telefone": user.phone || "Não informado",
       "Formação": user.education && user.education.length > 0 ? user.education.map(e => e.course).join(", ") : "Não informado",
       "Instituição": user.education && user.education.length > 0 ? user.education.map(e => e.institution).join(", ") : "Não informado",
       "Experiências": user.experience && user.experience.length > 0 ? user.experience.map(e => e.position).join(", ") : "Não informado",
-      "Habilidades": user.skills && user.skills.length > 0 ? user.skills.map(skill => `${skill.skill} (${skill.number}%)`).join(", ") : "Não informado"
+      "Habilidades": user.skills && user.skills.length > 0 ? user.skills.map(skill => `${skill.skill} (${skill.percentage}%)`).join(", ") : "Não informado"
     }));
-  
-    // Verificar a estrutura dos dados para garantir que os dados são consistentes
-    console.log("Dados exportados:", worksheetData);
+
   
     // Cria a planilha a partir dos dados
     const worksheet = XLSX.utils.json_to_sheet(worksheetData);
