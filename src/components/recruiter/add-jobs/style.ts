@@ -4,6 +4,7 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
 
 export const Total = styled.div`
   display: flex;
@@ -143,6 +144,10 @@ const iconsStyle = css`
 export const Address = styled(FaMapMarkerAlt)`
   ${iconsStyle}
 `;
+export const ViewInterested = styled(FaEye)`
+  margin-left: 10px;
+  margin-top: 5px;
+`;
 
 export const Email = styled(IoMdMail)`
   ${iconsStyle}
@@ -151,6 +156,13 @@ export const EditJob = styled(FaRegEdit)`
   margin-left: 20px;
   margin-top: 5px;
   font-size: 20px;
+  margin-right: 20px;
+`;
+export const InterestedButton = styled.button`
+  font-size: 16px;
+  display: flex;
+  margin-top: 20px;
+  text-decoration: underline;
 `;
 export const ButtonAdd = styled.div`
     background-color: #006B3F;
@@ -216,4 +228,36 @@ export const JobsAdd = styled.div`
     cursor: pointer;
     color: #006b3f;
     margin-left: 20px;
+`;
+export const StyledImageContainer = styled.div`
+width: 100px;   
+height: 100px;    
+border-radius: 50%;  
+overflow: hidden;     
+display: flex;        
+align-items: center;   
+justify-content: center;
+margin-left: 30px;
+margin-right: 20px;
+`;
+export const StyledImage = styled.img`
+width: 100%;    
+height: auto;       
+object-fit: cover;     
+`;
+export const StyledList = styled.li`
+  
+`;
+export const ExportButton = styled.button`
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+
+  &:hover {
+    background-color: #45a049;
+  }
 `;
