@@ -485,9 +485,11 @@ const Edited: React.FC = () => {
       ) : (
         <p>Não há interessados para esta vaga.</p>
       )}
-      <style.ExportButton onClick={() => exportJobToExcel(jobDetails, interestedUsers)}>
-            Exportar Vaga para Excel
-          </style.ExportButton>
+      {interestedUsers.length > 0 && (
+      <style.ExportButton onClick={() => exportJobToExcel(jobDetails!, interestedUsers)}>
+        Exportar interessados
+      </style.ExportButton>
+    )}
     </ul>
   </Card>
   

@@ -250,7 +250,8 @@ export const StyledList = styled.li`
 `;
 export const ExportButton = styled.button`
   padding: 10px 20px;
-  background-color: #4CAF50;
+  margin-top: 30px;
+  background-color: #006b3f;
   color: white;
   border: none;
   border-radius: 5px;
@@ -258,6 +259,6 @@ export const ExportButton = styled.button`
   margin-bottom: 20px;
 
   &:hover {
-    background-color: #45a049;
+    background-color: #228B22;
   }
 `;
