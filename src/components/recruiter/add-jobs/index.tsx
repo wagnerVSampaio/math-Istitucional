@@ -42,6 +42,7 @@ export interface Skill {
   id_skill: number;
   skill: string;
   percentage: number;
+  number: number;
 }
 
 export interface InterestedUser {
@@ -349,25 +350,25 @@ const Edited: React.FC = () => {
     const worksheetData = job.flatMap((currentJob) =>
       currentJob.interested_users.map((user) => ({
         "Título da Vaga": currentJob.title,
-        "Descrição da Vaga": currentJob.description,
-        Requisitos: currentJob.requirements,
-        Benefícios: currentJob.benefits,
-        Localização: currentJob.location,
-        Salário: currentJob.salary,
-        Contato: currentJob.contact,
+        "Descrição da Vaga": currentJob.description || "Não informado",
+        "Requisitos": currentJob.requirements|| "Não informado",
+        //"Benefícios": currentJob.benefits|| "Não informado",
+        //"Localização": currentJob.location|| "Não informado",
+        //"Salário": currentJob.salary|| "Não informado",
+        //"Contato": currentJob.contact|| "Não informado",
         "Nome do Interessado": user.full_name,
-        Email: user.email,
-        Telefone: user.phone || "Não informado",
-        "Data de Nascimento": user.birth_date || "Não informado",
+        "Email": user.email,
+        "Telefone": user.phone || "Não informado",
+        //"Data de Nascimento": user.birth_date || "Não informado",
         "Formação Acadêmica":
           user.education.map((edu) => `${edu.course} (${edu.institution})`).join(", ") ||
           "Não informado",
-        "Experiências Profissionais":
+        "Experiência":
           user.experience
             .map((exp) => `${exp.position} em ${exp.company}`)
             .join(", ") || "Não informado",
         "Habilidades":
-          user.skills.map((skill) => `${skill.skill} (${skill.percentage}%)`).join(", ") ||
+          user.skills.map((skill) => `${skill.skill} (${skill.number}%)`).join(", ") ||
           "Não informado",
       }))
     );
