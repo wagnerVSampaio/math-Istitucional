@@ -55,7 +55,7 @@ export interface InterestedUser {
   education: Education[];
   experience: Experience[];
   skills: Skill[];
-  
+
 }
 
 export interface Job {
@@ -79,7 +79,7 @@ const Edited: React.FC = () => {
   const [isModalVisibleRemove, setIsModalVisibleRemove] = useState(false);
   const [isSelecting, setIsSelecting] = useState(false);
   const [jobs, setJobs] = useState<JobDetails[]>([]);
-  const [job, setJob] = useState<JobDetails[]>([]);
+  const [job, setJob] = useState<Job[]>([]);
   const [editingJob, setEditingJob] = useState<JobDetails | null>(null);
   const [editIndexJob, setEditIndexJob] = useState<number | null>(null);
   const [form] = Form.useForm();
@@ -159,7 +159,7 @@ const Edited: React.FC = () => {
 
         if (Array.isArray(data)) {
           setJobs(data);
-          
+
         } else {
           console.error("Resposta da API não é um array:", data);
         }
@@ -304,12 +304,81 @@ const Edited: React.FC = () => {
     fetchInterestedUsers(job.id_job); // Chama a função para buscar interessados
     setIsModalVisible(true); // Exibe o modal
   };
-  
+
 
   const handleCancelModal = () => {
     setIsModalVisible(false);
     setInterestedUsers([]); // Limpar os interessados ao fechar o modal
   };
+
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      const data = sessionStorage.getItem("userData");
+      if (!data) {
+        console.error('Usuário não encontrado.');
+        setLoading(false); 
+        return;
+      }
+      const userData = JSON.parse(data);
+      const id_recruiter = userData.id_user;
+      setLoading(true);
+      try {
+        const response = await fetch(
+          `http://localhost:3002/api/interestedJob/${id_recruiter}`
+        );
+        if (!response.ok) throw new Error("Erro ao buscar dados");
+        const data: Job[] = await response.json();
+        setJob(data); // Armazenando os dados em 'job'
+      } catch (error) {
+        console.error("Erro ao carregar interessados:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJobs();
+  }, []);
+
+  const exportToExcelGeneral = () => {
+    if (!job.length) {
+      console.error("Não há dados para exportar.");
+      return;
+    }
+
+    const worksheetData = job.flatMap((currentJob) =>
+      currentJob.interested_users.map((user) => ({
+        "Título da Vaga": currentJob.title,
+        "Descrição da Vaga": currentJob.description,
+        Requisitos: currentJob.requirements,
+        Benefícios: currentJob.benefits,
+        Localização: currentJob.location,
+        Salário: currentJob.salary,
+        Contato: currentJob.contact,
+        "Nome do Interessado": user.full_name,
+        Email: user.email,
+        Telefone: user.phone || "Não informado",
+        "Data de Nascimento": user.birth_date || "Não informado",
+        "Formação Acadêmica":
+          user.education.map((edu) => `${edu.course} (${edu.institution})`).join(", ") ||
+          "Não informado",
+        "Experiências Profissionais":
+          user.experience
+            .map((exp) => `${exp.position} em ${exp.company}`)
+            .join(", ") || "Não informado",
+        "Habilidades":
+          user.skills.map((skill) => `${skill.skill} (${skill.percentage}%)`).join(", ") ||
+          "Não informado",
+      }))
+    );
+
+    const worksheet = XLSX.utils.json_to_sheet(worksheetData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Interessados");
+
+    XLSX.writeFile(workbook, "Interessados_Recrutador.xlsx");
+  };
+
 
   const fetchInterestedUsers = async (jobId: number) => {
     const data = sessionStorage.getItem("userData");
@@ -320,17 +389,17 @@ const Edited: React.FC = () => {
     }
     const userData = JSON.parse(data);
     const id_recruiter = userData.id_user;
-  
+
     try {
       const response = await fetch(`http://localhost:3002/api/interestedJobRecruiter/${id_recruiter}/${jobId}`);
       if (!response.ok) {
         throw new Error('Erro ao obter interessados');
       }
       const usersDataJob = await response.json();
-      
+
       // Verificando a resposta da API
       console.log("Interessados:", usersDataJob);
-      
+
       setInterestedUsers(Array.isArray(usersDataJob) ? usersDataJob : []);
     } catch (error) {
       console.error("Erro ao buscar interessados:", error);
@@ -339,17 +408,16 @@ const Edited: React.FC = () => {
       setLoading(false);
     }
   };
-  
-  
+
+
   const exportJobToExcel = (job: JobDetails, interestedUsers: InterestedUser[]) => {
-    
     if (!job || !interestedUsers || interestedUsers.length === 0) {
       console.error('Não há dados para exportar.');
       return;
     }
-  
+
     const worksheetData = interestedUsers.map((user) => ({
-      "Vaga": job.title || "Não informado", 
+      "Vaga": job.title || "Não informado",
       "Nome Interessado": user.full_name || "Não informado",
       "Email": { t: 's', v: user.email, l: { Target: `mailto:${user.email}` } },
       //"Telefone": user.phone || "Não informado",
@@ -359,17 +427,17 @@ const Edited: React.FC = () => {
       "Habilidades": user.skills && user.skills.length > 0 ? user.skills.map(skill => `${skill.skill} (${skill.percentage}%)`).join(", ") : "Não informado"
     }));
 
-  
+
     // Cria a planilha a partir dos dados
     const worksheet = XLSX.utils.json_to_sheet(worksheetData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, `Vaga_${job.id_job}`);
-  
+
     // Exporta para um arquivo Excel
     XLSX.writeFile(workbook, `Vaga_${job.id_job}_${job.title}.xlsx`);
   };
-  
-  
+
+
   return (
     <>
       <style.Total>
@@ -387,11 +455,11 @@ const Edited: React.FC = () => {
 
 
             <Tooltip title={isSelecting ? "Confirmar remoção" : "Remover usuário"}>
-              <style.ButtonRemoveUser onClick={showModal}>
+              <style.ButtonRemoveUser onClick={showModal}> Remover
                 {isSelecting ? <style.ConfirmRemoveUser /> : <style.RemoveUser />}
               </style.ButtonRemoveUser>
             </Tooltip>
-
+            <style.ExportButtonGeneral onClick={() => exportToExcelGeneral()}>Exportar dados gerais <style.Export /></style.ExportButtonGeneral>
           </style.DivTopSearch>
 
           {filteredUsers.length === 0 ? (
@@ -450,52 +518,52 @@ const Edited: React.FC = () => {
       </style.Total>
       {/* Modal para mostrar os interessados */}
       <Modal
-  title="Interessados na Vaga"
-  open={isModalVisible}
-  onCancel={handleCancelModal}
-  footer={null}
-  width="100%"
-  style={{ top: 5 }}
->
-  {loading ? <p>Carregando interessados...</p> : (
-    <Card>
-    <ul>
-      {interestedUsers.length > 0 ? (
-        interestedUsers.map((user) => (
-          <style.StyledList key={user.id_interested}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <style.StyledImage
-                src={`http://localhost:3002/uploads/${user.profile_picture}`}
-                style={{
-                  width: '60px',
-                  height: '60px',
-                  borderRadius: '50%',
-                  marginRight: '20px',
-                }}
-              />
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <h1 style={{ fontSize: '18px', fontWeight: 'bold' }}>{user.full_name}</h1>
-                <div style={{ fontSize: '16px', color: 'gray' }}>{user.email}</div>
-              </div>
-            </div>
-          </style.StyledList>
-          
-        ))
-        
-      ) : (
-        <p>Não há interessados para esta vaga.</p>
-      )}
-      {interestedUsers.length > 0 && (
-      <style.ExportButton onClick={() => exportJobToExcel(jobDetails!, interestedUsers)}>
-        Exportar interessados
-      </style.ExportButton>
-    )}
-    </ul>
-  </Card>
-  
-  )}
+        title="Interessados na Vaga"
+        open={isModalVisible}
+        onCancel={handleCancelModal}
+        footer={null}
+        width="100%"
+        style={{ top: 5 }}
+      >
+        {loading ? <p>Carregando interessados...</p> : (
+          <Card>
+            <ul>
+              {interestedUsers.length > 0 ? (
+                interestedUsers.map((user) => (
+                  <style.StyledList key={user.id_interested}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <style.StyledImage
+                        src={`http://localhost:3002/uploads/${user.profile_picture}`}
+                        style={{
+                          width: '60px',
+                          height: '60px',
+                          borderRadius: '50%',
+                          marginRight: '20px',
+                        }}
+                      />
+                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <h1 style={{ fontSize: '18px', fontWeight: 'bold' }}>{user.full_name}</h1>
+                        <div style={{ fontSize: '16px', color: 'gray' }}>{user.email}</div>
+                      </div>
+                    </div>
+                  </style.StyledList>
 
-</Modal>
+                ))
+
+              ) : (
+                <p>Não há interessados para esta vaga.</p>
+              )}
+              {interestedUsers.length > 0 && (
+                <style.ExportButton onClick={() => exportJobToExcel(jobDetails!, interestedUsers)}>
+                  Exportar dados <style.Export />
+                </style.ExportButton>
+              )}
+            </ul>
+          </Card>
+
+        )}
+
+      </Modal>
 
       {/* Modal de confirmação */}
       <Modal

@@ -5,6 +5,7 @@ import { IoMdMail } from "react-icons/io";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
+import { FaFileDownload } from "react-icons/fa";
 
 export const Total = styled.div`
   display: flex;
@@ -35,46 +36,34 @@ export const StyleInput = styled.div`
 `;
 
 export const ButtonRemoveUser = styled.button`
-  border: 1px solid #006b3f;
-  border-radius: 8px;
-  background-color: #ffffff;
+  background-color: #006b3f; 
+  margin-left: 20px;
+  color: white;
+  padding: 5px 16px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
   cursor: pointer;
+  transition: all 0.3s ease-in-out;
   display: flex;
   align-items: center;
-  padding: 5px 16px;
-  color: #006b3f;
-  margin-left: 20px;
-  font-size: 16px;
-  font-weight: 500;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
-  
   &:hover {
-    background-color: #e6f7f1;
-    border-color: #004c2b;
-    box-shadow: 0 6px 12px rgba(0, 107, 63, 0.2);
+    background-color: #45a049;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 
-  &:active {
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 107, 63, 0.3);
-  }
-
-  &:focus {
-    outline: 2px solid #004c2b;
-    outline-offset: 2px;
-  }
 `;
 
 export const RemoveUser = styled(AiFillDelete)`
   font-size: 22px;
-  color: #005b3f;
   cursor: pointer;
+  margin-left: 10px;
 
 `;
 export const ConfirmRemoveUser = styled(RiDeleteBinLine)`
   font-size: 22px;
-  color: #005b3f;
   cursor: pointer;
+  margin-left: 10px;
 `;
 
 export const ButtonEdit = styled.button`
@@ -152,6 +141,10 @@ export const ViewInterested = styled(FaEye)`
 export const Email = styled(IoMdMail)`
   ${iconsStyle}
 `;
+export const Export = styled(FaFileDownload)`
+  ${iconsStyle}
+  margin-left: 10px;
+`;
 export const EditJob = styled(FaRegEdit)`
   margin-left: 20px;
   margin-top: 5px;
@@ -167,14 +160,18 @@ export const InterestedButton = styled.button`
 export const ButtonAdd = styled.div`
     background-color: #006B3F;
     padding: 6px 100px;
-    border-radius: 10px;
+    border-radius: 5px;
     position: relative;
     color: white;
     text-align: center;
     font-size: 15px;
-    font-weight: bold;
     cursor: pointer;
     margin-left: 5px;
+    transition: all 0.3s ease-in-out;
+  &:hover {
+    background-color: #45a049;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
 `;
 export const Container = styled.div`
   max-width: 600px;
@@ -245,9 +242,22 @@ width: 100%;
 height: auto;       
 object-fit: cover;     
 `;
+
 export const StyledList = styled.li`
-  
+  list-style: none; /* Remove o marcador da lista */
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  color: #333; 
+  font-size: 16px;
+
+  &:hover {
+    background-color: #e0e0e0;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+  }
 `;
+
 export const ExportButton = styled.button`
   padding: 10px 20px;
   margin-top: 30px;
@@ -257,8 +267,25 @@ export const ExportButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
   margin-bottom: 20px;
+  display: flex;
 
   &:hover {
     background-color: #228B22;
+  }
+`;
+export const ExportButtonGeneral = styled.button`
+  background-color: #006b3f; 
+  margin-left: 20px;
+  color: white;
+  padding: 5px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  &:hover {
+    background-color: #45a049;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 `;
