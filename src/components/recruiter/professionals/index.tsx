@@ -106,10 +106,10 @@ const Professionals: React.FC<ProfessionalsProps> = ({ highlightedId }) => {
         placeholder="Busque por nome, formação, experiência ou habilidade"
         allowClear
         enterButton="Buscar"
-        size="large"
+        size="middle"
         onSearch={(value) => setSearchTerm(value)}
         onChange={(e) => setSearchTerm(e.target.value)}
-        style={{ marginTop: "60px" }}
+        style={{width:'350px', marginLeft: '40px'}}
       />
       {loading ? (
         <style.divLoading>
@@ -124,7 +124,7 @@ const Professionals: React.FC<ProfessionalsProps> = ({ highlightedId }) => {
                 backgroundColor: highlightedId === professional.id_user ? "#f5f5f5" : "#fff",
               }}
             >
-              <div className="flex flex-col m-[20px]">
+              <div className="flex flex-col m-[10px]">
                 <style.StyledParagraph>{professional.full_name}</style.StyledParagraph>
                 <style.StyledP>
                   {professional.education.map((edu) => (

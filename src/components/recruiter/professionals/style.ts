@@ -10,18 +10,18 @@ export const DivNotification = styled.div`
     width: 90%;
     border-radius: 10px;
     color: #272727;
-    margin-top: 20px;
-    height: 600px;
-    overflow-x: auto;
+    margin-top: 60px;
 `;
 
 export const StyledUl = styled.ul`
   list-style-type: none;
   padding: 0;
+  margin-top: 10px;
   border: 1px solid #ddd;
-  background-color: #f4f4f4;
-  list-style-type: none;
-  margin: 40px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
 `;
 export const StyledLi = styled.li`
   display: grid;
@@ -33,11 +33,16 @@ export const StyledLi = styled.li`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  &:hover {
+    background-color: #e0e0e0;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+  }
 `;
 export const StyledParagraph = styled.ul`
-  font-size: 25px;
+  font-size: 20px;
   color: #006b3f;
-  margin-bottom: 15px;
+  margin-bottom: 8px;
   font-weight: bold;
 `;
 export const StyledP = styled.ul`

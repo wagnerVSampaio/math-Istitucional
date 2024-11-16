@@ -519,7 +519,7 @@ const Edited: React.FC = () => {
       </style.Total>
       {/* Modal para mostrar os interessados */}
       <Modal
-        title="Interessados na Vaga"
+         title={`Interessados na vaga ${jobDetails?.title}`}
         open={isModalVisible}
         onCancel={handleCancelModal}
         footer={null}
