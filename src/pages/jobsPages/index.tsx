@@ -165,7 +165,7 @@ const Jobs: React.FC = () => {
             benefits={selectedJob.benefits}
             location={selectedJob.location}
             posted_at={dayjs(selectedJob.posted_at).format('DD/MM/YYYY HH:mm')} 
-            salary={selectedJob.salary}
+            gratified_function={selectedJob.gratified_function}
             contact={selectedJob.contact}
           />
         )}

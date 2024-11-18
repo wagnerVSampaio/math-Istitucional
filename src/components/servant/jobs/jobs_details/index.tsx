@@ -11,7 +11,7 @@ export type JobDetailsProps = {
   benefits: string;
   location: string;
   posted_at: string;
-  salary: string;
+  gratified_function: string;
   contact: string;
 };
 
@@ -23,7 +23,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({
   benefits,
   location,
   posted_at,
-  salary,
+  gratified_function,
 }) => {
   const [inscrito, setInscrito] = useState(false); // Estado para verificar inscrição
   const [userData, setUserData] = useState<{ id_user: number; id_recruiter: number } | null>(null);
@@ -111,7 +111,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({
         <Descriptions.Item label="Descrição">{description}</Descriptions.Item>
         <Descriptions.Item label="Requisitos">{requirements}</Descriptions.Item>
         <Descriptions.Item label="Benefícios">{benefits}</Descriptions.Item>
-        <Descriptions.Item label="Salário">R$ {salary}</Descriptions.Item>
+        <Descriptions.Item label="Gratificação">{gratified_function}</Descriptions.Item>
       </Descriptions>
 
       {/* Botão de Interesse */}

@@ -1,6 +1,6 @@
 import { UserOutlined } from '@ant-design/icons/lib/icons';
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Tooltip, Modal, Checkbox, Button, InputNumber, message, Card } from 'antd/lib';
+import { Form, Input, Tooltip, Modal, Checkbox, Button, InputNumber, message, Card, Select } from 'antd/lib';
 import * as style from "./style";
 import * as XLSX from 'xlsx';
 
@@ -13,7 +13,7 @@ type JobDetails = {
   benefits: string;
   location: string;
   posted_at: string;
-  salary: string;
+  gratified_function: string;
   contact: string;
 };
 
@@ -68,10 +68,13 @@ export interface Job {
   benefits: string;
   location: string;
   posted_at: string;
-  salary: string;
+  gratified_function: string;
   contact: string;
   interested_users: InterestedUser[];
 }
+
+
+const { Option } = Select;
 
 const Edited: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -123,7 +126,7 @@ const Edited: React.FC = () => {
           benefits: values.benefits || "",
           location: values.location,
           posted_at: new Date().toISOString(),
-          salary: values.salary || 0,
+          gratified_function: values.gratified_function || "",
           contact: values.contact || "",
           id_recruiter: idRecruiter,
         }),
@@ -182,7 +185,7 @@ const Edited: React.FC = () => {
       benefits: job.benefits,
       location: job.location,
       posted_at: job.posted_at,
-      salary: job.salary,
+      gratified_function: job.gratified_function,
       contact: job.contact,
     });
     setEditingJob(job);
@@ -296,8 +299,12 @@ const Edited: React.FC = () => {
   );
 
   const handleCancelEdit = () => {
+    form.resetFields(); 
+    setEditingJob(null); 
+    setEditIndexJob(null);
     setIsModalVisibleEdit(false);
   };
+
   const [currentJobId, setCurrentJobId] = useState<number | null>(null);
   const handleViewInterested = (job: JobDetails) => {
     setCurrentJobId(job.id_job);  // Armazena o id da vaga clicada
@@ -463,6 +470,7 @@ const Edited: React.FC = () => {
             <style.ExportButtonGeneral onClick={() => exportToExcelGeneral()}>Exportar dados gerais <style.Export /></style.ExportButtonGeneral>
           </style.DivTopSearch>
 
+    {/* Lista das vagas */}
           {filteredUsers.length === 0 ? (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px', color: "#272727" }}>
               <span>Não foi encontrado nenhuma vaga cadastrada.</span>
@@ -484,19 +492,9 @@ const Edited: React.FC = () => {
                         <style.StyledP>
                           <style.Address /> {user.location}
                         </style.StyledP>
-                        <Tooltip title="Entrar em contato" placement='right'>
-                          <style.StyledP style={{ cursor: 'pointer' }}>
-                            <style.Email />{" "}
-                            <span
-                              style={{ textDecoration: "none" }}
-                              onMouseOver={(e) => (e.currentTarget.style.textDecoration = "underline")}
-                              onMouseOut={(e) => (e.currentTarget.style.textDecoration = "none")}
-                              onClick={() => handleContactClick(user.contact)}
-                            >
-                              {user.contact}
-                            </span>
+                          <style.StyledP>
+                            <style.Description /> {user.description}
                           </style.StyledP>
-                        </Tooltip>
                         <Tooltip title="Ver Interessados">
                           <style.InterestedButton onClick={() => handleViewInterested(user)}>Visualizar Interessados <style.ViewInterested /></style.InterestedButton>
                         </Tooltip>
@@ -517,6 +515,7 @@ const Edited: React.FC = () => {
           )}
         </style.DivSearch>
       </style.Total>
+
       {/* Modal para mostrar os interessados */}
       <Modal
          title={`Interessados na vaga ${jobDetails?.title}`}
@@ -544,7 +543,12 @@ const Edited: React.FC = () => {
                       />
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <h1 style={{ fontSize: '18px', fontWeight: 'bold' }}>{user.full_name}</h1>
-                        <div style={{ fontSize: '16px', color: 'gray' }}>{user.email}</div>
+                        <div style={{ fontSize: '16px', color: 'gray', cursor: "pointer" }}><span
+                              style={{ textDecoration: "none" }}
+                              onMouseOver={(e) => (e.currentTarget.style.textDecoration = "underline")}
+                              onMouseOut={(e) => (e.currentTarget.style.textDecoration = "none")}
+                              onClick={() => handleContactClick(user.email)}
+                            >{user.email}</span></div>
                       </div>
                     </div>
                   </style.StyledList>
@@ -634,16 +638,23 @@ const Edited: React.FC = () => {
             </Form.Item>
 
             <Form.Item
-              label="Salário"
-              name="salary"
-              rules={[{ required: true, message: 'Por favor, insira o salário!' }]}
+              label="Função gratificada"
+              name="gratified_function"
+              //rules={[{ required: true, message: 'Por favor, insira o salário!' }]}
             >
-              <InputNumber
+              <Select
+                placeholder=""
+                showSearch
+                className="select-form-item">
+                <Option value="Sim">Sim</Option>
+                <Option value="Não">Não</Option>
+              </Select>
+              {/* <InputNumber
                 style={{ width: '100%' }}
                 min={0}
                 step={100}
                 placeholder="Digite o salário"
-              />
+              /> */}
             </Form.Item>
 
             <Form.Item
@@ -693,8 +704,14 @@ const Edited: React.FC = () => {
             <Form.Item label="Localização" name="location">
               <Input />
             </Form.Item>
-            <Form.Item label="Salário" name="salary">
-              <Input />
+            <Form.Item label="Gratificação" name="gratified_function">
+            <Select
+                placeholder=""
+                showSearch
+                className="select-form-item">
+                <Option value="Sim">Sim</Option>
+                <Option value="Não">Não</Option>
+              </Select>
             </Form.Item>
             <Form.Item label="Contato" name="contact" >
               <Input />

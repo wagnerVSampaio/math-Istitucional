@@ -6,6 +6,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
 import { FaFileDownload } from "react-icons/fa";
+import { IoMdInformationCircle } from "react-icons/io";
 
 export const Total = styled.div`
   display: flex;
@@ -140,6 +141,10 @@ export const ViewInterested = styled(FaEye)`
 
 export const Email = styled(IoMdMail)`
   ${iconsStyle}
+`;
+export const Description = styled(IoMdInformationCircle)`
+  margin-right: 10px;
+  font-size: 30px;
 `;
 export const Export = styled(FaFileDownload)`
   ${iconsStyle}
