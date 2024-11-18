@@ -495,9 +495,7 @@ const Edited: React.FC = () => {
                           <style.StyledP>
                             <style.Description /> {user.description}
                           </style.StyledP>
-                        <Tooltip title="Ver Interessados">
                           <style.InterestedButton onClick={() => handleViewInterested(user)}>Visualizar Interessados <style.ViewInterested /></style.InterestedButton>
-                        </Tooltip>
                       </div>
 
                       {isSelecting && (
@@ -643,7 +641,7 @@ const Edited: React.FC = () => {
               //rules={[{ required: true, message: 'Por favor, insira o salário!' }]}
             >
               <Select
-                placeholder=""
+                placeholder="Função gratificada"
                 showSearch
                 className="select-form-item">
                 <Option value="Sim">Sim</Option>

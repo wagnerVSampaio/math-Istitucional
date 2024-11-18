@@ -13,6 +13,7 @@ export type JobDetailsProps = {
   posted_at: string;
   gratified_function: string;
   contact: string;
+  recruiter_name: string;
 };
 
 const JobDetails: React.FC<JobDetailsProps> = ({
@@ -24,6 +25,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({
   location,
   posted_at,
   gratified_function,
+  recruiter_name,
 }) => {
   const [inscrito, setInscrito] = useState(false); // Estado para verificar inscrição
   const [userData, setUserData] = useState<{ id_user: number; id_recruiter: number } | null>(null);
@@ -105,7 +107,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({
   return (
     <Card style={{ margin: '20px' }}>
       <Title level={3}>{title}</Title>
-      <Paragraph type="secondary">{location} - {posted_at} </Paragraph>
+      <Paragraph type="secondary">{recruiter_name}, {location} - {posted_at} </Paragraph>
       
       <Descriptions column={1} bordered>
         <Descriptions.Item label="Descrição">{description}</Descriptions.Item>

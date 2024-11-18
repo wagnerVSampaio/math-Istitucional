@@ -124,6 +124,7 @@ export const StyledParagraph = styled.p`
 
 export const StyledP = styled.p`
   display: flex;
+  font-size: 15px;
 `;
 
 const iconsStyle = css`
@@ -143,8 +144,8 @@ export const Email = styled(IoMdMail)`
   ${iconsStyle}
 `;
 export const Description = styled(IoMdInformationCircle)`
-  margin-right: 10px;
-  font-size: 30px;
+  ${iconsStyle}
+  font-size: 25px;
 `;
 export const Export = styled(FaFileDownload)`
   ${iconsStyle}
