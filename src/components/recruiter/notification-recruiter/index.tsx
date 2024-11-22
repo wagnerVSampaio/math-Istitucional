@@ -125,9 +125,6 @@ const NotificationRecruiter: React.FC = () => {
     const userData = JSON.parse(data);
     const id_user = userData.id_user;
 
-    // Adicionando um log para conferir os dados antes de enviar a requisição
-    console.log("Enviando requisição para marcar notificação como lida", { notification_id, id_user });
-
     try {
         const response = await fetch(`http://localhost:3002/api/maskNotification/${notification_id}/read`, {
             method: 'PUT',
@@ -178,6 +175,40 @@ const NotificationRecruiter: React.FC = () => {
     }
   };
 
+  const deleteNotification = async (notificationId: number) => {
+    const data = sessionStorage.getItem("userData");
+    if (!data) {
+        console.error('Usuário não encontrado.');
+        message.error('Usuário não encontrado. Verifique a sessão.');
+        return;
+    }
+
+    const userData = JSON.parse(data);
+    const id_user = userData.id_user;
+    try {
+      const response = await fetch(
+        `http://localhost:3002/api/delUserNotification/${notificationId}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: id_user }),
+        }
+      );
+
+      if (response.ok) {
+        setNotifications((prev) =>
+          prev.filter((notif) => notif.id !== notificationId)
+        );
+        message.success('Notificação excluída com sucesso!');
+      } else {
+        message.error('Erro ao excluir notificação.');
+      }
+    } catch {
+      message.error('Erro ao conectar com o servidor.');
+    }
+  };
+
+
   // Função para manipular o clique no menu
   const handleMenuClick = (key: string) => {
     setSelectedMenu(key);  // Atualiza o estado de menu selecionado
@@ -210,7 +241,7 @@ const NotificationRecruiter: React.FC = () => {
                     <style.ButtonDelete
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleDeleteNotification(notification.id);
+                        deleteNotification(notification.id);
                       }}
                     >
                       <MdDelete />

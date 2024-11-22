@@ -160,7 +160,7 @@ const UserInterests: React.FC = () => {
           {interestedList.map((professional) => (
             professional.education.map((edu) => (
               <Select.Option key={edu.id_education} value={edu.course}>
-                {edu.course}
+                {edu.course} - {edu.institution}
               </Select.Option>
             ))
           ))}
@@ -176,7 +176,7 @@ const UserInterests: React.FC = () => {
           {interestedList.map((professional) => (
             professional.experience.map((exp) => (
               <Select.Option key={exp.id_experience} value={exp.position}>
-                {exp.position}
+                {exp.position} - {exp.company}
               </Select.Option>
             ))
           ))}
