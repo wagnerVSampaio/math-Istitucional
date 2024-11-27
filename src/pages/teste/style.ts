@@ -125,3 +125,11 @@ export const ButtonRemove = styled.button`
   margin-right: 15px;
   font-weight: 500;
 `;
+export const CardWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 20px;
+  padding: 10px;
+`;

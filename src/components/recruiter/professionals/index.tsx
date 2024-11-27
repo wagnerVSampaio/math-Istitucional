@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import * as style from './style';
 import { FaEnvelope } from 'react-icons/fa';
-import { Card, Descriptions, Modal, Button, Select, Tag } from 'antd/lib';
+import { Card, Descriptions, Modal, Button, Select, Tag, Radio } from 'antd/lib';
 import Search from 'antd/lib/input/Search';
 
 interface Education {
@@ -47,6 +47,8 @@ const UserInterests: React.FC = () => {
   const [selectedEducation, setSelectedEducation] = useState<string | null>(null);
   const [selectedExperience, setSelectedExperience] = useState<string | null>(null);
   const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
+  const [filterType, setFilterType] = useState<'search' | 'select'>('search'); 
+
 
   const fetchProfessionals = async () => {
     try {
@@ -173,99 +175,99 @@ const UserInterests: React.FC = () => {
 
   return (
     <style.DivNotification>
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+      <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+        <Radio.Group 
+        value={filterType} 
+        onChange={(e) => setFilterType(e.target.value)}
+        style={{ marginBottom: '20px' }}
+      >
+        <Radio.Button value="search">Buscar</Radio.Button>
+        <Radio.Button value="select">Filtrar</Radio.Button>
+      </Radio.Group>
+
+      {/* Renderização condicional com base no filtro selecionado */}
+      {filterType === 'search' ? (
         <Search
           placeholder="Buscar por nome, formação, experiência ou habilidade"
           allowClear
-          value={searchQuery} // Bind o valor do input ao estado searchQuery
-          onChange={(e) => setSearchQuery(e.target.value)} // Atualiza o valor da busca conforme o usuário digita
-          onSearch={handleAddSearch} // Chama a função de pesquisa ao pressionar Enter
-          style={{ width: '300px' }}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onSearch={handleAddSearch}
+          style={{ width: '300px', marginRight: '10px' }}
         />
+      ) : (
+        <>
+          <Select
+            allowClear
+            showSearch
+            placeholder="Filtrar por Formação"
+            optionFilterProp="children"
+            className="mr-[15px] w-[200px] ml-[15px]"
+            onChange={(value) => setSelectedEducation(value)}
+            onSearch={(value) => setSelectedEducation(value)}
+            value={selectedEducation}
+            filterOption={(input, option) => {
+              const children = option?.children as string | undefined;
+              return children?.toLowerCase().includes(input.toLowerCase()) || false;
+            }}
+          >
+            {Array.from(
+              new Set(interestedList.flatMap((professional) => professional.education.map((edu) => edu.course)))
+            ).map((course, index) => (
+              <Select.Option key={index} value={course}>
+                {course}
+              </Select.Option>
+            ))}
+          </Select>
 
-        <Select
-        allowClear 
-          showSearch
-          placeholder="Filtrar por Formação"
-          optionFilterProp="children"
-          className="mr-[15px] w-[200px]"
-          onChange={(value) => setSelectedEducation(value)} // Seleção direta
-          onSearch={(value) => setSelectedEducation(value)} // Atualização ao digitar
-          value={selectedEducation}
-          filterOption={(input, option) => {
-            const children = option?.children as string | undefined;
-            if (!children) return false;
-            return children.toLowerCase().includes(input.toLowerCase());
-          }}
-        >
-          {Array.from(
-            new Set(
-              interestedList.flatMap((professional) =>
-                professional.education.map((edu) => edu.course)
-              )
-            )
-          ).map((course, index) => (
-            <Select.Option key={index} value={course}>
-              {course}
-            </Select.Option>
-          ))}
-        </Select>
+          {/* Similar Select components for Experience and Skill */}
+          <Select
+            allowClear
+            showSearch
+            placeholder="Filtrar por Experiência"
+            optionFilterProp="children"
+            className="mr-[15px] w-[200px]"
+            onChange={(value) => setSelectedExperience(value)}
+            onSearch={(value) => setSelectedExperience(value)}
+            value={selectedExperience}
+            filterOption={(input, option) => {
+              const children = option?.children as string | undefined;
+              return children?.toLowerCase().includes(input.toLowerCase()) || false;
+            }}
+          >
+            {Array.from(
+              new Set(interestedList.flatMap((professional) => professional.experience.map((exp) => exp.position)))
+            ).map((position, index) => (
+              <Select.Option key={index} value={position}>
+                {position}
+              </Select.Option>
+            ))}
+          </Select>
 
-        <Select
-        allowClear 
-          showSearch
-          placeholder="Filtrar por Experiência"
-          optionFilterProp="children"
-          className="mr-[15px] w-[200px]"
-          onChange={(value) => setSelectedExperience(value)} // Seleção direta
-          onSearch={(value) => setSelectedExperience(value)} // Atualização ao digitar
-          value={selectedExperience}
-          filterOption={(input, option) => {
-            const children = option?.children as string | undefined;
-            if (!children) return false;
-            return children.toLowerCase().includes(input.toLowerCase());
-          }}
-        >
-          {Array.from(
-            new Set(
-              interestedList.flatMap((professional) =>
-                professional.experience.map((exp) => exp.position)
-              )
-            )
-          ).map((position, index) => (
-            <Select.Option key={index} value={position}>
-              {position}
-            </Select.Option>
-          ))}
-        </Select>
-
-        <Select
-        allowClear 
-          showSearch
-          placeholder="Filtrar por Habilidades"
-          optionFilterProp="children"
-          className="mr-[15px] w-[200px]"
-          onChange={(value) => setSelectedSkill(value)} // Seleção direta
-          onSearch={(value) => setSelectedSkill(value)} // Atualização ao digitar
-          value={selectedSkill}
-          filterOption={(input, option) => {
-            const children = option?.children as string | undefined;
-            if (!children) return false;
-            return children.toLowerCase().includes(input.toLowerCase());
-          }}
-        >
-          {Array.from(
-            new Set(
-              interestedList.flatMap((professional) =>
-                professional.skills.map((skill) => skill.skill)
-              )
-            )
-          ).map((skill, index) => (
-            <Select.Option key={index} value={skill}>
-              {skill}
-            </Select.Option>
-          ))}
-        </Select>
+          <Select
+            allowClear
+            showSearch
+            placeholder="Filtrar por Habilidades"
+            optionFilterProp="children"
+            className="mr-[15px] w-[200px]"
+            onChange={(value) => setSelectedSkill(value)}
+            onSearch={(value) => setSelectedSkill(value)}
+            value={selectedSkill}
+            filterOption={(input, option) => {
+              const children = option?.children as string | undefined;
+              return children?.toLowerCase().includes(input.toLowerCase()) || false;
+            }}
+          >
+            {Array.from(
+              new Set(interestedList.flatMap((professional) => professional.skills.map((skill) => skill.skill)))
+            ).map((skill, index) => (
+              <Select.Option key={index} value={skill}>
+                {skill}
+              </Select.Option>
+            ))}
+          </Select>
+        </>
+      )}
 
       </div>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
@@ -273,14 +275,14 @@ const UserInterests: React.FC = () => {
           <Tag
             key={index}
             closable
-            onClose={() => handleRemoveSearch(query)} // Remove a tag ao clicar no "x"
+            onClose={() => handleRemoveSearch(query)}
             color="green"
             style={{
-              marginBottom: '20px', // Espaço fora do elemento
-              paddingTop: '10px', // Espaçamento interno no topo
-              paddingRight: '15px', // Espaçamento interno à direita
-              paddingBottom: '10px', // Espaçamento interno na parte inferior
-              paddingLeft: '15px', // Espaçamento interno à esquerda
+              marginBottom: '20px', 
+              paddingTop: '10px',
+              paddingRight: '15px', 
+              paddingBottom: '10px',
+              paddingLeft: '15px', 
               fontSize: '16px',
               color: "#272727",
               border: "1px solid #006b3f",
