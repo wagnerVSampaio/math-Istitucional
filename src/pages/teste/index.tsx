@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import * as style from './style';
 import { FaEnvelope } from 'react-icons/fa';
-import { Card, Descriptions, Modal, Button, Select } from 'antd/lib';
+import { Card, Descriptions, Modal, Button, Select, Tag } from 'antd/lib';
 import Search from 'antd/lib/input/Search';
-
-const { Option } = Select;
 
 interface Education {
   id_education: number;
@@ -29,6 +27,7 @@ interface Skills {
 
 interface Interested {
   id_interested: number;
+  id_user: number;
   full_name: string;
   email: string;
   profile_picture: string;
@@ -42,26 +41,23 @@ const UserInterests: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedUser, setSelectedUser] = useState<Interested | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>(''); // Armazena o valor do campo de busca
+  const [searchQueries, setSearchQueries] = useState<string[]>([]); // Armazena todos os termos de pesquisa (tags)
+  const [noResults, setNoResults] = useState<boolean>(false); // Para verificar se não há resultados
   const [selectedEducation, setSelectedEducation] = useState<string | null>(null);
   const [selectedExperience, setSelectedExperience] = useState<string | null>(null);
   const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
 
-  // Opções filtradas para Educação, Experiência e Habilidades
-  const [experienceOptions, setExperienceOptions] = useState<{ label: string; value: string }[]>([]);
-  const [educationOptions, setEducationOptions] = useState<{ label: string; value: string }[]>([]);
-  const [skillsOptions, setSkillsOptions] = useState<{ label: string; value: string }[]>([]);
-
   const fetchProfessionals = async () => {
     try {
-      const response = await fetch("http://localhost:3002/api/userServer");
+      const response = await fetch('http://localhost:3002/api/userServer');
       if (!response.ok) {
-        throw new Error("Erro ao buscar profissionais");
+        throw new Error('Erro ao buscar profissionais');
       }
       const data = await response.json();
       setInterestedList(data);
     } catch (error) {
-      console.error("Erro ao obter dados:", error);
+      console.error('Erro ao obter dados:', error);
     } finally {
       setLoading(false);
     }
@@ -71,115 +67,90 @@ const UserInterests: React.FC = () => {
     fetchProfessionals();
   }, []);
 
-  const handleSearchExperience = (value: string) => {
-    if (value) {
-      const filtered = interestedList.flatMap((professional) =>
-        professional.experience
-          .filter(
-            (exp) =>
-              exp.position.toLowerCase().includes(value.toLowerCase()) ||
-              exp.company.toLowerCase().includes(value.toLowerCase())
-          )
-          .map((exp) => ({
-            label: `${exp.position} at ${exp.company}`,
-            value: exp.id_experience.toString(),
-          }))
-      );
-      setExperienceOptions(filtered);
-    } else {
-      setExperienceOptions([]);
+  const handleSearch = (value: string) => {
+    if (value && !searchQueries.includes(value)) {
+      setSearchQueries([...searchQueries, value]);  // Adiciona a busca como uma tag
+      setSearchQuery('');  // Limpa o campo de busca
     }
   };
 
-  const handleSearchEducation = (value: string) => {
-    if (value) {
-      const filtered = interestedList.flatMap((professional) =>
-        professional.education
-          .filter(
-            (edu) =>
-              edu.course.toLowerCase().includes(value.toLowerCase()) ||
-              edu.institution.toLowerCase().includes(value.toLowerCase())
-          )
-          .map((edu) => ({
-            label: `${edu.course} at ${edu.institution}`,
-            value: edu.id_education.toString(),
-          }))
-      );
-      setEducationOptions(filtered);
-    } else {
-      setEducationOptions([]);
+
+  const handleAddSearch = (value: string) => {
+    // Se houver valor na busca, adicione o termo à lista de tags
+    if (value && !searchQueries.includes(value)) {
+      setSearchQueries([...searchQueries, value]); // Adiciona o novo termo à lista
+      setSearchQuery(''); // Limpa o campo de pesquisa
     }
   };
 
-  const handleSearchSkills = (value: string) => {
-    if (value) {
-      const filtered = interestedList.flatMap((professional) =>
-        professional.skills
-          .filter((skill) => skill.skill.toLowerCase().includes(value.toLowerCase()))
-          .map((skill) => ({
-            label: skill.skill,
-            value: skill.id_skill.toString(),
-          }))
-      );
-      setSkillsOptions(filtered);
-    } else {
-      setSkillsOptions([]);
-    }
+  const handleRemoveSearch = (value: string) => {
+    // Remove o termo da lista de tags
+    setSearchQueries(searchQueries.filter(query => query !== value));
   };
 
   const filteredProfessionals = interestedList.filter((professional) => {
-    const query = searchQuery.toLowerCase();
-    const nameMatch = professional.full_name.toLowerCase().includes(query);
-    const educationMatch = professional.education.some(
-      (edu) =>
-        edu.course.toLowerCase().includes(query) ||
-        edu.institution.toLowerCase().includes(query)
-    );
-    const experienceMatch = professional.experience.some(
-      (exp) =>
-        exp.position.toLowerCase().includes(query) ||
-        exp.company.toLowerCase().includes(query)
-    );
-    const skillsMatch = professional.skills.some((skill) =>
-      skill.skill.toLowerCase().includes(query)
-    );
+    // Verifica se o profissional corresponde a todos os filtros de pesquisa (tags)
+    const matchesSearchQueries = searchQueries.every((query) => {
+      const lowerQuery = query.toLowerCase();
+      const nameMatch = professional.full_name.toLowerCase().includes(lowerQuery);
+      const educationMatch = professional.education.some(
+        (edu) =>
+          edu.course.toLowerCase().includes(lowerQuery) ||
+          edu.institution.toLowerCase().includes(lowerQuery)
+      );
+      const experienceMatch = professional.experience.some(
+        (exp) =>
+          exp.position.toLowerCase().includes(lowerQuery) ||
+          exp.company.toLowerCase().includes(lowerQuery)
+      );
+      const skillsMatch = professional.skills.some((skill) =>
+        skill.skill.toLowerCase().includes(lowerQuery)
+      );
 
+      return nameMatch || educationMatch || experienceMatch || skillsMatch;
+    });
+
+    // Filtra pela educação se selecionada
     const educationFilterMatch = selectedEducation
       ? professional.education.some(
-          (edu) =>
-            edu.course.toLowerCase().includes(selectedEducation.toLowerCase()) ||
-            edu.institution.toLowerCase().includes(selectedEducation.toLowerCase())
-        )
+        (edu) =>
+          edu.course.toLowerCase().includes(selectedEducation.toLowerCase()) ||
+          edu.institution.toLowerCase().includes(selectedEducation.toLowerCase())
+      )
       : true;
 
+    // Filtra pela experiência se selecionada
     const experienceFilterMatch = selectedExperience
       ? professional.experience.some(
-          (exp) =>
-            exp.position.toLowerCase().includes(selectedExperience.toLowerCase()) ||
-            exp.company.toLowerCase().includes(selectedExperience.toLowerCase())
-        )
+        (exp) =>
+          exp.position.toLowerCase().includes(selectedExperience.toLowerCase()) ||
+          exp.company.toLowerCase().includes(selectedExperience.toLowerCase())
+      )
       : true;
 
+    // Filtra pelas habilidades se selecionada
     const skillFilterMatch = selectedSkill
       ? professional.skills.some((skill) =>
-          skill.skill.toLowerCase().includes(selectedSkill.toLowerCase())
-        )
+        skill.skill.toLowerCase().includes(selectedSkill.toLowerCase())
+      )
       : true;
 
-    return (
-      (nameMatch || educationMatch || experienceMatch || skillsMatch) &&
-      educationFilterMatch &&
-      experienceFilterMatch &&
-      skillFilterMatch
-    );
+    // Retorna true se o profissional corresponder a todos os filtros
+    return matchesSearchQueries && educationFilterMatch && experienceFilterMatch && skillFilterMatch;
   });
+
+
+  // Verifica se há resultados para as tags de busca
+  useEffect(() => {
+    setNoResults(filteredProfessionals.length === 0 && searchQueries.length > 0);
+  }, [filteredProfessionals, searchQueries]);
 
   const formatDate = (dateString: string | undefined): string => {
     if (!dateString) return '';
     const date = new Date(dateString);
     const options: Intl.DateTimeFormatOptions = {
       month: 'long',
-      year: 'numeric'
+      year: 'numeric',
     };
     return date.toLocaleDateString('pt-BR', options);
   };
@@ -195,134 +166,237 @@ const UserInterests: React.FC = () => {
   };
 
   const handleContactClick = (email: string) => {
-    const subject = "Contato sobre oportunidade de trabalho";
+    const subject = 'Contato sobre oportunidade de trabalho';
     const body = `Olá,\n\nGostaria de discutir uma oportunidade de trabalho com você. Por favor, entre em contato.\n\nAtenciosamente,\nUniversidade Federal do Oeste do Pará`;
     window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
   return (
     <style.DivNotification>
-      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
         <Search
           placeholder="Buscar por nome, formação, experiência ou habilidade"
           allowClear
-          onSearch={(value) => setSearchQuery(value)}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ width: "300px" }}
+          value={searchQuery} // Bind o valor do input ao estado searchQuery
+          onChange={(e) => setSearchQuery(e.target.value)} // Atualiza o valor da busca conforme o usuário digita
+          onSearch={handleAddSearch} // Chama a função de pesquisa ao pressionar Enter
+          style={{ width: '300px' }}
         />
 
         <Select
+        allowClear 
           showSearch
           placeholder="Filtrar por Formação"
           optionFilterProp="children"
-          onSearch={handleSearchEducation}
+          className="mr-[15px] w-[200px]"
+          onChange={(value) => setSelectedEducation(value)} // Seleção direta
+          onSearch={(value) => setSelectedEducation(value)} // Atualização ao digitar
           value={selectedEducation}
-          onChange={setSelectedEducation}
-          style={{ width: 200 }}
+          filterOption={(input, option) => {
+            const children = option?.children as string | undefined;
+            if (!children) return false;
+            return children.toLowerCase().includes(input.toLowerCase());
+          }}
         >
-          {educationOptions.map((option) => (
-            <Option key={option.value} value={option.value}>
-              {option.label}
-            </Option>
+          {Array.from(
+            new Set(
+              interestedList.flatMap((professional) =>
+                professional.education.map((edu) => edu.course)
+              )
+            )
+          ).map((course, index) => (
+            <Select.Option key={index} value={course}>
+              {course}
+            </Select.Option>
           ))}
         </Select>
 
         <Select
+        allowClear 
           showSearch
           placeholder="Filtrar por Experiência"
           optionFilterProp="children"
-          onSearch={handleSearchExperience}
+          className="mr-[15px] w-[200px]"
+          onChange={(value) => setSelectedExperience(value)} // Seleção direta
+          onSearch={(value) => setSelectedExperience(value)} // Atualização ao digitar
           value={selectedExperience}
-          onChange={setSelectedExperience}
-          style={{ width: 200 }}
+          filterOption={(input, option) => {
+            const children = option?.children as string | undefined;
+            if (!children) return false;
+            return children.toLowerCase().includes(input.toLowerCase());
+          }}
         >
-          {experienceOptions.map((option) => (
-            <Option key={option.value} value={option.value}>
-              {option.label}
-            </Option>
+          {Array.from(
+            new Set(
+              interestedList.flatMap((professional) =>
+                professional.experience.map((exp) => exp.position)
+              )
+            )
+          ).map((position, index) => (
+            <Select.Option key={index} value={position}>
+              {position}
+            </Select.Option>
           ))}
         </Select>
 
         <Select
+        allowClear 
           showSearch
           placeholder="Filtrar por Habilidades"
           optionFilterProp="children"
-          onSearch={handleSearchSkills}
+          className="mr-[15px] w-[200px]"
+          onChange={(value) => setSelectedSkill(value)} // Seleção direta
+          onSearch={(value) => setSelectedSkill(value)} // Atualização ao digitar
           value={selectedSkill}
-          onChange={setSelectedSkill}
-          style={{ width: 200 }}
+          filterOption={(input, option) => {
+            const children = option?.children as string | undefined;
+            if (!children) return false;
+            return children.toLowerCase().includes(input.toLowerCase());
+          }}
         >
-          {skillsOptions.map((option) => (
-            <Option key={option.value} value={option.value}>
-              {option.label}
-            </Option>
+          {Array.from(
+            new Set(
+              interestedList.flatMap((professional) =>
+                professional.skills.map((skill) => skill.skill)
+              )
+            )
+          ).map((skill, index) => (
+            <Select.Option key={index} value={skill}>
+              {skill}
+            </Select.Option>
           ))}
         </Select>
-      </div>
 
-      <style.StyledUl>
-        {filteredProfessionals.map((item) => (
-          <style.StyledLi
-            key={item.id_interested}
-            onClick={() => handleUserClick(item)}
-            style={{ cursor: 'pointer' }}
+      </div>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        {searchQueries.map((query, index) => (
+          <Tag
+            key={index}
+            closable
+            onClose={() => handleRemoveSearch(query)} // Remove a tag ao clicar no "x"
+            color="green"
+            style={{
+              marginBottom: '20px', // Espaço fora do elemento
+              paddingTop: '10px', // Espaçamento interno no topo
+              paddingRight: '15px', // Espaçamento interno à direita
+              paddingBottom: '10px', // Espaçamento interno na parte inferior
+              paddingLeft: '15px', // Espaçamento interno à esquerda
+              fontSize: '16px',
+            }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-              <style.StyledImageContainer>
-                <style.StyledImage
-                  src={`http://localhost:3002/uploads/${item.profile_picture}`}
-                  alt={item.full_name}
-                />
-              </style.StyledImageContainer>
-              <div style={{ flexGrow: 1 }}>
-                <style.StyledParagraph style={{ fontWeight: 'bold', fontSize: '25px' }}>
-                  {item.full_name}
-                </style.StyledParagraph>
-                <style.StyledP style={{ margin: '5px 0' }}>
-                  <FaEnvelope style={{ marginRight: '8px', marginTop: '4px' }} />
-                  {item.email}
-                </style.StyledP>
-              </div>
-            </div>
-          </style.StyledLi>
+            {query}
+          </Tag>
         ))}
+      </div>
+      <style.StyledUl>
+        {filteredProfessionals.length === 0 ? (
+          <p style={{ textAlign: 'center', fontStyle: 'italic', color: '272727' }}>
+            Nenhum resultado encontrado
+          </p>
+        ) : (
+          filteredProfessionals.map((item) => (
+            <style.StyledLi
+              key={item.id_interested}
+              onClick={() => handleUserClick(item)}
+              style={{ cursor: 'pointer' }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                <style.StyledImageContainer>
+                  <style.StyledImage
+                    src={`http://localhost:3002/uploads/${item.profile_picture}`}
+                    alt={item.full_name}
+                  />
+                </style.StyledImageContainer>
+                <div style={{ flexGrow: 1 }}>
+                  <style.StyledParagraph style={{ fontWeight: 'bold', fontSize: '25px' }}>
+                    {item.full_name}
+                  </style.StyledParagraph>
+                  <style.StyledP style={{ margin: '5px 0' }}>
+                    <FaEnvelope style={{ marginRight: '8px', marginTop: '4px' }} />
+                    {item.email}
+                  </style.StyledP>
+                </div>
+              </div>
+            </style.StyledLi>
+          ))
+        )}
       </style.StyledUl>
 
       {selectedUser && (
         <Modal
-          title={selectedUser.full_name}
-          visible={isModalVisible}
+          open={isModalVisible}
           onCancel={handleCloseModal}
-          footer={[
-            <Button key="close" onClick={handleCloseModal}>Fechar</Button>,
-            <Button key="contact" type="primary" onClick={() => handleContactClick(selectedUser.email)}>
-              Contatar
-            </Button>
-          ]}
+          footer={null}
+          width={800}
+          style={{ top: 10 }}
         >
           <Card>
-            <Descriptions title="Detalhes">
-              <Descriptions.Item label="E-mail">{selectedUser.email}</Descriptions.Item>
+            <div style={{ display: 'flex' }}>
+              <style.StyledImage
+                src={`http://localhost:3002/uploads/${selectedUser.profile_picture}`}
+                style={{
+                  width: '100px',
+                  height: '100px',
+                  borderRadius: '50%',
+                  marginRight: '25px',
+                  marginLeft: '20px',
+                  marginBottom: '20px',
+                }}
+              />
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <h1 style={{ fontSize: '25px', fontWeight: 'bold', color: '#006b3f', marginTop: '15px' }}>
+                  {selectedUser.full_name}
+                </h1>
+                <div style={{ cursor: 'pointer', fontSize: '16px' }}>
+                  {selectedUser.email}
+                </div>
+              </div>
+            </div>
+            <Descriptions column={1} bordered>
               <Descriptions.Item label="Formação">
-                {selectedUser.education.map((edu) => (
-                  <div key={edu.id_education}>
-                    {edu.course} - {edu.institution} ({formatDate(edu.start_date)} - {formatDate(edu.completion_date)})
-                  </div>
-                ))}
+                {selectedUser.education.length > 0 ? (
+                  <ul style={{ listStyleType: 'disc' }}>
+                    {selectedUser.education.map((edu) => (
+                      <li key={edu.id_education}>
+                        {edu.course} - {edu.institution} ({formatDate(edu.start_date)} a {formatDate(edu.completion_date)})
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  'Nenhuma formação encontrada.'
+                )}
               </Descriptions.Item>
               <Descriptions.Item label="Experiência">
-                {selectedUser.experience.map((exp) => (
-                  <div key={exp.id_experience}>
-                    {exp.position} at {exp.company} ({formatDate(exp.start_date)} - {formatDate(exp.end_date)})
-                  </div>
-                ))}
+                {selectedUser.experience.length > 0 ? (
+                  <ul style={{ listStyleType: 'disc' }}>
+                    {selectedUser.experience.map((exp) => (
+                      <li key={exp.id_experience}>
+                        {exp.position} - {exp.company} ({formatDate(exp.start_date)} a {formatDate(exp.end_date)})
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  'Nenhuma experiência encontrada.'
+                )}
               </Descriptions.Item>
               <Descriptions.Item label="Habilidades">
-                {selectedUser.skills.map((skill) => (
-                  <div key={skill.id_skill}>{skill.skill}</div>
-                ))}
+                {selectedUser.skills.length > 0 ? (
+                  <ul style={{ listStyleType: 'disc' }}>
+                    {selectedUser.skills.map((skill) => (
+                      <li key={skill.id_skill}>{skill.skill}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  'Nenhuma habilidade encontrada.'
+                )}
               </Descriptions.Item>
             </Descriptions>
+            <Button
+              onClick={() => handleContactClick(selectedUser.email)}
+              style={{ marginTop: '20px', backgroundColor: '#006b3f', color: '#ffff', fontWeight: '500' }}
+            >
+              Entrar em Contato
+            </Button>
           </Card>
         </Modal>
       )}
