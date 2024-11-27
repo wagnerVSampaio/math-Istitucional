@@ -149,22 +149,35 @@ const UserInterests: React.FC = () => {
           onChange={(e) => setSearchQuery(e.target.value)}
           style={{ width: "300px" }}
         />
-        <Select
-          showSearch
-          placeholder="Filtrar por Formação"
-          optionFilterProp="children"
-          className="mr-[15px]"
-          onChange={setSelectedEducation}
-          value={selectedEducation}
-        >
-          {interestedList.map((professional) => (
-            professional.education.map((edu) => (
-              <Select.Option key={edu.id_education} value={edu.course}>
-                {edu.course}
-              </Select.Option>
-            ))
-          ))}
-        </Select>
+<Select
+  showSearch
+  placeholder="Filtrar por Formação"
+  optionFilterProp="children"
+  className="mr-[15px]"
+  onChange={setSelectedEducation}
+  value={selectedEducation}
+  filterOption={(input, option) => {
+    // Adicionando um log para verificar o valor de input e children
+    const children = option?.children as string | undefined;
+
+
+    if (!children) return false;
+
+    return children.toLowerCase().includes(input.toLowerCase());
+  }}
+>
+  {Array.from(new Set(interestedList.flatMap((professional) => 
+    professional.education.map((edu) => edu.course) // Flattening todos os cursos
+  ))) // Usando Set para garantir que os cursos sejam únicos
+    .map((course, index) => (
+      <Select.Option key={index} value={course}>
+        {course}
+      </Select.Option>
+  ))}
+</Select>
+
+
+
         <Select
           showSearch
           placeholder="Filtrar por Experiência"
