@@ -46,10 +46,15 @@ export const StyledLi = styled.li`
   gap: 20px;
   align-items: center;
   border-bottom: 1px solid #ddd;
-  
   display: flex;
   justify-content: space-between;
   align-items: center;
+  
+  &:hover {
+    background-color: #e6f7ff;
+    cursor: pointer;
+  }
+
   @media (min-width: 1200px) {
     padding: 20px 0;
   }
@@ -59,13 +64,13 @@ export const StyledLi = styled.li`
   }
 
 `;
-export const StyledParagraph = styled.ul`
+export const StyledParagraph = styled.p`
   font-size: 20px;
   color: #006b3f;
   margin-bottom: 15px;
   font-weight: bold;
 `;
-export const StyledP = styled.ul`
+export const StyledP = styled.p`
   display: flex;
 `;
 const iconsStyle = css`

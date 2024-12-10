@@ -146,7 +146,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
 
 
   const idEducations = async () => {
-    const data = sessionStorage.getItem("authToken");
+    const data = sessionStorage.getItem("userData");
     if (!data) {
       console.error('Usuário não encontrado.');
       return;

@@ -21,7 +21,7 @@ export const StyledUl = styled.ul`
   background-color: #f4f4f4;
   list-style-type: none;
   //margin: 20px;
-  overflow-x: auto;
+  overflow: auto;
 
   &:hover {
     border-color: #ccc;

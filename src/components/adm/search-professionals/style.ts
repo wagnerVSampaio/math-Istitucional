@@ -91,6 +91,10 @@ export const StyledLi = styled.li`
   align-items: center;
   border-bottom: 1px solid #ddd;
   padding: 5px 0;
+  &:hover {
+    background-color: #e6f7ff;
+    cursor: pointer;
+  }
 `;
 
 export const StyledParagraph = styled.p`
