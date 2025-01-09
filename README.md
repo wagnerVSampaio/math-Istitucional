@@ -1,5 +1,26 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+
+## Prerequisites
+
+Make sure you have installed on your machine:
+- [Node.js](https://nodejs.org/)
+- [Git](https://git-scm.com/)
+
+## Installing Dependencies
+
+Install the project dependencies:
+
+```bash
+npm install
+```
+
+Make sure you also install additional packages:
+
+```bash
+npm install react-icons
+```
+
 ## Getting Started
 
 First, run the development server:
@@ -8,10 +29,6 @@ First, run the development server:
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
