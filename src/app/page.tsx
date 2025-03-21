@@ -3,18 +3,7 @@ import React, { useState } from "react";
 import { Form, message, Spin } from "antd/lib";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  ButtonLogin,
-  ButtonWithEmail,
-  ParagraphInfos,
-  ParagraphPassword,
-  PararaphBottom,
-  PararaphBottom2,
-  Section,
-  StyledInput,
-  StyledInputSenha,
-  TopParagraph
-} from "./style";
+import * as style from "./style";
 import { ConfigProvider } from "antd/lib";
 import "../app/globals.css";
 import { useRouter } from 'next/navigation';
@@ -79,7 +68,7 @@ const App: React.FC = () => {
     <>
       <HeaderOverall />
       <ConfigProvider theme={{ token: { colorPrimary: "#006b3f" } }}>
-        <Section>
+        <style.Section>
           <Form
             name="basic"
             labelCol={{ span: 8 }}
@@ -89,28 +78,28 @@ const App: React.FC = () => {
             className="style-form-item"
             onFinish={onFinish}
           >
-            <TopParagraph>
+            <style.TopParagraph>
               FAÇA LOGIN AGORA MESMO!
-            </TopParagraph>
-            <ParagraphInfos>E-mail</ParagraphInfos>
+            </style.TopParagraph>
+            <style.ParagraphInfos>E-mail</style.ParagraphInfos>
             <Form.Item
               name="email"
               rules={[{ required: true, message: "Insira seu e-mail!" }]}
             >
-              <StyledInput
+              <style.StyledInput
                 value={email}
                 placeholder="Insira seu e-mail"
                 onChange={(e) => setEmail(e.target.value)}
               />
             </Form.Item>
 
-            <ParagraphInfos>Senha</ParagraphInfos>
+            <style.ParagraphInfos>Senha</style.ParagraphInfos>
             <Form.Item
               name="password"
               rules={[{ required: true, message: "Insira sua senha!" }]}
               className="mb-0"
             >
-              <StyledInputSenha
+              <style.StyledInputSenha
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Insira sua senha"
@@ -123,9 +112,9 @@ const App: React.FC = () => {
               className="text-customDark"
             >
               <Link href={"../password-reset"}>
-                <ParagraphPassword>
+                <style.ParagraphPassword>
                   Esqueceu a senha?
-                </ParagraphPassword>
+                </style.ParagraphPassword>
               </Link>
             </Form.Item>
 
@@ -135,30 +124,30 @@ const App: React.FC = () => {
               },
             }}>
               <Form.Item className="mb-0">
-                <ButtonLogin type="submit" disabled={loading}>
+                <style.ButtonLogin type="submit" disabled={loading}>
                   {loading ? <Spin size="small" /> : "ENTRAR"}
-                </ButtonLogin>
+                </style.ButtonLogin>
               </Form.Item>
             </ConfigProvider>
 
             {error && <p className="text-red-500">{error}</p>}
             <Form.Item wrapperCol={{ span: 11 }}>
-              <PararaphBottom className="text-customDark text-xs mt-6">
+              <style.PararaphBottom className="text-customDark text-xs mt-6">
                 Ao clicar em Continuar para se cadastrar ou entrar, você aceita
                 os <strong>Termos de Uso</strong> e{" "}
                 <strong>Política de Privacidade</strong> da Match Institucional.
-              </PararaphBottom>
+              </style.PararaphBottom>
             </Form.Item>
 
             <Form.Item wrapperCol={{ span: 16 }}>
-              <PararaphBottom2 className="text-customDark">———————— ou —————————</PararaphBottom2>
+              <style.PararaphBottom2 className="text-customDark">———————— ou —————————</style.PararaphBottom2>
             </Form.Item>
 
             <Form.Item>
               <Link href="/register" passHref>
-                <ButtonWithEmail>
+                <style.ButtonWithEmail>
                   CADASTRE-SE
-                </ButtonWithEmail>
+                </style.ButtonWithEmail>
               </Link>
 
             </Form.Item>
@@ -172,7 +161,7 @@ const App: React.FC = () => {
               style={{ width: "500px", height: "400px", marginLeft: "auto" }}
             />
           </div>
-        </Section>
+        </style.Section>
       </ConfigProvider>
     </>
   );
