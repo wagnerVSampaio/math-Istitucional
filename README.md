@@ -40,8 +40,9 @@ Você pode começar a editar a página modificando `app/page.tsx`. A página é 
 Este projeto utiliza [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) para otimizar e carregar automaticamente o Inter, um tipo de letra personalizado do Google.
 
 
-## Folder Structure
+## Estrutura das pastas
 
+```bash
 match-institucional/
 │
 ├── src/
@@ -70,3 +71,4 @@ match-institucional/
 │    │      │      ├── create-account-servant/   # Página de criar conta do servidor
 │    │      │      ├── jobs/                     # Página para visualizar vagas disponíveis
 │    │      │      ├── notification-servant/     # Página de notificação exibida no perfil do servidor
+```
