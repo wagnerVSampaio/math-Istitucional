@@ -79,30 +79,70 @@ const NavServidor = () => {
     return date.format("YYYY-MM-DD");
   };
 
-  const RegisterServidor = async (values: FieldType) => {
+
+const RegisterServidor = async (values: FieldType) => {
+  if (
+    !values.full_name ||
+    !values.cpf ||
+    !values.email ||
+    !values.password ||
+    !values.passwordconfirmation ||
+    !values.phone ||
+    !selectedDate ||
+    !registerImage
+  ) {
+    message.error("Por favor, preencha todos os campos obrigatórios!");
+    return;
+  }
+
+  if (!checked) {
+    message.error("Você deve aceitar os termos para continuar!");
+    return;
+  }
+
+  if (values.password !== values.passwordconfirmation) {
+    message.error("As senhas não coincidem!");
+    return;
+  }
+
+  if (!selectedDate || !selectedDate.isValid()) {
+    message.error("Por favor, insira uma data de nascimento válida!");
+    return;
+  }
+
   console.log("Formulário enviado!", values);
+  
   try {
-    const formData = new FormData(); 
-
-
+    const formData = new FormData();
+    
     formData.append("full_name", values.full_name);
     formData.append("email", values.email);
     formData.append("password", values.password);
     formData.append("cpf", values.cpf);
-    formData.append("birth_date", formatDate(selectedDate!)); 
+    formData.append("birth_date", formatDate(selectedDate)); 
     formData.append("phone", values.phone);
     formData.append("user_type", "server");
 
-    const defaultCoverImageUrl = "/cover.png";
-
     if (registerImage) {
-      const file = await fetch(registerImage).then(r => r.blob()); 
-      formData.append('profile_picture', file, 'photo.jpg'); 
+      try {
+        const file = await fetch(registerImage).then(r => r.blob());
+        formData.append('profile_picture', file, 'profile.jpg');
+      } catch (error) {
+        console.error("Erro ao processar imagem de perfil:", error);
+        message.error("Erro ao processar imagem de perfil");
+        return;
+      }
     }
 
-    const coverImageUrl = defaultCoverImageUrl;
-    const coverFile = await fetch(coverImageUrl).then((r) => r.blob()); 
-    formData.append("cover_photo", coverFile, "cover_photo.png");
+    try {
+      const defaultCoverImageUrl = "/cover.png";
+      const coverFile = await fetch(defaultCoverImageUrl).then(r => r.blob());
+      formData.append("cover_photo", coverFile, "cover.png");
+    } catch (error) {
+      console.error("Erro ao carregar imagem padrão:", error);
+      message.error("Erro ao carregar imagem de capa");
+      return;
+    }
 
     const response = await fetch("http://localhost:3002/api/createusers", {
       method: "POST",
@@ -110,19 +150,22 @@ const NavServidor = () => {
     });
 
     const data = await response.json();
+    
     if (response.ok) {
-      router.push("/");
       message.success("Cadastro realizado com sucesso! Realize o login.", 8);
+      router.push("/");
     } else {
       console.error("Erro do servidor:", data);
-      setErrorMessage(data.error || "Erro ao registrar");
+      const errorMsg = data.error || "Erro ao registrar";
+      setErrorMessage(errorMsg);
+      message.error(errorMsg);
     }
   } catch (error) {
-    console.error("Erro ao enviar dados:", error);
-    setErrorMessage("Erro ao registrar");
+    //console.error("Erro ao enviar dados:", error);
+    setErrorMessage("Erro ao conectar com o servidor");
+    message.error("Erro ao conectar com o servidor");
   }
 };
-
 
   return (
     <Form
