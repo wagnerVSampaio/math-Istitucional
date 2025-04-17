@@ -1,6 +1,6 @@
 import { UserOutlined } from '@ant-design/icons/lib/icons';
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Tooltip, Modal, Checkbox, Button, InputNumber, message, Card, Select } from 'antd/lib';
+import { Form, Input, Tooltip, Modal, Checkbox, Button, InputNumber, message, Card, Select} from 'antd/lib';
 import * as style from "./style";
 import * as XLSX from 'xlsx';
 
@@ -99,6 +99,8 @@ const Edited: React.FC = () => {
   const handleCancelAdd = () => {
     setIsModalVisibleAdd(false);
   };
+
+  const [isFormValid, setIsFormValid] = useState(false);
 
   /* CRIA VAGA */
   const onFinish = async (values: any) => {
@@ -594,6 +596,11 @@ const Edited: React.FC = () => {
             form={form}
             layout="vertical"
             onFinish={onFinish}
+            onFieldsChange={() => {
+              const hasErrors = form.getFieldsError().some(({ errors }) => errors.length > 0);
+              const allTouched = form.isFieldsTouched(true); // verifica se todos foram tocados
+              setIsFormValid(!hasErrors && allTouched);
+            }}
           >
             <Form.Item
               label="Título da Vaga"
@@ -664,7 +671,7 @@ const Edited: React.FC = () => {
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit" loading={loading} block>
+              <Button type="primary" htmlType="submit" loading={loading} block disabled={!isFormValid || loading}>
                 Adicionar Vaga
               </Button>
             </Form.Item>

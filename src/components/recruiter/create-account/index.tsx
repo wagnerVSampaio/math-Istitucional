@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Checkbox, Form, Flex, Select, Modal } from "antd/lib";
+import { Checkbox, Form, Flex, Select, Modal, message } from "antd/lib";
 import Link from "next/link";
 import type { CheckboxProps } from "antd/lib";
 import { useRouter } from 'next/navigation';
@@ -64,42 +64,77 @@ const NavRecrutador = () => {
   };
 
   const RegisterRecrutador = async (values: FieldType) => {
+    // Validação dos campos obrigatórios
+    if (
+      !values.full_name ||
+      !values.cpf ||
+      !values.email ||
+      !values.password ||
+      !values.allocation ||
+      !values.campus ||
+      !registerImage
+    ) {
+      message.error("Por favor, preencha todos os campos obrigatórios!");
+      return;
+    }
+  
+  
+    console.log("Formulário de recrutador enviado!", values);
+    
     try {
       const formData = new FormData();
-
-      formData.append('full_name', values.full_name);  
-      formData.append('email', values.email); 
-      formData.append('password', values.password);
-      formData.append('user_type', 'recruiter'); 
-      formData.append('cpf', values.cpf);
-      formData.append('allocation', values.allocation); 
-      formData.append('campus', values.campus); 
-      formData.append('status', 'pending');
-
-      const defaultCoverImageUrl = "/cover.png";
-
+      
+      // Dados básicos
+      formData.append("full_name", values.full_name);
+      formData.append("email", values.email);
+      formData.append("password", values.password);
+      formData.append("cpf", values.cpf);
+      formData.append("allocation", values.allocation);
+      formData.append("campus", values.campus);
+      formData.append("user_type", "recruiter");
+      formData.append("status", "pending");
+  
+      // Imagem de perfil
       if (registerImage) {
-        const file = await fetch(registerImage).then(r => r.blob()); 
-        formData.append('profile_picture', file, 'photo.jpg');
+        try {
+          const file = await fetch(registerImage).then(r => r.blob());
+          formData.append('profile_picture', file, 'profile.jpg');
+        } catch (error) {
+          console.error("Erro ao processar imagem de perfil:", error);
+          return;
+        }
       }
-
-      const coverImageUrl = defaultCoverImageUrl;
-      const coverFile = await fetch(coverImageUrl).then((r) => r.blob()); 
-      formData.append("cover_photo", coverFile, "cover_photo.png");
-
-      const response = await fetch('http://localhost:3002/api/createusers', {
-        method: 'POST',
-        body: formData, 
+  
+      // Imagem de capa padrão
+      try {
+        const defaultCoverImageUrl = "/cover.png";
+        const coverFile = await fetch(defaultCoverImageUrl).then(r => r.blob());
+        formData.append("cover_photo", coverFile, "cover.png");
+      } catch (error) {
+        console.error("Erro ao carregar imagem padrão:", error);
+        return;
+      }
+  
+      // Envio para a API
+      const response = await fetch("http://localhost:3002/api/createusers", {
+        method: "POST",
+        body: formData,
       });
-
+  
       const data = await response.json();
+      
       if (response.ok) {
         setIsModalVisible(true);
       } else {
-        setErrorMessage(data.message || 'Erro ao registrar');
+        console.error("Erro do servidor:", data);
+        const errorMsg = data.message || "Erro ao registrar recrutador";
+        setErrorMessage(errorMsg);
+        message.error(errorMsg);
       }
     } catch (error) {
-      setErrorMessage('Erro ao registrar');
+      console.error("Erro ao enviar dados:", error);
+      setErrorMessage("Erro ao conectar com o servidor");
+      message.error("Erro ao conectar com o servidor");
     }
   };
 
