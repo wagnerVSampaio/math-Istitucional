@@ -9,6 +9,7 @@ import NotificationRecruiterPages from "../notificationRecruiter";
 import ProfessionalsPage from "../professionalsPages";
 import AddJobsPages from "../addJobsPages";
 import ProfilePage from "../profilePages";
+import InterestesPage from "../interestesUser";
 
 const Principal: React.FC = () => {
   const [value, setValue] = useState(1);
@@ -47,10 +48,7 @@ const Principal: React.FC = () => {
           <style.StyledRadioButton value={4}>
             <style.Notifications />
           </style.StyledRadioButton>
-          <style.StyledRadioButton value={5} disabled={true}>
-            <style.Chat />
-          </style.StyledRadioButton>
-          <style.StyledRadioButton value={6}>
+          <style.StyledRadioButton value={5}>
             <style.Circle />
           </style.StyledRadioButton>
         </style.RadioGroup>
@@ -64,8 +62,6 @@ const Principal: React.FC = () => {
         <AddJobsPages />
       ) : value === 4 ? (
         <NotificationRecruiterPages />
-      ) : value === 5 ? (
-        <Message />
       ) : (
         <ProfilePage />
       )}

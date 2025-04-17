@@ -17,3 +17,14 @@ export const AddButton = styled.button`
         background-color: #FFFFFF;
 }
 `
+export const DivPersonalData = styled.div`
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 800px;
+    height: 80px;
+    border-radius: 10px;
+    background-color: aliceblue;
+    padding: 30px;
+`

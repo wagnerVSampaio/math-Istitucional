@@ -2,6 +2,7 @@ import styled, {css} from "styled-components";
 import { IoMdMail } from "react-icons/io";
 import { PiStudentFill } from "react-icons/pi";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import { FaCircleInfo } from "react-icons/fa6";
 
 export const DivNotification = styled.div`
     margin: 5px auto;
@@ -12,8 +13,8 @@ export const DivNotification = styled.div`
     height: 550px;
     overflow-x: auto;
 
-    @media (max-width: 1200px) {
-    width: 80%; /* Ajusta a largura para telas grandes mas não muito grandes */
+    @media (min-width: 1280px) {
+      width: 90%; /* Ajusta a largura para telas grandes mas não muito grandes */
   }
 
   @media (max-width: 768px) {
@@ -45,18 +46,31 @@ export const StyledLi = styled.li`
   gap: 20px;
   align-items: center;
   border-bottom: 1px solid #ddd;
-  padding: 40px 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  
+  &:hover {
+    background-color: #e6f7ff;
+    cursor: pointer;
+  }
+
+  @media (min-width: 1200px) {
+    padding: 20px 0;
+  }
+
+  @media (min-width: 1440px) {
+    padding: 40px 0;
+  }
+
 `;
-export const StyledParagraph = styled.ul`
+export const StyledParagraph = styled.p`
   font-size: 20px;
   color: #006b3f;
   margin-bottom: 15px;
   font-weight: bold;
 `;
-export const StyledP = styled.ul`
+export const StyledP = styled.p`
   display: flex;
 `;
 const iconsStyle = css`
@@ -100,5 +114,20 @@ export const Degree = styled( PiStudentFill )`
 `;
 
 export const Address = styled(FaMapMarkerAlt)`
+  ${iconsStyle}
+`;
+
+export const divNotUser = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: #272727;
+`;
+export const ParagraphNotUser = styled.p`
+  font-weight: 500;
+`;
+export const Info = styled(FaCircleInfo)`
   ${iconsStyle}
 `;

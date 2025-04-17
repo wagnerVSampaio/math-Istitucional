@@ -15,13 +15,20 @@ export const GeneralItens = styled.div`
     height: 550px;
     overflow-x: auto;
 
+    @media (min-width: 1024px) { 
+        height: 550px; 
+    }
+
+    @media (min-width: 1440px) { 
+        height: 800px;
+    }
 `;
 export const DivTop = styled.div`
     background-color: white;
-    height: 300px;
+    min-height: 100px; 
     border-radius: 10px;
     position: relative;
-
+    height: auto;
 `;
 
 export const ImageWrapper = styled.div`
@@ -63,7 +70,6 @@ export const ImageCover = styled.div`
   position: relative;
   width: 100%;
   height: 100px; 
-
 `;
 export const ButtonCoverLabel = styled.label`
     position: absolute;
@@ -108,7 +114,7 @@ export const HoverText = styled.div<{ isVisible: boolean }>`
   white-space: nowrap;
   display: inline-block;
   height: auto; 
-  z-index: 1000; /* Garante que esteja acima de outros elementos */
+  z-index: 1000; 
 `;
 
 export const DivButton = styled.div`
@@ -116,15 +122,18 @@ export const DivButton = styled.div`
   margin-top: 10px;
 `;
 export const EditProfileButton = styled.button`
-  padding: 8px 150px;
+  padding: 6px 100px;
   background-color: #006b3f;
   color: white;
   border-radius: 10px;
   font-weight: bold;
   position: relative;
+  @media (min-width: 1440px) { 
+    padding: 8px 150px;
+    }
 `;
 export const ProfileButton = styled.button`
-  padding: 8px 120px;
+  padding: 6px 100px;
   background-color: white;
   color: #ddd;
   border: 1px solid #ddd;
@@ -134,28 +143,48 @@ export const ProfileButton = styled.button`
   font-weight: bold;
   display: flex;
   cursor: not-allowed;
+  @media (min-width: 1024px) {
+    margin-left: 200px;
+    }
+
+    @media (min-width: 1440px) { 
+      margin-left: 400px;
+      margin-right: 100px;
+      padding: 8px 120px;
+    }
 `;
 export const DivIcon = styled.div`
   font-size: 40px;
   color: #006b3f;
-  margin-left: 60px;
+  margin-left: auto;
+  @media (min-width: 1024px) {
+    margin-left: auto;
+      margin-right: 18px;
+    }
+
+    @media (min-width: 1440px) { 
+      margin-left: auto;
+      margin-right: 20px
+    }
 `;
 export const DivBio = styled.div`
-  position: relative;
-  padding: 20px;
-  background-color: #ffff;
+  background-color: white;
+  height: auto; 
   border-radius: 10px;
-  color: #272727;
-  display: flex;
+  position: relative;
+  padding: 10px;
+  overflow: hidden;
+  margin-top: 5px;
 `;
+
 export const DivP = styled.div`
     width: 95%;
-    height: 100px;
+    height: auto;
 `;
 
 export const DivEdit = styled.button`
   position: absolute;
-  top: 12px;
+  top: 2px;
   right: 12px;
   background-color: transparent;
   border: none;
@@ -166,7 +195,7 @@ export const DivEdit = styled.button`
 
 export const DivSave = styled.button`
   position: absolute;
-  top: 12px;
+  top: 2px;
   right: 16px;
   background-color: transparent;
   border: none;
@@ -185,10 +214,11 @@ export const Textarea = styled.textarea`
   padding: 10px;
   width: 100%;
   border: 1px solid #006b3f;
+  //resize: none;
+  overflow-y: hidden; 
   &:focus {
     border: 1px solid #006b3f; 
-    outline: none; 
-    
+    outline: none;
   }
 `;
 
@@ -234,7 +264,7 @@ export const Period = styled.span`
 
 export const Wrapper = styled.div`
   margin: 15px auto;
-  margin-top: 50px;
+  margin-top: 15px;
   padding: 20px;
   background-color: #f7f7f7;
   border-radius: 10px;

@@ -1,39 +1,28 @@
 import React, { useState } from "react";
-import { Checkbox, Form, Input, Button, Flex, Select, Modal} from "antd/lib";
+import { Checkbox, Form, Flex, Select, Modal, message } from "antd/lib";
 import Link from "next/link";
 import type { CheckboxProps } from "antd/lib";
 import { useRouter } from 'next/navigation';
-import {
-  ButtonCreate,
-  ButtonExit,
-  ButtonLabelDate,
-  DateBirthUpload,
-  UploadButtonDate,
-} from "./style";
+import * as style from './style';
 import "./formEdited.css"
+import InputMask from "react-input-mask";
+
 type FieldType = {
-  nome: string;
+  full_name: string;
   cpf: string;
   email: string;
-  photo: string;
-  lotacao: string;
-  tipo_usuario: string;
+  profile_picture: string;
+  allocation: string;
+  user_type: string;
   status: string;
   campus: string;
-  senha: string;
-  senhaconfirmacao: string;
+  password: string;
+  passwordconfirmacao: string;
 };
 
 const { Option } = Select;
 
 type SizeType = Parameters<typeof Form>[0]["size"];
-
-const normFile = (e: any) => {
-  if (Array.isArray(e)) {
-    return e;
-  }
-  return e?.fileList;
-};
 
 
 const NavRecrutador = () => {
@@ -46,23 +35,17 @@ const NavRecrutador = () => {
   const [checked, setChecked] = useState(true);
   const [disabled, setDisabled] = useState(false);
   const router = useRouter();
-  const [isModalVisible, setIsModalVisible] = useState(false); // Estado do modal
-  const [modalContent, setModalContent] = useState<string>("");
+  const [isModalVisible, setIsModalVisible] = useState(false); 
+  const [error, setError] = useState(false);
+  const [cpf, setCpf] = useState("");
+
   const onFormLayoutChange = ({ size }: { size: SizeType }) => {
     setComponentSize(size);
   };
 
-  const toggleChecked = () => {
-    setChecked(!checked);
-  };
-
-  const toggleDisable = () => {
-    setDisabled(!disabled);
-  };
-
   const onChangeCheck: CheckboxProps["onChange"] = (e) => {
-    console.log("checked = ", e.target.checked);
     setChecked(e.target.checked);
+    if (error) setError(false); 
   };
 
   const handleRegisterImageChange = (
@@ -75,297 +58,280 @@ const NavRecrutador = () => {
     }
   };
 
-  const [cpf, setCpf] = useState("");
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCpf(e.target.value);
-  };
-
-
-  {/*   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { nome, value } = e.target;
-    setFormData({
-      ...formData,
-      [nome]: value,
-    });
-  };
-
-  // Função para lidar com o upload da imagem
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setRegisterImage(imageUrl);
-      setFormData({
-        ...formData,
-        photo: file.nome, // Apenas salva o nome do arquivo; ajuste conforme necessidade
-      });
-    }
-  }; */}
-
   const handleOk = () => {
     setIsModalVisible(false);
     router.push("/");
-    // Limpar o formulário ou redirecionar o usuário se necessário
   };
 
   const RegisterRecrutador = async (values: FieldType) => {
-    console.log("Formulário enviado!", values);
-    try {
-        const formData = new FormData(); // Crie uma instância de FormData
-
-        // Adicione todos os campos ao FormData
-        formData.append('nome', values.nome);  // Nome completo do recrutador
-        formData.append('email', values.email);  // Email do recrutador
-        formData.append('senha', values.senha);  // Senha do recrutador
-        formData.append('tipo_usuario', 'recrutador');  // Tipo de usuário
-        formData.append('cpf', values.cpf);  // CPF do recrutador
-        formData.append('lotacao', values.lotacao);  // Lotação do recrutador
-        formData.append('campus', values.campus);  // Campus do recrutador
-        formData.append('status', 'pendente');  // Status do recrutador
-
-        // Adicione o arquivo da imagem se existir
-        if (registerImage) {
-            const file = await fetch(registerImage).then(r => r.blob()); // Obtenha o arquivo Blob da URL
-            formData.append('foto', file, 'photo.jpg'); // Nomeie o arquivo como você quiser
-        }
-
-        // Envia os dados para criar o usuário pendente
-        const response = await fetch('http://localhost:3002/api/createusers', {
-            method: 'POST',
-            body: formData, // Envie o FormData
-        });
-
-        const data = await response.json();
-        if (response.ok) {
-            console.log('Usuário pendente criado com sucesso:', data);
-            setIsModalVisible(true); // Exibir modal de sucesso ou redirecionar
-        } else {
-            console.error('Erro do servidor:', data);
-            setErrorMessage(data.message || 'Erro ao registrar');
-        }
-    } catch (error) {
-        console.error('Erro ao enviar dados:', error);
-        setErrorMessage('Erro ao registrar');
+    // Validação dos campos obrigatórios
+    if (
+      !values.full_name ||
+      !values.cpf ||
+      !values.email ||
+      !values.password ||
+      !values.allocation ||
+      !values.campus ||
+      !registerImage
+    ) {
+      message.error("Por favor, preencha todos os campos obrigatórios!");
+      return;
     }
-};
-
+  
+  
+    console.log("Formulário de recrutador enviado!", values);
+    
+    try {
+      const formData = new FormData();
+      
+      // Dados básicos
+      formData.append("full_name", values.full_name);
+      formData.append("email", values.email);
+      formData.append("password", values.password);
+      formData.append("cpf", values.cpf);
+      formData.append("allocation", values.allocation);
+      formData.append("campus", values.campus);
+      formData.append("user_type", "recruiter");
+      formData.append("status", "pending");
+  
+      // Imagem de perfil
+      if (registerImage) {
+        try {
+          const file = await fetch(registerImage).then(r => r.blob());
+          formData.append('profile_picture', file, 'profile.jpg');
+        } catch (error) {
+          console.error("Erro ao processar imagem de perfil:", error);
+          return;
+        }
+      }
+  
+      // Imagem de capa padrão
+      try {
+        const defaultCoverImageUrl = "/cover.png";
+        const coverFile = await fetch(defaultCoverImageUrl).then(r => r.blob());
+        formData.append("cover_photo", coverFile, "cover.png");
+      } catch (error) {
+        console.error("Erro ao carregar imagem padrão:", error);
+        return;
+      }
+  
+      // Envio para a API
+      const response = await fetch("http://localhost:3002/api/createusers", {
+        method: "POST",
+        body: formData,
+      });
+  
+      const data = await response.json();
+      
+      if (response.ok) {
+        setIsModalVisible(true);
+      } else {
+        console.error("Erro do servidor:", data);
+        const errorMsg = data.message || "Erro ao registrar recrutador";
+        setErrorMessage(errorMsg);
+        message.error(errorMsg);
+      }
+    } catch (error) {
+      console.error("Erro ao enviar dados:", error);
+      setErrorMessage("Erro ao conectar com o servidor");
+      message.error("Erro ao conectar com o servidor");
+    }
+  };
 
   return (
     <>
-        <Form<FieldType>
-          labelCol={{ span: 1 }}
-          wrapperCol={{ span: 14 }}
-          layout="horizontal"
-          initialValues={{ size: componentSize }}
-          onValuesChange={onFormLayoutChange}
-          size={componentSize as SizeType}
-          className="ant-form-item"
-          onFinish={RegisterRecrutador}
-          style={{maxWidth: "600px"}}
-        >
-          <div className="flex">
-            <div className="mr-[75px]">
-              <p className="mb-[3px]">
-                Nome completo <strong className="text-red-500"> *</strong>
-              </p>
-              <Form.Item<FieldType>
-                name="nome"
-                rules={[{ required: true, message: "Por favor, insira o nome!" }]}
-              >
-                <Input className="w-[350px]" />
-              </Form.Item>
+      <Form<FieldType>
+        labelCol={{ span: 1 }}
+        wrapperCol={{ span: 14 }}
+        layout="horizontal"
+        initialValues={{ size: componentSize }}
+        onValuesChange={onFormLayoutChange}
+        size={componentSize as SizeType}
+        className="ant-form-item"
+        onFinish={RegisterRecrutador}
+        style={{ maxWidth: "600px" }}
+      >
+        <div className="flex">
+          <div className="mr-[75px]">
+            <style.ParagraphStyled className="mb-[3px]">
+              Nome completo <strong className="text-red-500"> *</strong>
+            </style.ParagraphStyled>
+            <Form.Item<FieldType>
+              name="full_name"
+              rules={[{ required: true, message: "Por favor, insira o nome!" }]}
+            >
+              <style.InputEditForm />
+            </Form.Item>
 
-              <p className="mt-[3px] mb-[3px]">
-                CPF <strong className="text-red-500"> *</strong>
-              </p>
-              <Form.Item<FieldType>
-                name="cpf"
-                rules={[{ required: true, message: "Por favor, insira o CPF!" }]}
+            <style.ParagraphStyled className="mt-[3px] mb-[3px]">
+              CPF <strong className="text-red-500"> *</strong>
+            </style.ParagraphStyled>
+            <Form.Item<FieldType>
+              name="cpf"
+              rules={[{ required: true, message: "Por favor, insira o CPF!" }]}
+            >
+              <InputMask
+                mask="999.999.999-99"
+                value={cpf}
+                onChange={(e) => setCpf(e.target.value)}
               >
-                <Input
-                  type="text"
-                  id="cpf"
-                  value={cpf}
-                  maxLength={11}
-                  className="w-[350px]"
-                />
-              </Form.Item>
+                {({ onChange, value, ...rest }) => (
+                  <style.InputEdit
+                    {...rest}
+                    value={value}
+                    onChange={onChange}
+                    type="text"
+                    id="cpf"
+                  />
+                )}
+              </InputMask>
+            </Form.Item>
 
-              <p className="mt-[3px] mb-[3px]">
-                E-mail <strong className="text-red-500"> *</strong>
-              </p>
-              <Form.Item<FieldType>
-                name="email"
-                rules={[{ required: true, message: "Por favor, insira o e-mail!" }]}
-              >
-                <Input className="w-[350px]" />
-              </Form.Item>
-            </div>
-
-            <div>
-              <p className="mb-[3px]">
-                Foto <strong className="text-red-500"> *</strong>{" "}
-              </p>
-              <Form.Item<FieldType> name="photo">
-                <ButtonLabelDate htmlFor="registerImageUpload">
-                  <DateBirthUpload className="relative">
-                    <img
-                      src={registerImage || "background-upload.png"}
-                      alt="Register"
-                      className="w-full object-cover"
-                    />
-                    <UploadButtonDate
-                      type="file"
-                      accept="image/*"
-                      id="registerImageUpload"
-                      onChange={handleRegisterImageChange}
-                      style={{ display: "none" }}
-                    />
-                  </DateBirthUpload>
-                </ButtonLabelDate>
-              </Form.Item>
-            </div>
-          </div>
-          <div className="flex mb-1">
-            <div className="mr-[50px]">
-              <p className="mb-[3px]">
-                Lotação <strong className="text-red-500"> *</strong>
-              </p>
-              <Form.Item<FieldType> name="lotacao">
-                <Select placeholder="" style={{ width: '250px' }}>
-                  <Option value="PROAD">PROAD - Pró-Reitoria de Administração</Option>
-                  <Option value="PROCCE">PROCCE -  Pró-Reitoria da Cultura,Comunidade e Extensão</Option>
-                  <Option value="PROPLAN">PROPLAN - Pró-Reitoria de Planejamento e Desenvolvimento Institucional</Option>
-                  <Option value="PROGES">PROGES - Pró-Reitoria de Gestão Estudantil</Option>
-                  <Option value="PROEN">PROEN -  Pró-Reitoria de Ensino de Graduação</Option>
-                  <Option value="PROGEP">PROGEP -  Pró-Reitoria de Gestão de Pessoas</Option>
-                  <Option value="PROPPIT">PROPPIT -  Pró-Reitoria de Pesquisa, Pós-Graduação e Inovação Tecnológica</Option>
-                </Select>
-              </Form.Item>
-            </div>
-
-            <div>
-              <p className="mb-[3px]">
-                Campus <strong className="text-red-500"> * </strong>
-              </p>
-              <Form.Item<FieldType> name="campus">
-                <Select
-                  placeholder="Selecione o Campus"
-                  showSearch
-                  style={{ width: '250px' }}
-                  optionFilterProp="label"
-                  filterSort={(optionA, optionB) =>
-                    (optionA?.label ?? "")
-                      .toLowerCase()
-                      .localeCompare((optionB?.label ?? "").toLowerCase())
-                  }
-                  options={[
-                    {
-                      value: "Santarém (Campus sede)",
-                      label: "Santarém (Campus sede)",
-                    },
-                    {
-                      value: "Campus Alenquer",
-                      label: "Campus Alenquer",
-                    },
-                    {
-                      value: "Campus Itaituba",
-                      label: "Campus Itaituba",
-                    },
-                    {
-                      value: "Campus Monte Alegre",
-                      label: "Campus Monte Alegre",
-                    },
-                    {
-                      value: "Campus Juruti",
-                      label: "Campus Juruti",
-                    },
-                    {
-                      value: "Campus Óbidos",
-                      label: "Campus Óbidos",
-                    },
-                    {
-                      value: "Campus Oriximiná",
-                      label: "Campus Oriximiná",
-                    },
-                  ]}
-                />
-              </Form.Item>
-            </div>
-          </div>
-          <div className="flex">
-            <div className="mr-[50px]">
-              <p className="mb-[3px]">
-                Senha <strong className="text-red-500"> *</strong>
-              </p>
-              <Form.Item<FieldType>
-                name="senha"
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor, insira a senha!",
-                  },
-                ]}
-              >
-                <Input.Password className="w-[250px]" />
-              </Form.Item>
-            </div>
-            <div>
-              <p className="mb-[3px]">
-                Confirmação de senha <strong className="text-red-500"> *</strong>
-              </p>
-              <Form.Item<FieldType>
-                name="senhaconfirmacao"
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor, insira a confirmação da senha!",
-                  },
-                ]}
-              >
-                <Input.Password className="w-[250px] bg-white" />
-              </Form.Item>
-            </div>
+            <style.ParagraphStyled className="mt-[3px] mb-[3px]">
+              E-mail <strong className="text-red-500"> *</strong>
+            </style.ParagraphStyled>
+            <Form.Item<FieldType>
+              name="email"
+              rules={[{ required: true, message: "Por favor, insira o e-mail!" }]}
+            >
+              <style.InputEditForm />
+            </Form.Item>
           </div>
 
-          <div className="mb-[20px] flex">
-            <Checkbox
-              checked={checked}
-              disabled={disabled}
-              onChange={onChangeCheck}
-              className="mr-[20px]"
-            />
-            <p>
-              Para prosseguir, por favor, clique no botão{" "}
-              <strong className="text-customGreen">Aceitar Termos</strong> abaixo
-              e confirme sua concordância com nossos termos de serviço e política
-              de privacidade.
-            </p>
+          <div>
+            <style.ParagraphStyled className="mb-[3px]">
+              Foto <strong className="text-red-500"> *</strong>{" "}
+            </style.ParagraphStyled>
+            <Form.Item<FieldType> name="profile_picture">
+              <style.ButtonLabelDate htmlFor="registerImageUpload">
+                <style.DateBirthUpload className="relative">
+                  <img
+                    src={registerImage || "background-upload.png"}
+                    alt="Register"
+                    className="w-full h-full object-cover"
+                  />
+                  <style.UploadButtonDate
+                    type="file"
+                    accept="image/*"
+                    id="registerImageUpload"
+                    onChange={handleRegisterImageChange}
+                    style={{ display: "none" }}
+                  />
+                </style.DateBirthUpload>
+              </style.ButtonLabelDate>
+            </Form.Item>
           </div>
-          <div className="mt-[40px]">
-            <Flex gap="small" wrap>
-              <Link href={"/"}>
-                <ButtonExit>
-                  Voltar
-                </ButtonExit>
-              </Link>
-              <ButtonCreate type="primary" htmlType="submit">
-                Criar conta
-              </ButtonCreate>
-            </Flex>
+        </div>
+        <div className="flex">
+          <div className="mr-[50px]">
+            <style.ParagraphStyled>
+              Lotação <strong className="text-red-500"> *</strong>
+            </style.ParagraphStyled>
+            <Form.Item<FieldType> name="allocation">
+              <Select placeholder="" className="select-form-item">
+                <Option value="PROAD">PROAD - Pró-Reitoria de Administração</Option>
+                <Option value="PROCCE">PROCCE -  Pró-Reitoria da Cultura,Comunidade e Extensão</Option>
+                <Option value="PROPLAN">PROPLAN - Pró-Reitoria de Planejamento e Desenvolvimento Institucional</Option>
+                <Option value="PROGES">PROGES - Pró-Reitoria de Gestão Estudantil</Option>
+                <Option value="PROEN">PROEN -  Pró-Reitoria de Ensino de Graduação</Option>
+                <Option value="PROGEP">PROGEP -  Pró-Reitoria de Gestão de Pessoas</Option>
+                <Option value="PROPPIT">PROPPIT -  Pró-Reitoria de Pesquisa, Pós-Graduação e Inovação Tecnológica</Option>
+              </Select>
+            </Form.Item>
           </div>
-        </Form>
 
-        {/* Modal para exibir informações do usuário */}
-      <Modal 
-        title="Solicitação de cadastro bem-Sucedido" 
-        open={isModalVisible} 
+          <div>
+            <style.ParagraphStyled>
+              Campus <strong className="text-red-500"> * </strong>
+            </style.ParagraphStyled>
+            <Form.Item<FieldType> name="campus">
+              <Select
+                placeholder=""
+                showSearch
+                className="select-form-item">
+                <Option value="Santarém (Campus sede)">Santarém (Campus sede)</Option>
+                <Option value="Campus Alenquer">Campus Alenquer</Option>
+                <Option value="Campus Itaituba">Campus Itaituba</Option>
+                <Option value="Campus Monte Alegre">Campus Monte Alegre</Option>
+                <Option value="Campus Juruti">Campus Juruti</Option>
+                <Option value="Campus Óbidos">Campus Óbidos</Option>
+                <Option value="Campus Oriximiná">Campus Oriximiná</Option>
+              </Select>
+            </Form.Item>
+          </div>
+        </div>
+        <div className="flex">
+          <div className="mr-[50px]">
+            <style.ParagraphStyled className="mb-[3px]">
+              Senha <strong className="text-red-500"> *</strong>
+            </style.ParagraphStyled>
+            <Form.Item<FieldType>
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor, insira a senha!",
+                },
+              ]}
+            >
+              <style.InputEditFormPass />
+            </Form.Item>
+          </div>
+          <div>
+            <style.ParagraphStyled className="mb-[3px]">
+              Confirmação de senha <strong className="text-red-500"> *</strong>
+            </style.ParagraphStyled>
+            <Form.Item<FieldType>
+              name="passwordconfirmacao"
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor, insira a confirmação da senha!",
+                },
+              ]}
+            >
+              <style.InputEditFormPass />
+            </Form.Item>
+          </div>
+        </div>
+
+        <div className="mb-[20px] flex">
+          <Checkbox
+            checked={checked}
+            disabled={disabled}
+            onChange={onChangeCheck}
+            className="mr-[20px]"
+          />
+          <style.ParagraphStyled>
+            Para prosseguir, clique no botão{" "}
+            <strong className="text-customGreen">Aceitar Termos</strong> abaixo
+            e confirme sua concordância com nossos termos de serviço e política
+            de privacidade.
+          </style.ParagraphStyled>
+        </div>
+        <div>
+          <Flex gap="small" wrap>
+            <Link href={"/"}>
+            <style.ButtonExit className="button-item">
+              Voltar
+            </style.ButtonExit>
+          </Link>
+          <style.ButtonRegister type="primary" htmlType="submit" className="button-item">
+            Criar conta
+          </style.ButtonRegister>
+          </Flex>
+        </div>
+      </Form>
+
+      {/* Modal para exibir informações do usuário */}
+      <Modal
+        title="Solicitação de cadastro bem-sucedido"
+        open={isModalVisible}
         onOk={handleOk}
       >
-          <>
-            <p>Aguarde a aprovação da pró-reitoria selecionada no cadastro!</p>
-          </>
+        <>
+          <p>Aguarde a aprovação da pró-reitoria selecionada no cadastro!</p>
+        </>
       </Modal>
     </>
   );

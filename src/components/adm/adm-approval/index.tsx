@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import * as style from "./style"; // Ajuste o caminho conforme necessário
-import { ButtonApprove, ButtonRefuse } from "./style"; // Ajuste o estilo conforme necessário
+import * as style from "./style"; 
 import { Modal } from "antd/lib";
 
 interface PendingUser {
-  id_usuario: number;
-  nome_completo: string;
+  id_user: number;
+  full_name: string;
   email: string;
-  campus: string; // Ou ajuste se houver outra informação relevante
+  campus: string; 
+  status: string;
 }
 
 const PendingUserApproval: React.FC = () => {
@@ -15,33 +15,44 @@ const PendingUserApproval: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalVisibleDelete, setIsModalVisibleDelete] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+  const [userData, setUserData] = useState<any>(null);
 
-  // Busca usuários pendentes ao montar o componente
+
   useEffect(() => {
-    const fetchPendingUsers = async () => {
-        try {
-            const response = await fetch("http://localhost:3002/api/pendingUsers"); // Rota para buscar usuários pendentes
-            const data = await response.json();
-            setPendingUsers(data); // Armazena os usuários pendentes no estado
-        } catch (error) {
-            console.error("Erro ao buscar usuários pendentes:", error);
-        }
-    };
+    const data = sessionStorage.getItem("userData");
+    if (data) {
+      const parsedData = JSON.parse(data);
+      setUserData(parsedData);
+      console.log(parsedData);
+      
+      fetchPendingUsers(parsedData.id_user);
+    }
+  }, [pendingUsers]);
 
-    fetchPendingUsers();
-}, []);
+  const fetchPendingUsers = async (idAdm: Number) => {
 
-// Função para aprovar um usuário
+    try {
+      const response = await fetch(`http://localhost:3002/api/pendingUsers/${idAdm}`); 
+      if (!response.ok) {
+        throw new Error('Erro ao buscar usuários pendentes');
+      }
+      const data = await response.json();
+      setPendingUsers(data); 
+    } catch (error) {
+      console.error("Erro ao buscar usuários pendentes:", error);
+    } 
+  };
+
+
 const approveUser = async (userId: number) => {
     try {
         const response = await fetch(`http://localhost:3002/api/approvedUser/${userId}`, {
-            method: 'POST', // Método para aprovação
+            method: 'POST', 
         });
         
         if (response.ok) {
-            // Atualiza o status do usuário no frontend
             setPendingUsers(pendingUsers.map(user => 
-                user.id_usuario === userId ? { ...user, status: 'aprovado' } : user
+                user.id_user === userId ? { ...user, status: 'approved' } : user
             ));
             console.log('Usuário aprovado com sucesso!');
         } else {
@@ -52,38 +63,35 @@ const approveUser = async (userId: number) => {
     }
 };
 
-const rejectUser = async (userId: number) => {
-  try {
-      const response = await fetch(`http://localhost:3002/api/deleteUser/${userId}`, {
-          method: 'DELETE', // Método para recusar (deletar)
-      });
 
-      if (response.ok) {
-          // Atualiza a lista de usuários pendentes após a recusa
-          setPendingUsers(pendingUsers.filter(user => user.id_usuario !== userId));
-          console.log('Usuário recusado com sucesso!');
-      } else {
-          console.error('Erro ao recusar usuário:', response.statusText);
-      }
-  } catch (error) {
-      console.error('Erro ao recusar usuário:', error);
-  }
-};
+  const rejectUser = async (userId: number) => {
+    try {
+        const response = await fetch(`http://localhost:3002/api/deleteRecruiter/${userId}`, {
+            method: 'DELETE',
+        });
+
+        if (response.ok) {
+            setPendingUsers(pendingUsers.filter(user => user.id_user !== userId));
+            console.log('Usuário recusado com sucesso!');
+        } else {
+            console.error('Erro ao recusar usuário:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Erro ao recusar usuário:', error);
+    }
+  };
 
 
-  // Função para exibir o modal de confirmação
   const showModal = (userId: number) => {
     setSelectedUserId(userId);
     setIsModalVisible(true);
   };
 
-  // Função para fechar o modal
   const handleCancel = () => {
     setIsModalVisible(false);
     setSelectedUserId(null);
   };
 
-  // Função para confirmar a aprovação
   const handleConfirm = () => {
     if (selectedUserId) {
       approveUser(selectedUserId);
@@ -92,7 +100,6 @@ const rejectUser = async (userId: number) => {
     setSelectedUserId(null);
   };
 
-  // Função para confirmar a reprovação
   const handleDelete = () => {
     if (selectedUserId) {
       rejectUser(selectedUserId);
@@ -105,54 +112,66 @@ const rejectUser = async (userId: number) => {
     setIsModalVisibleDelete(true);
   };
 
-  // Função para fechar o modal de delete
   const handleCancelDelete = () => {
     setIsModalVisibleDelete(false);
     setSelectedUserId(null);
   };
+
+
   return (
+    
     <style.DivNotification>
+  <div>
+    {pendingUsers.length === 0 ? (
+      <style.divNotUser >
+        <style.Info/>
+        <style.ParagraphNotUser>Não há usuários para aprovar</style.ParagraphNotUser>
+      </style.divNotUser>
+    ) : (
       <style.StyledUl>
         {pendingUsers.map((user) => (
-          <style.StyledLi key={user.id_usuario} style={{ backgroundColor: '#fff' }}>
+          <style.StyledLi key={user.id_user} style={{ backgroundColor: '#fff' }}>
             <div className="flex flex-col m-[20px]">
-              <style.StyledParagraph>{user.nome_completo}</style.StyledParagraph>
+              <style.StyledParagraph>{user.full_name}</style.StyledParagraph>
               <style.StyledP>
-                <style.Email />{" "}
-                <span>{user.email}</span>
+                <style.Email /> <span>{user.email}</span>
               </style.StyledP>
               <style.StyledP>
                 <style.Address /> {user.campus}
               </style.StyledP>
               <div className="flex mt-[40px]">
-                <ButtonRefuse onClick={() => showModalDelete(user.id_usuario)}>Recusar</ButtonRefuse>
-                <ButtonApprove onClick={() => showModal(user.id_usuario)}>Aprovar</ButtonApprove>
+                <style.ButtonRefuse onClick={() => showModalDelete(user.id_user)}>Recusar</style.ButtonRefuse>
+                <style.ButtonApprove onClick={() => showModal(user.id_user)}>Aprovar</style.ButtonApprove>
               </div>
             </div>
           </style.StyledLi>
         ))}
       </style.StyledUl>
-      <Modal
-        title="Deseja prosseguir com a aprovação?"
-        open={isModalVisible}
-        onOk={handleConfirm}
-        onCancel={handleCancel}
-        okText="Sim"
-        cancelText="Não"
-      >
-        <p>Você está prestes a aprovar o usuário. Deseja continuar?</p>
-      </Modal>
-      <Modal
-        title="Deseja recusar?"
-        open={isModalVisibleDelete}
-        onOk={handleDelete}
-        onCancel={handleCancelDelete}
-        okText="Sim"
-        cancelText="Não"
-      >
-        <p>Você está prestes a reprovar o usuário. Deseja continuar?</p>
-      </Modal>
-    </style.DivNotification>
+    )}
+
+    <Modal
+      title="Deseja prosseguir com a aprovação?"
+      open={isModalVisible}
+      onOk={handleConfirm}
+      onCancel={handleCancel}
+      okText="Sim"
+      cancelText="Não"
+    >
+      <p>Você está prestes a aprovar o usuário. Deseja continuar?</p>
+    </Modal>
+    <Modal
+      title="Deseja recusar?"
+      open={isModalVisibleDelete}
+      onOk={handleDelete}
+      onCancel={handleCancelDelete}
+      okText="Sim"
+      cancelText="Não"
+    >
+      <p>Você está prestes a reprovar o usuário. Deseja continuar?</p>
+    </Modal>
+  </div>
+</style.DivNotification>
+
   );
 };
 

@@ -1,10 +1,11 @@
+import NotificationServant from '@/components/servant/notification-servant';
 import React from 'react';
-import Notification from '@/components/servant/notification-servant';
+
 
 const NotificationPages: React.FC = () => {
   return (
     <div>
-      <Notification />
+      <NotificationServant />
     </div>
   );
 };

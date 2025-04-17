@@ -8,7 +8,7 @@ import ProfilePages from "@/pages/profilePages";
 import Message from "@/components/message";
 import Jobs from "../jobsPages";
 import * as style from "./style";
-import NotificationPages from "../notificationPages";
+import NotificationServant from "@/components/servant/notification-servant";
 
 const Principal: React.FC = () => {
   const [value, setValue] = useState(1);
@@ -63,7 +63,7 @@ const Principal: React.FC = () => {
       ) : value === 3 ? (
         <Jobs />
       ) : value === 4 ? (
-        <NotificationPages />
+        <NotificationServant />
       ) : value === 5 ? (
         <Message />
       ) : (

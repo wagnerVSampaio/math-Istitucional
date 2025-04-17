@@ -10,12 +10,18 @@ export const DivTopHomePage = styled.div`
     position: relative;
     overflow: hidden;
     margin-top: 65px;
+    @media (min-width: 1024px) { 
+        height: 500px; 
+    }
+    @media (min-width: 1440px) {
+        height: 700px; 
+    }
 `;
 export const DivMenu = styled.div`
   position: fixed;
   left: 20px;
   width: 150px;
-  height: 33%; 
+  height: auto; 
   z-index: 3; 
   color: #272727;
   background-color: white;
@@ -25,9 +31,9 @@ export const DivMenu = styled.div`
 export const StyledParagraph = styled.div`
     margin-top: 50px;
     padding-bottom: 10px;
-    font-size: 14px;
+    font-size: 11px;
     text-align: center;
-    border-bottom: 1px solid #ddd;
+    //border-bottom: 1px solid #ddd;
     color: #006B3F;
     font-weight: bold;
 `;
@@ -39,6 +45,9 @@ export const ImageHome = styled.div`
   height: 100%; 
   object-fit: cover;
   z-index: 1;
+  @media (min-width: 1280px) { 
+    height: auto;
+    }
 `;
 export const DivRadio = styled.div`
     position: absolute;

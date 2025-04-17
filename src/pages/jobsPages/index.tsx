@@ -13,7 +13,7 @@ const Jobs: React.FC = () => {
     location: "",
     area: "",
     experience: "",
-    postedago: "",
+    posted_at: "",
   });
 
   const [selectedJob, setSelectedJob] = useState<JobDetailsProps | null>(null);
@@ -25,7 +25,7 @@ const Jobs: React.FC = () => {
     const fetchJobs = async () => {
       setLoading(true);
       try {
-        const response = await fetch("http://localhost:3002/api/getVagas");
+        const response = await fetch("http://localhost:3002/api/getJob");
         const data = await response.json();
         
         if (Array.isArray(data)) {
@@ -53,15 +53,15 @@ const Jobs: React.FC = () => {
 
   const filteredJobs = useMemo(() => {
     return Array.isArray(jobs) ? jobs.filter((job) => {
-      const jobPostedDate = dayjs(job.postedago);
-      const filterPostedDate = filters.postedago ? dayjs().subtract(Number(filters.postedago), 'day') : null;
+      const jobPostedDate = dayjs(job.posted_at);
+      const filterPostedDate = filters.posted_at ? dayjs().subtract(Number(filters.posted_at), 'day') : null;
   
       return (
         (!filters.title || job.title.toLowerCase().includes(filters.title.toLowerCase())) &&
         (!filters.location || job.location.toLowerCase().includes(filters.location.toLowerCase())) &&
         (!filters.area || job.requirements.toLowerCase().includes(filters.area.toLowerCase())) &&
         (!filters.experience || job.requirements.toLowerCase().includes(filters.experience.toLowerCase())) &&
-        (!filters.postedago || (filterPostedDate && jobPostedDate.isAfter(filterPostedDate)))
+        (!filters.posted_at || (filterPostedDate && jobPostedDate.isAfter(filterPostedDate)))
       );
     }) : [];
   }, [filters, jobs]);
@@ -127,11 +127,11 @@ const Jobs: React.FC = () => {
         ) : (
           itensDaPaginaAtual.map((job) => (
             <JobCard
-              key={job.id}
+              key={job.id_job}
               title={job.title}
               description={job.description}
               location={job.location}
-              postedago={dayjs(job.postedago).format('DD/MM/YYYY HH:mm')} // Formatar a data aqui
+              posted_at={dayjs(job.posted_at).format('DD/MM/YYYY')} 
               onClick={() => handleJobClick(job)}
             />
           ))
@@ -158,14 +158,15 @@ const Jobs: React.FC = () => {
       >
         {selectedJob && (
           <JobDetails
-            id={selectedJob.id}
+            id_job={selectedJob.id_job}
             title={selectedJob.title}
             description={selectedJob.description}
             requirements={selectedJob.requirements}
             benefits={selectedJob.benefits}
             location={selectedJob.location}
-            postedago={dayjs(selectedJob.postedago).format('DD/MM/YYYY HH:mm')} 
-            salary={selectedJob.salary}
+            posted_at={dayjs(selectedJob.posted_at).format('DD/MM/YYYY HH:mm')} 
+            recruiter_name={selectedJob.recruiter_name}
+            gratified_function={selectedJob.gratified_function}
             contact={selectedJob.contact}
           />
         )}

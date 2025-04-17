@@ -5,7 +5,8 @@ import { FaUserCircle } from "react-icons/fa";
 import { IoBag, IoNotifications } from "react-icons/io5";
 import { MdChat } from "react-icons/md";
 import { BsPeopleFill } from "react-icons/bs";
-import { RiAddCircleFill } from "react-icons/ri";
+import { LuClipboardList } from "react-icons/lu";
+import { IoBagSharp } from "react-icons/io5";
 
 const { Search } = Input;
 
@@ -96,6 +97,9 @@ export const Circle = styled(FaUserCircle)`
   ${iconStyle}
 `;
 
-export const Add = styled(RiAddCircleFill)`
+export const Add = styled(IoBagSharp)`
+  ${iconStyle}
+`;
+export const Interested = styled(LuClipboardList)`
   ${iconStyle}
 `;

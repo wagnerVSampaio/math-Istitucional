@@ -1,3 +1,36 @@
-.ant-form-item {
+@media (min-width: 1024px) {
+  .ant-form-item {
+    margin-bottom: 5px !important;
+  }
+}
+@media (min-width: 1440px) {
+  .ant-form-item {
     margin-bottom: 7px !important;
   }
+}
+@media (min-width: 1024px) {
+  .select-form-item {
+  width: 220px !important;
+  height: 30px !important;
+}
+}
+@media (min-width: 1440px) {
+  .select-form-item {
+    width: 280px !important;
+    height: 35px !important;
+}
+}
+@media (min-width: 1024px) {
+  .button-item {
+    width: 220px !important;
+    height: 30px !important;
+    margin-top: 5px !important;
+  }
+}
+@media (min-width: 1440px) {
+  .button-item {
+    width: 290px !important;
+    height: 35px !important;
+    margin-top: 20px !important;
+  }
+}

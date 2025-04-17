@@ -7,6 +7,7 @@ import ProfilePages from "@/pages/profilePages";
 import * as style from "./style";
 import AdmPage from "../admPages";
 import Search from "../../components/adm/search-professionals";
+import NotificationAdm from "@/components/adm/notification-adm";
 
 const Principal: React.FC = () => {
   const [value, setValue] = useState(1);
@@ -43,6 +44,9 @@ const Principal: React.FC = () => {
             <style.ListProfessinals />
           </style.StyledRadioButton>
           <style.StyledRadioButton value={4}>
+            <style.Notifications />
+          </style.StyledRadioButton>
+          <style.StyledRadioButton value={5}>
             <style.Circle />
           </style.StyledRadioButton>
         </style.RadioGroup>
@@ -54,6 +58,8 @@ const Principal: React.FC = () => {
         <AdmPage />
       ) : value === 3 ? (
         <Search highlightedId={null} />
+      ) : value === 4 ? (
+        <NotificationAdm/>
       ) : (
         <ProfilePages />
       )}

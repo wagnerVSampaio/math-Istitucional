@@ -5,7 +5,7 @@ import {
   EnvironmentOutlined,
   UserOutlined,
 } from "@ant-design/icons/lib";
-
+import { IoCheckmarkCircleSharp } from "react-icons/io5";
 export const DivFooter = styled.div`
   position: fixed;
   bottom: 0;
@@ -87,6 +87,10 @@ export const CalendarIcon = styled(CalendarOutlined)`
 export const UserIcon = styled(UserOutlined)`
   margin-right: 5px;
 `;
+export const Checked = styled(IoCheckmarkCircleSharp)`
+  margin-right: 5px;
+  font-size: 22px;
+`;
 
 export const DescriptionWrapper = styled.p`
 text-align: justify;
@@ -98,4 +102,28 @@ text-align: justify;
   -webkit-box-orient: vertical;
   height: 7.6;
   line-height: 1.5em;
+`;
+
+export const StyledButton = styled.button`
+  background-color: #008C4A; /* Cor padrão do botão */
+  color: white;
+  font-weight: 400;
+  padding: 6px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #006b3f; /* Cor do botão ao passar o mouse */
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:active {
+    background-color: #005a36; /* Cor do botão ao clicar */
+  }
 `;

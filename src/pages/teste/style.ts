@@ -21,7 +21,7 @@ export const StyledUl = styled.ul`
   background-color: #f4f4f4;
   list-style-type: none;
   //margin: 20px;
-  overflow: auto;
+  overflow-x: auto;
 
   &:hover {
     border-color: #ccc;
@@ -124,4 +124,12 @@ export const ButtonRemove = styled.button`
   border-radius: 5px;
   margin-right: 15px;
   font-weight: 500;
+`;
+export const CardWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 20px;
+  padding: 10px;
 `;
