@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { SlArrowDown, SlArrowUp } from "react-icons/sl";
+import { SlArrowDown, SlArrowUp, SlArrowLeftCircle } from "react-icons/sl";
 import { Form, Input, Button, message } from "antd/lib";
-import FooterExpandable from "@/components/footer-expandable";
 import HeaderOverall from "@/components/header-overall";
 import * as style from "./style";
+import Link from "next/link";
 
 type FieldType = {
   name?: string;
@@ -14,6 +14,7 @@ type FieldType = {
 };
 
 const CadastroExpansivel: React.FC = () => {
+
   const [userData, setUserData] = useState<FieldType>({
     name: "",
     email: "",
@@ -27,7 +28,7 @@ const CadastroExpansivel: React.FC = () => {
 
   useEffect(() => {
     const data = sessionStorage.getItem("userData");
-    console.log(data)
+    console.log(data);
     if (data) {
       const parsedData = JSON.parse(data);
       setUserData({
@@ -52,7 +53,7 @@ const CadastroExpansivel: React.FC = () => {
     });
   };
 
-  const salvarDados = async () => {
+  const saveDados = async () => {
     if (!idUser) {
       message.error("ID do usuário não encontrado.");
       return;
@@ -78,9 +79,6 @@ const CadastroExpansivel: React.FC = () => {
         throw new Error("Erro ao atualizar dados.");
       }
 
-      const data = await response.json();
-      message.success("Dados atualizados com sucesso!");
-      console.log(data)
       const updatedUser = {
         id_user: idUser,
         full_name: payload.full_name,
@@ -89,7 +87,6 @@ const CadastroExpansivel: React.FC = () => {
         password: payload.password,
       };
       sessionStorage.setItem("userData", JSON.stringify(updatedUser));
-      console.log(updatedUser)
     } catch (error) {
       console.error("Erro:", error);
       message.error("Erro ao atualizar os dados. Tente novamente.");
@@ -101,8 +98,14 @@ const CadastroExpansivel: React.FC = () => {
       <HeaderOverall />
       <div className="flex justify-center items-center flex-col">
         <div>
-          <form>
-            <h1 className="text-green-900 font-bold text-[20px] mb-[60px] mt-[15px] mr-[140px] ml-[140px]">
+          <form className="flex mt-[15px]">
+          <div className="ml-[2%] ">
+                <Link href={"/inside"}><style.buttonReturn
+                >
+                  <SlArrowLeftCircle />
+                </style.buttonReturn></Link>
+                </div>
+            <h1 className="text-green-900 font-bold text-[20px] mb-[60px] mr-[140px] ml-[140px]">
               Preencha os blocos com seus dados e mantenha seus dados atualizados para se candidatar a vagas.
               Caso realize alterações, estes ajustes serão replicados para todas as suas candidaturas ativas.
             </h1>
@@ -130,9 +133,9 @@ const CadastroExpansivel: React.FC = () => {
                     padding: "20px",
                   }}
                 >
-                  <div className="flex">
-                    <div className="mr-[50px]">
-                      <p className="mb-[3px]">Nome <strong className="text-red-500">*</strong></p>
+                  <div className="flex flex-col justify-center items-center">
+                    <div>
+                      <p className="mr-[7px]">Nome <strong className="text-red-500">*</strong></p>
                       <Form.Item<FieldType> name="name">
                         <Input
                           className="w-[350px]"
@@ -141,22 +144,9 @@ const CadastroExpansivel: React.FC = () => {
                         />
                       </Form.Item>
                     </div>
-
+                    
                     <div>
-                      <p className="mb-[3px]">Telefone <strong className="text-red-500">*</strong></p>
-                      <Form.Item<FieldType> name="phone">
-                        <Input
-                          className="w-[350px] bg-white"
-                          value={userData.phone}
-                          onChange={(e) => handleChange(e, "phone")}
-                        />
-                      </Form.Item>
-                    </div>
-                  </div>
-
-                  <div className="flex">
-                    <div className="mr-[50px]">
-                      <p className="mb-[3px]">E-mail <strong className="text-red-500">*</strong></p>
+                      <p className="mr-[7px]">E-mail <strong className="text-red-500">*</strong></p>
                       <Form.Item<FieldType> name="email">
                         <Input
                           className="w-[350px] bg-white"
@@ -167,7 +157,7 @@ const CadastroExpansivel: React.FC = () => {
                     </div>
 
                     <div>
-                      <p className="mb-[3px]">Senha <strong className="text-red-500">*</strong></p>
+                      <p className="mr-[7px]">Senha <strong className="text-red-500">*</strong></p>
                       <Form.Item<FieldType> name="password">
                         <Input.Password
                           className="w-[350px] bg-white"
@@ -178,18 +168,21 @@ const CadastroExpansivel: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex justify-end mt-4">
-                    <Button type="primary" onClick={salvarDados}>
-                      Salvar Alterações
-                    </Button>
-                  </div>
                 </div>
               )}
             </div>
+
+            <style.DivFooter>
+              <h1 className='text-customDark font-bold p-[20px] text-[18px]'>
+                Após clicar em Salvar, suas informações serão atualizadas
+              </h1>
+              <div className='pt-3 flex gap-4'>
+                <style.FooterButton onClick={saveDados}>SALVAR</style.FooterButton>
+              </div>
+            </style.DivFooter>
           </form>
         </div>
       </div>
-      <FooterExpandable />
     </>
   );
 };

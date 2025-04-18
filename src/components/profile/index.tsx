@@ -875,7 +875,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
             <Link href={"../expandable"}>
               <style.EditProfileButton>Editar perfil</style.EditProfileButton>
             </Link>
-            <style.DivIcon>
+            <style.DivIcon style={{cursor: "not-allowed"}}>
               <Tooltip title="Configurações da conta" placement="left">
                 <IoSettingsSharp />
               </Tooltip>
