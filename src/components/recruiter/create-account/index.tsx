@@ -63,6 +63,8 @@ const NavRecrutador = () => {
     router.push("/");
   };
 
+  const URL_API = process.env.NEXT_PUBLIC_URL_API;
+
   const RegisterRecrutador = async (values: FieldType) => {
     // Validação dos campos obrigatórios
     if (
@@ -116,7 +118,7 @@ const NavRecrutador = () => {
       }
   
       // Envio para a API
-      const response = await fetch("http://localhost:3002/api/createusers", {
+      const response = await fetch(`${URL_API}/api/createusers`, {
         method: "POST",
         body: formData,
       });

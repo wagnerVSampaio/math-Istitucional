@@ -30,6 +30,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
+  const URL_API = process.env.NEXT_PUBLIC_URL_API;
 
   // Exibe o modal
   const showModalAdd = () => {
@@ -46,7 +47,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
     setLoading(true);
     
     try {
-      const response = await fetch("http://localhost:3002/api/createvagas", {
+      const response = await fetch(`${URL_API}/api/createvagas`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -83,7 +84,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await fetch("http://localhost:3002/api/getVagas"); 
+        const response = await fetch(`${URL_API}/api/getVagas`); 
         const data = await response.json();
         if (Array.isArray(data)) {
           setJobs(data);
@@ -98,46 +99,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
     fetchJobs();
   }, []);
 
-/*   const handleEditJob = (job: JobDetails) => {
-    setEditingJob(job);
-    setIsModalVisible(true);
-  }; */
 
-/*   const handleDeleteJob = async (id: number) => {
-    try {
-      await fetch(`http://localhost:3002/api/deleteVaga/${id}`, { method: "DELETE" });
-      setJobs(jobs.filter((job) => job.id !== id));
-    } catch (error) {
-      console.error("Erro ao deletar a vaga:", error);
-    }
-  }; */
-
-  /* const handleModalOk = async (values: JobDetails) => {
-    try {
-      await fetch(`http://localhost:3002/api/updateVaga/${editingJob?.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
-      setJobs((prevJobs) =>
-        prevJobs.map((job) => (job.id === editingJob?.id ? { ...job, ...values } : job))
-      );
-      setIsModalVisible(false);
-      setEditingJob(null);
-    } catch (error) {
-      console.error("Erro ao editar a vaga:", error);
-    }
-  };
-
-  const handleModalCancel = () => {
-    setIsModalVisible(false);
-    setEditingJob(null);
-  }; */
-
-
-  
 
   // Função para alternar entre a seleção e a remoção
   const showModal = () => {
@@ -156,7 +118,7 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
 
       // Faz a requisição para deletar cada usuário selecionado
       for (let userId of selectedAdms) {
-        const response = await fetch(`http://localhost:3002/api/deleteVaga/${userId}`, {
+        const response = await fetch(`${URL_API}/api/deleteVaga/${userId}`, {
           method: 'DELETE',
         });
 

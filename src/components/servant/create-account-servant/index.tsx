@@ -79,7 +79,7 @@ const NavServidor = () => {
     return date.format("YYYY-MM-DD");
   };
 
-
+  const URL_API = process.env.NEXT_PUBLIC_URL_API;
 const RegisterServidor = async (values: FieldType) => {
   if (
     !values.full_name ||
@@ -144,7 +144,7 @@ const RegisterServidor = async (values: FieldType) => {
       return;
     }
 
-    const response = await fetch("http://localhost:3002/api/createusers", {
+    const response = await fetch(`${URL_API}/api/createusers`, {
       method: "POST",
       body: formData,
     });

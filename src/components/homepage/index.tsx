@@ -90,9 +90,10 @@ const HomePageContainer = () => {
     localStorage.removeItem("userData");
   }; */
 
+  const URL_API = process.env.NEXT_PUBLIC_URL_API;
   const handleConfirm = async () => {
     try {
-        const response = await fetch('http://localhost:3002/api/logout', {
+        const response = await fetch(`${URL_API}/api/logout`, {
             method: 'POST',
         });
 
@@ -120,7 +121,7 @@ const data = sessionStorage.getItem("userData");
   if (data) {
     const parsedData = JSON.parse(data);
 
-    const response = await fetch(`http://localhost:3002/api/getPhoto/${parsedData.id_user}/photos`);
+    const response = await fetch(`${URL_API}/api/getPhoto/${parsedData.id_user}/photos`);
     if (!response.ok) {
       console.error('Erro ao buscar fotos do usuário.');
       return;
@@ -163,7 +164,7 @@ useEffect(() => {
             <ImageCover className="relative">
               <img
                 style={{ borderRadius: "10px 10px 0 0" }}
-                src={`http://localhost:3002/uploads/${coverImage}` || "/default_cover.png"}
+                src={`${URL_API}/uploads/${coverImage}` || "/default_cover.png"}
                 alt="Cover"
                 className="w-full h-[50px] object-cover"
               />
@@ -171,7 +172,7 @@ useEffect(() => {
 
             <ImageWrapper className="relative">
               <img
-                src={`http://localhost:3002/uploads/${profileImage}` || "/default_cover.png"}
+                src={`${URL_API}/uploads/${profileImage}` || "/default_cover.png"}
                 alt="Profile"
                 className="w-full h-[50px] object-cover"
               />

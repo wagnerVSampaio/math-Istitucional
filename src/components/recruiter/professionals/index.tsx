@@ -48,9 +48,12 @@ const UserInterests: React.FC = () => {
   const [selectedExperience, setSelectedExperience] = useState<string | null>(null);
   const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
 
+
+  const URL_API = process.env.NEXT_PUBLIC_URL_API;
+
   const fetchProfessionals = async () => {
     try {
-      const response = await fetch('http://localhost:3002/api/userServer');
+      const response = await fetch(`${URL_API}/api/userServer`);
       if (!response.ok) {
         throw new Error('Erro ao buscar profissionais');
       }
@@ -303,7 +306,7 @@ const UserInterests: React.FC = () => {
               <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                 <style.StyledImageContainer>
                   <style.StyledImage
-                    src={`http://localhost:3002/uploads/${item.profile_picture}`}
+                    src={`${URL_API}/uploads/${item.profile_picture}`}
                     alt={item.full_name}
                   />
                 </style.StyledImageContainer>
@@ -333,7 +336,7 @@ const UserInterests: React.FC = () => {
           <Card>
             <div style={{ display: 'flex' }}>
               <style.StyledImage
-                src={`http://localhost:3002/uploads/${selectedUser.profile_picture}`}
+                src={`${URL_API}/uploads/${selectedUser.profile_picture}`}
                 style={{
                   width: '100px',
                   height: '100px',

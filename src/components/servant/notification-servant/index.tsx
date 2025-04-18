@@ -42,6 +42,7 @@ const NotificationServant: React.FC = () => {
         loadNotifications();
     }, []);
 
+    const URL_API = process.env.NEXT_PUBLIC_URL_API;
     const loadNotifications = async () => {
         const data = sessionStorage.getItem("userData");
         if (!data) {
@@ -53,7 +54,7 @@ const NotificationServant: React.FC = () => {
         const idUser = userData.id_user;
 
         try {
-            const response = await fetch(`http://localhost:3002/api/allNotification`);
+            const response = await fetch(`${URL_API}/api/allNotification`);
             if (response.ok) {
                 const data = await response.json();
                 setNotifications(data);
@@ -91,7 +92,7 @@ const NotificationServant: React.FC = () => {
         const userId = userData.id_user;
     
         try {
-            const response = await fetch(`http://localhost:3002/api/deleteId/${id}`, {
+            const response = await fetch(`${URL_API}/api/deleteId/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -124,7 +125,7 @@ const NotificationServant: React.FC = () => {
         const id_user = userData.id_user;
     
         try {
-            const response = await fetch(`http://localhost:3002/api/maskNotification/${notification_id}/read`, {
+            const response = await fetch(`${URL_API}/api/maskNotification/${notification_id}/read`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

@@ -36,9 +36,10 @@ const Search: React.FC<AdmProps> = ({ usersId }) => {
     }
 }, []); 
 
+const URL_API = process.env.NEXT_PUBLIC_URL_API;
 const fetchApprovedUsers = async (idAdm: number) => {
     try {
-        const response = await fetch(`http://localhost:3002/api/recruiterOk/${idAdm}`); 
+        const response = await fetch(`${URL_API}/api/recruiterOk/${idAdm}`); 
         if (!response.ok) {
             throw new Error('Erro ao buscar usuários aprovados');
         }
@@ -62,7 +63,7 @@ const fetchApprovedUsers = async (idAdm: number) => {
     try {
 
         for (let userId of selectedAdms) {
-            const response = await fetch(`http://localhost:3002/api/deleteRecruiter/${userId}`, {
+            const response = await fetch(`${URL_API}/api/deleteRecruiter/${userId}`, {
                 method: 'DELETE', 
             });
 

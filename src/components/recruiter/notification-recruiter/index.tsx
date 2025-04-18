@@ -50,9 +50,11 @@ const NotificationRecruiter: React.FC = () => {
   }, [selectedMenu]); // Recarrega as notificações sempre que o menu mudar
 
   // Função para carregar todas as notificações
+
+  const URL_API = process.env.NEXT_PUBLIC_URL_API;
   const fetchNotifications = async () => {
     try {
-      const response = await fetch('http://localhost:3002/api/allNotification');
+      const response = await fetch(`${URL_API}/api/allNotification`);
       const data = await response.json();
       setNotifications(data);
     } catch (error) {
@@ -70,7 +72,7 @@ const NotificationRecruiter: React.FC = () => {
     const { id_user } = JSON.parse(userData);
 
     try {
-      const response = await fetch(`http://localhost:3002/api/idNotification/${id_user}`);
+      const response = await fetch(`${URL_API}/api/idNotification/${id_user}`);
       const data = await response.json();
       setNotifications(data);
     } catch (error) {
@@ -93,7 +95,7 @@ const NotificationRecruiter: React.FC = () => {
     const { id_user } = JSON.parse(userData);
 
     try {
-      const response = await fetch(`http://localhost:3002/api/createNotification/${id_user}`, {
+      const response = await fetch(`${URL_API}/api/createNotification/${id_user}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -126,7 +128,7 @@ const NotificationRecruiter: React.FC = () => {
     const id_user = userData.id_user;
 
     try {
-        const response = await fetch(`http://localhost:3002/api/maskNotification/${notification_id}/read`, {
+        const response = await fetch(`${URL_API}/api/maskNotification/${notification_id}/read`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -158,7 +160,7 @@ const NotificationRecruiter: React.FC = () => {
   // Função para excluir uma notificação
   const handleDeleteNotification = async (id: number) => {
     try {
-      const response = await fetch(`http://localhost:3002/api/deleteNotification/${id}`, {
+      const response = await fetch(`${URL_API}/api/deleteNotification/${id}`, {
         method: 'DELETE',
       });
 
@@ -186,8 +188,7 @@ const NotificationRecruiter: React.FC = () => {
     const userData = JSON.parse(data);
     const id_user = userData.id_user;
     try {
-      const response = await fetch(
-        `http://localhost:3002/api/delUserNotification/${notificationId}`,
+      const response = await fetch(`${URL_API}/api/delUserNotification/${notificationId}`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },

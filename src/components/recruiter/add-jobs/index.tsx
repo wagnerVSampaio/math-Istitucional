@@ -102,6 +102,8 @@ const Edited: React.FC = () => {
 
   const [isFormValid, setIsFormValid] = useState(false);
 
+  const URL_API = process.env.NEXT_PUBLIC_URL_API;
+
   /* CRIA VAGA */
   const onFinish = async (values: any) => {
     setLoading(true);
@@ -116,7 +118,7 @@ const Edited: React.FC = () => {
     const idRecruiter = userData.id_user;
 
     try {
-      const response = await fetch("http://localhost:3002/api/createJobs", {
+      const response = await fetch(`${URL_API}/api/createJobs`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -160,7 +162,7 @@ const Edited: React.FC = () => {
       const userData = JSON.parse(data);
       const idRecruiter = userData.id_user;
       try {
-        const response = await fetch(`http://localhost:3002/api/getJobIDRecruiter/${idRecruiter}`);
+        const response = await fetch(`${URL_API}/api/getJobIDRecruiter/${idRecruiter}`);
         const data = await response.json();
 
         if (Array.isArray(data)) {
@@ -217,7 +219,7 @@ const Edited: React.FC = () => {
           id_recruiter: idRecruiter
         };
 
-        const response = await fetch(`http://localhost:3002/api/updateJob/${editingJob.id_job}`, {
+        const response = await fetch(`${URL_API}/api/updateJob/${editingJob.id_job}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -262,7 +264,7 @@ const Edited: React.FC = () => {
     try {
       const updatedUsers = jobs.filter(user => !selectedAdms.includes(user.id_job));
       for (let userId of selectedAdms) {
-        const response = await fetch(`http://localhost:3002/api/deleteJob/${userId}`, {
+        const response = await fetch(`${URL_API}/api/deleteJob/${userId}`, {
           method: 'DELETE',
         });
         if (!response.ok) {
@@ -334,8 +336,7 @@ const Edited: React.FC = () => {
       const id_recruiter = userData.id_user;
       setLoading(true);
       try {
-        const response = await fetch(
-          `http://localhost:3002/api/interestedJob/${id_recruiter}`
+        const response = await fetch(`${URL_API}/api/interestedJob/${id_recruiter}`
         );
         if (!response.ok) throw new Error("Erro ao buscar dados");
         const data: Job[] = await response.json();
@@ -401,7 +402,7 @@ const Edited: React.FC = () => {
     const id_recruiter = userData.id_user;
 
     try {
-      const response = await fetch(`http://localhost:3002/api/interestedJobRecruiter/${id_recruiter}/${jobId}`);
+      const response = await fetch(`${URL_API}/api/interestedJobRecruiter/${id_recruiter}/${jobId}`);
       if (!response.ok) {
         throw new Error('Erro ao obter interessados');
       }
@@ -533,7 +534,7 @@ const Edited: React.FC = () => {
                   <style.StyledList key={user.id_interested}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                       <style.StyledImage
-                        src={`http://localhost:3002/uploads/${user.profile_picture}`}
+                        src={`${URL_API}/uploads/${user.profile_picture}`}
                         style={{
                           width: '60px',
                           height: '60px',

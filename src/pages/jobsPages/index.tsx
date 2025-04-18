@@ -16,16 +16,18 @@ const Jobs: React.FC = () => {
     posted_at: "",
   });
 
+
   const [selectedJob, setSelectedJob] = useState<JobDetailsProps | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [jobs, setJobs] = useState<JobDetailsProps[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const URL_API = process.env.NEXT_PUBLIC_URL_API;
   useEffect(() => {
     const fetchJobs = async () => {
       setLoading(true);
       try {
-        const response = await fetch("http://localhost:3002/api/getJob");
+        const response = await fetch(`${URL_API}/api/getJob`);
         const data = await response.json();
         
         if (Array.isArray(data)) {
