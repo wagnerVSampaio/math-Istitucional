@@ -49,6 +49,8 @@ const UserInterests: React.FC = () => {
     const [selectedUser, setSelectedUser] = useState<Interested | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
 
+    const URL_API = process.env.NEXT_PUBLIC_URL_API;
+
     useEffect(() => {
         const fetchInterested = async () => {
             const id_recruiter = sessionStorage.getItem('userData') ? JSON.parse(sessionStorage.getItem('userData')!).id_recruiter : null;
@@ -60,7 +62,7 @@ const UserInterests: React.FC = () => {
             }
 
             try {
-                const response = await fetch(`http://localhost:3002/api/idInterested/${id_recruiter}`);
+                const response = await fetch(`${URL_API}/api/idInterested/${id_recruiter}`);
                 if (!response.ok) {
                     throw new Error('Erro ao buscar dados.');
                 }
@@ -82,7 +84,7 @@ const UserInterests: React.FC = () => {
 
 
         try {
-            const response = await fetch('http://localhost:3002/api/deleteInterested', {
+            const response = await fetch(`${URL_API}/api/deleteInterested`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -147,7 +149,7 @@ const UserInterests: React.FC = () => {
                         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '15px' }}>
                             <style.StyledImageContainer>
                                 <style.StyledImage
-                                    src={`http://localhost:3002/uploads/${item.profile_picture}`}
+                                    src={`${URL_API}/uploads/${item.profile_picture}`}
                                     alt={item.full_name}
                                     style={{ width: '100px', height: '100px', borderRadius: '50%', marginRight: '25px', marginLeft: '20px' }}
                                 />
@@ -181,7 +183,7 @@ const UserInterests: React.FC = () => {
                     <Card>
                         <div style={{ display: 'flex' }}>
                             <style.StyledImage
-                                src={`http://localhost:3002/uploads/${selectedUser.profile_picture}`}
+                                src={`${URL_API}/uploads/${selectedUser.profile_picture}`}
                                 style={{ width: '100px', height: '100px', borderRadius: '50%', marginRight: '25px', marginLeft: '20px', marginBottom: '20px' }}
                             />
                             <div style={{ display: 'flex', flexDirection: 'column' }}>

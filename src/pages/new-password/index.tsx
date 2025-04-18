@@ -19,6 +19,7 @@ const NewPassword: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [email, setEmail] = useState<string | null>(null);
 
+    const URL_API = process.env.NEXT_PUBLIC_URL_API;
     useEffect(() => {
         // Recupera o e-mail do localStorage
         const storedEmail = sessionStorage.getItem('resetPassword');
@@ -34,7 +35,7 @@ const NewPassword: React.FC = () => {
             return;
         }
 
-        const response = await fetch('http://localhost:3002/api/reset/reset-password', {
+        const response = await fetch(`${URL_API}/api/reset/reset-password`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, newPassword })

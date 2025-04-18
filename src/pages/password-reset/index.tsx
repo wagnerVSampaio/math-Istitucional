@@ -14,11 +14,11 @@ import { message } from "antd/lib";
 
 const PasswordReset: React.FC = () => {
   const [email, setEmail] = useState("");
-
+  const URL_API = process.env.NEXT_PUBLIC_URL_API;
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const response = await fetch('http://localhost:3002/api/reset', {
+        const response = await fetch(`${URL_API}/api/reset`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email })

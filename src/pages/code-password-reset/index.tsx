@@ -42,9 +42,10 @@ const CodePasswordReset: React.FC = () => {
     }
   };
 
+  const URL_API = process.env.NEXT_PUBLIC_URL_API;
     const handleSubmitCode = async (e: React.FormEvent) => {
       e.preventDefault();
-      const response = await fetch('http://localhost:3002/api/reset/verify-code', {
+      const response = await fetch(`${URL_API}/api/reset/verify-code`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ resetCode: code })  

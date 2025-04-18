@@ -112,6 +112,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
   const [editedEducation, setEditedEducation] = useState<Education | null>(null);
   const [isModalOpenEducation, setIsModalOpenEducation] = useState(false);
 
+  const URL_API = process.env.NEXT_PUBLIC_URL_API;
   const handleAddEducation = async (newEducation: Education) => {
     try {
       const data = sessionStorage.getItem("userData");
@@ -124,7 +125,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
 
       const educationWithUser = { ...newEducation, id_user: idUser };
 
-      const response = await fetch('http://localhost:3002/api/createEdu', {
+      const response = await fetch(`${URL_API}/api/createEdu`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -156,7 +157,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
       const userData = JSON.parse(data);
       const idUser = userData.id_user;
 
-      const response = await fetch(`http://localhost:3002/api/idEdu/${idUser}`);
+      const response = await fetch(`${URL_API}/api/idEdu/${idUser}`);
 
       if (!response.ok) {
         throw new Error('Erro ao buscar educações: ' + response.statusText);
@@ -200,7 +201,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
       try {
         const educationWithUser: Education = { ...editedEducation, id_user: idUser };
 
-        const response = await fetch(`http://localhost:3002/api/updateEdu/${editedEducation.id_education}`, {
+        const response = await fetch(`${URL_API}/api/updateEdu/${editedEducation.id_education}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -230,7 +231,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
   const handleDeleteEducation = async (id_education: number) => {
     try {
       // Fazendo a requisição para excluir a educação no banco de dados
-      const response = await fetch(`http://localhost:3002/api/deleteEdu/${id_education}`, {
+      const response = await fetch(`${URL_API}/api/deleteEdu/${id_education}`, {
         method: 'DELETE',
       });
 
@@ -262,8 +263,6 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
 
 
 
-
-
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [editIndexExp, setEditIndexExp] = useState<number | null>(null);
   const [editedExp, setEditedExp] = useState<Experience | null>(null);
@@ -280,7 +279,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
       const userData = JSON.parse(data);
       const idUser = userData.id_user;
 
-      const response = await fetch(`http://localhost:3002/api/idExp/${idUser}`);
+      const response = await fetch(`${URL_API}/api/idExp/${idUser}`);
 
       if (!response.ok) {
         throw new Error('Erro ' + response.statusText);
@@ -323,7 +322,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
       try {
         const expWithUser = { ...editedExp, id_user: idUser };
 
-        const response = await fetch(`http://localhost:3002/api/updateExp/${editedExp.id_experience}`, {
+        const response = await fetch(`${URL_API}/api/updateExp/${editedExp.id_experience}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -352,7 +351,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
   const handleDeleteExp = async (id_experience: number) => {
     console.log('ID da experiência a ser excluída:', id_experience); // Log do ID
     try {
-      const response = await fetch(`http://localhost:3002/api/deleteExp/${id_experience}`, {
+      const response = await fetch(`${URL_API}/api/deleteExp/${id_experience}`, {
         method: 'DELETE',
       });
 
@@ -386,7 +385,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
 
       const expWithUser = { ...newExp, id_user: idUser };
 
-      const response = await fetch('http://localhost:3002/api/createExp', {
+      const response = await fetch(`${URL_API}/api/createExp`,{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -439,7 +438,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
       const idUser = userData.id_user;
       const skillWithUser = { ...newSkill, id_user: idUser };
 
-      const response = await fetch('http://localhost:3002/api/createSkill', {
+      const response = await fetch(`${URL_API}/api/createSkill`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -474,7 +473,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
       const userData = JSON.parse(data);
       const idUser = userData.id_user;
 
-      const response = await fetch(`http://localhost:3002/api/idSkill/${idUser}`);
+      const response = await fetch(`${URL_API}/api/idSkill/${idUser}`);
 
       if (!response.ok) {
         throw new Error('Erro ao buscar habilidades: ' + response.statusText);
@@ -521,7 +520,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
 
         const skillWithUser = { ...editedSkills, skill, number, id_user: idUser };
 
-        const response = await fetch(`http://localhost:3002/api/updateSkill/${editedSkills.id_skill}`, {
+        const response = await fetch(`${URL_API}/api/updateSkill/${editedSkills.id_skill}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -554,7 +553,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
 
   const handleDeleteSkills = async (id_skill: number) => {
     try {
-      const response = await fetch(`http://localhost:3002/api/deleteSkill/${id_skill}`, {
+      const response = await fetch(`${URL_API}/api/deleteSkill/${id_skill}`, {
         method: 'DELETE',
       });
 
@@ -621,7 +620,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
         formData.append('cover_photo', file);
 
         try {
-          const response = await fetch(`http://localhost:3002/api/updatePhoto/${id_user}`, {
+          const response = await fetch(`${URL_API}/api/updatePhoto/${id_user}`, {
             method: 'PUT',
             body: formData,
           });
@@ -662,7 +661,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
         formData.append('profile_picture', file);
 
         try {
-          const response = await fetch(`http://localhost:3002/api/updatePhoto/${id_user}`, {
+          const response = await fetch(`${URL_API}/api/updatePhoto/${id_user}`, {
             method: 'PUT',
             body: formData,
           });
@@ -692,7 +691,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
       const parsedData = JSON.parse(data);
       console.log('Dados do usuário:', parsedData);
 
-      const response = await fetch(`http://localhost:3002/api/getPhoto/${parsedData.id_user}/photos`);
+      const response = await fetch(`${URL_API}/api/getPhoto/${parsedData.id_user}/photos`);
       if (!response.ok) {
         console.error('Erro ao buscar fotos do usuário.');
         return;
@@ -728,7 +727,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
       const userData = JSON.parse(data);
       const idUser = userData.id_user;
 
-      const response = await fetch(`http://localhost:3002/api/biography/${idUser}/biography`);
+      const response = await fetch(`${URL_API}/api/biography/${idUser}/biography`);
 
       if (!response.ok) {
         throw new Error('Erro ao buscar biografia: ' + response.statusText);
@@ -774,7 +773,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
       const userData = JSON.parse(data);
       const idUser = userData.id_user;
 
-      const response = await fetch(`http://localhost:3002/api/biography/${idUser}/biography`, {
+      const response = await fetch(`${URL_API}/api/biography/${idUser}/biography`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -806,7 +805,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
       const userData = JSON.parse(data);
       const idUser = userData.id_user;
 
-      const response = await fetch(`http://localhost:3002/api/biography/${idUser}/biography`, {
+      const response = await fetch(`${URL_API}/api/biography/${idUser}/biography`, {
         method: 'DELETE',
       });
 
@@ -826,7 +825,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
           <form name="cover_photo">
             <style.ImageCover className="relative">
               <img
-                src={`http://localhost:3002/uploads/${coverImage}` || "/cover.png"}
+                src={`${URL_API}/uploads/${coverImage}` || "/cover.png"}
                 alt="Cover"
                 className="w-full h-full object-cover"
               />
@@ -845,7 +844,7 @@ const ProfileContainer: React.FC<{ id_user: number }> = ({ id_user }) => {
           <form name="profile_picture">
             <style.ImageWrapper className="relative">
               <img
-                src={`http://localhost:3002/uploads/${profileImage}` || "/profile.png"}
+                src={`${URL_API}/uploads/${profileImage}` || "/profile.png"}
                 alt="Profile"
                 className="w-full h-full object-cover"
               />

@@ -18,10 +18,11 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
 
+  const URL_API = process.env.NEXT_PUBLIC_URL_API;
   const loginAuthentication = async (values: { email: string; password: string; }) => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:3002/api/login", {
+      const response = await fetch(`${URL_API}/api/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

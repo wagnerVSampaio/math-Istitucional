@@ -17,7 +17,7 @@ const PendingUserApproval: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [userData, setUserData] = useState<any>(null);
 
-
+  const URL_API = process.env.NEXT_PUBLIC_URL_API;
   useEffect(() => {
     const data = sessionStorage.getItem("userData");
     if (data) {
@@ -32,7 +32,7 @@ const PendingUserApproval: React.FC = () => {
   const fetchPendingUsers = async (idAdm: Number) => {
 
     try {
-      const response = await fetch(`http://localhost:3002/api/pendingUsers/${idAdm}`); 
+      const response = await fetch(`${URL_API}/api/pendingUsers/${idAdm}`); 
       if (!response.ok) {
         throw new Error('Erro ao buscar usuários pendentes');
       }
@@ -46,7 +46,7 @@ const PendingUserApproval: React.FC = () => {
 
 const approveUser = async (userId: number) => {
     try {
-        const response = await fetch(`http://localhost:3002/api/approvedUser/${userId}`, {
+        const response = await fetch(`${URL_API}/api/approvedUser/${userId}`, {
             method: 'POST', 
         });
         
@@ -66,7 +66,7 @@ const approveUser = async (userId: number) => {
 
   const rejectUser = async (userId: number) => {
     try {
-        const response = await fetch(`http://localhost:3002/api/deleteRecruiter/${userId}`, {
+        const response = await fetch(`${URL_API}/api/deleteRecruiter/${userId}`, {
             method: 'DELETE',
         });
 

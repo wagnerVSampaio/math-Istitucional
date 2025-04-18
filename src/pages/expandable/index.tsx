@@ -26,6 +26,7 @@ const CadastroExpansivel: React.FC = () => {
   const [idUser, setIdUser] = useState<number | null>(null);
   const [expandidoDados, setExpandido] = useState<boolean>(false);
 
+  const URL_API = process.env.NEXT_PUBLIC_URL_API;
   useEffect(() => {
     const data = sessionStorage.getItem("userData");
     console.log(data);
@@ -67,7 +68,7 @@ const CadastroExpansivel: React.FC = () => {
     };
 
     try {
-      const response = await fetch(`http://localhost:3002/api/updateUser/${idUser}`, {
+      const response = await fetch(`${URL_API}/api/updateUser/${idUser}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

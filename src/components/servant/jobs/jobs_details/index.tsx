@@ -32,6 +32,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const URL_API = process.env.NEXT_PUBLIC_URL_API;
   useEffect(() => {
     const fetchUserData = () => {
       const userSessionData = sessionStorage.getItem('userData');
@@ -52,7 +53,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({
     const checkInterest = async () => {
       if (userData) {
         try {
-          const response = await fetch('http://localhost:3002/api/checkInterested', {
+          const response = await fetch(`${URL_API}/api/checkInterested`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -81,7 +82,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({
     }
 
     try {
-      const response = await fetch('http://localhost:3002/api/createInterested', {
+      const response = await fetch(`${URL_API}/api/createInterested`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
