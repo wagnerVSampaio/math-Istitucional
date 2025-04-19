@@ -3,13 +3,12 @@ import React, { useState } from "react";
 import type { RadioChangeEvent } from "antd/lib";
 import type { SearchProps } from "antd/es/input/Search";
 import HomePage from "@/pages/homePages";
-import Message from "@/components/message";
 import * as style from "./style";
 import NotificationRecruiterPages from "../notificationRecruiter";
-import ProfessionalsPage from "../professionalsPages";
+
 import AddJobsPages from "../addJobsPages";
 import ProfilePage from "../profilePages";
-import InterestesPage from "../interestesUser";
+import UserInterests from "../professionalsPages";
 
 const Principal: React.FC = () => {
   const [value, setValue] = useState(1);
@@ -57,7 +56,7 @@ const Principal: React.FC = () => {
       {value === 1 ? (
         <HomePage />
       ) : value === 2 ? (
-        <ProfessionalsPage />
+        <UserInterests />
       ) : value === 3 ? (
         <AddJobsPages />
       ) : value === 4 ? (

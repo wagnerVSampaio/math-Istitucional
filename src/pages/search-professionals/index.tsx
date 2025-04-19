@@ -14,7 +14,7 @@ interface Adm {
 }
 
 interface AdmProps {
-  usersId: number | null;
+  usersId?: number;
 }
 
 const Search: React.FC<AdmProps> = ({ usersId }) => {
