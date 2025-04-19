@@ -1,6 +1,6 @@
 import { UserOutlined } from '@ant-design/icons/lib/icons';
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Tooltip, Modal, Checkbox, Button, InputNumber, message, Card, Select} from 'antd/lib';
+import { Form, Input, Tooltip, Modal, Checkbox, Button, Card, Select} from 'antd/lib';
 import * as style from "./style";
 import * as XLSX from 'xlsx';
 
