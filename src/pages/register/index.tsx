@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import type { RadioChangeEvent } from "antd/lib";
 import NavServidor from "@/components/servant/create-account-servant";
 import NavRecrutador from "@/components/recruiter/create-account";
-import * as style from './style';
+import * as style from '@/style/register-style';
 import HeaderOverall from "@/components/header-overall";
 
 

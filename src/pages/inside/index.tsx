@@ -7,7 +7,7 @@ import People from "@/components/people";
 import ProfilePages from "@/pages/profilePages";
 import Message from "@/components/message";
 import Jobs from "../jobsPages";
-import * as style from "./style";
+import * as style from "@/style/inside-style";
 import NotificationServant from "@/components/servant/notification-servant";
 
 const Principal: React.FC = () => {

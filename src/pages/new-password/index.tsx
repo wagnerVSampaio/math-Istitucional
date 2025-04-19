@@ -5,7 +5,7 @@ import {
   StyledForm,
   StyledInput,
   StyledPasswordReset,
-} from "./style";
+} from "@/style/new-password-style";
 import HeaderOverall from "../../components/header-overall";
 import Link from "next/link";
 import { message } from "antd/lib";

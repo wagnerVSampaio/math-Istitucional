@@ -9,14 +9,11 @@ import {
   ImageCover,
   ImageWrapper,
   ButtonStyled,
-  DivBottom,
-  LiStyled,
-  UlStyled
+  DivBottom
 } from "./style";
 import type { RadioChangeEvent } from "antd/lib";
 import { Radio, Modal, Button, message } from "antd/lib";
 import * as style from "./style";
-import Link from "next/link";
 import { useRouter } from "next/router";
 
 const images = ["/bem-vindo.png", "/sobre-nos.png"];

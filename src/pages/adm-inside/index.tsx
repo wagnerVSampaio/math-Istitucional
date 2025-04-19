@@ -3,11 +3,11 @@ import React, { useState } from "react";
 import type { RadioChangeEvent } from "antd/lib";
 import type { SearchProps } from "antd/es/input/Search";
 import HomePage from "@/pages/homePages";
-import ProfilePages from "@/pages/profilePages";
-import * as style from "./style";
-import AdmPage from "../admPages";
-import Search from "../../components/adm/search-professionals";
+import * as style from "@/style/adm-inside-style";
 import NotificationAdm from "@/components/adm/notification-adm";
+import Search from "../search-professionals";
+import PendingUserApproval from "../admPages";
+import ProfilePage from "@/pages/profilePages";
 
 const Principal: React.FC = () => {
   const [value, setValue] = useState(1);
@@ -55,13 +55,13 @@ const Principal: React.FC = () => {
       {value === 1 ? (
         <HomePage />
       ) : value === 2 ? (
-        <AdmPage />
+        <PendingUserApproval />
       ) : value === 3 ? (
-        <Search highlightedId={null} />
+        <Search/>
       ) : value === 4 ? (
         <NotificationAdm/>
       ) : (
-        <ProfilePages />
+        <ProfilePage />
       )}
     </style.AppContainer>
   );

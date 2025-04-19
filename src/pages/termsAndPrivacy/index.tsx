@@ -1,5 +1,5 @@
 import React from 'react';
-import { PageWrapper, Section, Title, Subtitle, Paragraph, List, ListItem } from './style';
+import { PageWrapper, Section, Title, Subtitle, Paragraph, List, ListItem } from '@/style/termsAndPrivacy-style';
 
 const TermsAndPrivacy: React.FC = () => {
   return (
