@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import * as style from './style';
+import * as style from '@/style/professionalsPages-style';
 import { FaEnvelope } from 'react-icons/fa';
 import { Card, Descriptions, Modal, Button, Select, Tag } from 'antd/lib';
 import Search from 'antd/lib/input/Search';

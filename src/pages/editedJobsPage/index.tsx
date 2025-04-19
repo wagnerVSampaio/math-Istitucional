@@ -1,7 +1,7 @@
 import { UserOutlined } from '@ant-design/icons/lib/icons';
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Tooltip, Modal, Checkbox, Button, InputNumber } from 'antd/lib';
-import * as style from "./style";
+import * as style from "@/style/editedJobsPage-style";
 
 type JobDetails = {
     id: number;

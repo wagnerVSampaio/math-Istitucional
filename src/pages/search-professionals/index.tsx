@@ -1,7 +1,7 @@
 import { UserOutlined } from '@ant-design/icons/lib/icons';
 import React, { useState, useEffect } from 'react';
 import { Input, Tooltip, Modal, Checkbox, Spin } from 'antd/lib';
-import * as style from "./style";
+import * as style from "@/style/search-professionals-style";
 
 interface Adm {
   id_user: number;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import * as style from "./style"; 
+import * as style from "@/style/admPages-style"; 
 import { Modal } from "antd/lib";
 
 interface PendingUser {

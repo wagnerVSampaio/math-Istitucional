@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { SlArrowDown, SlArrowUp, SlArrowLeftCircle } from "react-icons/sl";
 import { Form, Input, Button, message } from "antd/lib";
 import HeaderOverall from "@/components/header-overall";
-import * as style from "./style";
+import * as style from "@/style/expandable-style";
 import Link from "next/link";
 
 type FieldType = {

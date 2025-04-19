@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
+'use client'; 
 import React, { useEffect, useState } from "react";
-import * as style from "./style";
+import * as style from "@/style/profilePages-style";
 import { FaCamera } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
 import { FaShareAltSquare } from "react-icons/fa";
@@ -80,9 +81,9 @@ const ProfilePage: React.FC<{ id_user?: number }> = ({ id_user }) => {
   }, []);
 
 
-  const profileLink = `${window.location.origin}/profile/${idUser}`;
+  /*const profileLink = `${window.location.origin}/profile/${idUser}`;
 
-  {/*COMPARTILHA O PERFIL*/ }
+
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -104,7 +105,7 @@ const ProfilePage: React.FC<{ id_user?: number }> = ({ id_user }) => {
     }
   };
 
-
+*/
 
 
   const [educations, setEducations] = useState<Education[]>([]);
@@ -862,9 +863,9 @@ const ProfilePage: React.FC<{ id_user?: number }> = ({ id_user }) => {
 
           <style.DivParagraph>
             <p>{userData?.full_name}</p>
-            <style.DivIconShare>
+            <style.DivIconShare style={{cursor: "not-allowed"}}>
               <Tooltip title="Compartilhar o perfil" placement="left">
-                <FaShareAltSquare onClick={handleShare} />
+                <FaShareAltSquare />
               </Tooltip>
             </style.DivIconShare>
           </style.DivParagraph>

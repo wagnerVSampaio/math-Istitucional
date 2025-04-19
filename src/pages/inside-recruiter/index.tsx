@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import type { RadioChangeEvent } from "antd/lib";
 import type { SearchProps } from "antd/es/input/Search";
 import HomePage from "@/pages/homePages";
-import * as style from "./style";
+import * as style from "@/style/inside-recruiter-style";
 import NotificationRecruiterPages from "../notificationRecruiter";
 
 import AddJobsPages from "../addJobsPages";

@@ -6,7 +6,7 @@ import {
     StyledInput,
     StyledPasswordReset,
     StyledSpan
-  } from "./style";
+  } from "@/style/code-password-reset-style";
 import HeaderOverall from "../../components/header-overall"
 import Link from "next/link";
 
