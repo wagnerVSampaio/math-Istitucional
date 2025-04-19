@@ -13,7 +13,7 @@ const TermsAndPrivacy: React.FC = () => {
         <Paragraph>Esses termos regulam o uso do nosso site e serviços...</Paragraph>
 
         <Subtitle>2. Definições</Subtitle>
-        <Paragraph>Por "nós", refere-se à empresa XYZ...</Paragraph>
+        <Paragraph>Por nós, refere-se à empresa XYZ...</Paragraph>
 
         <Subtitle>3. Condições de Uso</Subtitle>
         <Paragraph>O uso do site é permitido para fins pessoais e não comerciais...</Paragraph>

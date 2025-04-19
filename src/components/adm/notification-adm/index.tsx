@@ -40,16 +40,17 @@ const NotificationAdm: React.FC = () => {
 
     return date.toLocaleDateString('pt-BR', options);
   };
-  // Carrega as notificações ao iniciar o componente
-  useEffect(() => {
-    if (selectedMenu === 'all') {
-      fetchNotifications();  // Carrega todas as notificações
-    } else if (selectedMenu === 'my') {
-      loadUserNotifications();  // Carrega as notificações específicas do usuário
-    }
-  }, [selectedMenu]); // Recarrega as notificações sempre que o menu mudar
 
   const URL_API = process.env.NEXT_PUBLIC_URL_API;
+
+  useEffect(() => {
+    if (selectedMenu === 'all') {
+      fetchNotifications(); 
+    } else if (selectedMenu === 'my') {
+      loadUserNotifications();  
+    }
+  }, [selectedMenu]);
+
   const fetchNotifications = async () => {
     try {
       const response = await fetch(`${URL_API}/api/allNotification`);
@@ -59,6 +60,7 @@ const NotificationAdm: React.FC = () => {
       message.error('Erro ao carregar as notificações.');
     }
   };
+
 
   // Função para carregar as notificações do usuário logado
   const loadUserNotifications = async () => {
