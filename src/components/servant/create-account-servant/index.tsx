@@ -12,7 +12,6 @@ import * as style from './style';
 
 type FieldType = {
   full_name: string;
-  cpf: string;
   email: string;
   profile_picture: string;
   cover_photo: string;
@@ -83,7 +82,6 @@ const NavServidor = () => {
 const RegisterServidor = async (values: FieldType) => {
   if (
     !values.full_name ||
-    !values.cpf ||
     !values.email ||
     !values.password ||
     !values.passwordconfirmation ||
@@ -118,7 +116,6 @@ const RegisterServidor = async (values: FieldType) => {
     formData.append("full_name", values.full_name);
     formData.append("email", values.email);
     formData.append("password", values.password);
-    formData.append("cpf", values.cpf);
     formData.append("birth_date", formatDate(selectedDate)); 
     formData.append("phone", values.phone);
     formData.append("user_type", "server");
@@ -191,31 +188,7 @@ const RegisterServidor = async (values: FieldType) => {
             <style.InputEditForm className="w-[350px]" />
           </Form.Item>
 
-          <style.ParagraphStyled className="mt-[3px] mb-[3px]">
-            CPF <strong className="text-red-500"> *</strong>
-          </style.ParagraphStyled>
-          <Form.Item<FieldType>
-            name="cpf"
-            rules={[{ required: true, message: "Por favor, insira o CPF!" }]}
-          >
-            <InputMask
-                mask="999.999.999-99" // Máscara de CPF
-                value={cpf}
-                onChange={(e) => setCpf(e.target.value)}
-              >
-                {({ onChange, value, ...rest }) => (
-                  <style.InputEdit
-                    {...rest}
-                    value={value}
-                    onChange={onChange}
-                    type="text"
-                    id="cpf"
-                  />
-                )}
-              </InputMask>
-          </Form.Item>
-
-          <style.ParagraphStyled className="mt-[3px] mb-[3px]">
+          <style.ParagraphStyled className="mt-[15px] mb-[3px]">
             E-mail <strong className="text-red-500"> *</strong>
           </style.ParagraphStyled>
           <Form.Item<FieldType>
