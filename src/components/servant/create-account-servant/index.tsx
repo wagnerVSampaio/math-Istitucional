@@ -108,7 +108,6 @@ const RegisterServidor = async (values: FieldType) => {
     return;
   }
 
-  console.log("Formulário enviado!", values);
   
   try {
     const formData = new FormData();

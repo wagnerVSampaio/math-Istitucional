@@ -135,8 +135,6 @@ const NotificationServant: React.FC = () => {
     
             if (response.ok) {
                 const responseData = await response.json(); // Captura o retorno da API
-                console.log("Resposta da API:", responseData);
-    
                 setNotifications((prevNotifications) =>
                     prevNotifications.map((notification) =>
                         notification.id === notification_id ? { ...notification, read: true } : notification
@@ -145,7 +143,6 @@ const NotificationServant: React.FC = () => {
             } else {
                 const responseBody = await response.text();  // Pega o corpo da resposta de erro
                 message.error(`Erro ao marcar notificação como lida: ${responseBody}`);
-                console.log("Erro ao marcar notificação como lida:", responseBody);
             }
         } catch (error) {
             message.error('Erro ao conectar com o servidor.');

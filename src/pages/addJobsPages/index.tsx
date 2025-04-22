@@ -276,7 +276,6 @@ const Edited: React.FC = () => {
       setSelectedAdms([]);
       setIsSelecting(false);
 
-      console.log('Vagas deletados com sucesso');
     } catch (error) {
       console.error('Erro ao deletar usuários:', error);
     }
@@ -408,8 +407,6 @@ const Edited: React.FC = () => {
       }
       const usersDataJob = await response.json();
 
-      // Verificando a resposta da API
-      console.log("Interessados:", usersDataJob);
 
       setInterestedUsers(Array.isArray(usersDataJob) ? usersDataJob : []);
     } catch (error) {

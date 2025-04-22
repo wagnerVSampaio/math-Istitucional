@@ -54,11 +54,16 @@ const NotificationAdm: React.FC = () => {
   const fetchNotifications = async () => {
     try {
       const response = await fetch(`${URL_API}/api/allNotification`);
-      const data = await response.json();
-      setNotifications(data);
+      if (response.ok) {
+        const data = await response.json();
+        setNotifications(data);
+      } else {
+        message.error('Erro ao carregar as notificações.');
+      }
     } catch (error) {
       message.error('Erro ao carregar as notificações.');
     }
+    
   };
 
 
@@ -127,9 +132,6 @@ const NotificationAdm: React.FC = () => {
     const userData = JSON.parse(data);
     const id_user = userData.id_user;
 
-    // Adicionando um log para conferir os dados antes de enviar a requisição
-    console.log("Enviando requisição para marcar notificação como lida", { notification_id, id_user });
-
     try {
       const response = await fetch(`${URL_API}/api/maskNotification/${notification_id}/read`, {
         method: 'PUT',
@@ -141,7 +143,6 @@ const NotificationAdm: React.FC = () => {
 
       if (response.ok) {
         const responseData = await response.json(); // Captura o retorno da API
-        console.log("Resposta da API:", responseData);
 
         setNotifications((prevNotifications) =>
           prevNotifications.map((notification) =>
@@ -151,7 +152,6 @@ const NotificationAdm: React.FC = () => {
       } else {
         const responseBody = await response.text();  // Pega o corpo da resposta de erro
         message.error(`Erro ao marcar notificação como lida: ${responseBody}`);
-        console.log("Erro ao marcar notificação como lida:", responseBody);
       }
     } catch (error) {
       message.error('Erro ao conectar com o servidor.');

@@ -73,8 +73,12 @@ const NotificationRecruiter: React.FC = () => {
 
     try {
       const response = await fetch(`${URL_API}/api/idNotification/${id_user}`);
-      const data = await response.json();
-      setNotifications(data);
+      if (response.ok) {
+        const data = await response.json();
+        setNotifications(data);
+      } else {
+        message.error('Erro ao carregar as notificações.');
+      }
     } catch (error) {
       message.error('Erro ao carregar as notificações.');
     }
@@ -138,7 +142,6 @@ const NotificationRecruiter: React.FC = () => {
 
         if (response.ok) {
             const responseData = await response.json(); // Captura o retorno da API
-            console.log("Resposta da API:", responseData);
 
             setNotifications((prevNotifications) =>
                 prevNotifications.map((notification) =>
@@ -148,7 +151,7 @@ const NotificationRecruiter: React.FC = () => {
         } else {
             const responseBody = await response.text();  // Pega o corpo da resposta de erro
             message.error(`Erro ao marcar notificação como lida: ${responseBody}`);
-            console.log("Erro ao marcar notificação como lida:", responseBody);
+
         }
     } catch (error) {
         message.error('Erro ao conectar com o servidor.');
@@ -222,9 +225,7 @@ const NotificationRecruiter: React.FC = () => {
       return (
         <style.StyledUl>
           {notifications.length === 0 ? (
-            <p style={{ textAlign: 'center', color: '#999', padding: '10px' }}>
-              Não há notificações disponíveis.
-            </p>
+                              <p style={{ textAlign: 'center', color: '#999', padding: "10px" }}>Não há notificações disponíveis.</p>
           ) : (
             notifications.map((notification) => (
               <style.StyledLi

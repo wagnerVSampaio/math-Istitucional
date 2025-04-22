@@ -23,8 +23,6 @@ const PendingUserApproval: React.FC = () => {
     if (data) {
       const parsedData = JSON.parse(data);
       setUserData(parsedData);
-      console.log(parsedData);
-      
       fetchPendingUsers(parsedData.id_user);
     }
   }, [pendingUsers]);
@@ -54,7 +52,6 @@ const approveUser = async (userId: number) => {
             setPendingUsers(pendingUsers.map(user => 
                 user.id_user === userId ? { ...user, status: 'approved' } : user
             ));
-            console.log('Usuário aprovado com sucesso!');
         } else {
             console.error('Erro ao aprovar usuário:', response.statusText);
         }
@@ -72,7 +69,6 @@ const approveUser = async (userId: number) => {
 
         if (response.ok) {
             setPendingUsers(pendingUsers.filter(user => user.id_user !== userId));
-            console.log('Usuário recusado com sucesso!');
         } else {
             console.error('Erro ao recusar usuário:', response.statusText);
         }

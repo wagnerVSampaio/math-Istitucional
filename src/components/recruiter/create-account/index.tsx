@@ -79,10 +79,7 @@ const NavRecrutador = () => {
       message.error("Por favor, preencha todos os campos obrigatórios!");
       return;
     }
-  
-  
-    console.log("Formulário de recrutador enviado!", values);
-    
+
     try {
       const formData = new FormData();
       

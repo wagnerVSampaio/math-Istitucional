@@ -13,7 +13,6 @@ const Principal: React.FC = () => {
   const [value, setValue] = useState(1);
 
   const onChangeRadio2 = (e: RadioChangeEvent) => {
-    console.log("radio checked", e.target.value);
     setValue(e.target.value);
   };
 

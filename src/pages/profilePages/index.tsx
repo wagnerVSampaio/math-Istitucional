@@ -74,7 +74,6 @@ const ProfilePage: React.FC<{ id_user?: number }> = ({ id_user }) => {
     const data = sessionStorage.getItem("userData");
     if (data) {
       const parsedData = JSON.parse(data);
-      console.log('Dados do usuário:', parsedData);
       setUserData(parsedData);
       setIdUser(parsedData.id_user);
     }
@@ -241,15 +240,15 @@ const ProfilePage: React.FC<{ id_user?: number }> = ({ id_user }) => {
       }
 
 
-      const updatedExp = await response.json();
+      const updatedEdu = await response.json();
 
-      const updatedExperience = skills.map((experience, index) =>
-        index === editIndexExp ? updatedExp : experience
+      const updatedEducation = educations.map((education, index) =>
+        index === editIndexEducation ? updatedEdu : education
       );
 
-      setExperiences(updatedExperience);
-      setEditIndexExp(null);
-      setEditedExp(null);
+      setEducations(updatedEducation);
+      setEditIndexEducation(null);
+      setEditedEducation(null);
 
       const updatedEducations = educations.filter(education => education.id_education !== Number(id_education));
       setEducations(updatedEducations);
@@ -350,7 +349,6 @@ const ProfilePage: React.FC<{ id_user?: number }> = ({ id_user }) => {
   };
 
   const handleDeleteExp = async (id_experience: number) => {
-    console.log('ID da experiência a ser excluída:', id_experience); // Log do ID
     try {
       const response = await fetch(`${URL_API}/api/deleteExp/${id_experience}`, {
         method: 'DELETE',
@@ -657,7 +655,6 @@ const ProfilePage: React.FC<{ id_user?: number }> = ({ id_user }) => {
         }
         const userData = JSON.parse(data);
         const id_user = userData.id_user;
-        console.log(idUser)
         const formData = new FormData();
         formData.append('profile_picture', file);
 
@@ -670,7 +667,6 @@ const ProfilePage: React.FC<{ id_user?: number }> = ({ id_user }) => {
           if (response.ok) {
             const data = await response.json();
             setMessage('Foto de capa atualizada com sucesso!');
-            console.log('Resposta do servidor:', data);
             await fetchUserData();
           } else {
             setMessage('Erro ao atualizar a foto de capa.');
@@ -690,7 +686,6 @@ const ProfilePage: React.FC<{ id_user?: number }> = ({ id_user }) => {
     const data = sessionStorage.getItem("userData");
     if (data) {
       const parsedData = JSON.parse(data);
-      console.log('Dados do usuário:', parsedData);
 
       const response = await fetch(`${URL_API}/api/getPhoto/${parsedData.id_user}/photos`);
       if (!response.ok) {
@@ -735,7 +730,7 @@ const ProfilePage: React.FC<{ id_user?: number }> = ({ id_user }) => {
       }
 
       const { biography } = await response.json();
-      console.log('Biografia:', biography);
+
       setBioText(biography); 
     } catch (error) {
       console.error('Erro ao buscar biografia:', error);
@@ -786,8 +781,6 @@ const ProfilePage: React.FC<{ id_user?: number }> = ({ id_user }) => {
         throw new Error('Erro ao atualizar biografia: ' + response.statusText);
       }
 
-      // Sucesso - A biografia foi salva
-      console.log('Biografia atualizada com sucesso');
     } catch (error) {
       console.error('Erro ao atualizar biografia:', error);
     }
@@ -814,7 +807,6 @@ const ProfilePage: React.FC<{ id_user?: number }> = ({ id_user }) => {
         throw new Error('Erro ao deletar biografia: ' + response.statusText);
       }
 
-      console.log('Biografia deletada com sucesso.');
     } catch (error) {
       console.error('Erro ao deletar biografia:', error);
     }
