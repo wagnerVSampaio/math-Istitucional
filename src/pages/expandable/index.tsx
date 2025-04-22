@@ -29,7 +29,6 @@ const CadastroExpansivel: React.FC = () => {
   const URL_API = process.env.NEXT_PUBLIC_URL_API;
   useEffect(() => {
     const data = sessionStorage.getItem("userData");
-    console.log(data);
     if (data) {
       const parsedData = JSON.parse(data);
       setUserData({

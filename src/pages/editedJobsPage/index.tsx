@@ -135,7 +135,6 @@ const Edited: React.FC<AdmProps> = ({ usersId }) => {
       setSelectedAdms([]);
       setIsSelecting(false);
 
-      console.log('Vagas deletados com sucesso');
     } catch (error) {
       console.error('Erro ao deletar usuários:', error);
     }

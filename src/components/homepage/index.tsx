@@ -94,13 +94,12 @@ const HomePageContainer = () => {
             method: 'POST',
         });
 
-        const responseData = await response.json(); // Adicione isso para verificar a resposta
-        console.log('Resposta do servidor:', responseData); // Verifique a resposta aqui
+        const responseData = await response.json(); 
 
         if (response.ok) {
             sessionStorage.removeItem("userData");
 
-            message.success('Logout realizado com sucesso!'); // Feedback ao usuário
+            message.success('Logout realizado com sucesso!');
             setIsModalVisible(false);
             router.push("/");
         } else {

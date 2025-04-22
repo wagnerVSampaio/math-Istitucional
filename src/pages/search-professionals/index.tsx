@@ -78,7 +78,6 @@ const fetchApprovedUsers = async (idAdm: number) => {
         setSelectedAdms([]);
         setIsSelecting(false);
 
-        console.log('Usuários deletados com sucesso');
     } catch (error) {
         console.error('Erro ao deletar usuários:', error);
     }
